@@ -5,6 +5,14 @@ export default async function handler(req, res) {
     return res.status(405).json({ message: 'Method Not Allowed' });
   }
 
+  const authHeader = req.headers.authorization;
+  const adminPassword = process.env.ADMIN_PASSWORD || 'admin123';
+  const expectedToken = `Bearer ${Buffer.from(adminPassword).toString('base64')}`;
+
+  if (authHeader !== expectedToken) {
+    return res.status(401).json({ message: 'Unauthorized access' });
+  }
+
   const pool = new Pool({
     connectionString: process.env.DATABASE_URL,
     ssl: { rejectUnauthorized: false }

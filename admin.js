@@ -26,26 +26,94 @@ document.addEventListener('DOMContentLoaded', () => {
         });
     });
 
-    // Live Database Registrations
+    // Auth & Live Database Registrations
     let registrations = [];
+    let authToken = localStorage.getItem('dwsa_admin_token');
+
+    const loginOverlay = document.getElementById('login-overlay');
+    const adminContent = document.getElementById('admin-content');
+    const loginForm = document.getElementById('login-form');
+    const loginError = document.getElementById('login-error');
+
+    // Check auth on load
+    if (authToken) {
+        showDashboard();
+    }
+
+    if (loginForm) {
+        loginForm.addEventListener('submit', async (e) => {
+            e.preventDefault();
+            const password = document.getElementById('admin-password').value;
+            const submitBtn = loginForm.querySelector('button');
+            submitBtn.textContent = 'Verifying...';
+            
+            try {
+                const response = await fetch('/api/login', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ password })
+                });
+                
+                const result = await response.json();
+                
+                if (result.success) {
+                    authToken = result.token;
+                    localStorage.setItem('dwsa_admin_token', authToken);
+                    showDashboard();
+                } else {
+                    loginError.style.display = 'block';
+                }
+            } catch (error) {
+                console.error('Login error:', error);
+                loginError.textContent = 'Connection error';
+                loginError.style.display = 'block';
+            } finally {
+                submitBtn.textContent = 'Secure Login';
+            }
+        });
+    }
+
+    function showDashboard() {
+        if (loginOverlay) loginOverlay.style.display = 'none';
+        if (adminContent) adminContent.style.display = 'flex';
+        renderTables();
+    }
+
+    function logout() {
+        localStorage.removeItem('dwsa_admin_token');
+        authToken = null;
+        if (loginOverlay) loginOverlay.style.display = 'flex';
+        if (adminContent) adminContent.style.display = 'none';
+    }
 
     // Function to render table
     async function renderTables() {
         const fullTable = document.getElementById('full-reg-table');
-        if (fullTable) {
-            fullTable.innerHTML = '<tbody><tr><td colspan="4" style="text-align: center; padding: 2rem;">Loading live registrations from database...</td></tr></tbody>';
+        const recentBody = document.getElementById('registration-table-body');
+        
+        if (fullTable) fullTable.innerHTML = '<tbody><tr><td colspan="4" style="text-align: center; padding: 2rem;">Loading live registrations...</td></tr></tbody>';
+        if (recentBody) recentBody.innerHTML = '<tr><td colspan="5" style="text-align: center; padding: 1rem;">Loading...</td></tr>';
+        
+        try {
+            const response = await fetch('/api/get-registrations', {
+                headers: { 'Authorization': `Bearer ${authToken}` }
+            });
             
-            try {
-                const response = await fetch('/api/get-registrations');
-                const result = await response.json();
-                
-                if (result.success) {
-                    registrations = result.data;
-                }
-            } catch (error) {
-                console.error("Error fetching registrations:", error);
+            if (response.status === 401) {
+                logout();
+                return;
             }
             
+            const result = await response.json();
+            if (result.success) {
+                registrations = result.data;
+            }
+        } catch (error) {
+            console.error("Error fetching registrations:", error);
+        }
+        
+        // Render Full Table
+        if (fullTable) {
             if (registrations.length === 0) {
                  fullTable.innerHTML = '<tbody><tr><td colspan="4" style="text-align: center; padding: 2rem;">No registrations found yet.</td></tr></tbody>';
             } else {
@@ -75,12 +143,32 @@ document.addEventListener('DOMContentLoaded', () => {
             }
         }
 
+        // Render Recent Table (Dashboard view)
+        if (recentBody) {
+             if (registrations.length === 0) {
+                 recentBody.innerHTML = '<tr><td colspan="5" style="text-align: center; padding: 1rem;">No registrations found yet.</td></tr>';
+             } else {
+                 let html = '';
+                 const recent = registrations.slice(0, 5); // Just show top 5
+                 recent.forEach(reg => {
+                     html += `
+                         <tr>
+                             <td>${reg.name}</td>
+                             <td>${reg.email}</td>
+                             <td><span class="badge program-badge">${reg.program}</span></td>
+                             <td>${reg.date}</td>
+                             <td><button class="btn-text">View</button></td>
+                         </tr>
+                     `;
+                 });
+                 recentBody.innerHTML = html;
+             }
+        }
+
         // Update dashboard stat
         const statReg = document.getElementById('stat-reg');
         if (statReg) statReg.textContent = registrations.length;
     }
-
-    renderTables();
 
     // Bookshelf Add Form
     const bookForm = document.getElementById('add-book-form');
