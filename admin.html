@@ -1,0 +1,138 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>DWSA Admin Dashboard</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600&family=Montserrat:wght@500;700;800&family=Space+Grotesk:wght@400;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="admin.css">
+</head>
+<body>
+    <div class="admin-layout">
+        <!-- Sidebar -->
+        <aside class="sidebar">
+            <div class="sidebar-header">
+                <span class="dwsa-text">DWSA Admin</span>
+            </div>
+            <ul class="sidebar-nav">
+                <li class="active"><a href="#" data-target="dashboard">Dashboard Overview</a></li>
+                <li><a href="#" data-target="registrations">Registrations</a></li>
+                <li><a href="#" data-target="bookshelf">Manage Bookshelf</a></li>
+                <li><a href="#" data-target="programs">Manage Programs</a></li>
+                <li class="nav-divider"></li>
+                <li><a href="index.html" class="back-link">← Back to Main Site</a></li>
+            </ul>
+        </aside>
+
+        <!-- Main Content -->
+        <main class="main-content">
+            <header class="topbar">
+                <h1 id="page-title">Dashboard Overview</h1>
+                <div class="user-profile">
+                    <div class="avatar">AD</div>
+                    <span>Admin User</span>
+                </div>
+            </header>
+
+            <!-- Dashboard View -->
+            <div class="content-view active" id="view-dashboard">
+                <div class="stats-grid">
+                    <div class="stat-card">
+                        <h3>Total Registrations</h3>
+                        <div class="stat-value" id="stat-reg">124</div>
+                    </div>
+                    <div class="stat-card">
+                        <h3>Books Sold</h3>
+                        <div class="stat-value">45</div>
+                    </div>
+                    <div class="stat-card highlight">
+                        <h3>Total Revenue</h3>
+                        <div class="stat-value">₦245,000</div>
+                    </div>
+                </div>
+
+                <div class="recent-activity">
+                    <h2>Recent Campaign Registrations</h2>
+                    <div class="table-container">
+                        <table class="data-table">
+                            <thead>
+                                <tr>
+                                    <th>Name</th>
+                                    <th>Email</th>
+                                    <th>Program Selected</th>
+                                    <th>Date</th>
+                                    <th>Action</th>
+                                </tr>
+                            </thead>
+                            <tbody id="registration-table-body">
+                                <tr>
+                                    <td>John Doe</td>
+                                    <td>john@example.com</td>
+                                    <td><span class="badge program-badge">7-Day AI App Challenge</span></td>
+                                    <td>Today</td>
+                                    <td><button class="btn-text">View</button></td>
+                                </tr>
+                                <tr>
+                                    <td>Sarah Smith</td>
+                                    <td>sarah.s@mail.com</td>
+                                    <td><span class="badge program-badge">Crypto Fundamentals</span></td>
+                                    <td>Yesterday</td>
+                                    <td><button class="btn-text">View</button></td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Bookshelf View -->
+            <div class="content-view" id="view-bookshelf">
+                <div class="view-header">
+                    <h2>Manage Bookshelf Inventory</h2>
+                </div>
+                <div class="admin-panel glass-panel-admin">
+                    <h3>Add New Digital Material</h3>
+                    <form id="add-book-form" class="admin-form">
+                        <div class="form-row">
+                            <div class="form-group half">
+                                <label>Material Title</label>
+                                <input type="text" required placeholder="e.g. AI Prompt Library">
+                            </div>
+                            <div class="form-group half">
+                                <label>Price (₦)</label>
+                                <input type="number" required placeholder="5000">
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label>Cover Image URL</label>
+                            <input type="url" required placeholder="https://...">
+                        </div>
+                        <div class="form-group">
+                            <label>Short Description</label>
+                            <textarea rows="3" required placeholder="Describe the value of this material..."></textarea>
+                        </div>
+                        <button type="submit" class="btn-primary">Publish to Bookshelf</button>
+                    </form>
+                </div>
+            </div>
+
+            <!-- Registrations View -->
+            <div class="content-view" id="view-registrations">
+                <div class="view-header">
+                    <h2>All Registrations</h2>
+                    <div class="actions">
+                        <button class="btn-secondary">Export CSV</button>
+                    </div>
+                </div>
+                <div class="table-container">
+                    <table class="data-table" id="full-reg-table">
+                        <!-- Will be populated by JS -->
+                    </table>
+                </div>
+            </div>
+
+        </main>
+    </div>
+    <script src="admin.js"></script>
+</body>
+</html>
