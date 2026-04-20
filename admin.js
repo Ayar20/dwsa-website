@@ -26,44 +26,58 @@ document.addEventListener('DOMContentLoaded', () => {
         });
     });
 
-    // Mock Database for Registrations (Reads from local storage if available)
-    let registrations = JSON.parse(localStorage.getItem('dwsa_registrations')) || [
-        { name: 'John Doe', email: 'john@example.com', program: '7-Day AI App Challenge', date: new Date().toLocaleDateString() },
-        { name: 'Sarah Smith', email: 'sarah.s@mail.com', program: 'Crypto Fundamentals', date: new Date(Date.now() - 86400000).toLocaleDateString() }
-    ];
+    // Live Database Registrations
+    let registrations = [];
 
     // Function to render table
-    function renderTables() {
+    async function renderTables() {
         const fullTable = document.getElementById('full-reg-table');
         if (fullTable) {
-            let html = `
-                <thead>
-                    <tr>
-                        <th>Name</th>
-                        <th>Email</th>
-                        <th>Program Selected</th>
-                        <th>Date</th>
-                    </tr>
-                </thead>
-                <tbody>
-            `;
-            registrations.forEach(reg => {
-                html += `
-                    <tr>
-                        <td>${reg.name}</td>
-                        <td>${reg.email}</td>
-                        <td><span class="badge program-badge">${reg.program}</span></td>
-                        <td>${reg.date}</td>
-                    </tr>
+            fullTable.innerHTML = '<tbody><tr><td colspan="4" style="text-align: center; padding: 2rem;">Loading live registrations from database...</td></tr></tbody>';
+            
+            try {
+                const response = await fetch('/api/get-registrations');
+                const result = await response.json();
+                
+                if (result.success) {
+                    registrations = result.data;
+                }
+            } catch (error) {
+                console.error("Error fetching registrations:", error);
+            }
+            
+            if (registrations.length === 0) {
+                 fullTable.innerHTML = '<tbody><tr><td colspan="4" style="text-align: center; padding: 2rem;">No registrations found yet.</td></tr></tbody>';
+            } else {
+                let html = `
+                    <thead>
+                        <tr>
+                            <th>Name</th>
+                            <th>Email</th>
+                            <th>Program Selected</th>
+                            <th>Date</th>
+                        </tr>
+                    </thead>
+                    <tbody>
                 `;
-            });
-            html += `</tbody>`;
-            fullTable.innerHTML = html;
+                registrations.forEach(reg => {
+                    html += `
+                        <tr>
+                            <td>${reg.name}</td>
+                            <td>${reg.email}</td>
+                            <td><span class="badge program-badge">${reg.program}</span></td>
+                            <td>${reg.date}</td>
+                        </tr>
+                    `;
+                });
+                html += `</tbody>`;
+                fullTable.innerHTML = html;
+            }
         }
 
         // Update dashboard stat
         const statReg = document.getElementById('stat-reg');
-        if (statReg) statReg.textContent = registrations.length + 122; // Just to show a nice number
+        if (statReg) statReg.textContent = registrations.length;
     }
 
     renderTables();

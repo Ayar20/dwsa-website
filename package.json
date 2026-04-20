@@ -1,0 +1,8 @@
+{
+  "name": "dwsa-website",
+  "version": "1.0.0",
+  "description": "Digital Wealth Systems Africa",
+  "dependencies": {
+    "pg": "^8.11.3"
+  }
+}

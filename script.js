@@ -53,4 +53,46 @@ document.addEventListener('DOMContentLoaded', () => {
             }
         });
     });
+
+    // Handle Registration Form Submission
+    const campaignForm = document.getElementById('campaign-form');
+    if (campaignForm) {
+        campaignForm.addEventListener('submit', async (e) => {
+            e.preventDefault();
+            
+            const submitBtn = campaignForm.querySelector('button[type="submit"]');
+            const originalText = submitBtn.textContent;
+            submitBtn.textContent = 'Processing...';
+            submitBtn.disabled = true;
+
+            const formData = {
+                name: document.getElementById('name').value,
+                email: document.getElementById('email').value,
+                program: document.getElementById('program').value
+            };
+
+            try {
+                const response = await fetch('/api/register', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify(formData)
+                });
+
+                const result = await response.json();
+
+                if (response.ok) {
+                    alert('Registration Successful! Welcome to the DWSA Campaign.');
+                    campaignForm.reset();
+                } else {
+                    alert('Error: ' + result.message);
+                }
+            } catch (error) {
+                console.error('Error submitting form:', error);
+                alert('Something went wrong. Please try again.');
+            } finally {
+                submitBtn.textContent = originalText;
+                submitBtn.disabled = false;
+            }
+        });
+    }
 });
