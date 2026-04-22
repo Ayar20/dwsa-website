@@ -160,16 +160,20 @@ ul {
 }
 
 .nav-logo {
-    height: 64px;
+    height: 56px;
     width: auto;
     display: block;
     object-fit: contain;
-    filter: drop-shadow(0 0 8px rgba(212, 160, 23, 0.6)) brightness(1.15);
-    transition: filter 0.3s ease;
+    background: rgba(255, 255, 255, 0.92);
+    padding: 6px 14px;
+    border-radius: 8px;
+    box-shadow: 0 2px 12px rgba(0,0,0,0.3);
+    transition: all 0.3s ease;
 }
 
 .nav-logo:hover {
-    filter: drop-shadow(0 0 14px rgba(212, 160, 23, 0.9)) brightness(1.25);
+    background: rgba(255, 255, 255, 1);
+    box-shadow: 0 4px 20px rgba(212, 160, 23, 0.5);
 }
 
 .nav-links {
