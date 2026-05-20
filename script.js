@@ -87,7 +87,7 @@ document.addEventListener('DOMContentLoaded', () => {
                 html += `
                     <div class="book-card observe-me${delayClass}">
                         <div class="book-cover">
-                            <img src="${coverUrl}" alt="${book.title}" onerror="this.parentElement.style.background='rgba(201,168,76,0.1)'">
+                            <img src="${coverUrl}" alt="${book.title}" onerror="this.style.display='none'; this.parentElement.style.background='rgba(201,168,76,0.1)'">
                         </div>
                         <div class="book-info">
                             <h3>${book.title}</h3>
