@@ -84,7 +84,7 @@ document.addEventListener('DOMContentLoaded', () => {
                             <h3>${book.title}</h3>
                             <p>${book.description || 'Premium digital material available for download.'}</p>
                             <div class="book-price">${priceDisplay}</div>
-                            <a href="${book.download_url}" target="_blank" download class="btn-primary btn-sm glow-effect" style="display:inline-block;text-align:center;">Download Free</a>
+                            <a href="/api/download?url=${encodeURIComponent(book.download_url)}&filename=${encodeURIComponent(book.title.replace(/\s+/g, '_') + '.pdf')}" download class="btn-primary btn-sm glow-effect" style="display:inline-block;text-align:center;">Download Free</a>
                         </div>
                     </div>
                 `;
