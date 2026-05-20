@@ -59,12 +59,39 @@ document.addEventListener('DOMContentLoaded', () => {
         const grid = document.querySelector('.bookshelf-grid');
         if (!grid) return;
 
+        // Cache the fallback static HTML in case of API failure
+        const fallbackHtml = grid.innerHTML;
+
+        // Show a premium glassmorphic loading/skeleton state
+        grid.innerHTML = `
+            <div class="book-card observe-me visible" style="height: 400px; display: flex; align-items: center; justify-content: center; background: rgba(255,255,255,0.01); border: 1px dashed rgba(255,255,255,0.05); grid-column: 1 / -1; border-radius: 12px;">
+                <div style="text-align: center; color: var(--color-text-muted);">
+                    <div class="spinner" style="width: 32px; height: 32px; border: 3px solid rgba(212, 160, 23, 0.1); border-radius: 50%; border-top-color: var(--color-gold); animation: spin 1s linear infinite; margin: 0 auto 12px;"></div>
+                    <span style="font-family: var(--font-accent); font-size: 0.9rem; letter-spacing: 1px;">LOADING DIGITAL BOOKSHELF...</span>
+                </div>
+            </div>
+        `;
+
+        // Inject spin animation styles dynamically if not already present
+        if (!document.getElementById('skeleton-spin-styles')) {
+            const style = document.createElement('style');
+            style.id = 'skeleton-spin-styles';
+            style.innerHTML = `@keyframes spin { to { transform: rotate(360deg); } }`;
+            document.head.appendChild(style);
+        }
+
         try {
             const response = await fetch('/api/get-books');
-            if (!response.ok) return; // silently fall back to static cards
+            if (!response.ok) {
+                grid.innerHTML = fallbackHtml;
+                return;
+            }
 
             const result = await response.json();
-            if (!result.success || !result.data || result.data.length === 0) return;
+            if (!result.success || !result.data || result.data.length === 0) {
+                grid.innerHTML = fallbackHtml;
+                return;
+            }
 
             const books = result.data;
             let html = '';
@@ -112,7 +139,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
         } catch (err) {
             console.warn('Dynamic bookshelf unavailable, showing static content.', err);
-            // Falls back to existing static HTML — no action needed
+            grid.innerHTML = fallbackHtml;
         }
     }
 
