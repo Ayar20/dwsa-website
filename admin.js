@@ -202,9 +202,17 @@ document.addEventListener('DOMContentLoaded', () => {
 
         let html = '<div style="display:flex;flex-direction:column;gap:1rem;">';
         books.forEach(book => {
+            let coverUrl = book.cover_image_url;
+            if (coverUrl && coverUrl.includes('drive.google.com')) {
+                const match = coverUrl.match(/\/file\/d\/([a-zA-Z0-9_-]+)/) || coverUrl.match(/[?&]id=([a-zA-Z0-9_-]+)/);
+                if (match && match[1]) {
+                    coverUrl = `https://drive.google.com/thumbnail?id=${match[1]}&sz=200`;
+                }
+            }
+
             html += `
                 <div style="display:flex;align-items:center;gap:1rem;padding:1rem;background:rgba(255,255,255,0.03);border:1px solid rgba(255,255,255,0.07);border-radius:8px;">
-                    <img src="${book.cover_image_url}" alt="${book.title}" style="width:56px;height:72px;object-fit:cover;border-radius:4px;flex-shrink:0;" onerror="this.style.display='none'">
+                    <img src="${coverUrl}" alt="${book.title}" style="width:56px;height:72px;object-fit:cover;border-radius:4px;flex-shrink:0;" onerror="this.style.display='none'">
                     <div style="flex:1;min-width:0;">
                         <div style="font-weight:600;color:#fff;font-size:0.95rem;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;">${book.title}</div>
                         <div style="color:#c9a84c;font-size:0.82rem;margin-top:2px;">${book.price || 'Free'}</div>

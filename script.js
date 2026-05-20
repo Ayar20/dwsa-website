@@ -75,10 +75,19 @@ document.addEventListener('DOMContentLoaded', () => {
                     ? `<span style="text-decoration:line-through;font-size:0.8em;color:#a0aec0;margin-right:8px;">${book.price}</span>Free`
                     : 'Free';
 
+                // Helper to resolve Google Drive covers to actual thumbnails (works for images and PDF first pages)
+                let coverUrl = book.cover_image_url;
+                if (coverUrl && coverUrl.includes('drive.google.com')) {
+                    const match = coverUrl.match(/\/file\/d\/([a-zA-Z0-9_-]+)/) || coverUrl.match(/[?&]id=([a-zA-Z0-9_-]+)/);
+                    if (match && match[1]) {
+                        coverUrl = `https://drive.google.com/thumbnail?id=${match[1]}&sz=w600`;
+                    }
+                }
+
                 html += `
                     <div class="book-card observe-me${delayClass}">
                         <div class="book-cover">
-                            <img src="${book.cover_image_url}" alt="${book.title}" onerror="this.parentElement.style.background='rgba(201,168,76,0.1)'">
+                            <img src="${coverUrl}" alt="${book.title}" onerror="this.parentElement.style.background='rgba(201,168,76,0.1)'">
                         </div>
                         <div class="book-info">
                             <h3>${book.title}</h3>
