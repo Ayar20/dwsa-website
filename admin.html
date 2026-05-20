@@ -98,23 +98,35 @@
                         <div class="form-row">
                             <div class="form-group half">
                                 <label>Material Title</label>
-                                <input type="text" required placeholder="e.g. AI Prompt Library">
+                                <input type="text" id="book-title" required placeholder="e.g. AI Prompt Library">
                             </div>
                             <div class="form-group half">
-                                <label>Price (₦)</label>
-                                <input type="number" required placeholder="5000">
+                                <label>Price (leave blank for Free)</label>
+                                <input type="text" id="book-price" placeholder="e.g. ₦5,000 or Free">
                             </div>
                         </div>
                         <div class="form-group">
                             <label>Cover Image URL</label>
-                            <input type="url" required placeholder="https://...">
+                            <input type="url" id="book-cover-url" required placeholder="https://...">
+                        </div>
+                        <div class="form-group">
+                            <label>Download Link / PDF URL</label>
+                            <input type="url" id="book-download-url" required placeholder="https://drive.google.com/... or direct PDF link">
                         </div>
                         <div class="form-group">
                             <label>Short Description</label>
-                            <textarea rows="3" required placeholder="Describe the value of this material..."></textarea>
+                            <textarea id="book-description" rows="3" placeholder="Describe the value of this material..."></textarea>
                         </div>
-                        <button type="submit" class="btn-primary">Publish to Bookshelf</button>
+                        <button type="submit" class="btn-primary" id="publish-book-btn">Publish to Bookshelf</button>
+                        <p id="book-form-status" style="margin-top: 1rem; font-size: 0.9rem; display: none;"></p>
                     </form>
+                </div>
+
+                <div class="admin-panel glass-panel-admin" style="margin-top: 1.5rem;">
+                    <h3>Current Inventory</h3>
+                    <div id="book-inventory-list">
+                        <p style="color: #a0aec0; font-size: 0.9rem;">Loading books...</p>
+                    </div>
                 </div>
             </div>
 

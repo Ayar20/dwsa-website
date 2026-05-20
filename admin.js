@@ -23,6 +23,11 @@ document.addEventListener('DOMContentLoaded', () => {
             
             // Update title
             pageTitle.textContent = e.currentTarget.textContent;
+
+            // Load bookshelf inventory when that tab is opened
+            if (targetId === 'bookshelf') {
+                fetchBooks();
+            }
         });
     });
 
@@ -170,13 +175,124 @@ document.addEventListener('DOMContentLoaded', () => {
         if (statReg) statReg.textContent = registrations.length;
     }
 
+    // ── Bookshelf Management ──────────────────────────────────────────────
+
+    async function fetchBooks() {
+        const inventoryEl = document.getElementById('book-inventory-list');
+        if (inventoryEl) inventoryEl.innerHTML = '<p style="color:#a0aec0;font-size:0.9rem;">Loading books...</p>';
+
+        try {
+            const response = await fetch('/api/get-books');
+            const result = await response.json();
+            renderBookInventory(result.success ? result.data : []);
+        } catch (err) {
+            console.error('Error fetching books:', err);
+            if (inventoryEl) inventoryEl.innerHTML = '<p style="color:#ff4d4d;font-size:0.9rem;">Failed to load inventory.</p>';
+        }
+    }
+
+    function renderBookInventory(books) {
+        const inventoryEl = document.getElementById('book-inventory-list');
+        if (!inventoryEl) return;
+
+        if (!books || books.length === 0) {
+            inventoryEl.innerHTML = '<p style="color:#a0aec0;font-size:0.9rem;">No books published yet. Use the form above to add your first material.</p>';
+            return;
+        }
+
+        let html = '<div style="display:flex;flex-direction:column;gap:1rem;">';
+        books.forEach(book => {
+            html += `
+                <div style="display:flex;align-items:center;gap:1rem;padding:1rem;background:rgba(255,255,255,0.03);border:1px solid rgba(255,255,255,0.07);border-radius:8px;">
+                    <img src="${book.cover_image_url}" alt="${book.title}" style="width:56px;height:72px;object-fit:cover;border-radius:4px;flex-shrink:0;" onerror="this.style.display='none'">
+                    <div style="flex:1;min-width:0;">
+                        <div style="font-weight:600;color:#fff;font-size:0.95rem;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;">${book.title}</div>
+                        <div style="color:#c9a84c;font-size:0.82rem;margin-top:2px;">${book.price || 'Free'}</div>
+                        <div style="color:#a0aec0;font-size:0.8rem;margin-top:2px;">${book.date}</div>
+                    </div>
+                    <div style="display:flex;gap:0.5rem;flex-shrink:0;">
+                        <a href="${book.download_url}" target="_blank" style="font-size:0.8rem;color:#c9a84c;text-decoration:none;border:1px solid rgba(201,168,76,0.4);padding:4px 10px;border-radius:6px;">Preview</a>
+                        <button onclick="deleteBook(${book.id})" style="font-size:0.8rem;background:rgba(255,77,77,0.15);color:#ff4d4d;border:1px solid rgba(255,77,77,0.3);padding:4px 10px;border-radius:6px;cursor:pointer;">Delete</button>
+                    </div>
+                </div>
+            `;
+        });
+        html += '</div>';
+        inventoryEl.innerHTML = html;
+    }
+
+    window.deleteBook = async function(id) {
+        if (!confirm('Are you sure you want to remove this book from the bookshelf?')) return;
+
+        try {
+            const response = await fetch(`/api/delete-book?id=${id}`, {
+                method: 'DELETE',
+                headers: { 'Authorization': `Bearer ${authToken}` }
+            });
+            const result = await response.json();
+            if (result.success) {
+                fetchBooks();
+            } else {
+                alert('Error: ' + result.message);
+            }
+        } catch (err) {
+            console.error('Delete error:', err);
+            alert('Something went wrong. Please try again.');
+        }
+    };
+
     // Bookshelf Add Form
     const bookForm = document.getElementById('add-book-form');
     if (bookForm) {
-        bookForm.addEventListener('submit', (e) => {
+        bookForm.addEventListener('submit', async (e) => {
             e.preventDefault();
-            alert('Material successfully added to Bookshelf (Mock Action)');
-            bookForm.reset();
+
+            const publishBtn = document.getElementById('publish-book-btn');
+            const statusEl = document.getElementById('book-form-status');
+            publishBtn.textContent = 'Publishing...';
+            publishBtn.disabled = true;
+            statusEl.style.display = 'none';
+
+            const payload = {
+                title: document.getElementById('book-title').value.trim(),
+                price: document.getElementById('book-price').value.trim() || 'Free',
+                cover_image_url: document.getElementById('book-cover-url').value.trim(),
+                download_url: document.getElementById('book-download-url').value.trim(),
+                description: document.getElementById('book-description').value.trim()
+            };
+
+            try {
+                const response = await fetch('/api/add-book', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'Authorization': `Bearer ${authToken}`
+                    },
+                    body: JSON.stringify(payload)
+                });
+
+                const result = await response.json();
+
+                if (result.success) {
+                    statusEl.textContent = '✅ Book published successfully!';
+                    statusEl.style.color = '#48bb78';
+                    statusEl.style.display = 'block';
+                    bookForm.reset();
+                    fetchBooks();
+                } else {
+                    statusEl.textContent = '❌ Error: ' + result.message;
+                    statusEl.style.color = '#ff4d4d';
+                    statusEl.style.display = 'block';
+                }
+            } catch (err) {
+                console.error('Publish error:', err);
+                statusEl.textContent = '❌ Connection error. Please try again.';
+                statusEl.style.color = '#ff4d4d';
+                statusEl.style.display = 'block';
+            } finally {
+                publishBtn.textContent = 'Publish to Bookshelf';
+                publishBtn.disabled = false;
+            }
         });
     }
 });

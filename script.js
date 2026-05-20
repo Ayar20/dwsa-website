@@ -54,6 +54,61 @@ document.addEventListener('DOMContentLoaded', () => {
         });
     });
 
+    // ── Dynamic Bookshelf Loader ──────────────────────────────────────────
+    async function loadDynamicBookshelf() {
+        const grid = document.querySelector('.bookshelf-grid');
+        if (!grid) return;
+
+        try {
+            const response = await fetch('/api/get-books');
+            if (!response.ok) return; // silently fall back to static cards
+
+            const result = await response.json();
+            if (!result.success || !result.data || result.data.length === 0) return;
+
+            const books = result.data;
+            let html = '';
+
+            books.forEach((book, index) => {
+                const delayClass = index === 1 ? ' delay-1' : index === 2 ? ' delay-2' : '';
+                const priceDisplay = book.price && book.price.toLowerCase() !== 'free'
+                    ? `<span style="text-decoration:line-through;font-size:0.8em;color:#a0aec0;margin-right:8px;">${book.price}</span>Free`
+                    : 'Free';
+
+                html += `
+                    <div class="book-card observe-me${delayClass}">
+                        <div class="book-cover">
+                            <img src="${book.cover_image_url}" alt="${book.title}" onerror="this.parentElement.style.background='rgba(201,168,76,0.1)'">
+                        </div>
+                        <div class="book-info">
+                            <h3>${book.title}</h3>
+                            <p>${book.description || 'Premium digital material available for download.'}</p>
+                            <div class="book-price">${priceDisplay}</div>
+                            <a href="${book.download_url}" target="_blank" download class="btn-primary btn-sm glow-effect" style="display:inline-block;text-align:center;">Download Free</a>
+                        </div>
+                    </div>
+                `;
+            });
+
+            grid.innerHTML = html;
+
+            // Re-observe newly injected elements for scroll animations
+            const observerOptions = { root: null, rootMargin: '0px', threshold: 0.15 };
+            const newObserver = new IntersectionObserver((entries) => {
+                entries.forEach(entry => {
+                    if (entry.isIntersecting) entry.target.classList.add('visible');
+                });
+            }, observerOptions);
+            grid.querySelectorAll('.observe-me').forEach(el => newObserver.observe(el));
+
+        } catch (err) {
+            console.warn('Dynamic bookshelf unavailable, showing static content.', err);
+            // Falls back to existing static HTML — no action needed
+        }
+    }
+
+    loadDynamicBookshelf();
+
     // Handle Registration Form Submission
     const campaignForm = document.getElementById('campaign-form');
     if (campaignForm) {
