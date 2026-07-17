@@ -1137,6 +1137,8 @@ ul {
         flex-direction: column;
         text-align: center;
         padding-top: 8rem;
+        min-height: auto;
+        padding-bottom: 4rem;
     }
     
     .hero-content h1 {
@@ -1145,12 +1147,32 @@ ul {
     
     .hero-actions {
         justify-content: center;
+        flex-wrap: wrap;
     }
     
     .hero-graphics {
         width: 100%;
-        margin-top: 3rem;
+        height: auto;
+        position: static;
+        margin-top: 4rem;
+        display: flex;
+        flex-wrap: wrap;
+        gap: 1.5rem;
+        justify-content: center;
+        align-items: center;
     }
+
+    .hero-graphics .glass-card {
+        position: static;
+        flex: 1 1 200px;
+        max-width: 260px;
+        transform: none;
+        animation: float-simple 6s ease-in-out infinite;
+    }
+
+    .hero-graphics .floating-card-1 { animation-delay: 0s; }
+    .hero-graphics .floating-card-2 { animation-delay: 2s; }
+    .hero-graphics .floating-card-3 { animation-delay: 4s; }
     
     .pricing-table {
         flex-direction: column;
@@ -1163,6 +1185,12 @@ ul {
     .pricing-card.popular:hover {
         transform: translateY(-5px);
     }
+}
+
+@keyframes float-simple {
+    0% { transform: translateY(0px); }
+    50% { transform: translateY(-10px); }
+    100% { transform: translateY(0px); }
 }
 
 /* Mobile Navbar Toggle Button */
