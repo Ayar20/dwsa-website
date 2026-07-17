@@ -186,4 +186,71 @@ document.addEventListener('DOMContentLoaded', () => {
             }
         });
     }
+
+    // ── Mobile Menu Toggle ────────────────────────────────────────────────
+    const navToggle = document.getElementById('nav-toggle');
+    const navLinks = document.querySelector('.nav-links');
+
+    if (navToggle && navLinks) {
+        navToggle.addEventListener('click', () => {
+            navToggle.classList.toggle('active');
+            navLinks.classList.toggle('active');
+        });
+
+        // Close menu when clicking on links
+        navLinks.querySelectorAll('a').forEach(link => {
+            link.addEventListener('click', () => {
+                navToggle.classList.remove('active');
+                navLinks.classList.remove('active');
+            });
+        });
+    }
+
+    // ── P.R.I.D.E. Accordion Logic ─────────────────────────────────────────
+    const prideItems = document.querySelectorAll('.pride-item');
+    
+    prideItems.forEach(item => {
+        const header = item.querySelector('.pride-header');
+        const body = item.querySelector('.pride-body');
+        
+        if (header && body) {
+            header.addEventListener('click', () => {
+                const isOpen = item.classList.contains('active');
+                
+                // Close all other items first (accordion behavior)
+                prideItems.forEach(otherItem => {
+                    if (otherItem !== item) {
+                        otherItem.classList.remove('active');
+                        const otherHeader = otherItem.querySelector('.pride-header');
+                        const otherBody = otherItem.querySelector('.pride-body');
+                        if (otherHeader) otherHeader.setAttribute('aria-expanded', 'false');
+                        if (otherBody) otherBody.style.maxHeight = null;
+                    }
+                });
+                
+                // Toggle current item
+                if (isOpen) {
+                    item.classList.remove('active');
+                    header.setAttribute('aria-expanded', 'false');
+                    body.style.maxHeight = null;
+                } else {
+                    item.classList.add('active');
+                    header.setAttribute('aria-expanded', 'true');
+                    body.style.maxHeight = body.scrollHeight + "px";
+                }
+            });
+        }
+    });
+
+    // Open the first item (P) by default
+    const firstPrideItem = document.querySelector('.pride-item');
+    if (firstPrideItem) {
+        const header = firstPrideItem.querySelector('.pride-header');
+        const body = firstPrideItem.querySelector('.pride-body');
+        if (header && body) {
+            firstPrideItem.classList.add('active');
+            header.setAttribute('aria-expanded', 'true');
+            body.style.maxHeight = body.scrollHeight + "px";
+        }
+    }
 });
