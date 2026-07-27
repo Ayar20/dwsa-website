@@ -21,46 +21,56 @@
       ]
     }
   ],
-  "rewrites": [
+  "redirects": [
     {
       "source": "/academy",
-      "destination": "https://dwsa-academy.vercel.app/academy"
+      "destination": "https://dwsa-academy.vercel.app/academy",
+      "permanent": false
     },
     {
       "source": "/academy/:path*",
-      "destination": "https://dwsa-academy.vercel.app/academy/:path*"
+      "destination": "https://dwsa-academy.vercel.app/academy/:path*",
+      "permanent": false
     },
     {
       "source": "/enterprise",
-      "destination": "https://dwsa-enterpriseos.vercel.app/enterprise"
+      "destination": "https://dwsa-enterpriseos.vercel.app",
+      "permanent": false
     },
     {
       "source": "/enterprise/:path*",
-      "destination": "https://dwsa-enterpriseos.vercel.app/enterprise/:path*"
+      "destination": "https://dwsa-enterpriseos.vercel.app/:path*",
+      "permanent": false
     },
     {
       "source": "/hotel",
-      "destination": "https://hotel-mgt-app-lightup0002-5219s-projects.vercel.app/hotel"
+      "destination": "https://hotel-mgt-app-lightup0002-5219s-projects.vercel.app",
+      "permanent": false
     },
     {
       "source": "/hotel/:path*",
-      "destination": "https://hotel-mgt-app-lightup0002-5219s-projects.vercel.app/hotel/:path*"
+      "destination": "https://hotel-mgt-app-lightup0002-5219s-projects.vercel.app/:path*",
+      "permanent": false
     },
     {
       "source": "/school",
-      "destination": "https://dwsaeducare.vercel.app/school"
+      "destination": "https://dwsaeducare.vercel.app",
+      "permanent": false
     },
     {
       "source": "/school/:path*",
-      "destination": "https://dwsaeducare.vercel.app/school/:path*"
+      "destination": "https://dwsaeducare.vercel.app/:path*",
+      "permanent": false
     },
     {
       "source": "/farm",
-      "destination": "https://dwsaagriops.vercel.app/farm"
+      "destination": "https://dwsaagriops.vercel.app",
+      "permanent": false
     },
     {
       "source": "/farm/:path*",
-      "destination": "https://dwsaagriops.vercel.app/farm/:path*"
+      "destination": "https://dwsaagriops.vercel.app/:path*",
+      "permanent": false
     }
   ]
 }
