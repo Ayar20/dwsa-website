@@ -1393,14 +1393,22 @@ ul {
 }
 
 .app-switcher-item .app-icon {
-    font-size: 1.3rem;
     width: 36px;
     height: 36px;
+    flex-shrink: 0;
     display: flex;
     align-items: center;
     justify-content: center;
-    background: rgba(255, 255, 255, 0.05);
+    background: rgba(212, 160, 23, 0.1);
+    border: 1px solid rgba(212, 160, 23, 0.25);
     border-radius: 8px;
+    transition: var(--transition-smooth);
+}
+
+.app-switcher-item:hover .app-icon {
+    background: rgba(212, 160, 23, 0.25);
+    border-color: var(--color-gold);
+    box-shadow: 0 0 10px rgba(212, 160, 23, 0.4);
 }
 
 .app-switcher-item .app-details {
