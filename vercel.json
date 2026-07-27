@@ -20,5 +20,15 @@
         }
       ]
     }
+  ],
+  "rewrites": [
+    {
+      "source": "/academy",
+      "destination": "https://dwsa-academy.vercel.app/academy"
+    },
+    {
+      "source": "/academy/:path*",
+      "destination": "https://dwsa-academy.vercel.app/academy/:path*"
+    }
   ]
 }
