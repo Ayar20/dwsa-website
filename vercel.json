@@ -24,12 +24,12 @@
   "redirects": [
     {
       "source": "/academy",
-      "destination": "https://dwsa-academy.vercel.app/academy",
+      "destination": "https://dwsa-academy.vercel.app",
       "permanent": false
     },
     {
       "source": "/academy/:path*",
-      "destination": "https://dwsa-academy.vercel.app/academy/:path*",
+      "destination": "https://dwsa-academy.vercel.app/:path*",
       "permanent": false
     },
     {
