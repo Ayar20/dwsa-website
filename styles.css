@@ -1282,3 +1282,198 @@ ul {
     display: block;
     background: #000;
 }
+
+/* ── App Switcher Navigation Component ───────────────────────────────── */
+.app-switcher-container {
+    position: relative;
+    margin-left: 1rem;
+}
+
+.app-switcher {
+    position: relative;
+}
+
+.app-switcher-btn {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    padding: 0.5rem 1rem;
+    background: rgba(212, 160, 23, 0.1);
+    border: 1px solid rgba(212, 160, 23, 0.3);
+    border-radius: 6px;
+    color: var(--color-gold);
+    font-family: var(--font-heading);
+    font-size: 0.85rem;
+    font-weight: 600;
+    cursor: pointer;
+    transition: var(--transition-smooth);
+}
+
+.app-switcher-btn:hover {
+    background: rgba(212, 160, 23, 0.2);
+    border-color: var(--color-gold);
+}
+
+.app-switcher-btn .chevron-icon {
+    transition: transform 0.3s ease;
+}
+
+.app-switcher.active .app-switcher-btn .chevron-icon {
+    transform: rotate(180deg);
+}
+
+.app-switcher-dropdown {
+    position: absolute;
+    top: calc(100% + 10px);
+    right: 0;
+    width: 310px;
+    background: rgba(17, 34, 64, 0.95);
+    backdrop-filter: blur(20px);
+    border: 1px solid rgba(212, 160, 23, 0.3);
+    border-radius: 12px;
+    box-shadow: 0 15px 40px rgba(0, 0, 0, 0.6);
+    padding: 0.75rem;
+    display: flex;
+    flex-direction: column;
+    gap: 0.4rem;
+    opacity: 0;
+    visibility: hidden;
+    transform: translateY(-10px);
+    transition: var(--transition-smooth);
+    z-index: 1000;
+}
+
+.app-switcher.active .app-switcher-dropdown {
+    opacity: 1;
+    visibility: visible;
+    transform: translateY(0);
+}
+
+.app-switcher-header {
+    font-family: var(--font-accent);
+    font-size: 0.75rem;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    color: var(--color-text-muted);
+    padding: 0.4rem 0.6rem;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+    margin-bottom: 0.25rem;
+}
+
+.app-switcher-item {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+    padding: 0.6rem 0.75rem;
+    border-radius: 8px;
+    transition: var(--transition-smooth);
+    text-decoration: none;
+}
+
+.app-switcher-item:hover {
+    background: rgba(212, 160, 23, 0.12);
+    transform: translateX(4px);
+}
+
+.app-switcher-item .app-icon {
+    font-size: 1.3rem;
+    width: 36px;
+    height: 36px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: rgba(255, 255, 255, 0.05);
+    border-radius: 8px;
+}
+
+.app-switcher-item .app-details {
+    display: flex;
+    flex-direction: column;
+}
+
+.app-switcher-item .app-name {
+    font-family: var(--font-heading);
+    font-size: 0.9rem;
+    font-weight: 600;
+    color: var(--color-white);
+}
+
+.app-switcher-item .app-desc {
+    font-size: 0.75rem;
+    color: var(--color-text-muted);
+}
+
+/* ── Product Suite Section & Grid ────────────────────────────────────── */
+.products-section {
+    padding: 6rem 5%;
+    background: linear-gradient(180deg, var(--color-navy) 0%, var(--color-navy-light) 100%);
+    position: relative;
+}
+
+.product-suite-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+    gap: 2rem;
+    max-width: 1200px;
+    margin: 0 auto;
+}
+
+.product-card {
+    background: rgba(255, 255, 255, 0.03);
+    border: 1px solid rgba(212, 160, 23, 0.2);
+    border-radius: 16px;
+    padding: 2rem;
+    display: flex;
+    flex-direction: column;
+    position: relative;
+    transition: var(--transition-smooth);
+    backdrop-filter: blur(10px);
+}
+
+.product-card:hover {
+    transform: translateY(-8px);
+    border-color: var(--color-gold);
+    box-shadow: 0 20px 40px rgba(0, 0, 0, 0.4), 0 0 20px rgba(212, 160, 23, 0.2);
+    background: rgba(255, 255, 255, 0.05);
+}
+
+.product-badge {
+    position: absolute;
+    top: 1.25rem;
+    right: 1.25rem;
+    font-family: var(--font-accent);
+    font-size: 0.7rem;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    padding: 0.25rem 0.6rem;
+    background: rgba(212, 160, 23, 0.15);
+    border: 1px solid var(--color-gold);
+    color: var(--color-gold);
+    border-radius: 20px;
+}
+
+.product-icon {
+    margin-bottom: 1.25rem;
+}
+
+.product-card h3 {
+    font-size: 1.35rem;
+    margin-bottom: 0.75rem;
+    color: var(--color-white);
+}
+
+.product-card p {
+    color: var(--color-text-muted);
+    font-size: 0.95rem;
+    margin-bottom: 1.5rem;
+    flex-grow: 1;
+    line-height: 1.6;
+}
+
+.product-link {
+    width: 100%;
+    text-align: center;
+    padding: 0.75rem 1rem;
+    font-size: 0.85rem;
+}
+

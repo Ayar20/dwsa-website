@@ -253,4 +253,26 @@ document.addEventListener('DOMContentLoaded', () => {
             body.style.maxHeight = body.scrollHeight + "px";
         }
     }
+
+    // ── App Switcher Interactive Dropdown ─────────────────────────
+    const appSwitcher = document.getElementById('AppSwitcher');
+    const appSwitcherToggle = document.getElementById('app-switcher-toggle');
+
+    if (appSwitcher && appSwitcherToggle) {
+        appSwitcherToggle.addEventListener('click', (e) => {
+            e.stopPropagation();
+            const isActive = appSwitcher.classList.contains('active');
+            appSwitcher.classList.toggle('active');
+            appSwitcherToggle.setAttribute('aria-expanded', !isActive);
+        });
+
+        // Close dropdown when clicking outside
+        document.addEventListener('click', (e) => {
+            if (!appSwitcher.contains(e.target)) {
+                appSwitcher.classList.remove('active');
+                appSwitcherToggle.setAttribute('aria-expanded', 'false');
+            }
+        });
+    }
 });
+

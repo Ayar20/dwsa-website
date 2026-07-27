@@ -20,8 +20,9 @@ export default async function handler(req, res) {
     return res.status(400).json({ message: 'Missing required fields: title, cover_image_url, download_url' });
   }
 
+  const dbUrl = process.env.DATABASE_URL || process.env.NEON_DATABASE_URL || process.env.POSTGRES_URL;
   const pool = new Pool({
-    connectionString: process.env.DATABASE_URL,
+    connectionString: dbUrl,
     ssl: { rejectUnauthorized: false }
   });
 
