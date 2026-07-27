@@ -148,19 +148,24 @@ ul {
     display: flex;
     justify-content: space-between;
     align-items: center;
-    padding: 1.5rem 5%;
+    padding: 1.25rem 5%;
     position: fixed;
     top: 0;
     width: 100%;
     z-index: 1000;
-    background: rgba(10, 26, 47, 0.8);
+    background: rgba(10, 26, 47, 0.85);
     backdrop-filter: blur(10px);
     border-bottom: 1px solid rgba(255, 255, 255, 0.05);
     transition: var(--transition-smooth);
 }
 
+.logo {
+    flex-shrink: 0;
+    margin-right: 2.5rem;
+}
+
 .nav-logo {
-    height: 56px;
+    height: 52px;
     width: auto;
     display: block;
     object-fit: contain;
@@ -178,18 +183,24 @@ ul {
 
 .nav-links {
     display: flex;
-    gap: 2rem;
+    gap: 1.6rem;
     align-items: center;
+    margin-left: auto;
 }
 
-.nav-links a {
-    font-size: 0.9rem;
+.nav-links a,
+.app-switcher-btn {
+    font-family: var(--font-heading);
+    font-size: 0.88rem;
     font-weight: 600;
     letter-spacing: 1px;
     text-transform: uppercase;
+    color: var(--color-white);
+    transition: var(--transition-smooth);
 }
 
-.nav-links a:not(.btn-primary):hover {
+.nav-links a:not(.btn-primary):hover,
+.app-switcher-btn:hover {
     color: var(--color-gold);
 }
 
@@ -1227,7 +1238,21 @@ ul {
     transform: translateY(-8px) rotate(-45deg);
 }
 
-@media (max-width: 768px) {
+@media (max-width: 1150px) {
+    .nav-links {
+        gap: 1.1rem;
+    }
+    .nav-links a,
+    .app-switcher-btn {
+        font-size: 0.8rem;
+        letter-spacing: 0.5px;
+    }
+    .logo {
+        margin-right: 1.5rem;
+    }
+}
+
+@media (max-width: 960px) {
     .nav-toggle {
         display: flex;
     }
@@ -1246,7 +1271,7 @@ ul {
         backdrop-filter: blur(15px);
         transition: right 0.4s cubic-bezier(0.25, 0.8, 0.25, 1);
         z-index: 999;
-        gap: 2.5rem;
+        gap: 2.2rem;
     }
 
     .nav-links.active {
@@ -1284,9 +1309,10 @@ ul {
 }
 
 /* ── App Switcher Navigation Component ───────────────────────────────── */
-.app-switcher-container {
+.app-switcher-nav-item {
     position: relative;
-    margin-left: 1rem;
+    display: flex;
+    align-items: center;
 }
 
 .app-switcher {
@@ -1296,26 +1322,17 @@ ul {
 .app-switcher-btn {
     display: flex;
     align-items: center;
-    gap: 0.5rem;
-    padding: 0.5rem 1rem;
-    background: rgba(212, 160, 23, 0.1);
-    border: 1px solid rgba(212, 160, 23, 0.3);
-    border-radius: 6px;
-    color: var(--color-gold);
-    font-family: var(--font-heading);
-    font-size: 0.85rem;
-    font-weight: 600;
+    gap: 0.35rem;
+    padding: 0;
+    background: transparent;
+    border: none;
     cursor: pointer;
-    transition: var(--transition-smooth);
-}
-
-.app-switcher-btn:hover {
-    background: rgba(212, 160, 23, 0.2);
-    border-color: var(--color-gold);
+    line-height: 1;
 }
 
 .app-switcher-btn .chevron-icon {
     transition: transform 0.3s ease;
+    margin-top: 1px;
 }
 
 .app-switcher.active .app-switcher-btn .chevron-icon {
@@ -1324,10 +1341,11 @@ ul {
 
 .app-switcher-dropdown {
     position: absolute;
-    top: calc(100% + 10px);
-    right: 0;
-    width: 310px;
-    background: rgba(17, 34, 64, 0.95);
+    top: calc(100% + 18px);
+    left: 50%;
+    transform: translateX(-50%) translateY(-10px);
+    width: 290px;
+    background: rgba(17, 34, 64, 0.96);
     backdrop-filter: blur(20px);
     border: 1px solid rgba(212, 160, 23, 0.3);
     border-radius: 12px;
@@ -1338,7 +1356,6 @@ ul {
     gap: 0.4rem;
     opacity: 0;
     visibility: hidden;
-    transform: translateY(-10px);
     transition: var(--transition-smooth);
     z-index: 1000;
 }
@@ -1346,7 +1363,7 @@ ul {
 .app-switcher.active .app-switcher-dropdown {
     opacity: 1;
     visibility: visible;
-    transform: translateY(0);
+    transform: translateX(-50%) translateY(0);
 }
 
 .app-switcher-header {

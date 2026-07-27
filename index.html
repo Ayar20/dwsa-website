@@ -15,64 +15,62 @@
     <!-- Navbar -->
     <nav class="navbar">
         <div class="logo">
-            <img src="logo.png" alt="DWSA Logo" class="nav-logo">
+            <a href="#about"><img src="logo.png" alt="DWSA Logo" class="nav-logo"></a>
         </div>
         <ul class="nav-links">
             <li><a href="#about">About</a></li>
-            <li><a href="#products">Products</a></li>
+            <li class="app-switcher-nav-item">
+                <div class="app-switcher" id="AppSwitcher">
+                    <button class="app-switcher-btn" id="app-switcher-toggle" aria-expanded="false" aria-label="Toggle App Switcher">
+                        <span>Products</span>
+                        <svg class="chevron-icon" xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m6 9 6 6 6-6"/></svg>
+                    </button>
+                    <div class="app-switcher-dropdown" id="app-switcher-menu">
+                        <div class="app-switcher-header">DWSA Product Suite</div>
+                        <a href="/enterprise" class="app-switcher-item">
+                            <div class="app-icon enterprise-icon">🏢</div>
+                            <div class="app-details">
+                                <span class="app-name">DWSA Enterprise OS</span>
+                                <span class="app-desc">ERP & Business Management</span>
+                            </div>
+                        </a>
+                        <a href="/academy" class="app-switcher-item">
+                            <div class="app-icon academy-icon">🎓</div>
+                            <div class="app-details">
+                                <span class="app-name">DWSA Tech Academy</span>
+                                <span class="app-desc">Skills & Bootcamp Training</span>
+                            </div>
+                        </a>
+                        <a href="/hotel" class="app-switcher-item">
+                            <div class="app-icon hotel-icon">🏨</div>
+                            <div class="app-details">
+                                <span class="app-name">DWSA Hospitality</span>
+                                <span class="app-desc">Hotel & Guest Management</span>
+                            </div>
+                        </a>
+                        <a href="/school" class="app-switcher-item">
+                            <div class="app-icon school-icon">🏫</div>
+                            <div class="app-details">
+                                <span class="app-name">DWSA EduCare</span>
+                                <span class="app-desc">School Management Portal</span>
+                            </div>
+                        </a>
+                        <a href="/farm" class="app-switcher-item">
+                            <div class="app-icon farm-icon">🌾</div>
+                            <div class="app-details">
+                                <span class="app-name">DWSA AgriOps</span>
+                                <span class="app-desc">Farm & Yield Operations</span>
+                            </div>
+                        </a>
+                    </div>
+                </div>
+            </li>
             <li><a href="#services">Services</a></li>
             <li><a href="#values">Our Values</a></li>
             <li><a href="#case-study">Case Study</a></li>
             <li><a href="#bookshelf">Bookshelf</a></li>
             <li><a href="#contact" class="btn-primary">Get In Touch</a></li>
         </ul>
-        <div class="app-switcher-container">
-            <div class="app-switcher" id="AppSwitcher">
-                <button class="app-switcher-btn" id="app-switcher-toggle" aria-expanded="false" aria-label="Toggle App Switcher">
-                    <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect width="7" height="7" x="3" y="3" rx="1"/><rect width="7" height="7" x="14" y="3" rx="1"/><rect width="7" height="7" x="14" y="14" rx="1"/><rect width="7" height="7" x="3" y="14" rx="1"/></svg>
-                    <span>Products</span>
-                    <svg class="chevron-icon" xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m6 9 6 6 6-6"/></svg>
-                </button>
-                <div class="app-switcher-dropdown" id="app-switcher-menu">
-                    <div class="app-switcher-header">DWSA Product Suite</div>
-                    <a href="/enterprise" class="app-switcher-item">
-                        <div class="app-icon enterprise-icon">🏢</div>
-                        <div class="app-details">
-                            <span class="app-name">DWSA Enterprise OS</span>
-                            <span class="app-desc">ERP & Business Management</span>
-                        </div>
-                    </a>
-                    <a href="/academy" class="app-switcher-item">
-                        <div class="app-icon academy-icon">🎓</div>
-                        <div class="app-details">
-                            <span class="app-name">DWSA Tech Academy</span>
-                            <span class="app-desc">Skills & Bootcamp Training</span>
-                        </div>
-                    </a>
-                    <a href="/hotel" class="app-switcher-item">
-                        <div class="app-icon hotel-icon">🏨</div>
-                        <div class="app-details">
-                            <span class="app-name">DWSA Hospitality</span>
-                            <span class="app-desc">Hotel & Guest Management</span>
-                        </div>
-                    </a>
-                    <a href="/school" class="app-switcher-item">
-                        <div class="app-icon school-icon">🏫</div>
-                        <div class="app-details">
-                            <span class="app-name">DWSA EduCare</span>
-                            <span class="app-desc">School Management Portal</span>
-                        </div>
-                    </a>
-                    <a href="/farm" class="app-switcher-item">
-                        <div class="app-icon farm-icon">🌾</div>
-                        <div class="app-details">
-                            <span class="app-name">DWSA AgriOps</span>
-                            <span class="app-desc">Farm & Yield Operations</span>
-                        </div>
-                    </a>
-                </div>
-            </div>
-        </div>
         <button class="nav-toggle" id="nav-toggle" aria-label="Toggle menu">
             <span></span><span></span><span></span>
         </button>
