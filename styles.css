@@ -1699,3 +1699,42 @@ ul {
     font-size: 0.85rem;
 }
 
+/* ── Mobile Dropdown Final Override (must stay at end of file) ─────────────── */
+@media (max-width: 960px) {
+    /* Force the dropdown to be fully hidden when Products is not tapped */
+    .nav-links .app-switcher-dropdown {
+        position: static !important;
+        top: auto !important;
+        left: auto !important;
+        right: auto !important;
+        transform: none !important;
+        width: 90% !important;
+        max-width: 300px !important;
+        margin: 0.5rem auto 0 !important;
+        display: none !important;
+        opacity: 1 !important;
+        visibility: visible !important;
+        transition: none !important;
+    }
+
+    /* Show it inline only when Products is tapped */
+    .nav-links .app-switcher.active .app-switcher-dropdown {
+        display: flex !important;
+        flex-direction: column !important;
+        transform: none !important;
+    }
+
+    /* Ensure app-switcher items don't overflow or get cut off */
+    .nav-links .app-switcher-item {
+        width: 100%;
+        box-sizing: border-box;
+        overflow: hidden;
+    }
+
+    .nav-links .app-name,
+    .nav-links .app-desc {
+        white-space: nowrap;
+        overflow: hidden;
+        text-overflow: ellipsis;
+    }
+}
