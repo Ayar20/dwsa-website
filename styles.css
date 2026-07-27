@@ -243,7 +243,7 @@ ul {
 .hero-graphics {
     flex: 1;
     position: relative;
-    height: 500px;
+    height: 540px;
     display: flex;
     justify-content: center;
     align-items: center;
@@ -269,15 +269,18 @@ ul {
 }
 
 .floating-card-1 {
-    top: 20%; left: 20%;
+    top: 8%;
+    left: 5%;
     animation-delay: 0s;
 }
 .floating-card-2 {
-    top: 50%; right: 15%;
+    top: 42%;
+    right: 5%;
     animation-delay: 2s;
 }
 .floating-card-3 {
-    bottom: 15%; left: 30%;
+    top: 76%;
+    left: 12%;
     animation-delay: 4s;
 }
 
