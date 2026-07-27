@@ -1403,22 +1403,25 @@ ul {
         position: static !important;
         transform: none !important;
         left: auto !important;
+        top: auto !important;
         width: 100%;
         max-width: 300px;
         margin-top: 0.5rem;
-        display: none;
-        opacity: 1;
-        visibility: visible;
+        display: none !important;
+        opacity: 1 !important;
+        visibility: visible !important;
         box-shadow: none;
         background: rgba(17, 34, 64, 0.9);
         border: 1px solid rgba(212, 160, 23, 0.3);
         border-radius: 10px;
         padding: 0.5rem;
+        transition: none;
     }
 
     .app-switcher.active .app-switcher-dropdown {
-        display: flex;
+        display: flex !important;
         flex-direction: column;
+        transform: none !important;
     }
 
     .glass-panel h2 {
