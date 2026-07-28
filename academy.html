@@ -1,0 +1,790 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>AI Coding Academy | From Zero to Full-Stack in 8 Weeks — DWSA</title>
+  <meta name="description" content="Join DWSA's AI Coding Academy and master full-stack development in 8 weeks using AI. No coding experience needed. Early Bird: ₦45,000. Based in Makurdi, Benue State.">
+
+  <!-- OpenGraph — rich preview on Facebook, WhatsApp, LinkedIn -->
+  <meta property="og:title" content="AI Coding Academy | From Zero to Full-Stack in 8 Weeks">
+  <meta property="og:description" content="Master modern software engineering with AI. No coding experience needed. Early Bird: ₦45,000 (first 8 students). Apply now!">
+  <meta property="og:type" content="website">
+  <meta property="og:url" content="https://dws-africa.vercel.app/academy">
+  <meta property="og:image" content="https://dws-africa.vercel.app/students_coding.jpg">
+  <meta property="og:image:width" content="1200">
+  <meta property="og:image:height" content="630">
+  <meta property="og:site_name" content="Digital World Systems Africa">
+
+  <!-- Twitter Card -->
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:title" content="AI Coding Academy | DWSA">
+  <meta name="twitter:description" content="From Zero to Full-Stack in 8 Weeks. No coding experience needed. Early Bird: ₦45,000.">
+  <meta name="twitter:image" content="https://dws-africa.vercel.app/students_coding.jpg">
+  <meta name="twitter:site" content="@dwsafrica">
+
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600&family=Montserrat:wght@500;700;800&family=Space+Grotesk:wght@400;700&display=swap" rel="stylesheet">
+  <link rel="icon" type="image/png" href="icon.png">
+
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      --gold:   #d4a017;
+      --cyan:   #00d2ff;
+      --green:  #4ade80;
+      --red:    #ff4d4d;
+      --dark:   #030e1f;
+      --dark2:  #061428;
+      --white:  #f0f4ff;
+      --muted:  #8899b4;
+      --font-h: 'Montserrat', sans-serif;
+      --font-b: 'Inter', sans-serif;
+      --font-a: 'Space Grotesk', sans-serif;
+    }
+
+    html { scroll-behavior: smooth; }
+
+    body {
+      font-family: var(--font-b);
+      background: var(--dark);
+      color: var(--white);
+      min-height: 100vh;
+      overflow-x: hidden;
+    }
+
+    /* ── Top bar ── */
+    .top-bar {
+      background: linear-gradient(90deg, rgba(0,210,255,0.15), rgba(212,160,23,0.15));
+      border-bottom: 1px solid rgba(0,210,255,0.2);
+      text-align: center;
+      padding: 0.55rem 1rem;
+      font-family: var(--font-a);
+      font-size: 0.8rem;
+      font-weight: 700;
+      letter-spacing: 1px;
+      color: var(--cyan);
+    }
+    .top-bar span { color: var(--gold); }
+
+    /* ── Page wrapper ── */
+    .page {
+      max-width: 1080px;
+      margin: 0 auto;
+      padding: 2.5rem 5% 4rem;
+    }
+
+    /* ── Logo row ── */
+    .logo-row {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 0.75rem;
+      margin-bottom: 2.5rem;
+    }
+    .logo-row img { width: 42px; height: 42px; border-radius: 8px; }
+    .logo-row .brand {
+      font-family: var(--font-h);
+      font-size: 1rem;
+      font-weight: 800;
+      color: var(--gold);
+      letter-spacing: 0.5px;
+    }
+    .logo-row .brand span { color: var(--white); }
+
+    /* ── Badge ── */
+    .top-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.5rem;
+      background: rgba(0,210,255,0.07);
+      border: 1px solid rgba(0,210,255,0.4);
+      border-radius: 30px;
+      padding: 0.4rem 1rem;
+      font-family: var(--font-a);
+      font-size: 0.78rem;
+      font-weight: 700;
+      color: var(--cyan);
+      letter-spacing: 1px;
+      margin-bottom: 1.5rem;
+      box-shadow: 0 0 16px rgba(0,210,255,0.1);
+    }
+    .badge-pill {
+      background: linear-gradient(135deg, var(--gold), #e5a910);
+      color: #0a1a2f;
+      font-size: 0.7rem;
+      font-weight: 800;
+      padding: 0.2rem 0.55rem;
+      border-radius: 20px;
+    }
+
+    /* ── Hero heading ── */
+    .hero-title {
+      font-family: var(--font-h);
+      font-size: clamp(2.2rem, 6vw, 3.6rem);
+      font-weight: 800;
+      line-height: 1.1;
+      margin-bottom: 1rem;
+      text-shadow: 0 0 50px rgba(0,210,255,0.2);
+    }
+    .hero-title .gold { color: var(--gold); }
+    .hero-title .cyan { color: var(--cyan); }
+
+    .hero-sub {
+      font-size: clamp(1rem, 2.5vw, 1.2rem);
+      color: var(--muted);
+      line-height: 1.65;
+      max-width: 600px;
+      margin-bottom: 2rem;
+    }
+
+    /* ── Main grid ── */
+    .main-grid {
+      display: grid;
+      grid-template-columns: 1fr 420px;
+      gap: 2.5rem;
+      align-items: start;
+    }
+
+    /* ── Left column ── */
+    .left-col { display: flex; flex-direction: column; gap: 1.75rem; }
+
+    /* Student image */
+    .student-img-wrap {
+      border-radius: 18px;
+      overflow: hidden;
+      position: relative;
+      box-shadow: 0 0 0 2px rgba(0,210,255,0.25), 0 20px 50px rgba(0,0,0,0.5);
+    }
+    .student-img-wrap img {
+      width: 100%;
+      display: block;
+      object-fit: cover;
+      max-height: 300px;
+      transition: transform 0.5s ease;
+    }
+    .student-img-wrap:hover img { transform: scale(1.03); }
+    .img-caption {
+      position: absolute;
+      bottom: 0; left: 0; right: 0;
+      background: linear-gradient(to top, rgba(3,14,31,0.95) 0%, transparent 100%);
+      padding: 1.25rem 1rem 0.75rem;
+      font-family: var(--font-a);
+      font-size: 0.72rem;
+      font-weight: 700;
+      letter-spacing: 1.5px;
+      text-align: center;
+      color: var(--white);
+    }
+
+    /* Feature pills */
+    .pills { display: flex; gap: 1rem; flex-wrap: wrap; }
+    .pill {
+      display: flex;
+      align-items: center;
+      gap: 0.65rem;
+      background: rgba(0,210,255,0.06);
+      border: 1px solid rgba(0,210,255,0.22);
+      border-radius: 12px;
+      padding: 0.75rem 1.1rem;
+      flex: 1 1 180px;
+      transition: border-color 0.3s, box-shadow 0.3s;
+    }
+    .pill:hover { border-color: rgba(0,210,255,0.55); box-shadow: 0 0 14px rgba(0,210,255,0.12); }
+    .pill-icon { font-size: 1.4rem; }
+    .pill strong { display: block; font-size: 0.82rem; color: var(--white); letter-spacing: 0.4px; }
+    .pill span { font-size: 0.72rem; color: var(--gold); font-weight: 700; }
+
+    /* Deliverables */
+    .deliverables {
+      background: linear-gradient(135deg, rgba(0,210,255,0.05) 0%, rgba(212,160,23,0.07) 100%);
+      border: 1px solid rgba(212,160,23,0.3);
+      border-radius: 16px;
+      padding: 1.4rem;
+    }
+    .deliverables h3 {
+      font-family: var(--font-a);
+      font-size: 0.9rem;
+      color: var(--gold);
+      letter-spacing: 1px;
+      margin-bottom: 1rem;
+    }
+    .deliverables ul { list-style: none; display: flex; flex-direction: column; gap: 0.65rem; }
+    .deliverables li { display: flex; align-items: center; gap: 0.65rem; font-size: 0.93rem; }
+    .chk {
+      background: rgba(74,222,128,0.15);
+      color: var(--green);
+      font-weight: 900;
+      width: 22px; height: 22px;
+      border-radius: 50%;
+      display: flex; align-items: center; justify-content: center;
+      font-size: 0.72rem;
+      flex-shrink: 0;
+    }
+
+    /* Testimonial strip */
+    .trust-strip {
+      display: flex;
+      align-items: center;
+      gap: 1rem;
+      flex-wrap: wrap;
+      font-size: 0.82rem;
+      color: var(--muted);
+    }
+    .trust-strip .dot { width: 6px; height: 6px; border-radius: 50%; background: var(--cyan); display: inline-block; }
+    .trust-strip strong { color: var(--white); }
+
+    /* ── Right column — Pricing & Form card ── */
+    .right-col {
+      background: linear-gradient(160deg, rgba(9,24,50,0.98) 0%, rgba(5,15,35,0.98) 100%);
+      border: 2px solid var(--gold);
+      border-radius: 22px;
+      padding: 2rem;
+      position: sticky;
+      top: 1.5rem;
+      box-shadow: 0 0 0 1px rgba(212,160,23,0.08), 0 30px 70px rgba(0,0,0,0.6), 0 0 40px rgba(212,160,23,0.18);
+    }
+
+    .ribbon {
+      position: absolute;
+      top: -14px; right: 18px;
+      background: linear-gradient(135deg, var(--red), #c00);
+      color: #fff;
+      font-family: var(--font-a);
+      font-size: 0.72rem;
+      font-weight: 800;
+      padding: 0.28rem 0.85rem;
+      border-radius: 20px;
+      letter-spacing: 1px;
+      box-shadow: 0 4px 12px rgba(230,0,0,0.35);
+    }
+
+    .early-box {
+      background: linear-gradient(135deg, rgba(212,160,23,0.14), rgba(255,180,0,0.07));
+      border: 1px solid rgba(212,160,23,0.5);
+      border-radius: 14px;
+      padding: 1.2rem;
+      text-align: center;
+      margin-bottom: 1.2rem;
+      box-shadow: 0 0 20px rgba(212,160,23,0.08);
+    }
+    .early-label {
+      display: block;
+      font-family: var(--font-a);
+      font-size: 0.72rem;
+      color: var(--gold);
+      letter-spacing: 1px;
+      font-weight: 700;
+      margin-bottom: 0.35rem;
+    }
+    .early-price {
+      font-family: var(--font-h);
+      font-size: 3rem;
+      font-weight: 800;
+      color: var(--white);
+      line-height: 1;
+    }
+    .early-save { font-size: 0.78rem; color: var(--green); margin-top: 0.35rem; }
+
+    .price-chips {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 0.75rem;
+      margin-bottom: 1.5rem;
+    }
+    .chip {
+      background: rgba(255,255,255,0.03);
+      border: 1px solid rgba(255,255,255,0.08);
+      border-radius: 10px;
+      padding: 0.65rem;
+      text-align: center;
+    }
+    .chip span { display: block; font-size: 0.68rem; color: var(--muted); letter-spacing: 1px; margin-bottom: 0.2rem; }
+    .chip strong { font-size: 1rem; color: var(--white); }
+
+    /* Form */
+    .section-label {
+      font-family: var(--font-a);
+      font-size: 0.75rem;
+      font-weight: 700;
+      color: var(--cyan);
+      letter-spacing: 1.5px;
+      margin-bottom: 1rem;
+      border-top: 1px solid rgba(0,210,255,0.15);
+      padding-top: 1.2rem;
+    }
+
+    .form-group { margin-bottom: 0.9rem; }
+    .form-group label {
+      display: block;
+      font-size: 0.78rem;
+      color: var(--muted);
+      margin-bottom: 0.3rem;
+      font-weight: 600;
+      letter-spacing: 0.3px;
+    }
+    .form-group input,
+    .form-group select {
+      width: 100%;
+      background: rgba(255,255,255,0.04);
+      border: 1px solid rgba(255,255,255,0.12);
+      border-radius: 10px;
+      padding: 0.7rem 0.9rem;
+      color: var(--white);
+      font-family: var(--font-b);
+      font-size: 0.9rem;
+      outline: none;
+      transition: border-color 0.25s, box-shadow 0.25s;
+    }
+    .form-group input:focus,
+    .form-group select:focus {
+      border-color: rgba(0,210,255,0.5);
+      box-shadow: 0 0 0 3px rgba(0,210,255,0.08);
+    }
+    .form-group select option { background: #061428; }
+
+    .form-row-2 { display: grid; grid-template-columns: 1fr 1fr; gap: 0.75rem; }
+
+    .btn-submit {
+      width: 100%;
+      background: linear-gradient(135deg, var(--gold) 0%, #e5a910 100%);
+      color: #0a1a2f;
+      font-family: var(--font-h);
+      font-size: 1rem;
+      font-weight: 800;
+      letter-spacing: 0.5px;
+      padding: 0.95rem;
+      border: none;
+      border-radius: 12px;
+      cursor: pointer;
+      margin-top: 0.25rem;
+      box-shadow: 0 6px 24px rgba(212,160,23,0.4);
+      transition: transform 0.2s, box-shadow 0.2s;
+    }
+    .btn-submit:hover { transform: translateY(-2px); box-shadow: 0 10px 32px rgba(212,160,23,0.5); }
+    .btn-submit:active { transform: translateY(0); }
+
+    .wa-link {
+      display: flex;
+      align-items: center;
+      gap: 0.7rem;
+      background: rgba(37,211,102,0.08);
+      border: 1px solid rgba(37,211,102,0.25);
+      border-radius: 12px;
+      padding: 0.75rem 1rem;
+      margin-top: 0.85rem;
+      text-decoration: none;
+      color: var(--white);
+      transition: background 0.25s;
+    }
+    .wa-link:hover { background: rgba(37,211,102,0.14); }
+    .wa-icon { font-size: 1.4rem; }
+    .wa-link small { display: block; font-size: 0.68rem; color: var(--muted); letter-spacing: 0.5px; }
+    .wa-link strong { font-size: 0.9rem; }
+
+    .location-note {
+      text-align: center;
+      font-size: 0.75rem;
+      color: var(--muted);
+      margin-top: 1rem;
+      letter-spacing: 0.3px;
+    }
+
+    .status-msg {
+      margin-top: 0.75rem;
+      font-size: 0.85rem;
+      text-align: center;
+      min-height: 1.2em;
+      color: var(--green);
+    }
+
+    /* ── Receipt overlay ── */
+    .overlay {
+      display: none;
+      position: fixed;
+      inset: 0;
+      background: rgba(0,0,0,0.75);
+      backdrop-filter: blur(6px);
+      z-index: 1000;
+      align-items: center;
+      justify-content: center;
+      padding: 1rem;
+    }
+    .overlay.show { display: flex; }
+    .receipt {
+      background: linear-gradient(145deg, #061428, #0a1e3a);
+      border: 1px solid rgba(212,160,23,0.4);
+      border-radius: 22px;
+      padding: 2rem;
+      max-width: 460px;
+      width: 100%;
+      position: relative;
+      box-shadow: 0 30px 80px rgba(0,0,0,0.7);
+      animation: popIn 0.35s cubic-bezier(0.34,1.56,0.64,1);
+    }
+    @keyframes popIn { from { transform: scale(0.85); opacity: 0; } to { transform: scale(1); opacity: 1; } }
+    .receipt-close {
+      position: absolute; top: 1rem; right: 1rem;
+      background: rgba(255,255,255,0.06);
+      border: none; color: var(--white);
+      width: 30px; height: 30px; border-radius: 50%;
+      cursor: pointer; font-size: 1.1rem; line-height: 30px; text-align: center;
+    }
+    .receipt-emoji { font-size: 2.5rem; text-align: center; margin-bottom: 0.5rem; }
+    .receipt h2 { font-family: var(--font-h); font-size: 1.4rem; text-align: center; margin-bottom: 0.4rem; }
+    .receipt p { font-size: 0.88rem; color: var(--muted); text-align: center; margin-bottom: 1.25rem; }
+    .bank-box {
+      background: rgba(255,255,255,0.03);
+      border: 1px solid rgba(212,160,23,0.25);
+      border-radius: 14px;
+      padding: 1.1rem;
+      margin-bottom: 1.25rem;
+    }
+    .bank-name-row { display: flex; justify-content: space-between; font-size: 0.85rem; margin-bottom: 0.85rem; color: var(--muted); }
+    .bank-name-row strong { color: var(--white); }
+    .bank-cards { display: grid; grid-template-columns: 1fr 1fr; gap: 0.75rem; margin-bottom: 0.85rem; }
+    .bank-card { background: rgba(212,160,23,0.06); border: 1px solid rgba(212,160,23,0.2); border-radius: 10px; padding: 0.7rem; }
+    .bank-card .b-title { display: block; font-size: 0.68rem; color: var(--gold); font-weight: 700; letter-spacing: 0.5px; margin-bottom: 0.35rem; }
+    .acc-row { display: flex; justify-content: space-between; align-items: center; }
+    .acc-num { font-family: var(--font-h); font-size: 1.1rem; font-weight: 700; letter-spacing: 1px; }
+    .copy-btn {
+      background: rgba(212,160,23,0.2); border: 1px solid var(--gold);
+      color: var(--gold); padding: 0.18rem 0.55rem; border-radius: 6px;
+      font-size: 0.7rem; cursor: pointer; transition: all 0.2s;
+    }
+    .copy-btn:hover { background: var(--gold); color: #0a1a2f; }
+    .plan-row { display: flex; justify-content: space-between; font-size: 0.88rem; }
+    .plan-row span { color: var(--muted); }
+    .plan-row strong { color: var(--gold); font-size: 1.05rem; }
+    .receipt-btns { display: flex; flex-direction: column; gap: 0.75rem; }
+    .btn-wa {
+      display: block;
+      background: linear-gradient(135deg, #25d366, #128c7e);
+      color: #fff; font-family: var(--font-h); font-weight: 700;
+      font-size: 0.95rem; padding: 0.85rem; border-radius: 12px;
+      text-align: center; text-decoration: none;
+      box-shadow: 0 6px 20px rgba(37,211,102,0.3);
+      transition: transform 0.2s;
+    }
+    .btn-wa:hover { transform: translateY(-2px); }
+    .btn-done {
+      background: rgba(255,255,255,0.05); border: 1px solid rgba(255,255,255,0.12);
+      color: var(--muted); font-size: 0.88rem; padding: 0.7rem;
+      border-radius: 12px; cursor: pointer; transition: background 0.2s;
+    }
+    .btn-done:hover { background: rgba(255,255,255,0.1); }
+
+    /* ── Footer ── */
+    .foot {
+      text-align: center;
+      padding: 2rem 5% 1.5rem;
+      border-top: 1px solid rgba(255,255,255,0.06);
+      font-size: 0.8rem;
+      color: var(--muted);
+    }
+    .foot a { color: var(--cyan); text-decoration: none; }
+    .foot a:hover { text-decoration: underline; }
+
+    /* ── Responsive ── */
+    @media (max-width: 820px) {
+      .main-grid { grid-template-columns: 1fr; }
+      .right-col { position: static; }
+    }
+    @media (max-width: 500px) {
+      .hero-title { font-size: 1.9rem; }
+      .form-row-2 { grid-template-columns: 1fr; }
+      .bank-cards { grid-template-columns: 1fr; }
+      .price-chips { grid-template-columns: 1fr; }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- Top urgency bar -->
+  <div class="top-bar">
+    🔥 EARLY BIRD CLOSES WHEN FIRST <span>8 SEATS</span> ARE FILLED — ACT FAST!
+  </div>
+
+  <div class="page">
+
+    <!-- Brand -->
+    <div class="logo-row">
+      <img src="icon.png" alt="DWSA Logo">
+      <div class="brand"><span>Digital World</span> Systems Africa</div>
+    </div>
+
+    <!-- Badge & headline -->
+    <div class="top-badge">
+      🤖 AI-POWERED TECH BOOTCAMP
+      <span class="badge-pill">FROM ZERO TO FULL-STACK IN 8 WEEKS</span>
+    </div>
+
+    <h1 class="hero-title">
+      AI CODING <span class="gold">ACADEMY</span><br>
+      <span class="cyan" style="font-size:0.6em;">MAKURDI · BENUE STATE · NIGERIA</span>
+    </h1>
+    <p class="hero-sub">
+      Master modern software engineering by leveraging cutting-edge Artificial Intelligence —
+      no prior coding experience needed. Build real apps, earn a certificate, launch your tech career.
+    </p>
+
+    <!-- Main grid -->
+    <div class="main-grid">
+
+      <!-- LEFT -->
+      <div class="left-col">
+
+        <!-- Student image -->
+        <div class="student-img-wrap">
+          <img src="students_coding.jpg" alt="Students coding at DWSA AI Coding Academy">
+          <div class="img-caption">🎓 REAL STUDENTS · REAL PROJECTS · REAL CAREERS</div>
+        </div>
+
+        <!-- Pills -->
+        <div class="pills">
+          <div class="pill">
+            <span class="pill-icon">🧠</span>
+            <div><strong>BUILD REAL APPS</strong><span>WITH AI INTEGRATION</span></div>
+          </div>
+          <div class="pill">
+            <span class="pill-icon">⚙️</span>
+            <div><strong>NO CODING</strong><span>EXPERIENCE NEEDED</span></div>
+          </div>
+          <div class="pill">
+            <span class="pill-icon">🏆</span>
+            <div><strong>8 WEEKS</strong><span>INTENSIVE BOOTCAMP</span></div>
+          </div>
+          <div class="pill">
+            <span class="pill-icon">📍</span>
+            <div><strong>PHYSICAL + ONLINE</strong><span>BOTH MODES AVAILABLE</span></div>
+          </div>
+        </div>
+
+        <!-- Deliverables -->
+        <div class="deliverables">
+          <h3>🏆 YOU WILL WALK AWAY WITH</h3>
+          <ul>
+            <li><span class="chk">✓</span> Live personal portfolio website</li>
+            <li><span class="chk">✓</span> Full-stack app deployed to production</li>
+            <li><span class="chk">✓</span> Clean GitHub profile with real projects</li>
+            <li><span class="chk">✓</span> Ability to build any app using AI tools</li>
+            <li><span class="chk">✓</span> Official Certificate of Completion</li>
+          </ul>
+        </div>
+
+        <!-- Trust strip -->
+        <div class="trust-strip">
+          <span class="dot"></span>
+          <strong>Physical Lab</strong> — Makurdi, Benue State
+          <span class="dot"></span>
+          <strong>Virtual</strong> — Online Live Sessions
+          <span class="dot"></span>
+          Powered by <strong>Digital World Systems Africa Ltd</strong>
+        </div>
+
+      </div>
+
+      <!-- RIGHT — pricing + form -->
+      <div class="right-col" style="position:relative;">
+        <div class="ribbon">🔥 EARLY BIRD OFFER</div>
+
+        <!-- Pricing -->
+        <div class="early-box">
+          <span class="early-label">EARLY BIRD (FIRST 8 STUDENTS)</span>
+          <div class="early-price">₦45,000</div>
+          <p class="early-save">Save ₦10,000 when you register early</p>
+        </div>
+
+        <div class="price-chips">
+          <div class="chip"><span>STANDARD</span><strong>₦55,000</strong></div>
+          <div class="chip"><span>SPLIT PAY</span><strong>₦30k + ₦25k</strong></div>
+        </div>
+
+        <!-- Form -->
+        <p class="section-label">📝 RESERVE YOUR SEAT NOW</p>
+
+        <form id="acad-form" novalidate>
+          <div class="form-group">
+            <label for="ac-name">Full Name *</label>
+            <input type="text" id="ac-name" required placeholder="e.g. Samuel Adebayo">
+          </div>
+          <div class="form-group">
+            <label for="ac-email">Email Address *</label>
+            <input type="email" id="ac-email" required placeholder="e.g. samuel@example.com">
+          </div>
+          <div class="form-group">
+            <label for="ac-phone">Phone / WhatsApp *</label>
+            <input type="tel" id="ac-phone" required placeholder="e.g. 08012345678">
+          </div>
+          <div class="form-row-2">
+            <div class="form-group">
+              <label for="ac-mode">Learning Mode *</label>
+              <select id="ac-mode" required>
+                <option value="Physical (Makurdi)">Physical — Makurdi Lab</option>
+                <option value="Virtual (Online)">Virtual — Online Live</option>
+              </select>
+            </div>
+            <div class="form-group">
+              <label for="ac-plan">Payment Plan *</label>
+              <select id="ac-plan" required>
+                <option value="Early Bird — ₦45,000">Early Bird — ₦45,000</option>
+                <option value="Standard — ₦55,000">Standard — ₦55,000</option>
+                <option value="Split Pay — ₦30,000 initial">Split Pay — ₦30k first</option>
+              </select>
+            </div>
+          </div>
+
+          <button type="submit" class="btn-submit" id="ac-submit-btn">
+            RESERVE MY SEAT &amp; GET PAYMENT DETAILS →
+          </button>
+          <p class="status-msg" id="ac-status"></p>
+        </form>
+
+        <!-- WhatsApp -->
+        <a href="https://wa.me/2347082135071?text=Hello%20DWSA%2C%20I%20want%20to%20enquire%20about%20the%20AI%20Coding%20Academy" target="_blank" class="wa-link">
+          <span class="wa-icon">💬</span>
+          <div>
+            <small>HAVE A QUESTION? CHAT WITH US</small>
+            <strong>WhatsApp: 0708 213 5071</strong>
+          </div>
+        </a>
+
+        <p class="location-note">📍 Makurdi, Benue State &nbsp;•&nbsp; Digital World Systems Africa Ltd</p>
+      </div>
+
+    </div><!-- end main-grid -->
+  </div><!-- end page -->
+
+  <!-- ── Receipt overlay ── -->
+  <div class="overlay" id="receipt-overlay">
+    <div class="receipt">
+      <button class="receipt-close" id="close-receipt" aria-label="Close">&times;</button>
+      <div class="receipt-emoji">🎉</div>
+      <h2>Registration Submitted!</h2>
+      <p>Welcome aboard, <strong id="r-name">Applicant</strong>! Please make your transfer to lock in your seat.</p>
+
+      <div class="bank-box">
+        <div class="bank-name-row">
+          <span>Account Name:</span>
+          <strong>Ayar Japheth Idyege</strong>
+        </div>
+        <div class="bank-cards">
+          <div class="bank-card">
+            <span class="b-title">MoniePoint / OPay</span>
+            <div class="acc-row">
+              <span class="acc-num">7033337569</span>
+              <button class="copy-btn" onclick="copyNum('7033337569', this)">Copy</button>
+            </div>
+          </div>
+          <div class="bank-card">
+            <span class="b-title">GTBank (GTB)</span>
+            <div class="acc-row">
+              <span class="acc-num">0432342339</span>
+              <button class="copy-btn" onclick="copyNum('0432342339', this)">Copy</button>
+            </div>
+          </div>
+        </div>
+        <div class="plan-row">
+          <span>Amount to Pay:</span>
+          <strong id="r-amount">₦45,000</strong>
+        </div>
+      </div>
+
+      <div class="receipt-btns">
+        <a id="r-wa-btn" href="#" target="_blank" class="btn-wa">
+          📲 Send Payment Proof on WhatsApp
+        </a>
+        <button class="btn-done" onclick="document.getElementById('receipt-overlay').classList.remove('show')">
+          Done
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Footer -->
+  <footer class="foot">
+    &copy; 2025 Digital World Systems Africa Ltd &nbsp;|&nbsp;
+    <a href="https://dws-africa.vercel.app">Main Website</a> &nbsp;|&nbsp;
+    <a href="https://wa.me/2347082135071">WhatsApp</a>
+  </footer>
+
+  <script>
+    // ── Form submit ──
+    const form = document.getElementById('acad-form');
+    const status = document.getElementById('ac-status');
+    const submitBtn = document.getElementById('ac-submit-btn');
+
+    form.addEventListener('submit', async (e) => {
+      e.preventDefault();
+      const name  = document.getElementById('ac-name').value.trim();
+      const email = document.getElementById('ac-email').value.trim();
+      const phone = document.getElementById('ac-phone').value.trim();
+      const mode  = document.getElementById('ac-mode').value;
+      const plan  = document.getElementById('ac-plan').value;
+
+      if (!name || !email || !phone) {
+        status.style.color = '#ff6b6b';
+        status.textContent = '⚠️ Please fill in all required fields.';
+        return;
+      }
+
+      submitBtn.disabled = true;
+      submitBtn.textContent = 'Submitting…';
+      status.style.color = '#8899b4';
+      status.textContent = 'Sending your registration…';
+
+      try {
+        const res = await fetch('/api/apply', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ name, email, phone, program: 'AI Coding Academy', mode, tier: plan })
+        });
+
+        if (res.ok) {
+          // Show receipt
+          const planAmt = plan.includes('45') ? '₦45,000'
+                        : plan.includes('55') ? '₦55,000'
+                        : '₦30,000 (first instalment)';
+          document.getElementById('r-name').textContent   = name;
+          document.getElementById('r-amount').textContent = planAmt;
+
+          const waMsg = encodeURIComponent(
+            `Hello DWSA! I just registered for the AI Coding Academy.\n\nName: ${name}\nPhone: ${phone}\nPlan: ${plan}\nMode: ${mode}\n\nAttaching payment proof below.`
+          );
+          document.getElementById('r-wa-btn').href = `https://wa.me/2347082135071?text=${waMsg}`;
+
+          document.getElementById('receipt-overlay').classList.add('show');
+          form.reset();
+          status.textContent = '';
+        } else {
+          throw new Error('Server error');
+        }
+      } catch {
+        status.style.color = '#ff6b6b';
+        status.textContent = '❌ Submission failed. Please try WhatsApp below.';
+      } finally {
+        submitBtn.disabled = false;
+        submitBtn.textContent = 'RESERVE MY SEAT & GET PAYMENT DETAILS →';
+      }
+    });
+
+    // ── Close receipt ──
+    document.getElementById('close-receipt').addEventListener('click', () => {
+      document.getElementById('receipt-overlay').classList.remove('show');
+    });
+    document.getElementById('receipt-overlay').addEventListener('click', (e) => {
+      if (e.target === e.currentTarget) e.currentTarget.classList.remove('show');
+    });
+
+    // ── Copy account number ──
+    function copyNum(num, btn) {
+      navigator.clipboard.writeText(num).then(() => {
+        btn.textContent = '✓ Copied';
+        setTimeout(() => btn.textContent = 'Copy', 2000);
+      });
+    }
+  </script>
+</body>
+</html>
