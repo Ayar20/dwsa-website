@@ -8,8 +8,16 @@
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600&family=Montserrat:wght@500;700;800&family=Space+Grotesk:wght@400;700&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="styles.css">
     <link rel="icon" type="image/png" href="icon.png">
+    <!-- OpenGraph & Social Sharing Meta Tags -->
+    <meta property="og:title" content="AI Coding Academy | From Zero to Full-Stack in 8 Weeks">
+    <meta property="og:description" content="Master modern software engineering by leveraging cutting-edge AI. Early Bird Offer: ₦45,000. Apply now!">
+    <meta property="og:type" content="website">
+    <meta property="og:url" content="https://dws-africa.vercel.app/#apply">
+    <meta property="og:image" content="https://dws-africa.vercel.app/logo.png">
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:title" content="AI Coding Academy | DWSA">
+    <meta name="twitter:description" content="From Zero to Full-Stack in 8 Weeks. Learn to build real apps with AI.">
 </head>
 <body>
     <!-- Navbar -->
@@ -126,6 +134,90 @@
             </div>
         </div>
     </header>
+
+    <!-- ══════════════════════════════════════════════════════════ -->
+    <!-- AI CODING ACADEMY ADVERT SECTION                             -->
+    <!-- ══════════════════════════════════════════════════════════ -->
+    <section id="ai-academy" class="campaign-advert-section observe-me">
+        <div class="campaign-container">
+            <div class="campaign-header-badge">
+                <span class="badge-icon">🤖</span>
+                <span id="adv-sub-badge">AI-POWERED TECH BOOTCAMP</span>
+                <span class="badge-tag" id="adv-badge-tag">FROM ZERO TO FULL-STACK IN 8 WEEKS</span>
+            </div>
+
+            <div class="campaign-hero-grid">
+                <div class="campaign-info">
+                    <h2 class="campaign-title" id="adv-title">AI CODING <span class="highlight-gold">ACADEMY</span></h2>
+                    <p class="campaign-desc" id="adv-description">Master modern software engineering by leveraging cutting-edge Artificial Intelligence.</p>
+
+                    <div class="campaign-pills">
+                        <div class="campaign-pill">
+                            <span class="pill-icon">🧠</span>
+                            <div>
+                                <strong id="adv-feat-1-title">BUILD REAL APPS</strong>
+                                <span id="adv-feat-1-sub">WITH AI INTEGRATION</span>
+                            </div>
+                        </div>
+                        <div class="campaign-pill">
+                            <span class="pill-icon">⚙️</span>
+                            <div>
+                                <strong id="adv-feat-2-title">NO CODING</strong>
+                                <span id="adv-feat-2-sub">EXPERIENCE NEEDED</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="deliverables-box">
+                        <h3>🏆 YOU WILL WALK AWAY WITH</h3>
+                        <ul class="deliverables-list" id="adv-walkaway-list">
+                            <li><span class="check-icon">✓</span> Live personal portfolio website</li>
+                            <li><span class="check-icon">✓</span> Full-stack app (deployed to production)</li>
+                            <li><span class="check-icon">✓</span> Clean GitHub profile with real projects</li>
+                            <li><span class="check-icon">✓</span> Ability to build any app using AI tools</li>
+                            <li><span class="check-icon">✓</span> Official Certificate of Completion</li>
+                        </ul>
+                    </div>
+                </div>
+
+                <div class="campaign-pricing-card">
+                    <div class="pricing-header-ribbon">🔥 EARLY BIRD OFFER</div>
+                    <div class="early-bird-box">
+                        <span class="price-label">EARLY BIRD (FIRST 8 STUDENTS)</span>
+                        <div class="price-value" id="adv-early-price">₦45,000</div>
+                        <p class="price-sub" id="adv-early-sub">Save ₦10,000 when you register early</p>
+                    </div>
+
+                    <div class="secondary-pricing-grid">
+                        <div class="price-chip">
+                            <span>STANDARD</span>
+                            <strong id="adv-standard-price">₦55,000</strong>
+                        </div>
+                        <div class="price-chip">
+                            <span>SPLIT PAY</span>
+                            <strong id="adv-split-price">₦30k + ₦25k</strong>
+                        </div>
+                    </div>
+
+                    <div class="pricing-actions">
+                        <button class="btn-primary large-btn glow-effect open-apply-btn" id="hero-apply-btn">
+                            APPLY NOW →
+                        </button>
+                        <a href="https://wa.me/2347082135071?text=Hello%20DWSA%2C%20I%20want%20to%20enquire%20about%20the%20AI%20Coding%20Academy" target="_blank" class="whatsapp-support-link">
+                            <span class="wa-icon">💬</span>
+                            <div>
+                                <small>WHATSAPP SUPPORT</small>
+                                <strong id="adv-whatsapp-no">0708 213 5071</strong>
+                            </div>
+                        </a>
+                    </div>
+                    <div class="campaign-footer-location">
+                        📍 Makurdi, Benue State &nbsp;•&nbsp; Digital World Systems Africa Ltd
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
 
     <!-- ══════════════════════════════════════════════════════════ -->
     <!-- PRODUCT SUITE SECTION (ECOSYSTEM APPS)                    -->
@@ -549,6 +641,104 @@
             <p>&copy; 2026 Digital World Systems Africa Ltd. All rights reserved. Registered in Nigeria.</p>
         </div>
     </footer>
+
+    <!-- ══════════════════════════════════════════════════════════ -->
+    <!-- APPLICATION FORM MODAL (#apply)                          -->
+    <!-- ══════════════════════════════════════════════════════════ -->
+    <div class="modal-backdrop" id="apply-modal">
+        <div class="modal-content glass-panel">
+            <button class="modal-close" id="close-apply-modal" aria-label="Close modal">&times;</button>
+            <div class="modal-header">
+                <span class="modal-badge">🎓 ADMISSION REGISTRATION</span>
+                <h2>Apply for <span class="highlight-gold" id="modal-program-name">AI Coding Academy</span></h2>
+                <p>From Zero to Full-Stack in 8 Weeks. Reserve your seat below.</p>
+            </div>
+            <form id="bootcamp-apply-form" class="apply-form">
+                <div class="form-group">
+                    <label for="apply-name">Full Name *</label>
+                    <input type="text" id="apply-name" required placeholder="e.g. Samuel Adebayo">
+                </div>
+                <div class="form-group">
+                    <label for="apply-email">Email Address *</label>
+                    <input type="email" id="apply-email" required placeholder="e.g. samuel@example.com">
+                </div>
+                <div class="form-group">
+                    <label for="apply-phone">Phone / WhatsApp Number *</label>
+                    <input type="tel" id="apply-phone" required placeholder="e.g. 08012345678">
+                </div>
+                <div class="form-row">
+                    <div class="form-group half">
+                        <label for="apply-mode">Learning Mode *</label>
+                        <select id="apply-mode" required>
+                            <option value="Physical (Makurdi)">Physical (Makurdi Lab)</option>
+                            <option value="Virtual (Online)">Virtual (Online Live)</option>
+                        </select>
+                    </div>
+                    <div class="form-group half">
+                        <label for="apply-tier">Payment Option *</label>
+                        <select id="apply-tier" required>
+                            <option value="Early Bird (₦45,000)">Early Bird — ₦45,000 (First 8)</option>
+                            <option value="Standard (₦55,000)">Standard — ₦55,000</option>
+                            <option value="Split Pay (₦30,000 initial)">Split Pay — ₦30,000 Initial</option>
+                        </select>
+                    </div>
+                </div>
+
+                <button type="submit" class="btn-primary full-btn glow-effect" id="submit-apply-btn">
+                    Complete Registration & Get Payment Details →
+                </button>
+                <p id="apply-form-status" class="form-status-msg"></p>
+            </form>
+        </div>
+    </div>
+
+    <!-- ══════════════════════════════════════════════════════════ -->
+    <!-- PAYMENT RECEIPT & CONFIRMATION MODAL                      -->
+    <!-- ══════════════════════════════════════════════════════════ -->
+    <div class="modal-backdrop" id="receipt-modal">
+        <div class="modal-content glass-panel receipt-card">
+            <button class="modal-close" id="close-receipt-modal" aria-label="Close modal">&times;</button>
+            <div class="receipt-icon">🎉</div>
+            <h2>Registration Submitted!</h2>
+            <p class="receipt-sub">Welcome aboard, <strong id="receipt-user-name">Applicant</strong>. Please make your transfer to lock in your seat.</p>
+
+            <div class="bank-details-box">
+                <div class="bank-detail-row">
+                    <span>Account Name:</span>
+                    <strong>Ayar Japheth Idyege</strong>
+                </div>
+                <div class="bank-accounts-grid">
+                    <div class="bank-account-card">
+                        <span class="bank-title">MoniePoint / OPay / 3rd</span>
+                        <div class="acc-number-wrap">
+                            <span class="acc-num" id="acc-moniepoint">7033337569</span>
+                            <button class="copy-btn" onclick="copyAcc('7033337569', this)">Copy</button>
+                        </div>
+                    </div>
+                    <div class="bank-account-card">
+                        <span class="bank-title">Guaranty Trust Bank (GTB)</span>
+                        <div class="acc-number-wrap">
+                            <span class="acc-num" id="acc-gtb">0432342339</span>
+                            <button class="copy-btn" onclick="copyAcc('0432342339', this)">Copy</button>
+                        </div>
+                    </div>
+                </div>
+                <div class="bank-detail-row summary-row">
+                    <span>Selected Plan Amount:</span>
+                    <strong id="receipt-plan-amount" class="highlight-gold">₦45,000</strong>
+                </div>
+            </div>
+
+            <div class="receipt-actions">
+                <a id="wa-confirm-btn" href="#" target="_blank" class="btn-primary full-btn wa-confirm-btn">
+                    📲 Send Payment Proof on WhatsApp (0708 213 5071)
+                </a>
+                <button class="btn-secondary full-btn" onclick="document.getElementById('receipt-modal').classList.remove('active')">
+                    Done
+                </button>
+            </div>
+        </div>
+    </div>
 
     <script src="script.js"></script>
 </body>

@@ -1738,3 +1738,551 @@ ul {
         text-overflow: ellipsis;
     }
 }
+
+/* ── 🤖 AI Coding Academy Campaign Advert Section ────────────────────────── */
+.campaign-advert-section {
+    padding: 5rem 5%;
+    background: radial-gradient(circle at 10% 20%, rgba(15, 138, 95, 0.15) 0%, transparent 40%),
+                radial-gradient(circle at 90% 80%, rgba(212, 160, 23, 0.15) 0%, transparent 40%),
+                rgba(10, 26, 47, 0.95);
+    border-top: 1px solid rgba(212, 160, 23, 0.2);
+    border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+}
+
+.campaign-container {
+    max-width: 1200px;
+    margin: 0 auto;
+}
+
+.campaign-header-badge {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.6rem;
+    background: rgba(255, 255, 255, 0.04);
+    border: 1px solid rgba(212, 160, 23, 0.4);
+    border-radius: 30px;
+    padding: 0.4rem 1rem;
+    margin-bottom: 2rem;
+    flex-wrap: wrap;
+}
+
+.campaign-header-badge .badge-icon {
+    font-size: 1.1rem;
+}
+
+.campaign-header-badge #adv-sub-badge {
+    font-family: var(--font-accent);
+    font-size: 0.8rem;
+    color: var(--color-gold);
+    letter-spacing: 1px;
+    font-weight: 700;
+}
+
+.campaign-header-badge .badge-tag {
+    background: linear-gradient(135deg, var(--color-gold), #e5a910);
+    color: #0a1a2f;
+    font-family: var(--font-heading);
+    font-size: 0.72rem;
+    font-weight: 800;
+    padding: 0.2rem 0.6rem;
+    border-radius: 20px;
+    letter-spacing: 0.5px;
+}
+
+.campaign-hero-grid {
+    display: grid;
+    grid-template-columns: 1.2fr 0.9fr;
+    gap: 3rem;
+    align-items: center;
+}
+
+.campaign-title {
+    font-size: 3.2rem;
+    font-family: var(--font-heading);
+    line-height: 1.1;
+    margin-bottom: 1rem;
+    color: var(--color-white);
+}
+
+.campaign-desc {
+    font-size: 1.15rem;
+    color: var(--color-text-muted);
+    margin-bottom: 2rem;
+    line-height: 1.6;
+}
+
+.campaign-pills {
+    display: flex;
+    gap: 1.2rem;
+    margin-bottom: 2rem;
+    flex-wrap: wrap;
+}
+
+.campaign-pill {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+    background: rgba(17, 34, 64, 0.8);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    padding: 0.8rem 1.2rem;
+    border-radius: 12px;
+    flex: 1;
+    min-width: 200px;
+}
+
+.campaign-pill .pill-icon {
+    font-size: 1.4rem;
+}
+
+.campaign-pill strong {
+    display: block;
+    font-size: 0.85rem;
+    color: var(--color-white);
+    letter-spacing: 0.5px;
+}
+
+.campaign-pill span {
+    font-size: 0.75rem;
+    color: var(--color-gold);
+    font-weight: 700;
+}
+
+.deliverables-box {
+    background: rgba(17, 34, 64, 0.6);
+    border: 1px solid rgba(212, 160, 23, 0.2);
+    border-radius: 16px;
+    padding: 1.5rem;
+}
+
+.deliverables-box h3 {
+    font-size: 1rem;
+    color: var(--color-gold);
+    margin-bottom: 1rem;
+    font-family: var(--font-accent);
+    letter-spacing: 1px;
+}
+
+.deliverables-list {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+    display: flex;
+    flex-direction: column;
+    gap: 0.75rem;
+}
+
+.deliverables-list li {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+    font-size: 0.95rem;
+    color: var(--color-white);
+}
+
+.deliverables-list .check-icon {
+    color: #4ade80;
+    font-weight: bold;
+    background: rgba(74, 222, 128, 0.15);
+    width: 22px;
+    height: 22px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 0.75rem;
+    flex-shrink: 0;
+}
+
+/* Pricing Card Right Side */
+.campaign-pricing-card {
+    background: rgba(17, 34, 64, 0.9);
+    border: 2px solid var(--color-gold);
+    border-radius: 20px;
+    padding: 2rem;
+    position: relative;
+    box-shadow: 0 20px 50px rgba(0, 0, 0, 0.5), 0 0 30px rgba(212, 160, 23, 0.15);
+}
+
+.pricing-header-ribbon {
+    position: absolute;
+    top: -14px;
+    right: 20px;
+    background: linear-gradient(135deg, #ff4d4d, #e60000);
+    color: white;
+    font-family: var(--font-accent);
+    font-size: 0.75rem;
+    font-weight: 800;
+    padding: 0.3rem 0.9rem;
+    border-radius: 20px;
+    letter-spacing: 1px;
+    box-shadow: 0 4px 12px rgba(230, 0, 0, 0.4);
+}
+
+.early-bird-box {
+    background: rgba(212, 160, 23, 0.1);
+    border: 1px solid rgba(212, 160, 23, 0.4);
+    border-radius: 14px;
+    padding: 1.25rem;
+    text-align: center;
+    margin-bottom: 1.25rem;
+}
+
+.price-label {
+    display: block;
+    font-family: var(--font-accent);
+    font-size: 0.75rem;
+    color: var(--color-gold);
+    letter-spacing: 1px;
+    font-weight: 700;
+    margin-bottom: 0.4rem;
+}
+
+.price-value {
+    font-size: 3rem;
+    font-family: var(--font-heading);
+    font-weight: 800;
+    color: var(--color-white);
+    line-height: 1;
+}
+
+.price-sub {
+    font-size: 0.8rem;
+    color: #4ade80;
+    margin-top: 0.4rem;
+    margin-bottom: 0;
+}
+
+.secondary-pricing-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 1rem;
+    margin-bottom: 1.5rem;
+}
+
+.price-chip {
+    background: rgba(255, 255, 255, 0.03);
+    border: 1px solid rgba(255, 255, 255, 0.08);
+    border-radius: 10px;
+    padding: 0.75rem;
+    text-align: center;
+}
+
+.price-chip span {
+    display: block;
+    font-size: 0.7rem;
+    color: var(--color-text-muted);
+    letter-spacing: 1px;
+    margin-bottom: 0.2rem;
+}
+
+.price-chip strong {
+    font-size: 1.1rem;
+    color: var(--color-white);
+}
+
+.pricing-actions {
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+}
+
+.open-apply-btn {
+    width: 100%;
+    padding: 1rem;
+    font-size: 1.05rem;
+    letter-spacing: 1px;
+    text-align: center;
+    justify-content: center;
+}
+
+.whatsapp-support-link {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.75rem;
+    background: rgba(37, 211, 102, 0.1);
+    border: 1px solid rgba(37, 211, 102, 0.3);
+    color: #25d366;
+    padding: 0.75rem;
+    border-radius: 10px;
+    text-decoration: none;
+    transition: var(--transition-smooth);
+}
+
+.whatsapp-support-link:hover {
+    background: rgba(37, 211, 102, 0.2);
+    transform: translateY(-2px);
+}
+
+.whatsapp-support-link small {
+    display: block;
+    font-size: 0.65rem;
+    letter-spacing: 1px;
+    opacity: 0.8;
+}
+
+.whatsapp-support-link strong {
+    font-size: 0.95rem;
+}
+
+.campaign-footer-location {
+    font-size: 0.75rem;
+    color: var(--color-text-muted);
+    text-align: center;
+    margin-top: 1.25rem;
+}
+
+/* ── Modal Dialogs ───────────────────────────────────────────────────────── */
+.modal-backdrop {
+    position: fixed;
+    inset: 0;
+    background: rgba(10, 26, 47, 0.85);
+    backdrop-filter: blur(12px);
+    z-index: 2000;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 1.5rem;
+    opacity: 0;
+    visibility: hidden;
+    transition: all 0.3s ease;
+}
+
+.modal-backdrop.active {
+    opacity: 1;
+    visibility: visible;
+}
+
+.modal-content {
+    background: rgba(17, 34, 64, 0.95);
+    border: 1px solid rgba(212, 160, 23, 0.4);
+    border-radius: 20px;
+    padding: 2.5rem;
+    width: 100%;
+    max-width: 540px;
+    position: relative;
+    box-shadow: 0 25px 60px rgba(0, 0, 0, 0.7);
+    max-height: 90vh;
+    overflow-y: auto;
+}
+
+.modal-close {
+    position: absolute;
+    top: 1.25rem;
+    right: 1.25rem;
+    background: transparent;
+    border: none;
+    color: var(--color-text-muted);
+    font-size: 1.8rem;
+    cursor: pointer;
+    line-height: 1;
+    transition: color 0.2s;
+}
+
+.modal-close:hover {
+    color: var(--color-white);
+}
+
+.modal-header {
+    text-align: center;
+    margin-bottom: 1.75rem;
+}
+
+.modal-badge {
+    font-family: var(--font-accent);
+    font-size: 0.7rem;
+    color: var(--color-gold);
+    letter-spacing: 1.5px;
+    display: block;
+    margin-bottom: 0.4rem;
+}
+
+.modal-header h2 {
+    font-size: 1.8rem;
+    color: var(--color-white);
+    margin-bottom: 0.4rem;
+}
+
+.modal-header p {
+    font-size: 0.9rem;
+    color: var(--color-text-muted);
+}
+
+.apply-form .form-group {
+    margin-bottom: 1.25rem;
+}
+
+.apply-form label {
+    display: block;
+    font-size: 0.85rem;
+    color: var(--color-white);
+    margin-bottom: 0.4rem;
+    font-weight: 600;
+}
+
+.apply-form input,
+.apply-form select {
+    width: 100%;
+    padding: 0.85rem 1rem;
+    background: rgba(255, 255, 255, 0.05);
+    border: 1px solid rgba(255, 255, 255, 0.15);
+    border-radius: 10px;
+    color: var(--color-white);
+    font-family: inherit;
+    font-size: 0.95rem;
+    transition: border-color 0.2s;
+    box-sizing: border-box;
+}
+
+.apply-form select option {
+    background: #0a1a2f;
+    color: white;
+}
+
+.apply-form input:focus,
+.apply-form select:focus {
+    border-color: var(--color-gold);
+    outline: none;
+}
+
+.form-row {
+    display: flex;
+    gap: 1rem;
+}
+
+.form-row .half {
+    flex: 1;
+}
+
+.full-btn {
+    width: 100%;
+    padding: 0.9rem;
+    font-size: 1rem;
+    margin-top: 0.5rem;
+}
+
+.form-status-msg {
+    margin-top: 1rem;
+    text-align: center;
+    font-size: 0.9rem;
+}
+
+/* Receipt Card */
+.receipt-card {
+    text-align: center;
+}
+
+.receipt-icon {
+    font-size: 3rem;
+    margin-bottom: 0.5rem;
+}
+
+.receipt-sub {
+    font-size: 0.95rem;
+    color: var(--color-text-muted);
+    margin-bottom: 1.5rem;
+}
+
+.bank-details-box {
+    background: rgba(10, 26, 47, 0.8);
+    border: 1px dashed rgba(212, 160, 23, 0.4);
+    border-radius: 14px;
+    padding: 1.25rem;
+    margin-bottom: 1.5rem;
+    text-align: left;
+}
+
+.bank-detail-row {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 0.75rem;
+    font-size: 0.9rem;
+    color: var(--color-white);
+}
+
+.summary-row {
+    margin-top: 0.75rem;
+    padding-top: 0.75rem;
+    border-top: 1px solid rgba(255, 255, 255, 0.1);
+    margin-bottom: 0;
+}
+
+.bank-accounts-grid {
+    display: flex;
+    flex-direction: column;
+    gap: 0.75rem;
+    margin: 1rem 0;
+}
+
+.bank-account-card {
+    background: rgba(255, 255, 255, 0.03);
+    border: 1px solid rgba(255, 255, 255, 0.08);
+    border-radius: 10px;
+    padding: 0.75rem 1rem;
+}
+
+.bank-title {
+    display: block;
+    font-size: 0.75rem;
+    color: var(--color-gold);
+    margin-bottom: 0.25rem;
+}
+
+.acc-number-wrap {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.acc-num {
+    font-family: var(--font-heading);
+    font-size: 1.2rem;
+    font-weight: 700;
+    letter-spacing: 1px;
+    color: var(--color-white);
+}
+
+.copy-btn {
+    background: rgba(212, 160, 23, 0.2);
+    border: 1px solid var(--color-gold);
+    color: var(--color-gold);
+    padding: 0.2rem 0.6rem;
+    border-radius: 6px;
+    font-size: 0.75rem;
+    cursor: pointer;
+    transition: all 0.2s;
+}
+
+.copy-btn:hover {
+    background: var(--color-gold);
+    color: #0a1a2f;
+}
+
+.receipt-actions {
+    display: flex;
+    flex-direction: column;
+    gap: 0.75rem;
+}
+
+.wa-confirm-btn {
+    background: linear-gradient(135deg, #25d366, #128c7e);
+    color: white;
+
+}
+
+/* Responsive adjustments for Campaign Advert */
+@media (max-width: 960px) {
+    .campaign-hero-grid {
+        grid-template-columns: 1fr;
+        gap: 2rem;
+    }
+    .campaign-title {
+        font-size: 2.4rem;
+    }
+    .form-row {
+        flex-direction: column;
+        gap: 0;
+    }
+}
+

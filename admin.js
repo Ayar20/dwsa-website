@@ -24,12 +24,14 @@ document.addEventListener('DOMContentLoaded', () => {
             // Update title
             pageTitle.textContent = e.currentTarget.textContent;
 
-            // Load bookshelf inventory when that tab is opened
+            // Load bookshelf inventory or advert settings when tabs are opened
             if (targetId === 'bookshelf') {
                 fetchBooks();
+            } else if (targetId === 'programs') {
+                fetchAdminAdvert();
             }
         });
-    });
+    } );
 
     // Auth & Live Database Registrations
     let registrations = [];
@@ -120,14 +122,17 @@ document.addEventListener('DOMContentLoaded', () => {
         // Render Full Table
         if (fullTable) {
             if (registrations.length === 0) {
-                 fullTable.innerHTML = '<tbody><tr><td colspan="4" style="text-align: center; padding: 2rem;">No registrations found yet.</td></tr></tbody>';
+                 fullTable.innerHTML = '<tbody><tr><td colspan="7" style="text-align: center; padding: 2rem;">No registrations found yet.</td></tr></tbody>';
             } else {
                 let html = `
                     <thead>
                         <tr>
                             <th>Name</th>
                             <th>Email</th>
-                            <th>Program Selected</th>
+                            <th>Phone</th>
+                            <th>Program</th>
+                            <th>Payment Option</th>
+                            <th>Mode</th>
                             <th>Date</th>
                         </tr>
                     </thead>
@@ -136,14 +141,17 @@ document.addEventListener('DOMContentLoaded', () => {
                 registrations.forEach(reg => {
                     html += `
                         <tr>
-                            <td>${reg.name}</td>
-                            <td>${reg.email}</td>
-                            <td><span class="badge program-badge">${reg.program}</span></td>
-                            <td>${reg.date}</td>
+                            <td><strong>${reg.name}</strong></td>
+                            <td><a href="mailto:${reg.email}" style="color: #63b3ed;">${reg.email}</a></td>
+                            <td>${reg.phone || 'N/A'}</td>
+                            <td><span class="badge" style="background: rgba(212, 160, 23, 0.15); color: #d4a017; border: 1px solid #d4a017;">${reg.program || 'AI Coding Academy'}</span></td>
+                            <td>${reg.payment_option || 'Standard'}</td>
+                            <td>${reg.learning_mode || 'Physical'}</td>
+                            <td>${reg.date || ''}</td>
                         </tr>
                     `;
                 });
-                html += `</tbody>`;
+                html += '</tbody>';
                 fullTable.innerHTML = html;
             }
         }
@@ -303,4 +311,84 @@ document.addEventListener('DOMContentLoaded', () => {
             }
         });
     }
+
+    // ── Admin Campaign Advert Manager ──────────────────────────────────────
+    async function fetchAdminAdvert() {
+        try {
+            const res = await fetch('/api/get-advert');
+            if (!res.ok) return;
+            const result = await res.json();
+            if (result.success && result.data) {
+                const adv = result.data;
+                if (adv.title) document.getElementById('adv-input-title').value = adv.title;
+                if (adv.sub_badge) document.getElementById('adv-input-sub-badge').value = adv.sub_badge;
+                if (adv.tagline) document.getElementById('adv-input-tagline').value = adv.tagline;
+                if (adv.description) document.getElementById('adv-input-description').value = adv.description;
+                if (adv.early_bird_price) document.getElementById('adv-input-early-price').value = adv.early_bird_price;
+                if (adv.early_bird_sub) document.getElementById('adv-input-early-sub').value = adv.early_bird_sub;
+                if (adv.standard_price) document.getElementById('adv-input-standard-price').value = adv.standard_price;
+                if (adv.split_pay_price) document.getElementById('adv-input-split-price').value = adv.split_pay_price;
+                if (adv.whatsapp_number) document.getElementById('adv-input-whatsapp').value = adv.whatsapp_number;
+            }
+        } catch (err) {
+            console.error('Error loading advert settings in admin:', err);
+        }
+    }
+
+    const advertForm = document.getElementById('admin-advert-form');
+    if (advertForm) {
+        advertForm.addEventListener('submit', async (e) => {
+            e.preventDefault();
+            const saveBtn = document.getElementById('save-advert-btn');
+            const statusEl = document.getElementById('advert-form-status');
+            saveBtn.textContent = 'Publishing to Website...';
+            saveBtn.disabled = true;
+
+            const payload = {
+                id: 'ai-coding-academy',
+                title: document.getElementById('adv-input-title').value,
+                sub_badge: document.getElementById('adv-input-sub-badge').value,
+                tagline: document.getElementById('adv-input-tagline').value,
+                description: document.getElementById('adv-input-description').value,
+                early_bird_price: document.getElementById('adv-input-early-price').value,
+                early_bird_sub: document.getElementById('adv-input-early-sub').value,
+                standard_price: document.getElementById('adv-input-standard-price').value,
+                split_pay_price: document.getElementById('adv-input-split-price').value,
+                whatsapp_number: document.getElementById('adv-input-whatsapp').value,
+                whatsapp_link: `https://wa.me/234${document.getElementById('adv-input-whatsapp').value.replace(/^0/, '').replace(/\s+/g, '')}`,
+                is_active: true
+            };
+
+            try {
+                const response = await fetch('/api/save-advert', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'Authorization': `Bearer ${authToken}`
+                    },
+                    body: JSON.stringify(payload)
+                });
+
+                const result = await response.json();
+                if (result.success) {
+                    statusEl.textContent = '🚀 Advert published live to main website!';
+                    statusEl.style.color = '#48bb78';
+                    statusEl.style.display = 'block';
+                } else {
+                    statusEl.textContent = '❌ Error: ' + (result.message || 'Failed to save');
+                    statusEl.style.color = '#ff4d4d';
+                    statusEl.style.display = 'block';
+                }
+            } catch (err) {
+                console.error('Advert save error:', err);
+                statusEl.textContent = '❌ Connection error. Please try again.';
+                statusEl.style.color = '#ff4d4d';
+                statusEl.style.display = 'block';
+            } finally {
+                saveBtn.textContent = '🚀 Publish Advert Live to Website';
+                saveBtn.disabled = false;
+            }
+        });
+    }
 });
+

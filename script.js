@@ -274,5 +274,177 @@ document.addEventListener('DOMContentLoaded', () => {
             }
         });
     }
+
+    // ── 🤖 Dynamic Campaign Advert Loader ──────────────────────────────────
+    async function loadCampaignAdvert() {
+        try {
+            const res = await fetch('/api/get-advert');
+            if (!res.ok) return;
+            const result = await res.json();
+            if (!result.success || !result.data) return;
+
+            const adv = result.data;
+            if (adv.title) {
+                const titleEl = document.getElementById('adv-title');
+                if (titleEl) titleEl.innerHTML = adv.title.replace('ACADEMY', '<span class="highlight-gold">ACADEMY</span>');
+            }
+            if (adv.sub_badge) {
+                const el = document.getElementById('adv-sub-badge');
+                if (el) el.textContent = adv.sub_badge;
+            }
+            if (adv.tagline) {
+                const el = document.getElementById('adv-badge-tag');
+                if (el) el.textContent = adv.tagline;
+            }
+            if (adv.description) {
+                const el = document.getElementById('adv-description');
+                if (el) el.textContent = adv.description;
+            }
+            if (adv.early_bird_price) {
+                const el = document.getElementById('adv-early-price');
+                if (el) el.textContent = adv.early_bird_price;
+            }
+            if (adv.early_bird_sub) {
+                const el = document.getElementById('adv-early-sub');
+                if (el) el.textContent = adv.early_bird_sub;
+            }
+            if (adv.standard_price) {
+                const el = document.getElementById('adv-standard-price');
+                if (el) el.textContent = adv.standard_price;
+            }
+            if (adv.split_pay_price) {
+                const el = document.getElementById('adv-split-price');
+                if (el) el.textContent = adv.split_pay_price;
+            }
+            if (adv.whatsapp_number) {
+                const el = document.getElementById('adv-whatsapp-no');
+                if (el) el.textContent = adv.whatsapp_number;
+            }
+        } catch (err) {
+            console.log('Using pre-rendered advert content');
+        }
+    }
+    loadCampaignAdvert();
+
+    // ── Application Modal Handlers & Deep-Linking ─────────────────────────
+    const applyModal = document.getElementById('apply-modal');
+    const receiptModal = document.getElementById('receipt-modal');
+    const closeApplyBtn = document.getElementById('close-apply-modal');
+    const closeReceiptBtn = document.getElementById('close-receipt-modal');
+    const applyForm = document.getElementById('bootcamp-apply-form');
+    const applyStatus = document.getElementById('apply-form-status');
+
+    function openApplyModal() {
+        if (applyModal) applyModal.classList.add('active');
+    }
+    function closeApplyModal() {
+        if (applyModal) applyModal.classList.remove('active');
+    }
+
+    // Attach click listener to all Apply buttons
+    document.querySelectorAll('.open-apply-btn, a[href="#apply"]').forEach(btn => {
+        btn.addEventListener('click', (e) => {
+            e.preventDefault();
+            openApplyModal();
+        });
+    });
+
+    if (closeApplyBtn) closeApplyBtn.addEventListener('click', closeApplyModal);
+    if (closeReceiptBtn) closeReceiptBtn.addEventListener('click', () => receiptModal.classList.remove('active'));
+
+    // Check URL hash for social link share (#apply or #register)
+    if (window.location.hash === '#apply' || window.location.hash === '#register') {
+        setTimeout(openApplyModal, 300);
+    }
+
+    // Handle Application Form Submission
+    if (applyForm) {
+        applyForm.addEventListener('submit', async (e) => {
+            e.preventDefault();
+            const submitBtn = document.getElementById('submit-apply-btn');
+            const originalText = submitBtn.textContent;
+            submitBtn.disabled = true;
+            submitBtn.textContent = 'Submitting Registration...';
+            if (applyStatus) applyStatus.style.display = 'none';
+
+            const name = document.getElementById('apply-name').value;
+            const email = document.getElementById('apply-email').value;
+            const phone = document.getElementById('apply-phone').value;
+            const learning_mode = document.getElementById('apply-mode').value;
+            const payment_option = document.getElementById('apply-tier').value;
+
+            try {
+                const response = await fetch('/api/register', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({
+                        name,
+                        email,
+                        phone,
+                        learning_mode,
+                        payment_option,
+                        program: 'AI Coding Academy'
+                    })
+                });
+
+                const result = await response.json();
+
+                if (response.ok && result.success) {
+                    closeApplyModal();
+
+                    // Update receipt modal
+                    document.getElementById('receipt-user-name').textContent = name;
+                    document.getElementById('receipt-plan-amount').textContent = payment_option;
+
+                    // Setup WhatsApp confirmation link
+                    const waText = encodeURIComponent(
+                        `Hello DWSA Team, I just registered for the AI Coding Academy!\n` +
+                        `Name: ${name}\n` +
+                        `Tier: ${payment_option}\n` +
+                        `Mode: ${learning_mode}\n` +
+                        `Attached is my payment proof.`
+                    );
+                    const waBtn = document.getElementById('wa-confirm-btn');
+                    if (waBtn) waBtn.href = `https://wa.me/2347082135071?text=${waText}`;
+
+                    // Show Receipt Modal
+                    if (receiptModal) receiptModal.classList.add('active');
+                    applyForm.reset();
+                } else {
+                    if (applyStatus) {
+                        applyStatus.textContent = result.message || 'Error registering. Please try again.';
+                        applyStatus.style.color = '#ff4d4d';
+                        applyStatus.style.display = 'block';
+                    }
+                }
+            } catch (err) {
+                console.error('Registration Submission Error:', err);
+                if (applyStatus) {
+                    applyStatus.textContent = 'Connection error. Please check your network.';
+                    applyStatus.style.color = '#ff4d4d';
+                    applyStatus.style.display = 'block';
+                }
+            } finally {
+                submitBtn.disabled = false;
+                submitBtn.textContent = originalText;
+            }
+        });
+    }
 });
+
+// Copy Account Number Helper Function
+window.copyAcc = function(num, btn) {
+    navigator.clipboard.writeText(num).then(() => {
+        const orig = btn.textContent;
+        btn.textContent = 'Copied! ✓';
+        btn.style.background = '#4ade80';
+        btn.style.color = '#0a1a2f';
+        setTimeout(() => {
+            btn.textContent = orig;
+            btn.style.background = '';
+            btn.style.color = '';
+        }, 2000);
+    });
+};
+
 

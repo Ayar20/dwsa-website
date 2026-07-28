@@ -33,7 +33,7 @@
                 <li class="active"><a href="#" data-target="dashboard">Dashboard Overview</a></li>
                 <li><a href="#" data-target="registrations">Registrations</a></li>
                 <li><a href="#" data-target="bookshelf">Manage Bookshelf</a></li>
-                <li><a href="#" data-target="programs">Manage Programs</a></li>
+                <li><a href="#" data-target="programs">Manage Advert & Campaigns</a></li>
                 <li class="nav-divider"></li>
                 <li><a href="index.html" class="back-link">← Back to Main Site</a></li>
             </ul>
@@ -134,14 +134,78 @@
             <div class="content-view" id="view-registrations">
                 <div class="view-header">
                     <h2>All Registrations</h2>
-                    <div class="actions">
-                        <button class="btn-secondary">Export CSV</button>
-                    </div>
                 </div>
                 <div class="table-container">
                     <table class="data-table" id="full-reg-table">
                         <!-- Will be populated by JS -->
                     </table>
+                </div>
+            </div>
+
+            <!-- Manage Advert & Campaigns View -->
+            <div class="content-view" id="view-programs">
+                <div class="view-header">
+                    <h2>Live Campaign Advert Manager</h2>
+                </div>
+                <div class="admin-panel glass-panel-admin">
+                    <h3>Edit & Publish Active Website Advert</h3>
+                    <p style="color: #a0aec0; font-size: 0.85rem; margin-bottom: 1.5rem;">Changes made here instantly update the campaign section and pricing on the main company website.</p>
+
+                    <form id="admin-advert-form" class="admin-form">
+                        <div class="form-row">
+                            <div class="form-group half">
+                                <label>Campaign Title</label>
+                                <input type="text" id="adv-input-title" required value="AI CODING ACADEMY">
+                            </div>
+                            <div class="form-group half">
+                                <label>Tagline / Ribbon</label>
+                                <input type="text" id="adv-input-tagline" required value="FROM ZERO TO FULL-STACK IN 8 WEEKS">
+                            </div>
+                        </div>
+
+                        <div class="form-row">
+                            <div class="form-group half">
+                                <label>Sub-Badge Header</label>
+                                <input type="text" id="adv-input-sub-badge" required value="AI-POWERED TECH BOOTCAMP">
+                            </div>
+                            <div class="form-group half">
+                                <label>WhatsApp Support Number</label>
+                                <input type="text" id="adv-input-whatsapp" required value="0708 213 5071">
+                            </div>
+                        </div>
+
+                        <div class="form-group">
+                            <label>Campaign Description</label>
+                            <textarea id="adv-input-description" rows="2" required>Master modern software engineering by leveraging cutting-edge Artificial Intelligence.</textarea>
+                        </div>
+
+                        <div class="form-row">
+                            <div class="form-group half">
+                                <label>Early Bird Price</label>
+                                <input type="text" id="adv-input-early-price" required value="₦45,000">
+                            </div>
+                            <div class="form-group half">
+                                <label>Early Bird Offer Subtitle</label>
+                                <input type="text" id="adv-input-early-sub" required value="Save ₦10,000 when you register early (First 8 Students)">
+                            </div>
+                        </div>
+
+                        <div class="form-row">
+                            <div class="form-group half">
+                                <label>Standard Price</label>
+                                <input type="text" id="adv-input-standard-price" required value="₦55,000">
+                            </div>
+                            <div class="form-group half">
+                                <label>Split Pay Price</label>
+                                <input type="text" id="adv-input-split-price" required value="₦30k + ₦25k">
+                            </div>
+                        </div>
+
+                        <button type="submit" class="btn-primary" id="save-advert-btn" style="margin-top: 1rem;">
+                            🚀 Publish Advert Live to Website
+                        </button>
+                        <p id="advert-form-status" style="margin-top: 1rem; font-size: 0.9rem; display: none;"></p>
+                    </form>
                 </div>
             </div>
 
