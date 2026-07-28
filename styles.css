@@ -2325,38 +2325,109 @@ ul {
 
 }
 
-/* Responsive adjustments for Campaign Advert */
+/* ══════════════════════════════════════════════════════════
+   RESPONSIVE — Campaign Advert Section
+   ══════════════════════════════════════════════════════════ */
+
+/* ── Tablet (≤1100px): image spans full width on top, info+pricing side-by-side ── */
 @media (max-width: 1100px) {
+    .campaign-advert-section {
+        padding: 4rem 4%;
+    }
     .campaign-hero-grid {
         grid-template-columns: 1fr 1fr;
         gap: 2rem;
     }
     .campaign-image-panel {
-        grid-column: 1 / -1;
-        order: -1;
+        grid-column: 1 / -1;   /* full width */
+        order: -1;              /* sits above info+pricing */
     }
     .campaign-students-img {
-        min-height: 260px;
-        max-height: 320px;
+        min-height: 240px;
+        max-height: 300px;
+        object-fit: cover;
+    }
+    .campaign-title {
+        font-size: 2.6rem;
     }
 }
 
-@media (max-width: 960px) {
+/* ── Mobile (≤768px): everything stacks into a single column ── */
+@media (max-width: 768px) {
+    .campaign-advert-section {
+        padding: 3rem 5%;
+        text-align: center;
+    }
+    .campaign-container {
+        text-align: center;
+    }
+    .campaign-header-badge {
+        justify-content: center;
+    }
     .campaign-hero-grid {
         grid-template-columns: 1fr;
-        gap: 2rem;
+        gap: 1.75rem;
     }
     .campaign-image-panel {
         grid-column: auto;
-        order: 0;
+        order: 0;              /* info first, then image, then pricing */
+        border-radius: 14px;
     }
     .campaign-students-img {
-        min-height: 220px;
-        max-height: 260px;
+        min-height: 200px;
+        max-height: 240px;
     }
     .campaign-title {
+        font-size: 2.1rem;
+        text-align: center;
+    }
+    .campaign-desc {
+        text-align: center;
+    }
+    .campaign-pills {
+        justify-content: center;
+    }
+    .campaign-pill {
+        min-width: 140px;
+        flex: 1 1 140px;
+        justify-content: center;
+        text-align: left;
+    }
+    .deliverables-box {
+        text-align: left;
+    }
+    .campaign-pricing-card {
+        padding: 1.5rem;
+    }
+    .price-value {
         font-size: 2.4rem;
     }
+    .pricing-header-ribbon {
+        right: 12px;
+        font-size: 0.68rem;
+    }
+}
+
+/* ── Small phones (≤420px) ── */
+@media (max-width: 420px) {
+    .campaign-title {
+        font-size: 1.8rem;
+    }
+    .campaign-students-img {
+        min-height: 170px;
+        max-height: 210px;
+    }
+    .secondary-pricing-grid {
+        grid-template-columns: 1fr;
+    }
+    .campaign-pill {
+        min-width: 100%;
+        flex: 1 1 100%;
+    }
+}
+
+/* Form row stacking */
+@media (max-width: 960px) {
     .form-row {
         flex-direction: column;
         gap: 0;
