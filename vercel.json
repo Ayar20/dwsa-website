@@ -23,13 +23,13 @@
   ],
   "redirects": [
     {
-      "source": "/academy",
-      "destination": "https://dwsa-academy.vercel.app",
+      "source": "/apply",
+      "destination": "/academy.html",
       "permanent": false
     },
     {
-      "source": "/academy/:path*",
-      "destination": "https://dwsa-academy.vercel.app/:path*",
+      "source": "/bootcamp",
+      "destination": "/academy.html",
       "permanent": false
     },
     {
