@@ -1,0 +1,239 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>You're Offline — DWSA Tech Academy</title>
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      --gold: #d4a017;
+      --cyan: #00d2ff;
+      --navy: #030e1f;
+      --navy-card: #061428;
+      --navy-mid: #0f223d;
+      --muted: #8899b4;
+    }
+
+    body {
+      min-height: 100vh;
+      background-color: var(--navy);
+      color: #f0f4ff;
+      font-family: 'Inter', system-ui, -apple-system, sans-serif;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      padding: 1.5rem;
+      overflow: hidden;
+      position: relative;
+    }
+
+    /* Ambient glow blobs */
+    .blob {
+      position: absolute;
+      border-radius: 50%;
+      filter: blur(80px);
+      pointer-events: none;
+      opacity: 0.12;
+    }
+    .blob-gold { width: 500px; height: 500px; background: var(--gold); top: -150px; left: -150px; }
+    .blob-cyan { width: 400px; height: 400px; background: var(--cyan); bottom: -120px; right: -120px; }
+
+    /* Grid pattern overlay */
+    .grid-overlay {
+      position: absolute;
+      inset: 0;
+      background-image:
+        linear-gradient(var(--navy-mid) 1px, transparent 1px),
+        linear-gradient(90deg, var(--navy-mid) 1px, transparent 1px);
+      background-size: 48px 48px;
+      opacity: 0.15;
+      pointer-events: none;
+    }
+
+    .card {
+      position: relative;
+      z-index: 10;
+      background: rgba(6, 20, 40, 0.85);
+      border: 1px solid rgba(212, 160, 23, 0.25);
+      border-radius: 24px;
+      padding: 3rem 2.5rem;
+      max-width: 480px;
+      width: 100%;
+      text-align: center;
+      backdrop-filter: blur(20px);
+      box-shadow: 0 24px 80px rgba(0, 0, 0, 0.5), 0 0 0 1px rgba(212,160,23,0.08);
+    }
+
+    /* Top gradient line */
+    .card::before {
+      content: '';
+      position: absolute;
+      top: 0; left: 10%; right: 10%;
+      height: 2px;
+      background: linear-gradient(90deg, transparent, var(--gold), var(--cyan), transparent);
+      border-radius: 999px;
+    }
+
+    .icon-wrap {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      width: 80px;
+      height: 80px;
+      background: rgba(212, 160, 23, 0.1);
+      border: 1px solid rgba(212, 160, 23, 0.3);
+      border-radius: 20px;
+      margin-bottom: 1.5rem;
+      animation: pulse 2.5s ease-in-out infinite;
+    }
+
+    @keyframes pulse {
+      0%, 100% { box-shadow: 0 0 0 0 rgba(212,160,23,0.3); }
+      50%       { box-shadow: 0 0 0 16px rgba(212,160,23,0); }
+    }
+
+    .icon-wrap svg {
+      width: 40px;
+      height: 40px;
+      stroke: var(--gold);
+      fill: none;
+      stroke-width: 1.5;
+      stroke-linecap: round;
+      stroke-linejoin: round;
+    }
+
+    h1 {
+      font-size: 1.6rem;
+      font-weight: 900;
+      color: #fff;
+      letter-spacing: -0.02em;
+      margin-bottom: 0.6rem;
+    }
+
+    h1 span { color: var(--gold); }
+
+    .subtitle {
+      font-size: 0.8rem;
+      color: var(--muted);
+      line-height: 1.7;
+      max-width: 340px;
+      margin: 0 auto 2rem;
+    }
+
+    .divider {
+      height: 1px;
+      background: linear-gradient(90deg, transparent, rgba(212,160,23,0.2), transparent);
+      margin: 1.5rem 0;
+    }
+
+    .tips {
+      display: flex;
+      flex-direction: column;
+      gap: 0.75rem;
+      text-align: left;
+      margin-bottom: 2rem;
+    }
+
+    .tip {
+      display: flex;
+      align-items: center;
+      gap: 0.75rem;
+      font-size: 0.75rem;
+      color: #c8d8f0;
+    }
+
+    .tip-dot {
+      width: 6px;
+      height: 6px;
+      border-radius: 50%;
+      background: var(--cyan);
+      flex-shrink: 0;
+    }
+
+    .btn {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 0.5rem;
+      width: 100%;
+      padding: 0.875rem 1.5rem;
+      background: linear-gradient(135deg, var(--gold), #e5b520);
+      color: var(--navy);
+      font-weight: 900;
+      font-size: 0.8rem;
+      border: none;
+      border-radius: 14px;
+      cursor: pointer;
+      transition: opacity 0.2s, transform 0.2s;
+      text-decoration: none;
+      letter-spacing: 0.01em;
+      box-shadow: 0 6px 24px rgba(212,160,23,0.25);
+    }
+
+    .btn:hover { opacity: 0.9; transform: translateY(-1px); }
+    .btn:active { transform: translateY(0); }
+
+    .brand {
+      margin-top: 2rem;
+      font-size: 0.65rem;
+      font-weight: 700;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      color: var(--muted);
+    }
+
+    .brand span { color: var(--cyan); }
+
+    @media (max-width: 480px) {
+      .card { padding: 2rem 1.5rem; }
+      h1 { font-size: 1.3rem; }
+    }
+  </style>
+</head>
+<body>
+  <div class="blob blob-gold"></div>
+  <div class="blob blob-cyan"></div>
+  <div class="grid-overlay"></div>
+
+  <div class="card">
+    <div class="icon-wrap">
+      <!-- Wifi Off SVG -->
+      <svg viewBox="0 0 24 24">
+        <line x1="1" y1="1" x2="23" y2="23"/>
+        <path d="M16.72 11.06A10.94 10.94 0 0 1 19 12.55"/>
+        <path d="M5 12.55a10.94 10.94 0 0 1 5.17-2.39"/>
+        <path d="M10.71 5.05A16 16 0 0 1 22.56 9"/>
+        <path d="M1.42 9a15.91 15.91 0 0 1 4.7-2.88"/>
+        <path d="M8.53 16.11a6 6 0 0 1 6.95 0"/>
+        <circle cx="12" cy="20" r="1" fill="currentColor" stroke="none" style="fill: #d4a017;"/>
+      </svg>
+    </div>
+
+    <h1>You're <span>Offline</span></h1>
+    <p class="subtitle">
+      No internet connection detected. Some previously visited pages and resources are still available from your local cache.
+    </p>
+
+    <div class="divider"></div>
+
+    <div class="tips">
+      <div class="tip"><span class="tip-dot"></span> Previously viewed lessons & module content are cached</div>
+      <div class="tip"><span class="tip-dot"></span> Your submitted PR links are stored locally</div>
+      <div class="tip"><span class="tip-dot"></span> Full access resumes once your connection is restored</div>
+    </div>
+
+    <button class="btn" onclick="window.location.reload()">
+      <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+        <polyline points="23 4 23 10 17 10"/><polyline points="1 20 1 14 7 14"/>
+        <path d="M3.51 9a9 9 0 0 1 14.85-3.36L23 10M1 14l4.64 4.36A9 9 0 0 0 20.49 15"/>
+      </svg>
+      Try Again
+    </button>
+
+    <p class="brand">DWSA <span>Tech Academy</span> &nbsp;•&nbsp; RC 9718724</p>
+  </div>
+</body>
+</html>

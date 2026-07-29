@@ -132,8 +132,8 @@ export default function LoginPage() {
             <div className="grid grid-cols-2 gap-2.5">
               <button
                 type="button"
-                onClick={() => handleQuickLogin("student@dwsa.edu", "password123", "/dashboard/student")}
-                className="py-2.5 px-3 bg-[#0f223d] hover:bg-[#16335a] border border-[#00d2ff]/30 rounded-xl text-[11px] font-bold text-[#00d2ff] flex items-center justify-center gap-1.5 transition-all"
+                onClick={() => handleQuickLogin("student@dwsa.edu", "student123", "/dashboard/student")}
+                className="py-2.5 px-3 bg-[#0f223d] hover:bg-[#16335a] border border-[#00d2ff]/30 rounded-xl text-[11px] font-bold text-[#00d2ff] flex items-center justify-center gap-1.5 transition-all shadow-sm"
               >
                 <UserCheck className="w-3.5 h-3.5" />
                 Student Workspace
@@ -142,11 +142,15 @@ export default function LoginPage() {
               <button
                 type="button"
                 onClick={() => handleQuickLogin("admin@dwsa.edu", "admin123", "/dashboard/admin")}
-                className="py-2.5 px-3 bg-[#0f223d] hover:bg-[#16335a] border border-[#d4a017]/30 rounded-xl text-[11px] font-bold text-[#d4a017] flex items-center justify-center gap-1.5 transition-all"
+                className="py-2.5 px-3 bg-[#0f223d] hover:bg-[#16335a] border border-[#d4a017]/30 rounded-xl text-[11px] font-bold text-[#d4a017] flex items-center justify-center gap-1.5 transition-all shadow-sm"
               >
                 <Building2 className="w-3.5 h-3.5" />
                 Instructor Portal
               </button>
+            </div>
+            <div className="text-[10px] text-slate-400 text-center space-y-0.5 font-mono pt-1">
+              <p>Student: <span className="text-[#00d2ff]">student@dwsa.edu</span> / <span className="text-white">student123</span></p>
+              <p>Admin: <span className="text-[#d4a017]">admin@dwsa.edu</span> / <span className="text-white">admin123</span></p>
             </div>
           </div>
         </div>

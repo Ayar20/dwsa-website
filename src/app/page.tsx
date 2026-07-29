@@ -1,4 +1,5 @@
-import React from "react";
+"use client";
+import React, { useState } from "react";
 import Link from "next/link";
 import { 
   GraduationCap, 
@@ -15,10 +16,13 @@ import {
   Users, 
   Sparkles,
   ExternalLink,
-  BookOpen
+  BookOpen,
+  Menu,
+  X
 } from "lucide-react";
 
 export default function HomePage() {
+  const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   return (
     <div className="min-h-screen bg-[#030e1f] text-[#f0f4ff] flex flex-col font-sans selection:bg-[#00d2ff] selection:text-[#030e1f]">
       
@@ -33,21 +37,23 @@ export default function HomePage() {
 
       {/* 🧭 Navigation Header */}
       <header className="border-b border-[#d4a017]/20 bg-[#030e1f]/90 backdrop-blur-xl sticky top-0 z-50">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-20 flex items-center justify-between">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-16 sm:h-20 flex items-center justify-between">
+          {/* Brand */}
           <div className="flex items-center gap-3">
-            <div className="p-2.5 bg-gradient-to-br from-[#d4a017] to-[#e5a910] rounded-xl shadow-lg shadow-[#d4a017]/20 text-[#030e1f] font-extrabold">
-              <GraduationCap className="w-6 h-6" />
+            <div className="p-2 sm:p-2.5 bg-gradient-to-br from-[#d4a017] to-[#e5a910] rounded-xl shadow-lg shadow-[#d4a017]/20 text-[#030e1f] font-extrabold">
+              <GraduationCap className="w-5 h-5 sm:w-6 sm:h-6" />
             </div>
             <div>
-              <span className="font-extrabold text-lg tracking-tight text-white flex items-center gap-1.5">
+              <span className="font-extrabold text-base sm:text-lg tracking-tight text-white flex items-center gap-1.5">
                 DWSA <span className="text-[#d4a017]">Tech Academy</span>
               </span>
-              <span className="block text-[10px] uppercase tracking-widest text-[#00d2ff] font-semibold">
+              <span className="hidden sm:block text-[10px] uppercase tracking-widest text-[#00d2ff] font-semibold">
                 Digital World Systems Africa Ltd (RC 9718724)
               </span>
             </div>
           </div>
 
+          {/* Desktop nav */}
           <div className="hidden md:flex items-center gap-6 text-xs font-medium text-[#8899b4]">
             <a href="#features" className="hover:text-[#00d2ff] transition-colors">Features</a>
             <a href="#curriculum" className="hover:text-[#00d2ff] transition-colors">Curriculum</a>
@@ -57,16 +63,50 @@ export default function HomePage() {
             </a>
           </div>
 
-          <div className="flex items-center gap-3">
+          {/* Right actions */}
+          <div className="flex items-center gap-2">
             <Link
               href="/login"
-              className="px-5 py-2.5 rounded-xl text-xs font-bold bg-gradient-to-r from-[#d4a017] to-[#e5a910] hover:from-[#e5a910] hover:to-[#d4a017] text-[#030e1f] shadow-lg shadow-[#d4a017]/25 transition-all transform hover:-translate-y-0.5 flex items-center gap-2"
+              className="px-4 py-2 sm:px-5 sm:py-2.5 rounded-xl text-xs font-bold bg-gradient-to-r from-[#d4a017] to-[#e5a910] hover:from-[#e5a910] hover:to-[#d4a017] text-[#030e1f] shadow-lg shadow-[#d4a017]/25 transition-all flex items-center gap-1.5"
             >
-              Portal Login
-              <ArrowRight className="w-4 h-4" />
+              <span className="hidden sm:inline">Portal </span>Login
+              <ArrowRight className="w-3.5 h-3.5" />
             </Link>
+            {/* Mobile hamburger */}
+            <button
+              onClick={() => setMobileMenuOpen(v => !v)}
+              className="md:hidden p-2 rounded-xl border border-[#1e3a5f] text-[#8899b4] hover:text-white hover:bg-[#0f223d] transition-all"
+              aria-label="Toggle menu"
+            >
+              {mobileMenuOpen ? <X className="w-5 h-5" /> : <Menu className="w-5 h-5" />}
+            </button>
           </div>
         </div>
+
+        {/* Mobile drawer */}
+        {mobileMenuOpen && (
+          <div className="md:hidden border-t border-[#1e3a5f] bg-[#030e1f]/98 backdrop-blur-xl px-4 py-4 space-y-1">
+            {["#features","#curriculum","#tuition"].map((href, i) => (
+              <a
+                key={href}
+                href={href}
+                onClick={() => setMobileMenuOpen(false)}
+                className="block px-4 py-3 rounded-xl text-sm font-semibold text-[#c8d8f0] hover:bg-[#0f223d] hover:text-white transition-all"
+              >
+                {["Features","Curriculum","Tuition & Plans"][i]}
+              </a>
+            ))}
+            <a
+              href="https://dws-africa.vercel.app"
+              target="_blank"
+              rel="noreferrer"
+              onClick={() => setMobileMenuOpen(false)}
+              className="flex items-center gap-2 px-4 py-3 rounded-xl text-sm font-semibold text-[#d4a017] hover:bg-[#0f223d] transition-all"
+            >
+              Main Site <ExternalLink className="w-3.5 h-3.5" />
+            </a>
+          </div>
+        )}
       </header>
 
       {/* 🚀 Hero Section */}

@@ -3,6 +3,7 @@
 import React, { useState, useEffect } from "react";
 import Navbar from "@/components/Navbar";
 import PrideModal from "@/components/PrideModal";
+import PWAInstallBanner from "@/components/PWAInstallBanner";
 import { useSession } from "next-auth/react";
 import { useRouter } from "next/navigation";
 
@@ -42,7 +43,7 @@ export default function DashboardLayout({
     <div className="min-h-screen bg-[#030e1f] text-[#f0f4ff] flex flex-col font-sans">
       <Navbar />
 
-      <main className="flex-1 max-w-7xl w-full mx-auto px-4 sm:px-6 lg:px-8 py-8">
+      <main className="flex-1 max-w-7xl w-full mx-auto px-4 sm:px-6 lg:px-8 py-6 sm:py-8">
         {children}
       </main>
 
@@ -50,6 +51,9 @@ export default function DashboardLayout({
         isOpen={showPrideModal}
         onAccepted={() => setShowPrideModal(false)}
       />
+
+      {/* PWA Install Banner — shown to authenticated users */}
+      <PWAInstallBanner />
     </div>
   );
 }

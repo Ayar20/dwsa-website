@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useState, useEffect } from "react";
+import React, { useState } from "react";
 import dynamic from "next/dynamic";
 import "@uiw/react-md-editor/markdown-editor.css";
 import "@uiw/react-markdown-preview/markdown.css";
@@ -21,6 +21,8 @@ import {
   ShieldAlert,
   Sparkles,
   Video,
+  Play,
+  RotateCcw,
 } from "lucide-react";
 
 // Dynamic import — avoids SSR hydration mismatch
@@ -167,33 +169,49 @@ export default function ModuleEditorPage() {
 
   return (
     <div className="space-y-8">
-      {/* Page Header */}
-      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 border-b border-slate-800 pb-4">
-        <div>
-          <h1 className="text-2xl font-black text-white tracking-tight flex items-center gap-3">
-            <FilePen className="w-6 h-6 text-indigo-400" />
-            Admin Module Editor
-          </h1>
-          <p className="text-xs text-slate-400 mt-1">
-            Create, edit, and manage curriculum modules — including markdown lesson content, YouTube video streams, GitHub repositories, and preview access flags.
-          </p>
+      {/* Top Banner & Header */}
+      <div className="dwsa-glass-card rounded-3xl p-6 sm:p-8 relative overflow-hidden">
+        {/* Background Ambient Glow */}
+        <div className="absolute -top-24 -right-24 w-72 h-72 bg-[#00d2ff]/10 rounded-full blur-3xl pointer-events-none" />
+        <div className="absolute -bottom-24 -left-24 w-72 h-72 bg-[#d4a017]/10 rounded-full blur-3xl pointer-events-none" />
+
+        <div className="relative z-10 flex flex-col md:flex-row md:items-center justify-between gap-6">
+          <div className="space-y-2">
+            <div className="flex items-center gap-2">
+              <span className="px-3 py-1 bg-[#00d2ff]/20 border border-[#00d2ff]/50 text-[#00d2ff] rounded-full text-[10px] font-extrabold uppercase tracking-widest flex items-center gap-1.5 shadow-sm">
+                <FilePen className="w-3 h-3" />
+                Curriculum Management
+              </span>
+              <span className="px-3 py-1 bg-[#d4a017]/20 border border-[#d4a017]/50 text-[#d4a017] rounded-full text-[10px] font-extrabold uppercase tracking-widest">
+                DWSA Tech Academy
+              </span>
+            </div>
+
+            <h1 className="text-2xl sm:text-3xl font-black text-white tracking-tight">
+              Admin <span className="text-cyan-gradient">Module & Curriculum Editor</span>
+            </h1>
+            <p className="text-xs text-[#8899b4] max-w-2xl leading-relaxed">
+              Create, publish, and update course modules — complete with Markdown lessons, YouTube video streams, GitHub starter repositories, and free preview access flags.
+            </p>
+          </div>
+
+          <button
+            onClick={handleNewModule}
+            className="px-5 py-2.5 bg-gradient-to-r from-[#d4a017] to-[#e5a910] hover:from-[#e5a910] hover:to-[#d4a017] text-[#030e1f] font-black text-xs rounded-xl shadow-lg shadow-[#d4a017]/25 transition-all flex items-center gap-2 hover:scale-105 shrink-0 w-fit"
+          >
+            <PlusCircle className="w-4 h-4" />
+            Create New Module
+          </button>
         </div>
-        <button
-          onClick={handleNewModule}
-          className="flex items-center gap-2 px-4 py-2 bg-indigo-600 hover:bg-indigo-500 text-white font-semibold text-xs rounded-xl shadow-lg shadow-indigo-600/20 transition-all w-fit shrink-0"
-        >
-          <PlusCircle className="w-4 h-4" />
-          New Module
-        </button>
       </div>
 
-      {/* Toast */}
+      {/* Toast Alert */}
       {toast && (
         <div
-          className={`p-4 rounded-xl border text-xs flex items-center gap-3 ${
+          className={`p-4 rounded-2xl border text-xs font-semibold flex items-center gap-3 animate-in fade-in slide-in-from-top-2 duration-200 ${
             toast.type === "success"
-              ? "bg-emerald-950/60 border-emerald-800/60 text-emerald-300"
-              : "bg-red-950/60 border-red-800/60 text-red-300"
+              ? "bg-emerald-950/70 border-emerald-500/50 text-emerald-300 shadow-lg shadow-emerald-950/50"
+              : "bg-red-950/70 border-red-500/50 text-red-300 shadow-lg shadow-red-950/50"
           }`}
         >
           {toast.type === "success" ? (
@@ -210,44 +228,51 @@ export default function ModuleEditorPage() {
 
         {/* === LEFT: Module Editor Form === */}
         <div className="xl:col-span-2 space-y-6">
-          <form onSubmit={handleSubmit} className="bg-slate-900 border border-slate-800 rounded-2xl p-6 space-y-6 shadow-xl">
-            <h2 className="text-sm font-extrabold text-white flex items-center gap-2">
-              <Layers className="w-4 h-4 text-indigo-400" />
-              {form.id ? "Edit Existing Module" : "Create New Module"}
-            </h2>
+          <form onSubmit={handleSubmit} className="dwsa-glass-card rounded-3xl p-6 sm:p-8 space-y-6 shadow-2xl">
+            <div className="flex items-center justify-between border-b border-[#d4a017]/20 pb-4">
+              <h2 className="text-base font-extrabold text-white flex items-center gap-2.5">
+                <Layers className="w-5 h-5 text-[#00d2ff]" />
+                {form.id ? "Edit Module Content" : "Create New Track Module"}
+              </h2>
+              {form.id && (
+                <span className="px-3 py-1 bg-[#d4a017]/10 border border-[#d4a017]/40 text-[#d4a017] rounded-full text-[10px] font-bold">
+                  Editing ID: {form.id.slice(0, 8)}...
+                </span>
+              )}
+            </div>
 
             {/* Row 1: Track + Order */}
             <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
               <div className="sm:col-span-2">
-                <label className="block text-[11px] font-bold text-slate-400 uppercase tracking-wider mb-1.5">
+                <label className="block text-[10px] font-extrabold text-[#8899b4] uppercase tracking-wider mb-1.5">
                   Assign to Track *
                 </label>
                 <div className="relative">
                   <select
                     value={form.trackId}
                     onChange={(e) => setForm((f) => ({ ...f, trackId: e.target.value }))}
-                    className="w-full px-3 py-2.5 bg-slate-950 border border-slate-800 rounded-xl text-xs text-slate-100 focus:outline-none focus:border-indigo-500 focus:ring-1 focus:ring-indigo-500 appearance-none pr-8"
+                    className="w-full px-3.5 py-2.5 bg-[#061428] border border-[#d4a017]/30 rounded-xl text-xs text-white focus:outline-none focus:border-[#00d2ff] focus:ring-1 focus:ring-[#00d2ff] appearance-none pr-8 font-semibold"
                   >
-                    <option value="">— Select a Track —</option>
+                    <option value="">— Select Course Track —</option>
                     {tracks.map((t) => (
                       <option key={t.id} value={t.id}>{t.title}</option>
                     ))}
                   </select>
-                  <ChevronDown className="w-3.5 h-3.5 text-slate-500 absolute right-3 top-3 pointer-events-none" />
+                  <ChevronDown className="w-4 h-4 text-[#8899b4] absolute right-3 top-3 pointer-events-none" />
                 </div>
                 {errors.trackId && <p className="text-[10px] text-red-400 mt-1">{errors.trackId}</p>}
               </div>
 
               <div>
-                <label className="block text-[11px] font-bold text-slate-400 uppercase tracking-wider mb-1.5">
-                  Module Order *
+                <label className="block text-[10px] font-extrabold text-[#8899b4] uppercase tracking-wider mb-1.5">
+                  Module Sequence Order *
                 </label>
                 <input
                   type="number"
                   min={1}
                   value={form.order}
                   onChange={(e) => setForm((f) => ({ ...f, order: Number(e.target.value) }))}
-                  className="w-full px-3 py-2.5 bg-slate-950 border border-slate-800 rounded-xl text-xs text-slate-100 focus:outline-none focus:border-indigo-500"
+                  className="w-full px-3.5 py-2.5 bg-[#061428] border border-[#d4a017]/30 rounded-xl text-xs text-white focus:outline-none focus:border-[#00d2ff] font-bold"
                 />
                 {errors.order && <p className="text-[10px] text-red-400 mt-1">{errors.order}</p>}
               </div>
@@ -255,15 +280,15 @@ export default function ModuleEditorPage() {
 
             {/* Row 2: Module Title */}
             <div>
-              <label className="block text-[11px] font-bold text-slate-400 uppercase tracking-wider mb-1.5">
+              <label className="block text-[10px] font-extrabold text-[#8899b4] uppercase tracking-wider mb-1.5">
                 Module Title *
               </label>
               <input
                 type="text"
                 value={form.title}
                 onChange={(e) => setForm((f) => ({ ...f, title: e.target.value }))}
-                placeholder="e.g. Module 4: Database Design with Prisma ORM"
-                className="w-full px-3 py-2.5 bg-slate-950 border border-slate-800 rounded-xl text-xs text-slate-100 placeholder-slate-600 focus:outline-none focus:border-indigo-500 focus:ring-1 focus:ring-indigo-500"
+                placeholder="e.g. Module 4: Database Modeling & Schema Management with Prisma"
+                className="w-full px-3.5 py-2.5 bg-[#061428] border border-[#d4a017]/30 rounded-xl text-xs text-white placeholder-[#8899b4]/60 focus:outline-none focus:border-[#00d2ff] focus:ring-1 focus:ring-[#00d2ff]"
               />
               {errors.title && <p className="text-[10px] text-red-400 mt-1">{errors.title}</p>}
             </div>
@@ -271,8 +296,8 @@ export default function ModuleEditorPage() {
             {/* Row 3: YouTube ID + Duration + Free Preview */}
             <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
               <div className="sm:col-span-1">
-                <label className="block text-[11px] font-bold text-slate-400 uppercase tracking-wider mb-1.5 flex items-center gap-1.5">
-                  <Clapperboard className="w-3.5 h-3.5 text-red-500" />
+                <label className="block text-[10px] font-extrabold text-[#8899b4] uppercase tracking-wider mb-1.5 flex items-center gap-1.5">
+                  <Clapperboard className="w-3.5 h-3.5 text-rose-400" />
                   YouTube Video ID
                 </label>
                 <input
@@ -281,15 +306,15 @@ export default function ModuleEditorPage() {
                   onChange={(e) => setForm((f) => ({ ...f, youtubeId: e.target.value }))}
                   placeholder="e.g. dQw4w9WgXcQ"
                   maxLength={11}
-                  className="w-full px-3 py-2.5 bg-slate-950 border border-slate-800 rounded-xl text-xs text-slate-100 placeholder-slate-600 focus:outline-none focus:border-red-500 font-mono tracking-wider"
+                  className="w-full px-3.5 py-2.5 bg-[#061428] border border-[#d4a017]/30 rounded-xl text-xs text-white placeholder-[#8899b4]/60 focus:outline-none focus:border-rose-400 font-mono tracking-wider"
                 />
                 {errors.youtubeId && <p className="text-[10px] text-red-400 mt-1">{errors.youtubeId}</p>}
               </div>
 
               <div>
-                <label className="block text-[11px] font-bold text-slate-400 uppercase tracking-wider mb-1.5 flex items-center gap-1.5">
-                  <Video className="w-3.5 h-3.5 text-slate-500" />
-                  Duration (minutes)
+                <label className="block text-[10px] font-extrabold text-[#8899b4] uppercase tracking-wider mb-1.5 flex items-center gap-1.5">
+                  <Video className="w-3.5 h-3.5 text-[#00d2ff]" />
+                  Duration (Minutes)
                 </label>
                 <input
                   type="number"
@@ -297,12 +322,12 @@ export default function ModuleEditorPage() {
                   value={form.durationMinutes || ""}
                   onChange={(e) => setForm((f) => ({ ...f, durationMinutes: e.target.value as any }))}
                   placeholder="e.g. 45"
-                  className="w-full px-3 py-2.5 bg-slate-950 border border-slate-800 rounded-xl text-xs text-slate-100 placeholder-slate-600 focus:outline-none focus:border-indigo-500"
+                  className="w-full px-3.5 py-2.5 bg-[#061428] border border-[#d4a017]/30 rounded-xl text-xs text-white placeholder-[#8899b4]/60 focus:outline-none focus:border-[#00d2ff]"
                 />
               </div>
 
               <div className="flex flex-col justify-end">
-                <label className="flex items-center gap-3 cursor-pointer select-none group h-full pb-1">
+                <label className="flex items-center gap-3 cursor-pointer select-none group h-full pb-1 p-2 bg-[#061428] border border-[#d4a017]/20 rounded-xl">
                   <div className="relative">
                     <input
                       type="checkbox"
@@ -313,20 +338,20 @@ export default function ModuleEditorPage() {
                     <div
                       className={`w-10 h-5 rounded-full transition-colors border ${
                         form.isFreePreview
-                          ? "bg-emerald-600 border-emerald-500"
-                          : "bg-slate-800 border-slate-700"
+                          ? "bg-gradient-to-r from-[#d4a017] to-[#e5a910] border-[#d4a017]"
+                          : "bg-[#030e1f] border-slate-700"
                       }`}
                     >
                       <div
-                        className={`w-4 h-4 rounded-full bg-white shadow-sm absolute top-0.5 transition-transform ${
-                          form.isFreePreview ? "translate-x-5" : "translate-x-0.5"
+                        className={`w-4 h-4 rounded-full bg-[#030e1f] shadow-sm absolute top-0.5 transition-transform ${
+                          form.isFreePreview ? "translate-x-5 bg-white" : "translate-x-0.5"
                         }`}
                       />
                     </div>
                   </div>
                   <div>
-                    <span className="block text-[11px] font-bold text-slate-300 uppercase tracking-wider">Free Preview</span>
-                    <span className="block text-[10px] text-slate-500">Visible without enrollment</span>
+                    <span className="block text-[10px] font-extrabold text-white uppercase tracking-wider">Free Preview</span>
+                    <span className="block text-[9px] text-[#8899b4]">Accessible without tuition payment</span>
                   </div>
                 </label>
               </div>
@@ -334,8 +359,8 @@ export default function ModuleEditorPage() {
 
             {/* Row 4: GitHub Starter Repo */}
             <div>
-              <label className="block text-[11px] font-bold text-slate-400 uppercase tracking-wider mb-1.5 flex items-center gap-1.5">
-                <Code className="w-3.5 h-3.5 text-blue-400" />
+              <label className="block text-[10px] font-extrabold text-[#8899b4] uppercase tracking-wider mb-1.5 flex items-center gap-1.5">
+                <Code className="w-3.5 h-3.5 text-[#00d2ff]" />
                 GitHub Starter Repository URL
               </label>
               <input
@@ -343,29 +368,29 @@ export default function ModuleEditorPage() {
                 value={form.githubStarterRepo || ""}
                 onChange={(e) => setForm((f) => ({ ...f, githubStarterRepo: e.target.value }))}
                 placeholder="https://github.com/dwsa-academy/module-starter"
-                className="w-full px-3 py-2.5 bg-slate-950 border border-slate-800 rounded-xl text-xs text-slate-100 placeholder-slate-600 focus:outline-none focus:border-blue-500"
+                className="w-full px-3.5 py-2.5 bg-[#061428] border border-[#d4a017]/30 rounded-xl text-xs text-white placeholder-[#8899b4]/60 focus:outline-none focus:border-[#00d2ff]"
               />
               {errors.githubStarterRepo && (
                 <p className="text-[10px] text-red-400 mt-1">{errors.githubStarterRepo}</p>
               )}
             </div>
 
-            {/* Row 5: Markdown Editor */}
+            {/* Row 5: Markdown Lesson Content */}
             <div>
-              <label className="block text-[11px] font-bold text-slate-400 uppercase tracking-wider mb-2 flex items-center gap-1.5">
-                <BookOpen className="w-3.5 h-3.5 text-purple-400" />
-                Lesson Content (Markdown) *
+              <label className="block text-[10px] font-extrabold text-[#8899b4] uppercase tracking-wider mb-2 flex items-center gap-1.5">
+                <BookOpen className="w-3.5 h-3.5 text-[#d4a017]" />
+                Lesson Curriculum Content (Markdown) *
               </label>
               <div
                 data-color-mode="dark"
-                className="rounded-xl overflow-hidden border border-slate-700 shadow-inner"
+                className="rounded-2xl overflow-hidden border border-[#d4a017]/30 shadow-inner"
               >
                 <MDEditor
                   value={form.contentMarkdown}
                   onChange={(val) => setForm((f) => ({ ...f, contentMarkdown: val || "" }))}
-                  height={400}
+                  height={420}
                   preview="live"
-                  className="!bg-slate-950"
+                  className="!bg-[#061428]"
                 />
               </div>
               {errors.contentMarkdown && (
@@ -373,29 +398,31 @@ export default function ModuleEditorPage() {
               )}
             </div>
 
-            {/* Submit Button */}
-            <div className="flex items-center justify-end gap-3 pt-2 border-t border-slate-800">
+            {/* Submit Action Row */}
+            <div className="flex items-center justify-end gap-3 pt-4 border-t border-[#d4a017]/20">
               <button
                 type="button"
                 onClick={handleNewModule}
-                className="px-5 py-2.5 bg-slate-800 hover:bg-slate-700 border border-slate-700 text-slate-300 text-xs font-semibold rounded-xl transition-all"
+                className="px-4 py-2.5 bg-[#061428] hover:bg-[#0f223d] border border-slate-700 text-slate-300 text-xs font-extrabold rounded-xl transition-all flex items-center gap-1.5"
               >
+                <RotateCcw className="w-3.5 h-3.5 text-[#8899b4]" />
                 Clear Form
               </button>
+
               <button
                 type="submit"
                 disabled={saveMutation.isPending}
-                className="px-6 py-2.5 bg-gradient-to-r from-indigo-600 to-purple-600 hover:from-indigo-500 hover:to-purple-500 text-white text-xs font-bold rounded-xl shadow-lg shadow-indigo-600/25 transition-all flex items-center gap-2"
+                className="px-6 py-2.5 bg-gradient-to-r from-[#d4a017] to-[#e5a910] hover:from-[#e5a910] hover:to-[#d4a017] text-[#030e1f] text-xs font-black rounded-xl shadow-lg shadow-[#d4a017]/25 transition-all flex items-center gap-2 hover:scale-105"
               >
                 {saveMutation.isPending ? (
                   <>
-                    <Loader2 className="w-3.5 h-3.5 animate-spin" />
+                    <Loader2 className="w-4 h-4 animate-spin" />
                     Saving Module...
                   </>
                 ) : (
                   <>
-                    <Save className="w-3.5 h-3.5" />
-                    {form.id ? "Update Module" : "Create Module"}
+                    <Save className="w-4 h-4" />
+                    {form.id ? "Update Module Content" : "Publish New Module"}
                   </>
                 )}
               </button>
@@ -403,44 +430,48 @@ export default function ModuleEditorPage() {
           </form>
         </div>
 
-        {/* === RIGHT: YouTube Thumbnail Preview + Module Library === */}
-        <div className="space-y-5">
+        {/* === RIGHT: YouTube Video Preview + Module Library === */}
+        <div className="space-y-6">
 
-          {/* YouTube Thumbnail Preview */}
-          <div className="bg-slate-900 border border-slate-800 rounded-2xl p-5 space-y-4 shadow-xl">
-            <h3 className="text-xs font-bold text-slate-400 uppercase tracking-wider flex items-center gap-2">
-              <Eye className="w-3.5 h-3.5 text-red-500" />
-              YouTube Video Preview
+          {/* YouTube Video Preview Card */}
+          <div className="dwsa-glass-card-cyan rounded-3xl p-6 space-y-4 shadow-xl">
+            <h3 className="text-xs font-extrabold text-[#8899b4] uppercase tracking-wider flex items-center gap-2">
+              <Eye className="w-4 h-4 text-rose-400" />
+              YouTube Video Stream Preview
             </h3>
             {youtubePreviewUrl ? (
-              <div className="space-y-2">
-                <div className="aspect-video rounded-xl overflow-hidden border border-slate-700 shadow-lg bg-slate-950">
+              <div className="space-y-3">
+                <div className="aspect-video rounded-2xl overflow-hidden border border-[#00d2ff]/40 shadow-lg bg-[#030e1f] relative group">
                   {/* eslint-disable-next-line @next/next/no-img-element */}
                   <img
                     src={youtubePreviewUrl}
                     alt="YouTube thumbnail preview"
-                    className="w-full h-full object-cover"
+                    className="w-full h-full object-cover group-hover:scale-105 transition-transform"
                   />
+                  <div className="absolute inset-0 bg-black/40 flex items-center justify-center">
+                    <div className="p-3 bg-[#d4a017] text-[#030e1f] rounded-full shadow-lg glow-gold-sm">
+                      <Play className="w-5 h-5 fill-current ml-0.5" />
+                    </div>
+                  </div>
                 </div>
-                <p className="text-[10px] text-slate-500 text-center">
-                  Thumbnail for ID:{" "}
-                  <code className="text-indigo-400 font-mono">{form.youtubeId}</code>
+                <p className="text-[10px] text-[#8899b4] text-center font-mono">
+                  Video ID: <span className="text-[#00d2ff] font-bold">{form.youtubeId}</span>
                 </p>
               </div>
             ) : (
-              <div className="aspect-video rounded-xl border border-dashed border-slate-700 bg-slate-950/60 flex flex-col items-center justify-center space-y-2 text-slate-500">
-                <Clapperboard className="w-8 h-8 text-slate-700" />
-                <p className="text-[11px]">Enter a YouTube ID above to preview</p>
+              <div className="aspect-video rounded-2xl border border-dashed border-[#00d2ff]/30 bg-[#030e1f]/60 flex flex-col items-center justify-center space-y-2 text-[#8899b4]">
+                <Clapperboard className="w-8 h-8 text-slate-600" />
+                <p className="text-[11px] text-center">Enter a valid 11-character YouTube ID to preview thumbnail</p>
               </div>
             )}
           </div>
 
-          {/* Module Library Panel */}
-          <div className="bg-slate-900 border border-slate-800 rounded-2xl p-5 space-y-4 shadow-xl">
-            <div className="flex items-center justify-between">
-              <h3 className="text-xs font-bold text-slate-400 uppercase tracking-wider flex items-center gap-2">
-                <Sparkles className="w-3.5 h-3.5 text-blue-400" />
-                Module Library
+          {/* Module Library Directory */}
+          <div className="dwsa-glass-card rounded-3xl p-6 space-y-4 shadow-xl">
+            <div className="flex items-center justify-between border-b border-[#d4a017]/20 pb-3">
+              <h3 className="text-xs font-extrabold text-[#8899b4] uppercase tracking-wider flex items-center gap-2">
+                <Sparkles className="w-4 h-4 text-[#d4a017]" />
+                Curriculum Library
               </h3>
 
               {/* Track Filter */}
@@ -448,66 +479,66 @@ export default function ModuleEditorPage() {
                 <select
                   value={selectedTrackId}
                   onChange={(e) => setSelectedTrackId(e.target.value)}
-                  className="pl-2 pr-6 py-1 bg-slate-950 border border-slate-800 rounded-lg text-[10px] text-slate-300 focus:outline-none focus:border-indigo-500 appearance-none"
+                  className="pl-2.5 pr-6 py-1 bg-[#061428] border border-[#d4a017]/30 rounded-lg text-[10px] text-white focus:outline-none focus:border-[#00d2ff] appearance-none font-bold"
                 >
                   <option value="all">All Tracks</option>
                   {tracks.map((t) => (
                     <option key={t.id} value={t.id}>{t.title}</option>
                   ))}
                 </select>
-                <ChevronDown className="w-3 h-3 text-slate-500 absolute right-1.5 top-1.5 pointer-events-none" />
+                <ChevronDown className="w-3 h-3 text-[#8899b4] absolute right-1.5 top-2 pointer-events-none" />
               </div>
             </div>
 
             {isLoading ? (
-              <div className="py-6 flex items-center justify-center gap-2 text-xs text-slate-500">
-                <Loader2 className="w-4 h-4 animate-spin" />
-                <span>Loading modules...</span>
+              <div className="py-8 flex items-center justify-center gap-2 text-xs text-[#8899b4]">
+                <Loader2 className="w-4 h-4 animate-spin text-[#d4a017]" />
+                <span>Fetching curriculum modules...</span>
               </div>
             ) : (
-              <div className="space-y-3 max-h-[60vh] overflow-y-auto pr-1">
+              <div className="space-y-4 max-h-[60vh] overflow-y-auto pr-1">
                 {filteredTracks.length === 0 ? (
-                  <p className="text-xs text-slate-500 text-center py-4">No modules found.</p>
+                  <p className="text-xs text-[#8899b4] text-center py-6">No track modules created yet.</p>
                 ) : (
                   filteredTracks.map((track) => (
-                    <div key={track.id} className="space-y-1.5">
-                      <p className="text-[10px] uppercase tracking-widest font-bold text-indigo-400 px-1 pt-1">
+                    <div key={track.id} className="space-y-2">
+                      <p className="text-[10px] uppercase tracking-widest font-black text-[#d4a017] px-1">
                         {track.title}
                       </p>
                       {track.modules.length === 0 ? (
-                        <p className="text-[10px] text-slate-600 italic px-2">No modules yet.</p>
+                        <p className="text-[10px] text-[#8899b4] italic px-2">No modules yet in this track.</p>
                       ) : (
                         track.modules.map((mod) => (
                           <button
                             key={mod.id}
                             onClick={() => handleEditModule(mod)}
-                            className={`w-full p-3 rounded-xl border text-left transition-all group ${
+                            className={`w-full p-3.5 rounded-2xl border text-left transition-all group ${
                               form.id === mod.id
-                                ? "bg-indigo-950/50 border-indigo-700/60 text-white"
-                                : "bg-slate-950/60 border-slate-800 text-slate-400 hover:border-slate-700 hover:text-slate-200"
+                                ? "bg-[#0f223d] border-[#d4a017] text-white glow-gold-sm"
+                                : "bg-[#061428]/80 border-[#d4a017]/20 text-[#8899b4] hover:border-[#00d2ff]/40 hover:text-white"
                             }`}
                           >
                             <div className="flex items-start justify-between gap-2">
-                              <div className="min-w-0">
-                                <span className="block text-[11px] font-bold truncate">
+                              <div className="min-w-0 space-y-1">
+                                <span className="block text-xs font-bold truncate group-hover:text-[#00d2ff] transition-colors">
                                   {mod.order}. {mod.title}
                                 </span>
-                                <div className="flex items-center gap-2 mt-0.5 flex-wrap">
+                                <div className="flex items-center gap-2 flex-wrap">
                                   {mod.youtubeId && (
-                                    <span className="text-[9px] text-red-400 flex items-center gap-0.5">
+                                    <span className="text-[9px] text-rose-400 flex items-center gap-0.5 font-bold">
                                       <Clapperboard className="w-2.5 h-2.5" />
                                       Video
                                     </span>
                                   )}
                                   {mod.isFreePreview && (
-                                    <span className="text-[9px] text-emerald-400">Free Preview</span>
+                                    <span className="text-[9px] text-emerald-400 font-bold">Free Preview</span>
                                   )}
                                   {mod.durationMinutes && (
-                                    <span className="text-[9px] text-slate-500">{mod.durationMinutes}m</span>
+                                    <span className="text-[9px] text-[#8899b4] font-semibold">{mod.durationMinutes} mins</span>
                                   )}
                                 </div>
                               </div>
-                              <FilePen className="w-3.5 h-3.5 text-slate-600 group-hover:text-indigo-400 transition-colors shrink-0 mt-0.5" />
+                              <FilePen className="w-4 h-4 text-slate-600 group-hover:text-[#d4a017] transition-colors shrink-0 mt-0.5" />
                             </div>
                           </button>
                         ))
@@ -523,3 +554,4 @@ export default function ModuleEditorPage() {
     </div>
   );
 }
+
