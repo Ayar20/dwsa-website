@@ -25,6 +25,7 @@ import {
   X,
   Menu,
   ShieldCheck,
+  Mail,
 } from "lucide-react";
 
 interface StudentSidebarProps {
@@ -67,8 +68,10 @@ export default function StudentSidebar({ mobileOpen, setMobileOpen }: StudentSid
     {
       title: "CAMPUS LIFE",
       items: [
+        { href: "/dashboard/student/inbox", label: "My Inbox", icon: Mail },
         { href: "/dashboard/student/resources", label: "Resource Library", icon: Library },
         { href: "/dashboard/student/calendar", label: "Learning Calendar", icon: CalendarIcon },
+        { href: "/dashboard/admin/knowledge", label: "Knowledge Centre", icon: BookOpen },
         { href: "/knowledge-hub", label: "Campus News", icon: Newspaper, external: false },
       ],
     },

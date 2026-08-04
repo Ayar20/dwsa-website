@@ -9,7 +9,8 @@ import {
   UserPlus, FileCheck, Award, Briefcase, FileText, FlaskConical,
   DollarSign, CreditCard, PieChart, Lightbulb, Shield,
   Settings, Cpu, ChevronDown, ChevronRight, X, Sparkles, SlidersHorizontal,
-  GitBranch, HelpCircle, FileCode, CheckCircle2, ShieldCheck, Lock, Database
+  GitBranch, HelpCircle, FileCode, CheckCircle2, ShieldCheck, Lock, Database,
+  Zap, Mail
 } from "lucide-react";
 
 interface ICCSidebarProps {
@@ -94,6 +95,18 @@ const navSections: NavSection[] = [
       { label: "Employment Intelligence", href: "/dashboard/admin/employment", badge: "NEW", badgeColor: "bg-[#4ade80]/20 text-[#4ade80]" },
       { label: "Employer Portal", href: "/dashboard/employer" },
       { label: "Alumni Network", href: "/dashboard/alumni" },
+    ],
+  },
+  {
+    title: "Operational Intelligence",
+    icon: Zap,
+    items: [
+      { label: "Automation Centre", href: "/dashboard/admin/automation", badge: "ENGINE", badgeColor: "bg-[#818cf8]/20 text-[#818cf8]" },
+      { label: "Communications Hub", href: "/dashboard/admin/communications", badge: "BROADCAST", badgeColor: "bg-[#d4a017]/20 text-[#d4a017]" },
+      { label: "Executive Approvals", href: "/dashboard/admin/approvals", badge: "SIGN", badgeColor: "bg-[#4ade80]/20 text-[#4ade80]" },
+      { label: "Quality Assurance", href: "/dashboard/admin/quality" },
+      { label: "Knowledge Centre", href: "/dashboard/admin/knowledge" },
+      { label: "Operations Inbox", href: "/dashboard/admin/inbox" },
     ],
   },
   {

@@ -137,7 +137,19 @@ export default function DashboardLayout({
 
   // Institution Control Centre Shell for Administrators & Executive Leadership
   if (!isStudent && !isInstructor) {
-    const iccPageLabel = pathname.includes("/intelligence")
+    const iccPageLabel = pathname.includes("/automation")
+      ? "Automation & Workflow Centre"
+      : pathname.includes("/communications")
+      ? "Communications Centre"
+      : pathname.includes("/approvals")
+      ? "Executive Approval Centre"
+      : pathname.includes("/quality")
+      ? "Quality Assurance Centre"
+      : pathname.includes("/knowledge")
+      ? "Institution Knowledge Centre"
+      : pathname.includes("/admin/inbox")
+      ? "Executive Operations Inbox"
+      : pathname.includes("/intelligence")
       ? "Digital Twin & Intelligence"
       : pathname.includes("/analytics")
       ? "Persistent Executive Analytics"
@@ -275,6 +287,12 @@ export default function DashboardLayout({
                   ? "Employer Recruitment Portal"
                   : pathname.includes("/mentor")
                   ? "Mentor Operations Hub"
+                  : pathname.includes("/student/inbox")
+                  ? "My Campus Inbox"
+                  : pathname.includes("/instructor/inbox")
+                  ? "Faculty Inbox"
+                  : pathname.includes("/knowledge")
+                  ? "Institution Knowledge Centre"
                   : pathname.includes("/programme")
                   ? "My Programme Handbook"
                   : pathname.includes("/identity")

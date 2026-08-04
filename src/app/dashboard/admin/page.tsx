@@ -137,6 +137,43 @@ export default function ExecutiveDashboardPage() {
       <AcademicHealthIndex />
       <ExecutiveAcademicInsights />
 
+      {/* ── OPERATIONAL INTELLIGENCE & AUTOMATION (v3.7) ── */}
+      <div className="rounded-3xl bg-[#061428] border border-[#818cf8]/30 p-6 space-y-4 shadow-xl">
+        <div className="flex items-center justify-between">
+          <div className="flex items-center gap-2">
+            <div className="w-8 h-8 rounded-xl bg-[#818cf8]/15 border border-[#818cf8]/30 flex items-center justify-center">
+              <Zap className="w-4 h-4 text-[#818cf8]" />
+            </div>
+            <div>
+              <h2 className="text-sm font-extrabold text-white">Operational Intelligence & Automation Engine</h2>
+              <p className="text-[10px] text-[#8899b4]">InstitutionOS v3.7 · Operational Health & Automation Status</p>
+            </div>
+          </div>
+          <span className="px-2.5 py-0.5 rounded-full bg-[#4ade80]/10 border border-[#4ade80]/30 text-[#4ade80] text-[9px] font-black uppercase">
+            AUTOMATION ACTIVE
+          </span>
+        </div>
+
+        <div className="grid grid-cols-2 sm:grid-cols-4 gap-3">
+          {[
+            { label: "Institution Capacity", value: "96%", sub: "482 / 500 Active Seats", color: "text-[#d4a017]" },
+            { label: "Automation Status", value: "94%", sub: "4 Tasks Active · 2 Workflows", color: "text-[#4ade80]" },
+            { label: "Workflow Health", value: "100%", sub: "0 Failed Processes", color: "text-[#4ade80]" },
+            { label: "Comms Delivery Rate", value: "98.1%", sub: "Multi-Channel Broadcast Hub", color: "text-[#818cf8]" },
+            { label: "Pending Approvals", value: "4 Items", sub: "Signature & Review Queue", color: "text-[#d4a017]" },
+            { label: "Upcoming Risks", value: "1 Conflict", sub: "Schedule Collision Flagged", color: "text-red-400" },
+            { label: "Operational Efficiency", value: "94%", sub: "Automated Resolution Index", color: "text-[#4ade80]" },
+            { label: "Readiness Index", value: "92 / 100", sub: "System-Wide Health Score", color: "text-white" },
+          ].map((op) => (
+            <div key={op.label} className="rounded-2xl bg-[#030e1f] border border-[#1a2f4a] p-3.5 space-y-1">
+              <p className="text-[9px] font-black text-[#8899b4] uppercase">{op.label}</p>
+              <p className={`text-xl font-extrabold ${op.color}`}>{op.value}</p>
+              <p className="text-[9px] text-[#8899b4]">{op.sub}</p>
+            </div>
+          ))}
+        </div>
+      </div>
+
       {/* Enhancement 5: Executive AI Briefing */}
       <div className="rounded-3xl bg-[#061428] border border-[#d4a017]/30 p-6 space-y-4 shadow-xl">
         <div className="flex items-center justify-between">

@@ -32,6 +32,7 @@ import {
   ShieldCheck,
   Award,
   BookMarked,
+  Mail,
 } from "lucide-react";
 
 interface FacultySidebarProps {
@@ -49,6 +50,7 @@ export default function FacultySidebar({ mobileOpen, setMobileOpen }: FacultySid
       title: "ACADEMIC OPERATIONS",
       items: [
         { href: "/dashboard/instructor", label: "Faculty Home", icon: Home },
+        { href: "/dashboard/instructor/inbox", label: "Faculty Inbox", icon: Mail },
         { href: "/dashboard/instructor/cohorts", label: "My Cohorts", icon: Users },
         { href: "/dashboard/instructor/lessons", label: "Teaching Modules", icon: BookOpen },
         { href: "/dashboard/instructor/cohorts#live-classes", label: "Live Classes", icon: Video },
@@ -69,6 +71,7 @@ export default function FacultySidebar({ mobileOpen, setMobileOpen }: FacultySid
       items: [
         { href: "/dashboard/instructor/lessons", label: "Lesson Manager", icon: FileEdit },
         { href: "/dashboard/instructor/lessons#vault", label: "Resource Vault", icon: Library },
+        { href: "/dashboard/admin/knowledge", label: "Teaching Resources", icon: BookOpen },
         { href: "/dashboard/instructor/assessments#assignments", label: "Assignments", icon: ClipboardList },
         { href: "/dashboard/instructor/announcements", label: "Announcements", icon: Megaphone },
         { href: "/dashboard/instructor/competencies", label: "Competency Validation", icon: ShieldCheck },
