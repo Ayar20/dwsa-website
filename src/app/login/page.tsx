@@ -67,10 +67,10 @@ export default function LoginPage() {
             <GraduationCap className="w-8 h-8 text-[#030e1f]" />
           </Link>
           <h1 className="text-2xl font-black text-white tracking-tight">
-            DWSA <span className="text-[#d4a017]">Tech Academy</span> Portal
+            DWSA <span className="text-[#d4a017]">Digital Campus</span>
           </h1>
           <p className="text-xs text-[#00d2ff] font-semibold tracking-wide">
-            Digital World Systems Africa Ltd (RC 9718724)
+            Welcome to the Digital Campus of the Digital Technology Academy, a strategic pillar of Digital World Systems Africa Ltd (RC 9718724).
           </p>
         </div>
 

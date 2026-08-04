@@ -24,8 +24,8 @@ export default function Navbar() {
 
   const roleColors: Record<string, string> = {
     ADMIN: "bg-[#d4a017]/20 border-[#d4a017]/50 text-[#d4a017]",
-    INSTRUCTOR: "bg-[#00d2ff]/20 border-[#00d2ff]/50 text-[#00d2ff]",
-    STUDENT: "bg-[#4ade80]/20 border-[#4ade80]/50 text-[#4ade80]",
+    INSTRUCTOR: "bg-[#4ade80]/20 border-[#4ade80]/50 text-[#4ade80]",
+    STUDENT: "bg-white/10 border-white/20 text-white",
   };
 
   const isAdminErpActive = pathname === "/dashboard/admin";
@@ -53,14 +53,14 @@ export default function Navbar() {
           <Link
             href="/dashboard/admin/modules/editor"
             onClick={() => setMobileOpen(false)}
-            className={`px-3 py-2 rounded-xl text-xs font-extrabold flex items-center gap-2 transition-all border ${
+            className={`px-3 py-2 rounded-xl text-xs font-extrabold flex items-center gap-2 transition-all border focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#d4a017] ${
               isModuleEditorActive
-                ? "bg-[#00d2ff]/20 border-[#00d2ff]/50 text-[#00d2ff] shadow-sm"
+                ? "bg-[#d4a017]/20 border-[#d4a017]/50 text-[#d4a017] shadow-sm"
                 : "border-transparent text-slate-300 hover:text-white hover:bg-[#0f223d]"
             }`}
           >
             <FilePen
-              className={`w-4 h-4 ${isModuleEditorActive ? "text-[#00d2ff]" : "text-[#00d2ff]/70"}`}
+              className={`w-4 h-4 ${isModuleEditorActive ? "text-[#d4a017]" : "text-[#d4a017]/70"}`}
             />
             Module Editor
           </Link>
@@ -70,13 +70,13 @@ export default function Navbar() {
       <Link
         href="/dashboard/student"
         onClick={() => setMobileOpen(false)}
-        className={`px-3 py-2 rounded-xl text-xs font-extrabold flex items-center gap-2 transition-all border ${
+        className={`px-3 py-2 rounded-xl text-xs font-extrabold flex items-center gap-2 transition-all border focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#d4a017] ${
           isStudentActive
-            ? "bg-[#0f223d] border-[#00d2ff]/40 text-[#00d2ff] shadow-sm"
+            ? "bg-[#0f223d] border-[#d4a017]/40 text-[#d4a017] shadow-sm"
             : "border-transparent text-slate-300 hover:text-white hover:bg-[#0f223d]"
         }`}
       >
-        <GraduationCap className="w-4 h-4 text-[#00d2ff]" />
+        <GraduationCap className="w-4 h-4 text-[#d4a017]" />
         Student Workspace
       </Link>
 
@@ -107,8 +107,8 @@ export default function Navbar() {
                 <span className="font-extrabold text-base tracking-tight text-white group-hover:text-[#d4a017] transition-colors">
                   DWSA <span className="text-[#d4a017]">Tech Academy</span>
                 </span>
-                <span className="block text-[9px] uppercase tracking-widest text-[#00d2ff] font-bold">
-                  RC 9718724 • Digital World Systems Africa
+                <span className="block text-[9px] uppercase tracking-widest text-[#c8d8f0]/70 font-bold">
+                  A Strategic Pillar of Digital World Systems Africa Ltd
                 </span>
               </div>
               {/* Mobile brand shortname */}
@@ -162,10 +162,11 @@ export default function Navbar() {
                 {/* Logout */}
                 <button
                   onClick={() => signOut({ callbackUrl: "/login" })}
-                  className="p-2 text-slate-400 hover:text-red-400 hover:bg-red-950/40 rounded-xl transition-all border border-transparent hover:border-red-900/40"
+                  className="p-2 text-slate-400 hover:text-red-400 hover:bg-red-950/40 rounded-xl transition-all border border-transparent hover:border-red-900/40 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-red-500"
                   title="Sign Out"
+                  aria-label="Sign out"
                 >
-                  <LogOut className="w-4 h-4" />
+                  <LogOut className="w-4 h-4" aria-hidden="true" />
                 </button>
               </div>
             ) : (
@@ -193,8 +194,7 @@ export default function Navbar() {
         {/* ── Mobile Drawer ── */}
         {mobileOpen && session && (
           <div
-            className="md:hidden border-t border-[#1e3a5f] bg-[#030e1f]/98 backdrop-blur-xl px-4 py-4 space-y-2"
-            style={{ animation: "slideDown 0.2s ease-out" }}
+            className="md:hidden border-t border-[#1e3a5f] bg-[#030e1f]/98 backdrop-blur-xl px-4 py-4 space-y-2 animate-slideDown"
           >
             {/* User info strip */}
             <div className="flex items-center gap-3 pb-3 mb-2 border-b border-[#1e3a5f]">
@@ -246,12 +246,7 @@ export default function Navbar() {
         />
       )}
 
-      <style>{`
-        @keyframes slideDown {
-          from { opacity: 0; transform: translateY(-8px); }
-          to   { opacity: 1; transform: translateY(0); }
-        }
-      `}</style>
+
     </>
   );
 }

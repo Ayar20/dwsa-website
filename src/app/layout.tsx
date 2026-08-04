@@ -3,8 +3,8 @@ import { Inter, Space_Grotesk } from "next/font/google";
 import "./globals.css";
 import Providers from "@/components/Providers";
 
-const inter = Inter({ subsets: ["latin"], variable: "--font-inter" });
-const spaceGrotesk = Space_Grotesk({ subsets: ["latin"], variable: "--font-space" });
+const inter = Inter({ subsets: ["latin"], variable: "--font-inter", display: "swap" });
+const spaceGrotesk = Space_Grotesk({ subsets: ["latin"], variable: "--font-space", display: "swap" });
 
 export const viewport: Viewport = {
   width: "device-width",
@@ -18,12 +18,27 @@ export const viewport: Viewport = {
 };
 
 export const metadata: Metadata = {
-  title: "DWSA Tech Academy | Software Engineering & AI Training (RC 9718724)",
+  metadataBase: new URL("https://dwsa-academy.vercel.app"),
+  title: {
+    default: "Digital Technology Academy (DTA) | DWSA Digital Campus",
+    template: "%s | DTA – Digital Technology Academy",
+  },
   description:
-    "Digital World Systems Africa Ltd Tech Academy — World-class software engineering, AI automation, and cloud training with automated GitHub PR grading and Paystack installment payments.",
-  applicationName: "DWSA Tech Academy",
-  keywords: ["software engineering", "tech academy", "AI training", "Nigeria", "DWSA", "coding bootcamp"],
-  authors: [{ name: "Digital World Systems Africa Ltd" }],
+    "Developing Africa's Next Generation of Technology Professionals. DTA is the education and human capability development engine of Digital World Systems Africa Ltd (RC 9718724), offering software engineering, AI integration, blockchain, and digital leadership training.",
+  applicationName: "DWSA Digital Technology Academy",
+  keywords: [
+    "software engineering bootcamp",
+    "tech academy Nigeria",
+    "AI training Africa",
+    "coding bootcamp Makurdi",
+    "Nigeria tech institute",
+    "DWSA Academy",
+    "Digital Campus",
+    "blockchain training",
+    "Digital Technology Academy",
+    "DTA",
+  ],
+  authors: [{ name: "Digital World Systems Africa Ltd", url: "https://dws-africa.vercel.app" }],
   creator: "Digital World Systems Africa Ltd",
   publisher: "Digital World Systems Africa Ltd",
   manifest: "/manifest.webmanifest",
@@ -36,9 +51,29 @@ export const metadata: Metadata = {
   formatDetection: { telephone: false },
   openGraph: {
     type: "website",
-    siteName: "DWSA Tech Academy",
-    title: "DWSA Tech Academy | Software Engineering & AI Training",
-    description: "World-class software engineering, AI automation & cloud training. RC 9718724.",
+    locale: "en_NG",
+    siteName: "Digital Technology Academy (DTA)",
+    title: "Digital Technology Academy (DTA) | Developing Africa's Next Generation of Tech Leaders",
+    description:
+      "The education and human capability development engine of Digital World Systems Africa Ltd (RC 9718724). Practical technology education in AI, software engineering, and blockchain.",
+    url: "https://dwsa-academy.vercel.app",
+    images: [
+      {
+        url: "/og-image.png",
+        width: 1200,
+        height: 630,
+        alt: "Digital Technology Academy (DTA) – DWSA Digital Campus",
+      },
+    ],
+  },
+  twitter: {
+    card: "summary_large_image",
+    title: "Digital Technology Academy (DTA) | DWSA Digital Campus",
+    description:
+      "Developing Africa's next generation of technology professionals. AI, software engineering, blockchain training. A pillar of Digital World Systems Africa Ltd (RC 9718724).",
+    images: ["/og-image.png"],
+    creator: "@dwsafrica",
+    site: "@dwsafrica",
   },
   icons: {
     icon: [
@@ -50,6 +85,14 @@ export const metadata: Metadata = {
       { url: "/icons/icon-192.png", sizes: "192x192", type: "image/png" },
     ],
     shortcut: "/icons/icon-192.png",
+  },
+  robots: {
+    index: true,
+    follow: true,
+    googleBot: {
+      index: true,
+      follow: true,
+    },
   },
 };
 
@@ -64,7 +107,6 @@ export default function RootLayout({
       className={`${inter.variable} ${spaceGrotesk.variable} h-full antialiased dark`}
     >
       <head>
-        {/* PWA Service Worker registration */}
         <script
           dangerouslySetInnerHTML={{
             __html: `
@@ -79,7 +121,7 @@ export default function RootLayout({
           }}
         />
       </head>
-      <body className="min-h-full flex flex-col bg-[#030e1f] text-[#f0f4ff] font-sans selection:bg-[#00d2ff] selection:text-[#030e1f]">
+      <body className="min-h-full flex flex-col bg-[#030e1f] text-[#f0f4ff] font-sans selection:bg-[#d4a017] selection:text-[#030e1f]">
         <Providers>{children}</Providers>
       </body>
     </html>
