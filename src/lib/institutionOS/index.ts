@@ -51,3 +51,11 @@ export * from "./DisasterRecoveryService";
 export * from "./ConfigManagementService";
 export * from "./OperationalAlertService";
 export * from "./BenchmarkService";
+
+// v3.9 — Academic Delivery Engine
+export * from "./CourseDeliveryService";
+export * from "./LessonProgressService";
+export * from "./StudyPlannerService";
+export * from "./FacultyTeachingService";
+export * from "./LearningExperienceService";
+export * from "./LearningAnalyticsService";

@@ -1,177 +1,117 @@
 "use client";
 
-import React, { useState } from "react";
-import {
-  GraduationCap, BookOpen, Layers, Calendar, Users, PlusCircle,
-  Edit3, CheckCircle2, Clock, Search, ChevronRight, Download,
-  Building2, Globe, Shield, Sparkles, Folder
-} from "lucide-react";
+import { LearningAnalyticsService } from "@/lib/institutionOS/LearningAnalyticsService";
 
-const schools = [
-  { id: 1, name: "School of Software Engineering", dean: "Dr. Olumide Adeleke", programmes: 3, students: 240, status: "Active" },
-  { id: 2, name: "School of Artificial Intelligence & Data", dean: "Prof. Amina Bello", programmes: 2, students: 142, status: "Active" },
-  { id: 3, name: "School of Blockchain & Digital Trust", dean: "Dr. Marcus Vance", programmes: 2, students: 100, status: "Active" },
-];
+const modules = LearningAnalyticsService.getModuleEffectiveness();
+const health = LearningAnalyticsService.getCurriculumHealth();
 
-const programmes = [
-  { id: 1, title: "Full-Stack Software Engineering (DLX)", school: "School of Software Engineering", duration: "24 Weeks", credits: 60, status: "Active", cohort: "Cohort Alpha & Beta" },
-  { id: 2, title: "AI & Data Engineering Track", school: "School of Artificial Intelligence & Data", duration: "16 Weeks", credits: 40, status: "Active", cohort: "Cohort Gamma" },
-  { id: 3, title: "Blockchain & Smart Contract Architecture", school: "School of Blockchain & Digital Trust", duration: "12 Weeks", credits: 30, status: "Enrolling", cohort: "Cohort Delta" },
-];
+function ScoreBar({ value, max = 100, color }: { value: number; max?: number; color: string }) {
+  return (
+    <div style={{ height: 6, background: "rgba(255,255,255,0.07)", borderRadius: 3, flex: 1 }}>
+      <div style={{ height: "100%", width: `${(value / max) * 100}%`, background: color, borderRadius: 3, transition: "width 0.5s ease" }} />
+    </div>
+  );
+}
 
-const academicCalendar = [
-  { term: "Trimester 2 (2026)", start: "May 01, 2026", end: "Aug 30, 2026", status: "In Progress" },
-  { term: "Trimester 3 (2026)", start: "Sep 07, 2026", end: "Dec 20, 2026", status: "Upcoming" },
-];
+export default function LearningAnalyticsDashboardPage() {
+  const trendConfig = {
+    Rising: { color: "#4ade80", icon: "↑" },
+    Stable: { color: "#d4a017", icon: "→" },
+    Declining: { color: "#f87171", icon: "↓" },
+  }[health.engagementTrend];
 
-export default function AcademicOperationsPage() {
-  const [activeTab, setActiveTab] = useState<"schools" | "programmes" | "calendar">("schools");
-  const [showModal, setShowModal] = useState(false);
-  const [newItemName, setNewItemName] = useState("");
-  const [toast, setToast] = useState<string | null>(null);
-
-  const handleCreate = () => {
-    if (!newItemName) return;
-    setShowModal(false);
-    setToast(`New Academic Item "${newItemName}" created successfully!`);
-    setNewItemName("");
-    setTimeout(() => setToast(null), 2500);
-  };
+  const healthCards = [
+    { label: "Curriculum Health", value: health.overallHealth, color: "#d4a017", icon: "🏛" },
+    { label: "Content Quality", value: health.contentQuality, color: "#4ade80", icon: "📚" },
+    { label: "Assessment Quality", value: health.assessmentQuality, color: "#d4a017", icon: "📝" },
+    { label: "Learner Satisfaction", value: health.learnerSatisfaction, color: "#4ade80", icon: "⭐" },
+    { label: "Graduation Forecast", value: health.graduationForecast, color: "#d4a017", icon: "🎓" },
+  ];
 
   return (
-    <div className="space-y-8 pb-12">
-      {/* Toast Alert */}
-      {toast && (
-        <div className="fixed bottom-6 right-6 z-50 px-4 py-3 rounded-2xl bg-[#061428] border border-[#4ade80]/50 text-[#4ade80] text-xs font-extrabold shadow-2xl flex items-center gap-2 animate-fadeInUp">
-          <CheckCircle2 className="w-4 h-4" />
-          {toast}
-        </div>
-      )}
-
+    <div style={{ minHeight: "100vh", background: "#030e1f", color: "#f0f4ff", fontFamily: "'Inter','Outfit',sans-serif", padding: "24px 28px" }}>
       {/* Header */}
-      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
-        <div>
-          <div className="flex items-center gap-2">
-            <span className="px-2.5 py-0.5 rounded bg-[#d4a017]/15 text-[#d4a017] text-[9px] font-black uppercase">ACADEMIC GOVERNANCE</span>
-            <span className="text-[10px] text-[#8899b4]">InstitutionOS v3.2</span>
-          </div>
-          <h2 className="text-2xl font-extrabold text-white mt-1">Academic Operations Centre</h2>
-          <p className="text-xs text-[#8899b4]">Manage Schools, Academic Programmes, Curriculum Tracks, and Institutional Calendar</p>
-        </div>
-        <button
-          onClick={() => setShowModal(true)}
-          className="flex items-center gap-2 px-4 py-2 rounded-xl bg-[#d4a017] text-[#030e1f] text-xs font-extrabold hover:bg-[#b8891a] transition-all"
-        >
-          <PlusCircle className="w-4 h-4" /> Add Academic Unit
-        </button>
+      <div style={{ marginBottom: 24 }}>
+        <h1 style={{ fontSize: 24, fontWeight: 800, color: "#f0f4ff", margin: "0 0 4px" }}>Institutional Learning Analytics</h1>
+        <p style={{ color: "#6b7a94", fontSize: 14, margin: 0 }}>Academic quality metrics, module effectiveness, and programme health indicators.</p>
       </div>
 
-      {/* Tabs */}
-      <div className="flex gap-2 border-b border-[#1a2f4a] pb-3" role="tablist">
-        {[
-          { key: "schools", label: "Schools & Departments", icon: Building2 },
-          { key: "programmes", label: "Programmes & Tracks", icon: BookOpen },
-          { key: "calendar", label: "Academic Calendar", icon: Calendar },
-        ].map((tab) => {
-          const Icon = tab.icon;
-          const isActive = activeTab === tab.key;
-          return (
-            <button
-              key={tab.key}
-              role="tab"
-              aria-selected={isActive}
-              onClick={() => setActiveTab(tab.key as any)}
-              className={`flex items-center gap-2 px-4 py-2 rounded-xl text-xs font-bold transition-all focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#d4a017] ${
-                isActive
-                  ? "bg-[#d4a017]/15 border border-[#d4a017]/40 text-[#d4a017]"
-                  : "text-[#8899b4] hover:text-white hover:bg-[#061428]"
-              }`}
-            >
-              <Icon className="w-4 h-4" />
-              {tab.label}
-            </button>
-          );
-        })}
-      </div>
-
-      {/* Schools Section */}
-      {activeTab === "schools" && (
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-          {schools.map((school) => (
-            <div key={school.id} className="rounded-2xl bg-[#061428] border border-[#1a2f4a] p-6 space-y-4 hover:border-[#d4a017]/30 transition-all">
-              <div className="w-10 h-10 rounded-xl bg-[#d4a017]/10 border border-[#d4a017]/30 text-[#d4a017] flex items-center justify-center">
-                <Building2 className="w-5 h-5" />
-              </div>
-              <div>
-                <h3 className="text-sm font-extrabold text-white">{school.name}</h3>
-                <p className="text-xs text-[#8899b4] mt-0.5">Dean: {school.dean}</p>
-              </div>
-              <div className="flex items-center justify-between text-xs border-t border-[#1a2f4a] pt-3 text-[#8899b4]">
-                <span>{school.programmes} Programmes</span>
-                <span className="text-white font-bold">{school.students} Students</span>
-              </div>
-            </div>
-          ))}
-        </div>
-      )}
-
-      {/* Programmes Section */}
-      {activeTab === "programmes" && (
-        <div className="space-y-3">
-          {programmes.map((prog) => (
-            <div key={prog.id} className="rounded-2xl bg-[#061428] border border-[#1a2f4a] p-5 flex flex-col sm:flex-row sm:items-center justify-between gap-4">
-              <div>
-                <div className="flex items-center gap-2">
-                  <span className="px-2 py-0.5 rounded bg-[#1a2f4a] text-[#d4a017] text-[9px] font-black">{prog.school}</span>
-                  <span className="px-2 py-0.5 rounded bg-[#4ade80]/10 border border-[#4ade80]/30 text-[#4ade80] text-[9px] font-black">{prog.status}</span>
-                </div>
-                <h3 className="text-sm font-extrabold text-white mt-1">{prog.title}</h3>
-                <p className="text-xs text-[#8899b4] mt-0.5">Duration: {prog.duration} · Credits: {prog.credits} · Active: {prog.cohort}</p>
-              </div>
-              <button className="px-3 py-1.5 rounded-xl bg-[#030e1f] border border-[#d4a017]/30 text-[#d4a017] text-xs font-bold hover:bg-[#d4a017] hover:text-[#030e1f] transition-all">
-                Edit Curriculum Track
-              </button>
-            </div>
-          ))}
-        </div>
-      )}
-
-      {/* Calendar Section */}
-      {activeTab === "calendar" && (
-        <div className="space-y-3">
-          {academicCalendar.map((cal) => (
-            <div key={cal.term} className="rounded-2xl bg-[#061428] border border-[#1a2f4a] p-5 flex items-center justify-between">
-              <div>
-                <h3 className="text-sm font-extrabold text-white">{cal.term}</h3>
-                <p className="text-xs text-[#8899b4] mt-0.5">{cal.start} — {cal.end}</p>
-              </div>
-              <span className="px-3 py-1 rounded-full bg-[#4ade80]/10 border border-[#4ade80]/30 text-[#4ade80] text-xs font-bold">
-                {cal.status}
-              </span>
-            </div>
-          ))}
-        </div>
-      )}
-
-      {/* Modal Placeholder */}
-      {showModal && (
-        <div className="fixed inset-0 bg-[#030e1f]/80 backdrop-blur-sm z-50 flex items-center justify-center p-4">
-          <div className="bg-[#061428] border border-[#d4a017]/40 rounded-3xl p-6 max-w-md w-full space-y-4">
-            <h3 className="text-base font-extrabold text-white">Create New Academic Unit</h3>
-            <input
-              type="text"
-              placeholder="e.g. School of Cybersecurity & Cloud Infrastructure"
-              value={newItemName}
-              onChange={(e) => setNewItemName(e.target.value)}
-              className="w-full px-4 py-2.5 rounded-xl bg-[#030e1f] border border-[#1a2f4a] text-xs text-white focus:outline-none focus:border-[#d4a017]"
-            />
-            <div className="flex justify-end gap-2">
-              <button onClick={() => setShowModal(false)} className="px-4 py-2 rounded-xl bg-[#030e1f] text-[#8899b4] text-xs font-bold">Cancel</button>
-              <button onClick={handleCreate} className="px-4 py-2 rounded-xl bg-[#d4a017] text-[#030e1f] text-xs font-extrabold">Create Unit</button>
+      {/* Curriculum Health Snapshot */}
+      <div style={{ background: "#060f21", border: "1px solid rgba(212,160,23,0.2)", borderRadius: 12, padding: "20px 24px", marginBottom: 24 }}>
+        <div style={{ display: "flex", alignItems: "center", gap: 16, marginBottom: 20, flexWrap: "wrap" }}>
+          <div>
+            <div style={{ color: "#d4a017", fontSize: 11, fontWeight: 700, letterSpacing: "0.1em", textTransform: "uppercase", marginBottom: 4 }}>Curriculum Health Snapshot</div>
+            <div style={{ display: "flex", alignItems: "center", gap: 12 }}>
+              <span style={{ color: "#f0f4ff", fontSize: 36, fontWeight: 900 }}>{health.overallHealth}</span>
+              <span style={{ color: "#6b7a94", fontSize: 16, alignSelf: "flex-end", marginBottom: 4 }}>/100</span>
             </div>
           </div>
+          <div style={{ background: `${trendConfig.color}18`, border: `1px solid ${trendConfig.color}40`, borderRadius: 20, padding: "6px 16px", display: "flex", alignItems: "center", gap: 6 }}>
+            <span style={{ color: trendConfig.color, fontSize: 16, fontWeight: 800 }}>{trendConfig.icon}</span>
+            <span style={{ color: trendConfig.color, fontSize: 13, fontWeight: 700 }}>Engagement {health.engagementTrend}</span>
+          </div>
         </div>
-      )}
+        <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit,minmax(160px,1fr))", gap: 14 }}>
+          {healthCards.map((c) => (
+            <div key={c.label} style={{ background: "rgba(255,255,255,0.03)", border: "1px solid rgba(255,255,255,0.07)", borderRadius: 10, padding: "14px 16px" }}>
+              <div style={{ fontSize: 20, marginBottom: 6 }}>{c.icon}</div>
+              <div style={{ color: c.color, fontSize: 22, fontWeight: 800, marginBottom: 4 }}>{c.value}%</div>
+              <div style={{ color: "#6b7a94", fontSize: 11, fontWeight: 600 }}>{c.label}</div>
+              <div style={{ marginTop: 8 }}><ScoreBar value={c.value} color={c.color} /></div>
+            </div>
+          ))}
+        </div>
+      </div>
+
+      {/* Module Effectiveness Table */}
+      <div style={{ background: "#060f21", border: "1px solid rgba(212,160,23,0.15)", borderRadius: 12, overflow: "hidden" }}>
+        <div style={{ padding: "16px 20px", borderBottom: "1px solid rgba(212,160,23,0.1)", background: "#050e1e" }}>
+          <div style={{ color: "#d4a017", fontSize: 11, fontWeight: 700, letterSpacing: "0.1em", textTransform: "uppercase" }}>Module Effectiveness Report</div>
+        </div>
+        <table style={{ width: "100%", borderCollapse: "collapse" }}>
+          <thead>
+            <tr style={{ borderBottom: "1px solid rgba(212,160,23,0.1)" }}>
+              {["Module", "Completion Rate", "Avg Grade", "Drop-off %", "Satisfaction", "Faculty Score"].map((h) => (
+                <th key={h} style={{ padding: "12px 16px", textAlign: "left", color: "#6b7a94", fontSize: 11, fontWeight: 700, letterSpacing: "0.07em", textTransform: "uppercase", background: "#050e1e", whiteSpace: "nowrap" }}>{h}</th>
+              ))}
+            </tr>
+          </thead>
+          <tbody>
+            {modules.map((mod, i) => (
+              <tr key={mod.moduleId} style={{ borderBottom: i < modules.length - 1 ? "1px solid rgba(255,255,255,0.05)" : "none" }}>
+                <td style={{ padding: "14px 16px" }}>
+                  <div style={{ color: "#f0f4ff", fontSize: 13, fontWeight: 600, marginBottom: 2 }}>{mod.moduleTitle}</div>
+                  <div style={{ color: "#4a5568", fontSize: 11 }}>{mod.moduleId}</div>
+                </td>
+                <td style={{ padding: "14px 16px" }}>
+                  <div style={{ display: "flex", alignItems: "center", gap: 10 }}>
+                    <span style={{ color: mod.completionRate >= 90 ? "#4ade80" : "#d4a017", fontWeight: 700, fontSize: 13 }}>{mod.completionRate}%</span>
+                    <ScoreBar value={mod.completionRate} color={mod.completionRate >= 90 ? "#4ade80" : "#d4a017"} />
+                  </div>
+                </td>
+                <td style={{ padding: "14px 16px" }}>
+                  <span style={{ color: mod.avgGrade >= 80 ? "#4ade80" : "#d4a017", fontWeight: 700, fontSize: 13 }}>{mod.avgGrade}%</span>
+                </td>
+                <td style={{ padding: "14px 16px" }}>
+                  <span style={{ color: mod.dropOffRate >= 15 ? "#f87171" : mod.dropOffRate >= 8 ? "#d4a017" : "#4ade80", fontWeight: 700, fontSize: 13 }}>{mod.dropOffRate}%</span>
+                </td>
+                <td style={{ padding: "14px 16px" }}>
+                  <div style={{ display: "flex", alignItems: "center", gap: 10 }}>
+                    <span style={{ color: "#d4a017", fontWeight: 700, fontSize: 13 }}>{mod.satisfactionScore}%</span>
+                    <ScoreBar value={mod.satisfactionScore} color="#d4a017" />
+                  </div>
+                </td>
+                <td style={{ padding: "14px 16px" }}>
+                  <div style={{ display: "flex", alignItems: "center", gap: 10 }}>
+                    <span style={{ color: mod.facultyEffectivenessScore >= 93 ? "#4ade80" : "#d4a017", fontWeight: 700, fontSize: 13 }}>{mod.facultyEffectivenessScore}%</span>
+                    <ScoreBar value={mod.facultyEffectivenessScore} color={mod.facultyEffectivenessScore >= 93 ? "#4ade80" : "#d4a017"} />
+                  </div>
+                </td>
+              </tr>
+            ))}
+          </tbody>
+        </table>
+      </div>
     </div>
   );
 }

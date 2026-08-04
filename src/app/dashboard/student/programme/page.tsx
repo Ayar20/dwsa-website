@@ -1,172 +1,177 @@
 "use client";
 
-import React from "react";
-import Link from "next/link";
-import {
-  GraduationCap,
-  BookOpen,
-  Award,
-  CheckCircle2,
-  Clock,
-  ShieldCheck,
-  Code2,
-  FileText,
-  Briefcase,
-  GitPullRequest,
-  Sparkles,
-  ArrowRight,
-} from "lucide-react";
+import { useState } from "react";
+import { CourseDeliveryService } from "@/lib/institutionOS/CourseDeliveryService";
+import { LearningExperienceService } from "@/lib/institutionOS/LearningExperienceService";
+import { StudyPlannerService } from "@/lib/institutionOS/StudyPlannerService";
+import { StudentVideoPlayer } from "@/components/learning/StudentVideoPlayer";
+import { CodingLab } from "@/components/learning/CodingLab";
+import { StudyDashboardPanel } from "@/components/learning/StudyDashboardPanel";
 
-export default function MyProgrammePage() {
-  const modules = [
-    { num: "01", title: "AI Fundamentals & Prompt Engineering", duration: "1 Week", desc: "Mastering Generative AI tools, LLM prompting techniques, automated developer workflows, and agentic debugging." },
-    { num: "02", title: "Modern Web Core (HTML5, CSS3, ES6+)", duration: "1 Week", desc: "Foundational software engineering principles, responsive layout math, DOM manipulation, and Git version control." },
-    { num: "03", title: "Full-Stack React 19 & Next.js App Router", duration: "2 Weeks", desc: "Server Components, Server Actions, state management, client hooks, and production UI component architecture." },
-    { num: "04", title: "Serverless Databases & Neon Postgres", duration: "1 Week", desc: "Prisma ORM schema design, SQL migrations, relation modeling, and serverless database connection pooling." },
-    { num: "05", title: "Authentication, Paystack & REST APIs", duration: "1 Week", desc: "NextAuth.js authentication flow, Paystack payment webhooks, RESTful API endpoints, and secure middleware." },
-    { num: "06", title: "Capstone Project & Production Deployment", duration: "2 Weeks", desc: "Building and deploying a full-stack production web application to Vercel, automated GitHub PR grading, and certificate issue." },
-  ];
+const lessons = CourseDeliveryService.getAllLessons();
+const metrics = LearningExperienceService.getMetrics();
+const recommendations = LearningExperienceService.getStudyRecommendations();
+const productivityPattern = LearningExperienceService.getProductivityPattern();
+const weeklyGoals = StudyPlannerService.getWeeklyGoals();
+
+const difficultyConfig = {
+  Beginner: { color: "#4ade80", bg: "rgba(74,222,128,0.1)", border: "rgba(74,222,128,0.25)" },
+  Intermediate: { color: "#d4a017", bg: "rgba(212,160,23,0.1)", border: "rgba(212,160,23,0.25)" },
+  Advanced: { color: "#f87171", bg: "rgba(248,113,113,0.1)", border: "rgba(248,113,113,0.25)" },
+};
+
+export default function LearningWorkspacePage() {
+  const [activeLessonId, setActiveLessonId] = useState(lessons[0]?.id ?? "");
+  const [activeView, setActiveView] = useState<"workspace" | "dashboard">("workspace");
+  const [completedLessons, setCompletedLessons] = useState<Set<string>>(new Set());
+
+  const activeLesson = CourseDeliveryService.getLessonById(activeLessonId) ?? lessons[0];
+  const activeLessonIndex = lessons.findIndex((l) => l.id === activeLessonId);
+  const nextLesson = lessons[activeLessonIndex + 1];
+  const prevLesson = lessons[activeLessonIndex - 1];
+
+  const handleComplete = () => setCompletedLessons((prev) => { const s = new Set(prev); s.has(activeLessonId) ? s.delete(activeLessonId) : s.add(activeLessonId); return s; });
+  const diff = activeLesson ? difficultyConfig[activeLesson.difficulty] : difficultyConfig.Intermediate;
 
   return (
-    <div className="space-y-8 animate-fadeInUp">
-
-      {/* Header Banner */}
-      <div className="bg-gradient-to-br from-[#061428] via-[#091832] to-[#061428] border-2 border-[#d4a017] rounded-3xl p-6 sm:p-10 space-y-4 shadow-xl">
-        <div className="flex flex-wrap items-center justify-between gap-3">
-          <div className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-[#d4a017]/15 border border-[#d4a017]/40 text-[#d4a017] text-xs font-extrabold">
-            <GraduationCap className="w-4 h-4" aria-hidden="true" />
-            ACADEMIC HANDBOOK &amp; SYLLABUS
-          </div>
-          <span className="text-xs font-bold text-[#4ade80] bg-[#4ade80]/10 border border-[#4ade80]/30 px-3 py-1 rounded-full uppercase">
-            Official Cohort 2026 Curriculum
-          </span>
-        </div>
-
+    <div style={{ minHeight: "100vh", background: "#030e1f", color: "#f0f4ff", fontFamily: "'Inter','Outfit',sans-serif", padding: "24px 28px" }}>
+      {/* Page Header */}
+      <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", marginBottom: 24, flexWrap: "wrap", gap: 12 }}>
         <div>
-          <h1 className="text-3xl sm:text-4xl font-black text-white tracking-tight">
-            8-Week AI Coding <span className="text-[#d4a017]">Academy</span>
-          </h1>
-          <p className="text-xs sm:text-sm text-[#8899b4] mt-2 max-w-3xl leading-relaxed">
-            From Zero to Full-Stack Software Developer with AI Integration. Delivered by Digital Technology Academy (DTA) — a flagship institution of <strong className="text-white">Digital World Systems Africa Ltd (RC 9718724)</strong>.
-          </p>
+          <h1 style={{ fontSize: 24, fontWeight: 800, color: "#f0f4ff", margin: 0, marginBottom: 4 }}>My Learning Workspace</h1>
+          <p style={{ color: "#6b7a94", fontSize: 14, margin: 0 }}>Project-First Digital Technology Programme · Full-Stack Engineering Track</p>
         </div>
-
-        {/* Quick Specs Grid */}
-        <div className="grid grid-cols-2 sm:grid-cols-4 gap-3 pt-2 text-xs">
-          <div className="p-3 rounded-xl bg-[#030e1f] border border-[#d4a017]/30 space-y-1">
-            <span className="text-[10px] text-[#8899b4] uppercase font-bold block">DURATION</span>
-            <strong className="text-white text-sm">8 Weeks Intensive</strong>
-          </div>
-          <div className="p-3 rounded-xl bg-[#030e1f] border border-[#d4a017]/30 space-y-1">
-            <span className="text-[10px] text-[#8899b4] uppercase font-bold block">LEARNING MODE</span>
-            <strong className="text-white text-sm">Physical + Virtual</strong>
-          </div>
-          <div className="p-3 rounded-xl bg-[#030e1f] border border-[#d4a017]/30 space-y-1">
-            <span className="text-[10px] text-[#8899b4] uppercase font-bold block">GRADING ENGINE</span>
-            <strong className="text-[#4ade80] text-sm">GitHub PR Automated</strong>
-          </div>
-          <div className="p-3 rounded-xl bg-[#030e1f] border border-[#d4a017]/30 space-y-1">
-            <span className="text-[10px] text-[#8899b4] uppercase font-bold block">QUALIFICATION</span>
-            <strong className="text-[#d4a017] text-sm">DCFE Certificate</strong>
-          </div>
+        <div style={{ display: "flex", gap: 8 }}>
+          <button onClick={() => setActiveView("workspace")} style={{ padding: "9px 20px", borderRadius: 8, border: "none", cursor: "pointer", fontWeight: 700, fontSize: 13, background: activeView === "workspace" ? "#d4a017" : "rgba(255,255,255,0.06)", color: activeView === "workspace" ? "#030e1f" : "#aab4c4", transition: "all 0.2s" }}>
+            📚 Workspace
+          </button>
+          <button onClick={() => setActiveView("dashboard")} style={{ padding: "9px 20px", borderRadius: 8, border: "none", cursor: "pointer", fontWeight: 700, fontSize: 13, background: activeView === "dashboard" ? "#d4a017" : "rgba(255,255,255,0.06)", color: activeView === "dashboard" ? "#030e1f" : "#aab4c4", transition: "all 0.2s" }}>
+            📊 Study Dashboard
+          </button>
         </div>
       </div>
 
-      {/* Curriculum Roadmap */}
-      <div className="space-y-4">
-        <div className="border-b border-[#d4a017]/20 pb-3 flex items-center justify-between">
-          <div>
-            <h2 className="text-xl font-extrabold text-white">Curriculum Modules</h2>
-            <p className="text-xs text-[#8899b4]">Structured 6-part technical progression</p>
-          </div>
-          <span className="text-xs font-bold text-[#d4a017]">{modules.length} Modules</span>
-        </div>
+      {activeView === "dashboard" && (
+        <StudyDashboardPanel
+          streakDays={metrics.currentStreakDays}
+          weeklyMinutes={metrics.weeklyStudyMinutes}
+          dailyMinutesToday={metrics.dailyStudyMinutesToday}
+          consistencyScore={metrics.consistencyScore}
+          completionForecastDays={metrics.completionForecastDays}
+          productivityPattern={productivityPattern}
+          studyGoals={weeklyGoals}
+          recommendations={recommendations.map((r) => ({ type: r.type, title: r.title, rationale: r.rationale, estimatedMinutes: r.estimatedMinutes, priority: r.priority }))}
+        />
+      )}
 
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-          {modules.map((m) => (
-            <div
-              key={m.num}
-              className="p-6 bg-[#061428] border border-slate-800 rounded-2xl space-y-3 hover:border-[#d4a017]/40 transition-all flex flex-col justify-between"
-            >
-              <div className="space-y-2">
-                <div className="flex items-center justify-between">
-                  <span className="text-xs font-black text-[#d4a017] px-2.5 py-0.5 rounded-lg bg-[#d4a017]/10 border border-[#d4a017]/30">
-                    MODULE {m.num}
-                  </span>
-                  <span className="text-[11px] text-[#8899b4] font-semibold flex items-center gap-1">
-                    <Clock className="w-3 h-3 text-[#d4a017]" aria-hidden="true" /> {m.duration}
-                  </span>
+      {activeView === "workspace" && (
+        <div style={{ display: "grid", gridTemplateColumns: "260px 1fr", gap: 20, alignItems: "start" }}>
+          {/* Lesson Navigation Sidebar */}
+          <div style={{ background: "#060f21", border: "1px solid rgba(212,160,23,0.15)", borderRadius: 12, overflow: "hidden", position: "sticky", top: 24 }}>
+            <div style={{ padding: "14px 16px", borderBottom: "1px solid rgba(212,160,23,0.1)", background: "#050e1e" }}>
+              <div style={{ color: "#d4a017", fontSize: 11, fontWeight: 700, letterSpacing: "0.1em", textTransform: "uppercase" }}>Programme Lessons</div>
+              <div style={{ color: "#6b7a94", fontSize: 11, marginTop: 4 }}>{completedLessons.size}/{lessons.length} completed</div>
+              <div style={{ height: 4, background: "rgba(255,255,255,0.07)", borderRadius: 2, marginTop: 8 }}>
+                <div style={{ height: "100%", width: `${(completedLessons.size / lessons.length) * 100}%`, background: "linear-gradient(90deg,#d4a017,#4ade80)", borderRadius: 2, transition: "width 0.4s" }} />
+              </div>
+            </div>
+            <div style={{ padding: "8px 0" }}>
+              {lessons.map((lesson) => {
+                const isActive = lesson.id === activeLessonId;
+                const isDone = completedLessons.has(lesson.id);
+                return (
+                  <button key={lesson.id} onClick={() => setActiveLessonId(lesson.id)} style={{ width: "100%", textAlign: "left", padding: "12px 16px", background: isActive ? "rgba(212,160,23,0.1)" : "transparent", border: "none", borderLeft: `3px solid ${isActive ? "#d4a017" : "transparent"}`, cursor: "pointer", transition: "all 0.2s", display: "flex", alignItems: "flex-start", gap: 10 }}>
+                    <div style={{ width: 20, height: 20, borderRadius: "50%", border: `2px solid ${isDone ? "#4ade80" : isActive ? "#d4a017" : "rgba(255,255,255,0.2)"}`, background: isDone ? "rgba(74,222,128,0.15)" : "transparent", display: "flex", alignItems: "center", justifyContent: "center", fontSize: 9, color: isDone ? "#4ade80" : "#6b7a94", flexShrink: 0, marginTop: 2, fontWeight: 700 }}>{isDone ? "✓" : ""}</div>
+                    <div>
+                      <div style={{ color: isActive ? "#d4a017" : "#aab4c4", fontSize: 12, fontWeight: isActive ? 700 : 500, lineHeight: 1.4, marginBottom: 3 }}>{lesson.title}</div>
+                      <div style={{ color: "#4a5568", fontSize: 10 }}>{lesson.durationMinutes} min · {lesson.difficulty}</div>
+                    </div>
+                  </button>
+                );
+              })}
+            </div>
+          </div>
+
+          {/* Main Content Area */}
+          <div style={{ display: "flex", flexDirection: "column", gap: 20 }}>
+            {/* Lesson Header */}
+            {activeLesson && (
+              <div style={{ background: "#060f21", border: "1px solid rgba(212,160,23,0.2)", borderRadius: 12, padding: "20px 24px" }}>
+                <div style={{ display: "flex", gap: 8, marginBottom: 12, flexWrap: "wrap" }}>
+                  <span style={{ background: diff.bg, color: diff.color, border: `1px solid ${diff.border}`, borderRadius: 20, padding: "3px 12px", fontSize: 11, fontWeight: 700 }}>{activeLesson.difficulty}</span>
+                  <span style={{ background: "rgba(255,255,255,0.05)", color: "#6b7a94", border: "1px solid rgba(255,255,255,0.1)", borderRadius: 20, padding: "3px 12px", fontSize: 11 }}>⏱ {activeLesson.durationMinutes} min</span>
+                  {activeLesson.prerequisite && <span style={{ background: "rgba(212,160,23,0.08)", color: "#d4a017", border: "1px solid rgba(212,160,23,0.2)", borderRadius: 20, padding: "3px 12px", fontSize: 11 }}>Prereq: {activeLesson.prerequisite}</span>}
+                  <span style={{ background: "rgba(255,255,255,0.04)", color: "#6b7a94", borderRadius: 20, padding: "3px 12px", fontSize: 11, border: "1px solid rgba(255,255,255,0.08)" }}>{activeLesson.moduleTitle}</span>
                 </div>
-                <h3 className="text-base font-bold text-white">{m.title}</h3>
-                <p className="text-xs text-[#8899b4] leading-relaxed">{m.desc}</p>
+                <h2 style={{ color: "#f0f4ff", fontSize: 20, fontWeight: 800, margin: "0 0 8px" }}>{activeLesson.title}</h2>
+                <p style={{ color: "#aab4c4", fontSize: 14, lineHeight: 1.6, margin: "0 0 16px" }}>{activeLesson.description}</p>
+                {/* Objectives */}
+                <div style={{ background: "rgba(212,160,23,0.06)", border: "1px solid rgba(212,160,23,0.15)", borderRadius: 8, padding: "12px 16px" }}>
+                  <div style={{ color: "#d4a017", fontSize: 11, fontWeight: 700, letterSpacing: "0.08em", textTransform: "uppercase", marginBottom: 8 }}>Lesson Objectives</div>
+                  <ul style={{ margin: 0, paddingLeft: 18 }}>
+                    {activeLesson.checklist.map((obj, i) => (
+                      <li key={i} style={{ color: "#aab4c4", fontSize: 13, lineHeight: 1.7 }}>{obj}</li>
+                    ))}
+                  </ul>
+                </div>
               </div>
+            )}
 
-              <div className="pt-2 border-t border-slate-800 flex items-center justify-between text-xs">
-                <span className="text-[#4ade80] font-semibold flex items-center gap-1">
-                  <CheckCircle2 className="w-3.5 h-3.5" aria-hidden="true" /> Practical Lab Included
-                </span>
+            {/* Video Player */}
+            {activeLesson && (
+              <StudentVideoPlayer
+                lessonId={activeLesson.id}
+                title={activeLesson.title}
+                videoUrl={activeLesson.videoUrl}
+                transcript={activeLesson.transcript}
+                nextLessonTitle={nextLesson?.title}
+                onLessonComplete={handleComplete}
+                onNextLesson={() => nextLesson && setActiveLessonId(nextLesson.id)}
+                onPrevLesson={() => prevLesson && setActiveLessonId(prevLesson.id)}
+              />
+            )}
+
+            {/* CodingLab */}
+            {activeLesson && (
+              <CodingLab
+                lessonId={activeLesson.id}
+                title={`${activeLesson.title} — Practical Lab`}
+                instructions={`Use the concepts from this lesson to complete the following practical implementation. Clone the starter repository and follow each task step-by-step. ${activeLesson.description}`}
+                starterTemplateUrl={activeLesson.starterTemplateUrl}
+                expectedOutput={activeLesson.expectedOutput ?? "See rubric for detailed grading criteria."}
+                rubric={[
+                  "Code structure follows Next.js App Router file-system conventions correctly.",
+                  "TypeScript types are explicitly defined with no implicit 'any' usage.",
+                  "Component responsibilities are cleanly separated — no mixed concerns.",
+                  "All async data fetching is performed at the Server Component layer.",
+                  "Pull Request description clearly explains implementation decisions.",
+                ]}
+                instructorTip="Run `npx next dev` locally first and inspect the Network tab to verify zero client-side data fetches before submitting your PR."
+                tasks={activeLesson.checklist.map((desc, i) => ({ id: `TASK-${i}`, description: desc, completed: false }))}
+              />
+            )}
+
+            {/* Downloadable Resources */}
+            {activeLesson && activeLesson.resources.length > 0 && (
+              <div style={{ background: "#060f21", border: "1px solid rgba(212,160,23,0.15)", borderRadius: 12, padding: "18px 20px" }}>
+                <div style={{ color: "#aab4c4", fontSize: 13, fontWeight: 700, letterSpacing: "0.06em", textTransform: "uppercase", marginBottom: 12 }}>📎 Lesson Resources</div>
+                <div style={{ display: "flex", flexDirection: "column", gap: 8 }}>
+                  {activeLesson.resources.map((res) => (
+                    <a key={res.id} href={res.url} style={{ display: "flex", alignItems: "center", gap: 12, padding: "10px 14px", background: "rgba(255,255,255,0.03)", border: "1px solid rgba(255,255,255,0.08)", borderRadius: 8, textDecoration: "none", transition: "border-color 0.2s" }}>
+                      <span style={{ fontSize: 18 }}>{res.type === "PDF" ? "📄" : "📦"}</span>
+                      <div style={{ flex: 1 }}>
+                        <div style={{ color: "#f0f4ff", fontSize: 13, fontWeight: 600 }}>{res.name}</div>
+                        <div style={{ color: "#4a5568", fontSize: 11 }}>{res.size}</div>
+                      </div>
+                      <span style={{ color: "#d4a017", fontSize: 12, fontWeight: 700 }}>↓ Download</span>
+                    </a>
+                  ))}
+                </div>
               </div>
-            </div>
-          ))}
-        </div>
-      </div>
-
-      {/* Graduation Requirements & Certification */}
-      <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-        <div className="p-6 bg-[#061428] border border-[#d4a017]/30 rounded-2xl space-y-4">
-          <div className="flex items-center gap-3">
-            <div className="p-2.5 bg-[#d4a017]/15 text-[#d4a017] rounded-xl border border-[#d4a017]/30">
-              <ShieldCheck className="w-5 h-5" aria-hidden="true" />
-            </div>
-            <div>
-              <h3 className="text-base font-bold text-white">Graduation Requirements</h3>
-              <p className="text-xs text-[#8899b4]">Mandatory criteria to earn your DWSA qualification</p>
-            </div>
-          </div>
-          <ul className="space-y-2.5 text-xs text-[#c8d8f0]">
-            <li className="flex items-start gap-2">
-              <CheckCircle2 className="w-4 h-4 text-[#4ade80] shrink-0 mt-0.5" aria-hidden="true" />
-              <span>Complete all 6 module coding assignments with approved status.</span>
-            </li>
-            <li className="flex items-start gap-2">
-              <CheckCircle2 className="w-4 h-4 text-[#4ade80] shrink-0 mt-0.5" aria-hidden="true" />
-              <span>Submit production capstone Pull Request to DWSA GitHub grading engine.</span>
-            </li>
-            <li className="flex items-start gap-2">
-              <CheckCircle2 className="w-4 h-4 text-[#4ade80] shrink-0 mt-0.5" aria-hidden="true" />
-              <span>Deploy live full-stack web application to Vercel production.</span>
-            </li>
-            <li className="flex items-start gap-2">
-              <CheckCircle2 className="w-4 h-4 text-[#4ade80] shrink-0 mt-0.5" aria-hidden="true" />
-              <span>Abide by the official P.R.I.D.E. Conduct Standard.</span>
-            </li>
-          </ul>
-        </div>
-
-        <div className="p-6 bg-[#061428] border border-[#4ade80]/30 rounded-2xl space-y-4">
-          <div className="flex items-center gap-3">
-            <div className="p-2.5 bg-[#4ade80]/15 text-[#4ade80] rounded-xl border border-[#4ade80]/30">
-              <Award className="w-5 h-5" aria-hidden="true" />
-            </div>
-            <div>
-              <h3 className="text-base font-bold text-white">DWSA Institutional Credential</h3>
-              <p className="text-xs text-[#8899b4]">Verified Certificate of Completion (RC 9718724)</p>
-            </div>
-          </div>
-          <p className="text-xs text-[#8899b4] leading-relaxed">
-            Graduates receive an official, QR-verifiable certificate confirming competence in Full-Stack Software Engineering, Next.js App Router, Neon Postgres, and AI Developer Workflows.
-          </p>
-          <div className="pt-2">
-            <Link
-              href="/dashboard/student#assignments"
-              className="inline-flex items-center gap-2 px-5 py-2.5 rounded-xl bg-gradient-to-r from-[#d4a017] to-[#e5a910] text-[#030e1f] font-extrabold text-xs shadow-md shadow-[#d4a017]/20 btn-press"
-            >
-              Go to Submissions Desk <ArrowRight className="w-3.5 h-3.5" aria-hidden="true" />
-            </Link>
+            )}
           </div>
         </div>
-      </div>
-
+      )}
     </div>
   );
 }

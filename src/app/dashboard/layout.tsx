@@ -67,7 +67,7 @@ export default function DashboardLayout({
       : pathname.includes("/learners")
       ? "Learner Analytics"
       : pathname.includes("/lessons")
-      ? "Lesson Manager"
+      ? "Faculty Lesson Studio"
       : pathname.includes("/profile")
       ? "Faculty Profile"
       : pathname.includes("/announcements")
@@ -94,7 +94,7 @@ export default function DashboardLayout({
                 <div className="flex items-center gap-2 text-[10px] font-bold text-[#8899b4]">
                   <span>Faculty Workspace</span>
                   <span aria-hidden="true">•</span>
-                  <span className="text-[#d4a017] uppercase tracking-wider">InstitutionOS v3.1</span>
+                  <span className="text-[#d4a017] uppercase tracking-wider">InstitutionOS v3.9</span>
                 </div>
                 <h1 className="text-sm sm:text-base font-extrabold text-white tracking-tight">{facultyPageLabel}</h1>
               </div>
@@ -170,7 +170,7 @@ export default function DashboardLayout({
       : pathname.includes("/reports")
       ? "Executive Reports"
       : pathname.includes("/academic")
-      ? "Academic Operations"
+      ? "Institutional Learning Analytics"
       : pathname.includes("/modules/editor")
       ? "Module & Track Editor"
       : pathname.includes("/students")
@@ -308,7 +308,7 @@ export default function DashboardLayout({
                   : pathname.includes("/knowledge")
                   ? "Institution Knowledge Centre"
                   : pathname.includes("/programme")
-                  ? "My Programme Handbook"
+                  ? "My Learning Workspace"
                   : pathname.includes("/identity")
                   ? "Digital Identity Workspace"
                   : pathname.includes("/resources")

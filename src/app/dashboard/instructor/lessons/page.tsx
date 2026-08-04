@@ -1,201 +1,173 @@
 "use client";
 
-import React, { useState } from "react";
-import {
-  FileEdit, PlusCircle, Upload, Eye, Clock, CheckCircle2,
-  BookOpen, Link as LinkIcon, FileText, Video, GitBranch,
-  Library, Download, Search, Calendar,
-} from "lucide-react";
+import { useState } from "react";
+import { FacultyTeachingService } from "@/lib/institutionOS/FacultyTeachingService";
 
-const lessons = [
-  { id: 1, title: "React Hooks Deep Dive", module: "React Fundamentals", cohort: "Cohort Alpha", status: "Published", statusColor: "text-[#4ade80]", statusBg: "bg-[#4ade80]/10 border-[#4ade80]/30", duration: "90 min", week: 3, attachments: ["Video", "GitHub", "Slides"] },
-  { id: 2, title: "TypeScript Generics & Utility Types", module: "TypeScript", cohort: "Cohort Alpha", status: "Draft", statusColor: "text-amber-400", statusBg: "bg-amber-950/30 border-amber-800/30", duration: "75 min", week: 4, attachments: ["Slides", "Document"] },
-  { id: 3, title: "Next.js App Router & SSR", module: "Next.js", cohort: "Cohort Beta", status: "Scheduled", statusColor: "text-[#818cf8]", statusBg: "bg-indigo-950/30 border-indigo-800/30", duration: "120 min", week: 4, attachments: ["Video", "GitHub", "Document", "External Link"] },
-  { id: 4, title: "UI Component Architecture", module: "UI/UX Design", cohort: "Cohort Gamma", status: "Published", statusColor: "text-[#4ade80]", statusBg: "bg-[#4ade80]/10 border-[#4ade80]/30", duration: "60 min", week: 2, attachments: ["Slides", "External Link"] },
-];
+const lessons = FacultyTeachingService.getStudioLessons();
 
-const vaultCategories = ["All", "Lesson Templates", "Curriculum Guides", "Assessment Rubrics", "Presentation Slides", "Coding Challenges", "Sample Projects", "Institutional Documents"];
-
-const vaultResources = [
-  { id: 1, title: "Full-Stack Curriculum Guide v2.0", category: "Curriculum Guides", type: "Document", size: "2.4 MB", updated: "2 weeks ago" },
-  { id: 2, title: "React Assessment Rubric", category: "Assessment Rubrics", type: "Document", size: "840 KB", updated: "1 month ago" },
-  { id: 3, title: "Week 1–4 Slide Deck", category: "Presentation Slides", type: "Slides", size: "18.2 MB", updated: "3 days ago" },
-  { id: 4, title: "JavaScript Coding Challenge Pack", category: "Coding Challenges", type: "GitHub", size: "–", updated: "1 week ago" },
-  { id: 5, title: "Lesson Plan Template", category: "Lesson Templates", type: "Document", size: "320 KB", updated: "2 months ago" },
-  { id: 6, title: "E-Commerce Capstone Sample", category: "Sample Projects", type: "GitHub", size: "–", updated: "3 weeks ago" },
-];
-
-const attachmentIcon: Record<string, React.ElementType> = {
-  Video,
-  GitHub: GitBranch,
-  Slides: FileText,
-  Document: FileText,
-  "External Link": LinkIcon,
+const statusConfig = {
+  Published: { color: "#4ade80", bg: "rgba(74,222,128,0.1)", border: "rgba(74,222,128,0.25)" },
+  Draft: { color: "#d4a017", bg: "rgba(212,160,23,0.1)", border: "rgba(212,160,23,0.25)" },
+  Archived: { color: "#6b7a94", bg: "rgba(255,255,255,0.06)", border: "rgba(255,255,255,0.12)" },
 };
 
-export default function LessonsPage() {
-  const [activeSection, setActiveSection] = useState<"lessons" | "vault">("lessons");
-  const [vaultCategory, setVaultCategory] = useState("All");
-  const [search, setSearch] = useState("");
-  const [showNewLesson, setShowNewLesson] = useState(false);
-  const [newLesson, setNewLesson] = useState({ title: "", module: "", cohort: "", duration: "", outcomes: "", prerequisites: "" });
+function StatPill({ label, value, color }: { label: string; value: string | number; color: string }) {
+  return (
+    <div style={{ textAlign: "center" }}>
+      <div style={{ color, fontSize: 18, fontWeight: 800, lineHeight: 1 }}>{value}</div>
+      <div style={{ color: "#6b7a94", fontSize: 10, marginTop: 3, whiteSpace: "nowrap" }}>{label}</div>
+    </div>
+  );
+}
 
-  const filteredVault = vaultResources.filter((r) => {
-    const matchCat = vaultCategory === "All" || r.category === vaultCategory;
-    const matchSearch = r.title.toLowerCase().includes(search.toLowerCase());
-    return matchCat && matchSearch;
+export default function FacultyLessonStudioPage() {
+  const [selectedId, setSelectedId] = useState<string | null>(null);
+  const [filterStatus, setFilterStatus] = useState<"All" | "Published" | "Draft" | "Archived">("All");
+  const [liveEngagement] = useState({
+    activeStudents: 47,
+    pollsCompleted: 3,
+    questionsRaised: 12,
+    avgAttentionScore: 88,
   });
 
+  const filtered = lessons.filter((l) => filterStatus === "All" || l.status === filterStatus);
+  const selectedLesson = selectedId ? lessons.find((l) => l.id === selectedId) : null;
+  const totalPublished = lessons.filter((l) => l.status === "Published").length;
+  const avgCompletion = Math.round(lessons.filter((l) => l.completionRate > 0).reduce((a, l) => a + l.completionRate, 0) / (lessons.filter((l) => l.completionRate > 0).length || 1));
+  const totalQuestions = lessons.reduce((a, l) => a + l.questionsAsked, 0);
+
   return (
-    <div className="space-y-8 pb-12">
-      {/* Header */}
-      <div className="flex flex-col sm:flex-row sm:items-end justify-between gap-4">
-        <div>
-          <h2 className="text-2xl font-extrabold text-white">Lesson Manager</h2>
-          <p className="text-sm text-[#8899b4] mt-1">Create, publish, and manage lessons — plus access the Faculty Resource Vault</p>
-        </div>
-        <div className="flex gap-2">
-          <button
-            onClick={() => { setActiveSection("lessons"); }}
-            className={`px-4 py-2 rounded-xl text-[11px] font-black border transition-all focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#d4a017] ${activeSection === "lessons" ? "bg-[#d4a017]/15 border-[#d4a017]/40 text-[#d4a017]" : "bg-[#061428] border-[#1a2f4a] text-[#8899b4]"}`}
-            aria-pressed={activeSection === "lessons"}
-          >
-            Lessons
-          </button>
-          <button
-            id="vault"
-            onClick={() => { setActiveSection("vault"); }}
-            className={`px-4 py-2 rounded-xl text-[11px] font-black border transition-all focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#d4a017] ${activeSection === "vault" ? "bg-[#d4a017]/15 border-[#d4a017]/40 text-[#d4a017]" : "bg-[#061428] border-[#1a2f4a] text-[#8899b4]"}`}
-            aria-pressed={activeSection === "vault"}
-          >
-            Resource Vault
-          </button>
-        </div>
+    <div style={{ minHeight: "100vh", background: "#030e1f", color: "#f0f4ff", fontFamily: "'Inter','Outfit',sans-serif", padding: "24px 28px" }}>
+      {/* Page Header */}
+      <div style={{ marginBottom: 24 }}>
+        <h1 style={{ fontSize: 24, fontWeight: 800, color: "#f0f4ff", margin: "0 0 4px" }}>Faculty Lesson Studio</h1>
+        <p style={{ color: "#6b7a94", fontSize: 14, margin: 0 }}>Publish, manage, and analyse your lessons. Engage your classroom in real time.</p>
       </div>
 
-      {activeSection === "lessons" && (
-        <>
-          {/* Quick Create */}
-          <div className="flex justify-end">
-            <button
-              onClick={() => setShowNewLesson(!showNewLesson)}
-              className="flex items-center gap-2 px-4 py-2 rounded-xl bg-[#d4a017]/15 border border-[#d4a017]/40 text-[#d4a017] text-xs font-black hover:bg-[#d4a017]/25 transition-all focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#d4a017]"
-            >
-              <PlusCircle className="w-3.5 h-3.5" /> Create Lesson
-            </button>
-          </div>
-
-          {/* New Lesson Form */}
-          {showNewLesson && (
-            <div className="rounded-3xl bg-[#061428] border border-[#d4a017]/30 p-6 space-y-4">
-              <h3 className="text-sm font-extrabold text-white flex items-center gap-2">
-                <FileEdit className="w-4 h-4 text-[#d4a017]" />
-                New Lesson
-              </h3>
-              <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
-                {[
-                  { label: "Lesson Title", key: "title", placeholder: "e.g. React Hooks Deep Dive" },
-                  { label: "Module", key: "module", placeholder: "e.g. React Fundamentals" },
-                  { label: "Cohort", key: "cohort", placeholder: "e.g. Cohort Alpha" },
-                  { label: "Duration (min)", key: "duration", placeholder: "e.g. 90" },
-                ].map((f) => (
-                  <div key={f.key}>
-                    <label className="block text-[9px] font-black text-[#8899b4] mb-1" htmlFor={`new-${f.key}`}>{f.label}</label>
-                    <input
-                      id={`new-${f.key}`}
-                      type="text"
-                      value={newLesson[f.key as keyof typeof newLesson]}
-                      onChange={(e) => setNewLesson((p) => ({ ...p, [f.key]: e.target.value }))}
-                      className="w-full px-3 py-2.5 rounded-xl bg-[#030e1f] border border-[#1a2f4a] text-xs text-white placeholder-[#8899b4] focus:outline-none focus:border-[#d4a017]/60 transition-all"
-                      placeholder={f.placeholder}
-                    />
-                  </div>
-                ))}
-                <div>
-                  <label className="block text-[9px] font-black text-[#8899b4] mb-1" htmlFor="new-outcomes">Learning Outcomes</label>
-                  <textarea id="new-outcomes" rows={2} className="w-full px-3 py-2.5 rounded-xl bg-[#030e1f] border border-[#1a2f4a] text-xs text-white placeholder-[#8899b4] focus:outline-none focus:border-[#d4a017]/60 transition-all resize-none" placeholder="What will learners achieve?" value={newLesson.outcomes} onChange={(e) => setNewLesson((p) => ({ ...p, outcomes: e.target.value }))} />
-                </div>
-                <div>
-                  <label className="block text-[9px] font-black text-[#8899b4] mb-1" htmlFor="new-prereqs">Prerequisites</label>
-                  <textarea id="new-prereqs" rows={2} className="w-full px-3 py-2.5 rounded-xl bg-[#030e1f] border border-[#1a2f4a] text-xs text-white placeholder-[#8899b4] focus:outline-none focus:border-[#d4a017]/60 transition-all resize-none" placeholder="Required prior knowledge…" value={newLesson.prerequisites} onChange={(e) => setNewLesson((p) => ({ ...p, prerequisites: e.target.value }))} />
-                </div>
-              </div>
-              <div className="flex gap-2 pt-2">
-                <button className="px-4 py-2 rounded-xl bg-[#030e1f] border border-[#1a2f4a] text-[10px] font-black text-[#8899b4] hover:border-[#d4a017]/30 transition-all focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#d4a017]">Save Draft</button>
-                <button className="px-4 py-2 rounded-xl bg-[#4ade80]/15 border border-[#4ade80]/30 text-[#4ade80] text-[10px] font-black hover:bg-[#4ade80]/25 transition-all focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#4ade80]">Publish Lesson</button>
-                <button className="px-4 py-2 rounded-xl bg-[#818cf8]/15 border border-[#818cf8]/30 text-[#818cf8] text-[10px] font-black hover:bg-[#818cf8]/25 transition-all focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#818cf8]">Schedule</button>
-              </div>
-            </div>
-          )}
-
-          {/* Lesson Cards */}
-          <div className="space-y-4">
-            {lessons.map((l) => (
-              <div key={l.id} className="rounded-2xl bg-[#061428] border border-[#1a2f4a] hover:border-[#d4a017]/30 p-5 transition-colors">
-                <div className="flex items-start justify-between gap-4">
-                  <div className="flex-1 min-w-0">
-                    <div className="flex items-center gap-2 flex-wrap mb-1">
-                      <h3 className="text-sm font-extrabold text-white">{l.title}</h3>
-                      <span className={`px-2 py-0.5 rounded-full text-[9px] font-black border ${l.statusBg} ${l.statusColor}`}>{l.status}</span>
-                    </div>
-                    <p className="text-[10px] text-[#8899b4]">{l.module} · {l.cohort} · Week {l.week} · {l.duration}</p>
-                  </div>
-                  <div className="flex gap-2 shrink-0">
-                    <button className="p-2 rounded-xl bg-[#030e1f] border border-[#1a2f4a] text-[#8899b4] hover:text-[#d4a017] hover:border-[#d4a017]/30 transition-all focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#d4a017]" aria-label="Edit lesson"><FileEdit className="w-3.5 h-3.5" /></button>
-                    <button className="p-2 rounded-xl bg-[#030e1f] border border-[#1a2f4a] text-[#8899b4] hover:text-[#4ade80] hover:border-[#4ade80]/30 transition-all focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#4ade80]" aria-label="Preview lesson"><Eye className="w-3.5 h-3.5" /></button>
-                  </div>
-                </div>
-                <div className="flex flex-wrap gap-2 mt-3">
-                  {l.attachments.map((att) => {
-                    const Icon = attachmentIcon[att] || FileText;
-                    return (
-                      <span key={att} className="flex items-center gap-1.5 px-2.5 py-1 rounded-lg bg-[#030e1f] border border-[#1a2f4a] text-[9px] text-[#8899b4] font-semibold">
-                        <Icon className="w-3 h-3" aria-hidden="true" />
-                        {att}
-                      </span>
-                    );
-                  })}
-                </div>
-              </div>
-            ))}
-          </div>
-        </>
-      )}
-
-      {/* Faculty Resource Vault */}
-      {activeSection === "vault" && (
-        <div className="space-y-6" id="vault">
-          <div className="flex flex-col sm:flex-row gap-3">
-            <div className="flex-1 relative">
-              <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-[#8899b4]" aria-hidden="true" />
-              <input type="search" placeholder="Search the resource vault…" value={search} onChange={(e) => setSearch(e.target.value)} className="w-full pl-9 pr-4 py-2.5 rounded-xl bg-[#061428] border border-[#1a2f4a] text-xs text-white placeholder-[#8899b4] focus:outline-none focus:border-[#d4a017]/60 transition-all" />
+      {/* Summary Stats */}
+      <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit,minmax(140px,1fr))", gap: 12, marginBottom: 24 }}>
+        {[
+          { label: "Published Lessons", value: totalPublished, icon: "✅", color: "#4ade80" },
+          { label: "Avg Completion Rate", value: `${avgCompletion}%`, icon: "📈", color: "#d4a017" },
+          { label: "Student Questions", value: totalQuestions, icon: "❓", color: "#d4a017" },
+          { label: "Live Students Now", value: liveEngagement.activeStudents, icon: "🟢", color: "#4ade80" },
+        ].map((s) => (
+          <div key={s.label} style={{ background: "#060f21", border: "1px solid rgba(212,160,23,0.15)", borderRadius: 12, padding: "16px 18px", display: "flex", gap: 12, alignItems: "center" }}>
+            <span style={{ fontSize: 24 }}>{s.icon}</span>
+            <div>
+              <div style={{ color: s.color, fontSize: 22, fontWeight: 800 }}>{s.value}</div>
+              <div style={{ color: "#6b7a94", fontSize: 11, marginTop: 2 }}>{s.label}</div>
             </div>
           </div>
-          <div className="flex flex-wrap gap-2">
-            {vaultCategories.map((cat) => (
-              <button key={cat} onClick={() => setVaultCategory(cat)} className={`px-3 py-1.5 rounded-xl text-[10px] font-black border transition-all focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#d4a017] ${vaultCategory === cat ? "bg-[#d4a017]/15 border-[#d4a017]/40 text-[#d4a017]" : "bg-[#061428] border-[#1a2f4a] text-[#8899b4] hover:border-[#d4a017]/30"}`} aria-pressed={vaultCategory === cat}>{cat}</button>
+        ))}
+      </div>
+
+      <div style={{ display: "grid", gridTemplateColumns: selectedLesson ? "1fr 380px" : "1fr", gap: 20, alignItems: "start" }}>
+        {/* Lesson Table */}
+        <div>
+          {/* Filter + Actions */}
+          <div style={{ display: "flex", gap: 8, marginBottom: 14, flexWrap: "wrap", alignItems: "center" }}>
+            {(["All", "Published", "Draft", "Archived"] as const).map((f) => (
+              <button key={f} onClick={() => setFilterStatus(f)} style={{ padding: "7px 16px", borderRadius: 8, border: "none", cursor: "pointer", fontSize: 12, fontWeight: 700, background: filterStatus === f ? "#d4a017" : "rgba(255,255,255,0.06)", color: filterStatus === f ? "#030e1f" : "#6b7a94", transition: "all 0.2s" }}>{f}</button>
             ))}
+            <div style={{ flex: 1 }} />
+            <button style={{ padding: "7px 18px", borderRadius: 8, border: "1px solid rgba(212,160,23,0.3)", background: "rgba(212,160,23,0.1)", color: "#d4a017", cursor: "pointer", fontSize: 12, fontWeight: 700 }}>+ New Lesson</button>
           </div>
-          <div className="space-y-3">
-            {filteredVault.map((r) => (
-              <div key={r.id} className="flex items-center justify-between rounded-2xl bg-[#061428] border border-[#1a2f4a] hover:border-[#d4a017]/30 p-4 transition-colors">
-                <div className="flex items-center gap-4 min-w-0">
-                  <div className="w-9 h-9 rounded-xl bg-[#d4a017]/10 border border-[#d4a017]/20 flex items-center justify-center shrink-0">
-                    <Library className="w-4 h-4 text-[#d4a017]" aria-hidden="true" />
-                  </div>
-                  <div className="min-w-0">
-                    <p className="text-xs font-bold text-white truncate">{r.title}</p>
-                    <p className="text-[10px] text-[#8899b4]">{r.category} · {r.type} {r.size !== "–" ? `· ${r.size}` : ""} · Updated {r.updated}</p>
-                  </div>
-                </div>
-                <button className="p-2 rounded-xl bg-[#030e1f] border border-[#1a2f4a] text-[#8899b4] hover:text-[#d4a017] hover:border-[#d4a017]/30 shrink-0 transition-all focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#d4a017]" aria-label={`Download ${r.title}`}>
-                  <Download className="w-3.5 h-3.5" />
-                </button>
-              </div>
-            ))}
+
+          <div style={{ background: "#060f21", border: "1px solid rgba(212,160,23,0.15)", borderRadius: 12, overflow: "hidden" }}>
+            <table style={{ width: "100%", borderCollapse: "collapse" }}>
+              <thead>
+                <tr style={{ borderBottom: "1px solid rgba(212,160,23,0.12)" }}>
+                  {["Lesson", "Status", "Cohort", "Completion", "Drop-off", "Questions", ""].map((h) => (
+                    <th key={h} style={{ padding: "12px 16px", textAlign: "left", color: "#6b7a94", fontSize: 11, fontWeight: 700, letterSpacing: "0.08em", textTransform: "uppercase", background: "#050e1e", whiteSpace: "nowrap" }}>{h}</th>
+                  ))}
+                </tr>
+              </thead>
+              <tbody>
+                {filtered.map((lesson, i) => {
+                  const sc = statusConfig[lesson.status];
+                  const isSelected = selectedId === lesson.id;
+                  return (
+                    <tr key={lesson.id} style={{ borderBottom: i < filtered.length - 1 ? "1px solid rgba(255,255,255,0.05)" : "none", background: isSelected ? "rgba(212,160,23,0.06)" : "transparent", cursor: "pointer" }} onClick={() => setSelectedId(isSelected ? null : lesson.id)}>
+                      <td style={{ padding: "14px 16px" }}>
+                        <div style={{ color: "#f0f4ff", fontSize: 13, fontWeight: 600, marginBottom: 2 }}>{lesson.title}</div>
+                        <div style={{ color: "#4a5568", fontSize: 11 }}>{lesson.module} · v{lesson.version} · Updated {lesson.lastUpdated}</div>
+                      </td>
+                      <td style={{ padding: "14px 16px" }}>
+                        <span style={{ background: sc.bg, color: sc.color, border: `1px solid ${sc.border}`, borderRadius: 20, padding: "3px 10px", fontSize: 11, fontWeight: 700 }}>{lesson.status}</span>
+                      </td>
+                      <td style={{ padding: "14px 16px", color: "#aab4c4", fontSize: 13 }}>{lesson.cohort}</td>
+                      <td style={{ padding: "14px 16px" }}>
+                        {lesson.completionRate > 0 ? (
+                          <div>
+                            <div style={{ color: "#d4a017", fontSize: 13, fontWeight: 700, marginBottom: 4 }}>{lesson.completionRate}%</div>
+                            <div style={{ height: 4, width: 80, background: "rgba(255,255,255,0.07)", borderRadius: 2 }}>
+                              <div style={{ height: "100%", width: `${lesson.completionRate}%`, background: lesson.completionRate >= 90 ? "#4ade80" : "#d4a017", borderRadius: 2 }} />
+                            </div>
+                          </div>
+                        ) : <span style={{ color: "#4a5568", fontSize: 12 }}>—</span>}
+                      </td>
+                      <td style={{ padding: "14px 16px", color: "#aab4c4", fontSize: 12 }}>{lesson.dropOffPoint}</td>
+                      <td style={{ padding: "14px 16px", color: "#aab4c4", fontSize: 13 }}>{lesson.questionsAsked > 0 ? lesson.questionsAsked : "—"}</td>
+                      <td style={{ padding: "14px 16px" }}>
+                        <div style={{ display: "flex", gap: 6 }}>
+                          <button style={{ background: "transparent", border: "1px solid rgba(212,160,23,0.25)", borderRadius: 6, padding: "5px 10px", color: "#d4a017", cursor: "pointer", fontSize: 11 }}>Edit</button>
+                          <button style={{ background: "transparent", border: "1px solid rgba(255,255,255,0.1)", borderRadius: 6, padding: "5px 10px", color: "#6b7a94", cursor: "pointer", fontSize: 11 }}>Clone</button>
+                        </div>
+                      </td>
+                    </tr>
+                  );
+                })}
+              </tbody>
+            </table>
           </div>
         </div>
-      )}
+
+        {/* Lesson Detail / Analytics Panel */}
+        {selectedLesson && (
+          <div style={{ background: "#060f21", border: "1px solid rgba(212,160,23,0.2)", borderRadius: 12, overflow: "hidden", position: "sticky", top: 24 }}>
+            <div style={{ padding: "16px 20px", borderBottom: "1px solid rgba(212,160,23,0.1)", background: "#050e1e" }}>
+              <div style={{ color: "#d4a017", fontSize: 11, fontWeight: 700, letterSpacing: "0.1em", textTransform: "uppercase", marginBottom: 4 }}>Lesson Analytics</div>
+              <div style={{ color: "#f0f4ff", fontSize: 15, fontWeight: 700 }}>{selectedLesson.title}</div>
+            </div>
+            <div style={{ padding: "20px", display: "flex", flexDirection: "column", gap: 20 }}>
+              {/* Stats Grid */}
+              <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr 1fr", gap: 12, textAlign: "center" }}>
+                <StatPill label="Completion" value={`${selectedLesson.completionRate}%`} color="#4ade80" />
+                <StatPill label="Avg Time" value={`${selectedLesson.avgCompletionTimeMinutes}m`} color="#d4a017" />
+                <StatPill label="Downloads" value={selectedLesson.downloadsCount} color="#d4a017" />
+              </div>
+
+              {/* Drop-off Point */}
+              <div style={{ background: "rgba(248,113,113,0.06)", border: "1px solid rgba(248,113,113,0.15)", borderRadius: 8, padding: "12px 14px" }}>
+                <div style={{ color: "#f87171", fontSize: 11, fontWeight: 700, letterSpacing: "0.08em", textTransform: "uppercase", marginBottom: 6 }}>⚠ Primary Drop-off Point</div>
+                <div style={{ color: "#aab4c4", fontSize: 13 }}>{selectedLesson.dropOffPoint}</div>
+                <div style={{ color: "#6b7a94", fontSize: 11, marginTop: 4 }}>Consider adding a checkpoint activity or clearer explanation at this timestamp.</div>
+              </div>
+
+              {/* Student Questions */}
+              <div>
+                <div style={{ color: "#6b7a94", fontSize: 11, fontWeight: 700, letterSpacing: "0.08em", textTransform: "uppercase", marginBottom: 10 }}>Questions Asked</div>
+                <div style={{ background: "rgba(212,160,23,0.08)", border: "1px solid rgba(212,160,23,0.2)", borderRadius: 8, padding: "12px 14px", color: "#d4a017", fontSize: 22, fontWeight: 800, textAlign: "center" }}>{selectedLesson.questionsAsked}</div>
+              </div>
+
+              {/* Live Classroom Engagement Panel */}
+              <div style={{ background: "rgba(74,222,128,0.06)", border: "1px solid rgba(74,222,128,0.2)", borderRadius: 10, padding: "14px 16px" }}>
+                <div style={{ color: "#4ade80", fontSize: 11, fontWeight: 700, letterSpacing: "0.08em", textTransform: "uppercase", marginBottom: 12 }}>🟢 Live Classroom</div>
+                <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 10 }}>
+                  <StatPill label="Active Students" value={liveEngagement.activeStudents} color="#4ade80" />
+                  <StatPill label="Polls Completed" value={liveEngagement.pollsCompleted} color="#4ade80" />
+                  <StatPill label="Questions Raised" value={liveEngagement.questionsRaised} color="#d4a017" />
+                  <StatPill label="Attention Score" value={`${liveEngagement.avgAttentionScore}%`} color="#d4a017" />
+                </div>
+                <button style={{ width: "100%", marginTop: 14, padding: "10px 0", background: "rgba(74,222,128,0.15)", border: "1px solid rgba(74,222,128,0.3)", borderRadius: 8, color: "#4ade80", cursor: "pointer", fontWeight: 700, fontSize: 13 }}>
+                  📡 Launch Live Session
+                </button>
+              </div>
+            </div>
+          </div>
+        )}
+      </div>
     </div>
   );
 }
