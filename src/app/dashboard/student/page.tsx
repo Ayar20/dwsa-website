@@ -1,6 +1,7 @@
 "use client";
 
 import React, { useState } from "react";
+import Link from "next/link";
 import { useQuery } from "@tanstack/react-query";
 import YouTubePlayer from "@/components/YouTubePlayer";
 import {
@@ -27,6 +28,7 @@ import {
   Users,
   BarChart3,
   Flame,
+  GraduationCap,
 } from "lucide-react";
 
 // ─── Animated Progress Ring ──────────────────────────────────────────────────
@@ -229,7 +231,120 @@ export default function StudentDashboardPage() {
   };
 
   return (
-    <div className="space-y-8 pb-12">
+    <div className="space-y-8 pb-12 animate-fadeInUp">
+
+      {/* ── 1. CAMPUS HOME INSTITUTIONAL WELCOME BANNER ── */}
+      <div className="p-6 sm:p-8 bg-gradient-to-br from-[#061428] via-[#091832] to-[#061428] border-2 border-[#d4a017] rounded-3xl space-y-5 shadow-xl relative overflow-hidden">
+        <div className="flex flex-col md:flex-row md:items-center justify-between gap-6">
+          <div className="space-y-2">
+            <div className="flex flex-wrap items-center gap-2">
+              <span className="px-3 py-1 rounded-full bg-[#d4a017]/15 border border-[#d4a017]/40 text-[#d4a017] text-xs font-extrabold flex items-center gap-1.5">
+                <GraduationCap className="w-3.5 h-3.5" aria-hidden="true" />
+                DIGITAL CAMPUS WORKSPACE
+              </span>
+              <span className="px-3 py-1 rounded-full bg-[#4ade80]/10 border border-[#4ade80]/30 text-[#4ade80] text-xs font-bold">
+                Cohort 2026 Active
+              </span>
+            </div>
+            <h1 className="text-2xl sm:text-3xl font-black text-white tracking-tight">
+              Welcome to Campus Home, <span className="text-[#d4a017]">{enrollment.studentName || "Learner"}</span> 👋
+            </h1>
+            <p className="text-xs sm:text-sm text-[#8899b4] leading-relaxed max-w-2xl">
+              You are enrolled in the <strong>{track?.title || "8-Week AI Coding Academy"}</strong>. Your coursework, live code grading engine, and digital identity are active.
+            </p>
+          </div>
+
+          {/* Learning Goal Pill */}
+          <div className="shrink-0 p-4 bg-[#030e1f] border border-[#d4a017]/30 rounded-2xl space-y-1.5 min-w-[200px]">
+            <span className="text-[10px] font-bold text-[#8899b4] uppercase tracking-wider block">
+              Primary Learning Goal
+            </span>
+            <strong className="text-xs font-extrabold text-white flex items-center gap-1.5">
+              <Target className="w-3.5 h-3.5 text-[#d4a017]" aria-hidden="true" />
+              Software Engineer
+            </strong>
+            <Link
+              href="/dashboard/student/identity"
+              className="text-[10px] text-[#d4a017] font-semibold hover:underline block pt-0.5"
+            >
+              Update Digital Identity →
+            </Link>
+          </div>
+        </div>
+
+        {/* Quick Actions Bar */}
+        <div className="pt-3 border-t border-[#d4a017]/20 flex flex-wrap items-center gap-2 text-xs">
+          <a
+            href="#my-learning"
+            className="px-4 py-2 rounded-xl bg-gradient-to-r from-[#d4a017] to-[#e5a910] hover:from-[#e5a910] hover:to-[#d4a017] text-[#030e1f] font-extrabold shadow-md shadow-[#d4a017]/20 transition-all btn-press flex items-center gap-1.5"
+          >
+            <BookOpen className="w-3.5 h-3.5" aria-hidden="true" /> Continue Learning
+          </a>
+          <Link
+            href="/dashboard/student/programme"
+            className="px-4 py-2 rounded-xl bg-[#0f223d] hover:bg-[#16335a] border border-[#d4a017]/40 text-[#d4a017] font-bold transition-all flex items-center gap-1.5"
+          >
+            <GraduationCap className="w-3.5 h-3.5" aria-hidden="true" /> My Programme
+          </Link>
+          <a
+            href="#assignments"
+            className="px-4 py-2 rounded-xl bg-[#0f223d] hover:bg-[#16335a] border border-purple-500/40 text-purple-300 font-bold transition-all flex items-center gap-1.5"
+          >
+            <GitPullRequest className="w-3.5 h-3.5" aria-hidden="true" /> Submit PR
+          </a>
+          <Link
+            href="/dashboard/student/resources"
+            className="px-4 py-2 rounded-xl bg-[#0f223d] hover:bg-[#16335a] border border-slate-700 text-slate-300 font-bold transition-all flex items-center gap-1.5"
+          >
+            <BookOpen className="w-3.5 h-3.5" aria-hidden="true" /> Resource Library
+          </Link>
+        </div>
+      </div>
+
+      {/* ── 2. MY LEARNING JOURNEY ROADMAP ── */}
+      <div className="p-6 bg-[#061428] border border-[#d4a017]/30 rounded-3xl space-y-4 shadow-lg">
+        <div className="flex items-center justify-between">
+          <div>
+            <h2 className="text-base font-extrabold text-white flex items-center gap-2">
+              <TrendingUp className="w-4 h-4 text-[#d4a017]" aria-hidden="true" />
+              My Learning Journey
+            </h2>
+            <p className="text-xs text-[#8899b4]">Your institutional academic progression roadmap</p>
+          </div>
+          <span className="text-xs font-bold text-[#4ade80] bg-[#4ade80]/10 border border-[#4ade80]/30 px-3 py-1 rounded-full">
+            Stage 4: Active Learning
+          </span>
+        </div>
+
+        {/* Progression Stage Bar */}
+        <div className="grid grid-cols-2 sm:grid-cols-4 lg:grid-cols-7 gap-2 text-center pt-2">
+          {[
+            { stage: "01. Application", status: "completed" },
+            { stage: "02. Admission", status: "completed" },
+            { stage: "03. Orientation", status: "completed" },
+            { stage: "04. Active Learning", status: "current" },
+            { stage: "05. PR Evaluation", status: "upcoming" },
+            { stage: "06. Certification", status: "upcoming" },
+            { stage: "07. Career Launch", status: "upcoming" },
+          ].map((s) => (
+            <div
+              key={s.stage}
+              className={`p-2.5 rounded-xl border text-[11px] font-bold transition-all ${
+                s.status === "completed"
+                  ? "bg-[#4ade80]/10 border-[#4ade80]/30 text-[#4ade80]"
+                  : s.status === "current"
+                  ? "bg-[#d4a017]/20 border-[#d4a017] text-[#d4a017] shadow-md shadow-[#d4a017]/10"
+                  : "bg-[#030e1f] border-slate-800 text-slate-500"
+              }`}
+            >
+              {s.status === "completed" && <span className="block text-[9px] text-[#4ade80]">✓ Done</span>}
+              {s.status === "current" && <span className="block text-[9px] text-[#d4a017]">● Active Now</span>}
+              {s.status === "upcoming" && <span className="block text-[9px] text-slate-500">○ Pending</span>}
+              <span className="truncate block mt-0.5">{s.stage}</span>
+            </div>
+          ))}
+        </div>
+      </div>
 
       {/* ── Suspension Banner ── */}
       {isSuspended && (
@@ -327,7 +442,7 @@ export default function StudentDashboardPage() {
           label="Total Paid"
           value={`₦${enrollment.amountPaid.toLocaleString()}`}
           sub={enrollment.paymentPlan}
-          accent="#00d2ff"
+          accent="#4ade80"
         />
         <StatCard
           icon={outstandingBalance > 0 ? Flame : Award}
@@ -338,23 +453,86 @@ export default function StudentDashboardPage() {
         />
       </div>
 
+      {/* ── 3. MEET YOUR MENTOR & CAMPUS NEWS ROW ── */}
+      <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+
+        {/* Meet Your Mentor Card */}
+        <div className="p-6 bg-[#061428] border border-[#d4a017]/30 rounded-3xl space-y-4 flex flex-col justify-between">
+          <div className="space-y-3">
+            <div className="flex items-center justify-between">
+              <span className="text-[10px] font-extrabold text-[#d4a017] bg-[#d4a017]/10 px-2.5 py-0.5 rounded-full border border-[#d4a017]/30 uppercase">
+                ACADEMIC FACULTY MENTOR
+              </span>
+              <span className="text-[10px] text-[#4ade80] font-bold uppercase">Office Hours Active</span>
+            </div>
+
+            <div className="flex items-center gap-4">
+              <div className="w-14 h-14 rounded-2xl bg-gradient-to-br from-[#d4a017] to-[#e5a910] text-[#030e1f] flex items-center justify-center font-black text-xl shadow-md shrink-0">
+                AJ
+              </div>
+              <div>
+                <h3 className="text-base font-bold text-white">Ayar Japheth Idyege</h3>
+                <p className="text-xs text-[#d4a017] font-semibold">Lead Software Architect &amp; DTA Faculty Instructor</p>
+                <p className="text-[11px] text-[#8899b4] mt-0.5">Office Hours: Mon–Fri, 2:00 PM – 6:00 PM WAT</p>
+              </div>
+            </div>
+          </div>
+
+          <div className="pt-2 border-t border-slate-800 flex items-center justify-between">
+            <a
+              href="https://wa.me/2347082135071?text=Hello%20Ayar%20Japheth%2C%20I%20want%20to%20request%20a%20PR%20review%20or%20mentorship%20session"
+              target="_blank"
+              rel="noreferrer"
+              className="w-full py-2.5 rounded-xl bg-[#0f223d] hover:bg-[#16335a] border border-[#d4a017]/40 text-[#d4a017] font-bold text-xs flex items-center justify-center gap-2 transition-all"
+            >
+              <Users className="w-3.5 h-3.5" aria-hidden="true" /> Request 1-on-1 PR Review Session
+            </a>
+          </div>
+        </div>
+
+        {/* Campus News Widget */}
+        <div className="p-6 bg-[#061428] border border-slate-800 rounded-3xl space-y-4 flex flex-col justify-between">
+          <div className="space-y-3">
+            <div className="flex items-center justify-between">
+              <span className="text-[10px] font-extrabold text-[#4ade80] bg-[#4ade80]/10 px-2.5 py-0.5 rounded-full border border-[#4ade80]/30 uppercase">
+                INSTITUTIONAL NEWS
+              </span>
+              <Link href="/knowledge-hub" className="text-[10px] text-[#d4a017] font-bold hover:underline">
+                View All News →
+              </Link>
+            </div>
+
+            <div className="space-y-2">
+              <div className="p-3 bg-[#030e1f] border border-slate-800 rounded-xl space-y-1">
+                <span className="text-[9px] text-[#d4a017] font-bold uppercase">ANNOUNCEMENT</span>
+                <h4 className="text-xs font-bold text-white leading-snug">
+                  Annual Pan-African Student Hackathon Announced for Cohort 2026
+                </h4>
+                <p className="text-[11px] text-[#8899b4]">Top 3 winning capstone projects will receive seed mentorship and DWSA cloud infrastructure credits.</p>
+              </div>
+            </div>
+          </div>
+        </div>
+
+      </div>
+
       {/* ── Financial Status Panel ── */}
       <div
         className="relative p-6 rounded-2xl border overflow-hidden"
         style={{
           background: "rgba(6,20,40,0.75)",
-          borderColor: "#00d2ff22",
+          borderColor: "#d4a01722",
           backdropFilter: "blur(16px)",
-          boxShadow: "0 8px 40px rgba(0,210,255,0.05)",
+          boxShadow: "0 8px 40px rgba(212,160,23,0.05)",
         }}
       >
         {/* Decorative gradient strip */}
-        <div className="absolute top-0 left-0 right-0 h-0.5 bg-gradient-to-r from-transparent via-[#00d2ff] to-transparent opacity-60" />
+        <div className="absolute top-0 left-0 right-0 h-0.5 bg-gradient-to-r from-transparent via-[#d4a017] to-transparent opacity-60" />
 
         <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">
           <div className="flex items-center gap-3">
-            <div className="p-2.5 rounded-xl border border-[#00d2ff]/30 bg-[#00d2ff]/10">
-              <CreditCard className="w-5 h-5 text-[#00d2ff]" />
+            <div className="p-2.5 rounded-xl border border-[#d4a017]/30 bg-[#d4a017]/10">
+              <CreditCard className="w-5 h-5 text-[#d4a017]" />
             </div>
             <div>
               <h3 className="text-sm font-extrabold text-white">Tuition Financial Overview</h3>
@@ -384,7 +562,7 @@ export default function StudentDashboardPage() {
               <button
                 onClick={() => handlePayInstallment(outstandingBalance)}
                 disabled={paying}
-                className="px-5 py-2.5 font-extrabold rounded-xl text-xs transition-all flex items-center gap-2 shadow-md"
+                className="px-5 py-2.5 font-extrabold rounded-xl text-xs transition-all flex items-center gap-2 shadow-md btn-press"
                 style={{
                   background: "linear-gradient(135deg, #d4a017, #e5b520)",
                   color: "#030e1f",
@@ -406,12 +584,12 @@ export default function StudentDashboardPage() {
               ₦{enrollment.amountPaid.toLocaleString()} / ₦{enrollment.totalAmount.toLocaleString()}
             </span>
           </div>
-          <div className="h-2 bg-[#030e1f] rounded-full overflow-hidden border border-[#00d2ff]/10">
+          <div className="h-2 bg-[#030e1f] rounded-full overflow-hidden border border-[#d4a017]/10">
             <div
               className="h-full rounded-full transition-all duration-700"
               style={{
                 width: `${Math.min(100, (enrollment.amountPaid / enrollment.totalAmount) * 100)}%`,
-                background: "linear-gradient(90deg, #00d2ff, #d4a017)",
+                background: "linear-gradient(90deg, #d4a017, #4ade80)",
               }}
             />
           </div>
