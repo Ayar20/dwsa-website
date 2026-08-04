@@ -53,7 +53,15 @@ export default function StudentSidebar({ mobileOpen, setMobileOpen }: StudentSid
         { href: "/dashboard/student/credentials", label: "Credential Wallet", icon: ShieldCheck },
         { href: "/dashboard/student/transcript", label: "Digital Transcript", icon: Award },
         { href: "/dashboard/student/employability", label: "Employability Centre", icon: Briefcase },
-        { href: "/dashboard/student/identity", label: "Digital Identity Workspace", icon: UserCheck },
+        { href: "/dashboard/student/careers", label: "Career Placement Centre", icon: Briefcase },
+      ],
+    },
+    {
+      title: "INNOVATION & COMMUNITY",
+      items: [
+        { href: "/dashboard/student/innovation-marketplace", label: "Innovation Marketplace", icon: Sparkles },
+        { href: "/dashboard/alumni", label: "Alumni Network", icon: Users },
+        { href: "https://www.skool.com/digital-wealth-systems-africa-6803/", label: "Community Forum", icon: Users, external: true },
       ],
     },
     {
@@ -61,8 +69,6 @@ export default function StudentSidebar({ mobileOpen, setMobileOpen }: StudentSid
       items: [
         { href: "/dashboard/student/resources", label: "Resource Library", icon: Library },
         { href: "/dashboard/student/calendar", label: "Learning Calendar", icon: CalendarIcon },
-        { href: "/innovation", label: "Innovation Centre", icon: Lightbulb, external: false },
-        { href: "https://www.skool.com/digital-wealth-systems-africa-6803/", label: "Community", icon: Users, external: true },
         { href: "/knowledge-hub", label: "Campus News", icon: Newspaper, external: false },
       ],
     },

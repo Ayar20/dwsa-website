@@ -79,8 +79,15 @@ export default function FacultySidebar({ mobileOpen, setMobileOpen }: FacultySid
       items: [
         { href: "/dashboard/instructor/profile#research", label: "Research", icon: FlaskConical },
         { href: "/innovation", label: "Innovation Centre", icon: Lightbulb },
-        { href: "https://www.skool.com/digital-wealth-systems-africa-6803/", label: "Faculty Community", icon: Globe, external: true },
         { href: "/dashboard/instructor/profile#recognition", label: "Faculty Recognition", icon: Award },
+      ],
+    },
+    {
+      title: "INDUSTRY & ENGAGEMENT",
+      items: [
+        { href: "/dashboard/mentor", label: "Mentoring Hub", icon: UserCheck },
+        { href: "/dashboard/student/innovation-marketplace", label: "Innovation Marketplace", icon: Lightbulb },
+        { href: "https://www.skool.com/digital-wealth-systems-africa-6803/", label: "Faculty Community", icon: Globe, external: true },
       ],
     },
     {

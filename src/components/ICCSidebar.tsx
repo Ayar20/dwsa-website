@@ -87,6 +87,16 @@ const navSections: NavSection[] = [
     ],
   },
   {
+    title: "Enterprise Engagement",
+    icon: Users,
+    items: [
+      { label: "Industry Partners Centre", href: "/dashboard/admin/partners", badge: "NEW", badgeColor: "bg-[#d4a017]/20 text-[#d4a017]" },
+      { label: "Employment Intelligence", href: "/dashboard/admin/employment", badge: "NEW", badgeColor: "bg-[#4ade80]/20 text-[#4ade80]" },
+      { label: "Employer Portal", href: "/dashboard/employer" },
+      { label: "Alumni Network", href: "/dashboard/alumni" },
+    ],
+  },
+  {
     title: "Institution Settings",
     icon: Settings,
     items: [

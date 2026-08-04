@@ -141,6 +141,10 @@ export default function DashboardLayout({
       ? "Digital Twin & Intelligence"
       : pathname.includes("/analytics")
       ? "Persistent Executive Analytics"
+      : pathname.includes("/partners")
+      ? "Industry Partnership Centre"
+      : pathname.includes("/employment")
+      ? "Graduate Employment Intelligence"
       : pathname.includes("/reports")
       ? "Executive Reports"
       : pathname.includes("/academic")
@@ -261,6 +265,16 @@ export default function DashboardLayout({
                   ? "Digital Credential Wallet"
                   : pathname.includes("/employability")
                   ? "Employability & Career Centre"
+                  : pathname.includes("/careers")
+                  ? "Career Placement Centre"
+                  : pathname.includes("/innovation-marketplace")
+                  ? "Innovation Marketplace"
+                  : pathname.includes("/alumni")
+                  ? "DTA Alumni Network"
+                  : pathname.includes("/employer")
+                  ? "Employer Recruitment Portal"
+                  : pathname.includes("/mentor")
+                  ? "Mentor Operations Hub"
                   : pathname.includes("/programme")
                   ? "My Programme Handbook"
                   : pathname.includes("/identity")
