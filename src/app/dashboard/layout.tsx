@@ -5,6 +5,8 @@ import Navbar from "@/components/Navbar";
 import StudentSidebar from "@/components/StudentSidebar";
 import FacultySidebar from "@/components/FacultySidebar";
 import ICCSidebar from "@/components/ICCSidebar";
+import UniversalNotificationDrawer from "@/components/platform/UniversalNotificationDrawer";
+import GlobalSearchModal from "@/components/platform/GlobalSearchModal";
 import PrideModal from "@/components/PrideModal";
 import PWAInstallBanner from "@/components/PWAInstallBanner";
 import { useSession } from "next-auth/react";
@@ -22,6 +24,8 @@ export default function DashboardLayout({
   const pathname = usePathname();
   const [showPrideModal, setShowPrideModal] = useState(false);
   const [mobileOpen, setMobileOpen] = useState(false);
+  const [notifOpen, setNotifOpen] = useState(false);
+  const [searchOpen, setSearchOpen] = useState(false);
 
   useEffect(() => {
     if (status === "unauthenticated") {
@@ -100,15 +104,15 @@ export default function DashboardLayout({
                 <BookMarked className="w-3.5 h-3.5" aria-hidden="true" />
                 FACULTY
               </span>
-              <Link
-                href="/knowledge-hub"
+              <button
+                onClick={() => setNotifOpen(true)}
                 className="p-2 rounded-xl bg-[#061428] border border-[#d4a017]/30 text-[#d4a017] hover:bg-[#0f223d] transition-all relative focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#d4a017]"
-                aria-label="View Campus Notices"
-                title="Campus Notices"
+                aria-label="View Campus Notifications"
+                title="Universal Notifications"
               >
                 <Bell className="w-4 h-4" aria-hidden="true" />
                 <span className="absolute top-1.5 right-1.5 w-2 h-2 rounded-full bg-[#4ade80]" aria-hidden="true" />
-              </Link>
+              </button>
               <Link
                 href="/dashboard/instructor/profile"
                 className="flex items-center gap-2 p-1.5 sm:px-3 sm:py-1.5 rounded-xl bg-[#061428] border border-[#d4a017]/40 hover:border-[#d4a017] text-white transition-all focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#d4a017]"
@@ -187,15 +191,15 @@ export default function DashboardLayout({
                 <ShieldCheck className="w-3.5 h-3.5" aria-hidden="true" />
                 EXECUTIVE
               </span>
-              <Link
-                href="/knowledge-hub"
+              <button
+                onClick={() => setNotifOpen(true)}
                 className="p-2 rounded-xl bg-[#061428] border border-[#d4a017]/30 text-[#d4a017] hover:bg-[#0f223d] transition-all relative focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#d4a017]"
-                aria-label="View Institution Notices"
-                title="Institution Notices"
+                aria-label="View Institution Notifications"
+                title="Universal Notifications"
               >
                 <Bell className="w-4 h-4" aria-hidden="true" />
                 <span className="absolute top-1.5 right-1.5 w-2 h-2 rounded-full bg-[#4ade80]" aria-hidden="true" />
-              </Link>
+              </button>
               <Link
                 href="/dashboard/admin/settings"
                 className="flex items-center gap-2 p-1.5 sm:px-3 sm:py-1.5 rounded-xl bg-[#061428] border border-[#d4a017]/40 hover:border-[#d4a017] text-white transition-all focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#d4a017]"
@@ -264,23 +268,23 @@ export default function DashboardLayout({
 
           {/* Top Header Actions */}
           <div className="flex items-center gap-3">
-            <Link
-              href="/dashboard/student/resources"
+            <button
+              onClick={() => setSearchOpen(true)}
               className="hidden sm:flex items-center gap-2 px-3 py-1.5 rounded-xl bg-[#061428] border border-[#d4a017]/30 text-[#d4a017] hover:bg-[#0f223d] text-xs font-bold transition-all focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#d4a017]"
             >
               <Search className="w-3.5 h-3.5" aria-hidden="true" />
               <span>Search Library</span>
-            </Link>
+            </button>
 
-            <Link
-              href="/knowledge-hub"
+            <button
+              onClick={() => setNotifOpen(true)}
               className="p-2 rounded-xl bg-[#061428] border border-[#d4a017]/30 text-[#d4a017] hover:bg-[#0f223d] transition-all relative focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#d4a017]"
-              aria-label="View Campus Notices & News"
-              title="Campus Notices"
+              aria-label="View Campus Notices & Notifications"
+              title="Campus Notifications"
             >
               <Bell className="w-4 h-4" aria-hidden="true" />
               <span className="absolute top-1.5 right-1.5 w-2 h-2 rounded-full bg-[#4ade80]" aria-hidden="true" />
-            </Link>
+            </button>
 
             <Link
               href="/dashboard/student/identity"
@@ -305,6 +309,15 @@ export default function DashboardLayout({
 
       <PrideModal isOpen={showPrideModal} onAccepted={() => setShowPrideModal(false)} />
       <PWAInstallBanner />
+      <UniversalNotificationDrawer
+        isOpen={notifOpen}
+        onClose={() => setNotifOpen(false)}
+        role={(session?.user?.role as any) || "STUDENT"}
+      />
+      <GlobalSearchModal
+        isOpen={searchOpen}
+        onClose={() => setSearchOpen(false)}
+      />
     </div>
   );
 }
