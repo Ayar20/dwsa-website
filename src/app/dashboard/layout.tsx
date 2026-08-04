@@ -137,7 +137,11 @@ export default function DashboardLayout({
 
   // Institution Control Centre Shell for Administrators & Executive Leadership
   if (!isStudent && !isInstructor) {
-    const iccPageLabel = pathname.includes("/automation")
+    const iccPageLabel = pathname.includes("/ai-governance")
+      ? "AI Governance & Controls Centre"
+      : pathname.includes("/admin/ai")
+      ? "Executive AI Advisory Hub"
+      : pathname.includes("/automation")
       ? "Automation & Workflow Centre"
       : pathname.includes("/communications")
       ? "Communications Centre"
@@ -287,6 +291,10 @@ export default function DashboardLayout({
                   ? "Employer Recruitment Portal"
                   : pathname.includes("/mentor")
                   ? "Mentor Operations Hub"
+                  : pathname.includes("/student/ai")
+                  ? "Student AI Learning Assistant"
+                  : pathname.includes("/instructor/ai")
+                  ? "Faculty AI Co-Pilot"
                   : pathname.includes("/student/inbox")
                   ? "My Campus Inbox"
                   : pathname.includes("/instructor/inbox")

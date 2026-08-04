@@ -43,6 +43,7 @@ export default function StudentSidebar({ mobileOpen, setMobileOpen }: StudentSid
       title: "CAMPUS CORE",
       items: [
         { href: "/dashboard/student", label: "Campus Home", icon: Home },
+        { href: "/dashboard/student/ai", label: "AI Learning Assistant", icon: Sparkles },
         { href: "/dashboard/student/programme", label: "My Programme", icon: GraduationCap },
         { href: "/dashboard/student#my-learning", label: "My Learning", icon: BookOpen },
         { href: "/dashboard/student#assignments", label: "Assignments & PRs", icon: GitPullRequest },

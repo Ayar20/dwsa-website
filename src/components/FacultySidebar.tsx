@@ -50,6 +50,7 @@ export default function FacultySidebar({ mobileOpen, setMobileOpen }: FacultySid
       title: "ACADEMIC OPERATIONS",
       items: [
         { href: "/dashboard/instructor", label: "Faculty Home", icon: Home },
+        { href: "/dashboard/instructor/ai", label: "Faculty AI Assistant", icon: Sparkles },
         { href: "/dashboard/instructor/inbox", label: "Faculty Inbox", icon: Mail },
         { href: "/dashboard/instructor/cohorts", label: "My Cohorts", icon: Users },
         { href: "/dashboard/instructor/lessons", label: "Teaching Modules", icon: BookOpen },

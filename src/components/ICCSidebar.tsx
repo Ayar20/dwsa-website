@@ -101,6 +101,8 @@ const navSections: NavSection[] = [
     title: "Operational Intelligence",
     icon: Zap,
     items: [
+      { label: "Executive AI Advisory", href: "/dashboard/admin/ai", badge: "AI CORE", badgeColor: "bg-[#d4a017]/20 text-[#d4a017]" },
+      { label: "AI Governance & Controls", href: "/dashboard/admin/ai-governance", badge: "POLICY", badgeColor: "bg-[#818cf8]/20 text-[#818cf8]" },
       { label: "Automation Centre", href: "/dashboard/admin/automation", badge: "ENGINE", badgeColor: "bg-[#818cf8]/20 text-[#818cf8]" },
       { label: "Communications Hub", href: "/dashboard/admin/communications", badge: "BROADCAST", badgeColor: "bg-[#d4a017]/20 text-[#d4a017]" },
       { label: "Executive Approvals", href: "/dashboard/admin/approvals", badge: "SIGN", badgeColor: "bg-[#4ade80]/20 text-[#4ade80]" },
