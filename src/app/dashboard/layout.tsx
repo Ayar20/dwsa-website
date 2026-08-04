@@ -139,6 +139,8 @@ export default function DashboardLayout({
   if (!isStudent && !isInstructor) {
     const iccPageLabel = pathname.includes("/intelligence")
       ? "Digital Twin & Intelligence"
+      : pathname.includes("/analytics")
+      ? "Persistent Executive Analytics"
       : pathname.includes("/reports")
       ? "Executive Reports"
       : pathname.includes("/academic")
@@ -253,7 +255,13 @@ export default function DashboardLayout({
                 <span className="text-[#d4a017] uppercase tracking-wider">InstitutionOS v3.0</span>
               </div>
               <h1 className="text-sm sm:text-base font-extrabold text-white tracking-tight">
-                {pathname.includes("/programme")
+                {pathname.includes("/transcript")
+                  ? "Official Digital Transcript"
+                  : pathname.includes("/credentials")
+                  ? "Digital Credential Wallet"
+                  : pathname.includes("/employability")
+                  ? "Employability & Career Centre"
+                  : pathname.includes("/programme")
                   ? "My Programme Handbook"
                   : pathname.includes("/identity")
                   ? "Digital Identity Workspace"

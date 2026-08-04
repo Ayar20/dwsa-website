@@ -48,13 +48,21 @@ export default function StudentSidebar({ mobileOpen, setMobileOpen }: StudentSid
       ],
     },
     {
+      title: "CREDENTIALS & CAREER",
+      items: [
+        { href: "/dashboard/student/credentials", label: "Credential Wallet", icon: ShieldCheck },
+        { href: "/dashboard/student/transcript", label: "Digital Transcript", icon: Award },
+        { href: "/dashboard/student/employability", label: "Employability Centre", icon: Briefcase },
+        { href: "/dashboard/student/identity", label: "Digital Identity Workspace", icon: UserCheck },
+      ],
+    },
+    {
       title: "CAMPUS LIFE",
       items: [
         { href: "/dashboard/student/resources", label: "Resource Library", icon: Library },
         { href: "/dashboard/student/calendar", label: "Learning Calendar", icon: CalendarIcon },
         { href: "/innovation", label: "Innovation Centre", icon: Lightbulb, external: false },
         { href: "https://www.skool.com/digital-wealth-systems-africa-6803/", label: "Community", icon: Users, external: true },
-        { href: "/careers", label: "Career Centre", icon: Briefcase, external: false },
         { href: "/knowledge-hub", label: "Campus News", icon: Newspaper, external: false },
       ],
     },

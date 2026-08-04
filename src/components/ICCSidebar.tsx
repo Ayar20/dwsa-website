@@ -37,6 +37,7 @@ const navSections: NavSection[] = [
     items: [
       { label: "Executive Dashboard", href: "/dashboard/admin" },
       { label: "Digital Twin & Intelligence", href: "/dashboard/admin/intelligence", badge: "AI", badgeColor: "bg-[#d4a017]/20 text-[#d4a017]" },
+      { label: "Persistent Analytics", href: "/dashboard/admin/analytics", badge: "Snapshots", badgeColor: "bg-[#4ade80]/20 text-[#4ade80]" },
       { label: "Executive Reports", href: "/dashboard/admin/reports" },
     ],
   },

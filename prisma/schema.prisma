@@ -100,3 +100,85 @@ model Submission {
   assignment   Assignment @relation(fields: [assignmentId], references: [id], onDelete: Cascade)
   user         User       @relation(fields: [userId], references: [id], onDelete: Cascade)
 }
+
+// ─── InstitutionOS v3.5 Enterprise Intelligence & Credential Models ─────────
+
+model CompetencyScore {
+  id             String   @id @default(cuid())
+  studentId      String
+  competency     String
+  score          Float
+  level          String   // Proficient | Advanced | Expert
+  assessedBy     String
+  assessmentType String   // FacultyValidation | AutomatedRubric | PeerReview
+  remarks        String?
+  createdAt      DateTime @default(now())
+}
+
+model AchievementBadge {
+  id          String   @id @default(cuid())
+  studentId   String
+  badge       String
+  category    String   // Academic | DevOps | Engagement | Leadership | AI
+  description String
+  earnedAt    DateTime @default(now())
+  verifiedBy  String?
+}
+
+model LearningMilestone {
+  id          String    @id @default(cuid())
+  studentId   String
+  title       String
+  description String
+  status      String    @default("UPCOMING") // Completed | In Progress | Upcoming
+  completedAt DateTime?
+}
+
+model DigitalTranscript {
+  id                   String   @id @default(cuid())
+  studentId            String   @unique
+  programme            String
+  overallProgress      Float
+  gpaEquivalent        Float
+  completionPercentage Float
+  generatedAt          DateTime @default(now())
+}
+
+model CertificateRecord {
+  id                 String   @id @default(cuid())
+  studentId          String
+  certificateType    String   // Professional Diploma | Competency Certificate | Honor Badge
+  verificationCode   String   @unique
+  verificationStatus String   @default("VERIFIED") // VERIFIED | PENDING | REVOKED
+  issuedAt           DateTime @default(now())
+}
+
+model EmploymentReadiness {
+  id                 String   @id @default(cuid())
+  studentId          String   @unique
+  technicalScore     Float
+  portfolioScore     Float
+  githubScore        Float
+  communicationScore Float
+  overallReadiness   Float
+  recommendation     String
+}
+
+model FacultyAssessment {
+  id         String   @id @default(cuid())
+  facultyId  String
+  studentId  String
+  module     String
+  competency String
+  score      Float
+  feedback   String?
+  createdAt  DateTime @default(now())
+}
+
+model InstitutionMetricSnapshot {
+  id         String   @id @default(cuid())
+  metric     String
+  value      Float
+  capturedAt DateTime @default(now())
+}
+
