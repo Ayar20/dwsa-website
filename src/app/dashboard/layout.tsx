@@ -4,6 +4,7 @@ import React, { useState, useEffect } from "react";
 import Navbar from "@/components/Navbar";
 import StudentSidebar from "@/components/StudentSidebar";
 import FacultySidebar from "@/components/FacultySidebar";
+import ICCSidebar from "@/components/ICCSidebar";
 import PrideModal from "@/components/PrideModal";
 import PWAInstallBanner from "@/components/PWAInstallBanner";
 import { useSession } from "next-auth/react";
@@ -130,14 +131,88 @@ export default function DashboardLayout({
     );
   }
 
-  // For Admin roles, render original Navbar
+  // Institution Control Centre Shell for Administrators & Executive Leadership
   if (!isStudent && !isInstructor) {
+    const iccPageLabel = pathname.includes("/intelligence")
+      ? "Digital Twin & Intelligence"
+      : pathname.includes("/reports")
+      ? "Executive Reports"
+      : pathname.includes("/academic")
+      ? "Academic Operations"
+      : pathname.includes("/modules/editor")
+      ? "Module & Track Editor"
+      : pathname.includes("/students")
+      ? "Student Success Centre"
+      : pathname.includes("/admissions")
+      ? "Admissions Command Centre"
+      : pathname.includes("/certificates")
+      ? "Certificate Authority"
+      : pathname.includes("/faculty")
+      ? "Faculty Management Centre"
+      : pathname.includes("/finance")
+      ? "Financial ERP & Business Intelligence"
+      : pathname.includes("/research")
+      ? "Research & Innovation Management"
+      : pathname.includes("/governance")
+      ? "Governance & Compliance Centre"
+      : pathname.includes("/settings")
+      ? "Institution Settings"
+      : "Executive Dashboard";
+
     return (
-      <div className="min-h-screen bg-[#030e1f] text-[#f0f4ff] flex flex-col font-sans">
-        <Navbar />
-        <main className="flex-1 max-w-7xl w-full mx-auto px-4 sm:px-6 lg:px-8 py-6 sm:py-8">
-          {children}
-        </main>
+      <div className="min-h-screen bg-[#030e1f] text-[#f0f4ff] flex font-sans">
+        <ICCSidebar mobileOpen={mobileOpen} setMobileOpen={setMobileOpen} />
+        <div className="flex-1 flex flex-col min-w-0 min-h-screen">
+          {/* Executive Header Bar */}
+          <header className="sticky top-0 z-30 bg-[#030e1f]/90 backdrop-blur-md border-b border-[#d4a017]/25 px-4 sm:px-6 py-3 flex items-center justify-between gap-4">
+            <div className="flex items-center gap-3">
+              <button
+                onClick={() => setMobileOpen(true)}
+                className="lg:hidden p-2 rounded-xl bg-[#061428] border border-[#d4a017]/30 text-[#d4a017] hover:bg-[#d4a017] hover:text-[#030e1f] transition-all focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#d4a017]"
+                aria-label="Open executive navigation"
+              >
+                <Menu className="w-5 h-5" />
+              </button>
+              <div>
+                <div className="flex items-center gap-2 text-[10px] font-bold text-[#8899b4]">
+                  <span>Institution Control Centre</span>
+                  <span aria-hidden="true">•</span>
+                  <span className="text-[#d4a017] uppercase tracking-wider">Powered by InstitutionOS v3.2</span>
+                </div>
+                <h1 className="text-sm sm:text-base font-extrabold text-white tracking-tight">{iccPageLabel}</h1>
+              </div>
+            </div>
+            <div className="flex items-center gap-3">
+              <span className="hidden sm:flex items-center gap-1.5 px-3 py-1.5 rounded-xl bg-[#061428] border border-[#d4a017]/30 text-[#d4a017] text-[10px] font-black tracking-wider">
+                <ShieldCheck className="w-3.5 h-3.5" aria-hidden="true" />
+                EXECUTIVE
+              </span>
+              <Link
+                href="/knowledge-hub"
+                className="p-2 rounded-xl bg-[#061428] border border-[#d4a017]/30 text-[#d4a017] hover:bg-[#0f223d] transition-all relative focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#d4a017]"
+                aria-label="View Institution Notices"
+                title="Institution Notices"
+              >
+                <Bell className="w-4 h-4" aria-hidden="true" />
+                <span className="absolute top-1.5 right-1.5 w-2 h-2 rounded-full bg-[#4ade80]" aria-hidden="true" />
+              </Link>
+              <Link
+                href="/dashboard/admin/settings"
+                className="flex items-center gap-2 p-1.5 sm:px-3 sm:py-1.5 rounded-xl bg-[#061428] border border-[#d4a017]/40 hover:border-[#d4a017] text-white transition-all focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#d4a017]"
+              >
+                <div className="w-6 h-6 rounded-lg bg-gradient-to-br from-[#d4a017] to-[#e5a910] text-[#030e1f] flex items-center justify-center font-black text-xs shrink-0">
+                  {session?.user?.name?.[0]?.toUpperCase() || "E"}
+                </div>
+                <span className="hidden md:inline text-xs font-extrabold text-white truncate max-w-[120px]">
+                  {session?.user?.name?.split(" ")[0] || "Executive"}
+                </span>
+              </Link>
+            </div>
+          </header>
+          <main className="flex-1 max-w-7xl w-full mx-auto px-4 sm:px-6 lg:px-8 py-6 sm:py-8">
+            {children}
+          </main>
+        </div>
         <PrideModal isOpen={showPrideModal} onAccepted={() => setShowPrideModal(false)} />
         <PWAInstallBanner />
       </div>

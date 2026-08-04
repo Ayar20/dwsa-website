@@ -1,506 +1,433 @@
 "use client";
 
 import React, { useState } from "react";
-import { useQuery } from "@tanstack/react-query";
+import Link from "next/link";
 import {
-  DollarSign,
-  Users,
-  AlertOctagon,
-  FileCheck,
-  Search,
-  ShieldAlert,
-  CheckCircle2,
-  XCircle,
-  ExternalLink,
-  GitPullRequest,
-  RefreshCw,
-  SlidersHorizontal,
-  Building2,
-  TrendingUp,
-  CreditCard,
-  UserCheck,
-  Sparkles,
-  Award,
+  Building2, Activity, ShieldCheck, Sparkles, TrendingUp, Users,
+  GraduationCap, DollarSign, Award, Calendar, CheckCircle2, Clock,
+  AlertTriangle, ArrowUpRight, ChevronRight, Inbox, Briefcase, FileCheck,
+  FlaskConical, Globe, Zap, Layers, RefreshCw, BarChart3, Database,
+  Cpu, Lock, Check, X, Bell
 } from "lucide-react";
 
-export default function AdminDashboardPage() {
-  const [filterText, setFilterText] = useState("");
-  const [gradingFeedback, setGradingFeedback] = useState<Record<string, string>>({});
-  const [gradingScore, setGradingScore] = useState<Record<string, string>>({});
-  const [actionLoading, setActionLoading] = useState<string | null>(null);
-  const [message, setMessage] = useState<{ type: "success" | "error"; text: string } | null>(null);
+const healthPillars = [
+  { name: "Academic Excellence", score: 94, status: "Optimal", color: "#4ade80" },
+  { name: "Admissions Performance", score: 88, status: "Strong", color: "#d4a017" },
+  { name: "Financial Health", score: 96, status: "Optimal", color: "#4ade80" },
+  { name: "Research & Innovation", score: 82, status: "Growing", color: "#818cf8" },
+  { name: "Digital Infrastructure", score: 99, status: "Optimal", color: "#4ade80" },
+  { name: "Governance & Compliance", score: 95, status: "Compliant", color: "#4ade80" },
+];
 
-  // Fetch Admin ERP Data
-  const { data, isLoading, isError, refetch } = useQuery({
-    queryKey: ["admin-dashboard"],
-    queryFn: async () => {
-      const res = await fetch("/api/admin/dashboard");
-      if (!res.ok) throw new Error("Unauthorized or failed to fetch admin data.");
-      return res.json();
-    },
-  });
+const overallHealthScore = Math.round(
+  healthPillars.reduce((acc, p) => acc + p.score, 0) / healthPillars.length
+);
 
-  if (isLoading) {
-    return (
-      <div className="py-24 text-center text-[#8899b4] text-xs flex flex-col items-center justify-center gap-4">
-        <div className="relative">
-          <div className="w-12 h-12 border-2 border-[#d4a017] border-t-transparent rounded-full animate-spin glow-gold-sm" />
-          <Building2 className="w-5 h-5 text-[#d4a017] absolute inset-0 m-auto" />
-        </div>
-        <span className="font-bold tracking-wider text-sm text-white">Loading Financial ERP & Student Records...</span>
-        <span className="text-[11px] text-[#00d2ff]">Digital World Systems Africa Management Portal</span>
-      </div>
-    );
-  }
+const strategicKPIs = [
+  { label: "Active Learners", value: "482", change: "+14.2%", trend: "up", icon: Users, color: "#d4a017", subText: "Across 4 Active Cohorts" },
+  { label: "Faculty Members", value: "34", change: "+2 this month", trend: "up", icon: GraduationCap, color: "#4ade80", subText: "98% On-Time Grading" },
+  { label: "Total Revenue", value: "₦48.2M", change: "+22.5% YoY", trend: "up", icon: DollarSign, color: "#4ade80", subText: "Paystack + Corporate" },
+  { label: "Admissions Pipeline", value: "128", change: "42 Under Review", trend: "up", icon: Activity, color: "#818cf8", subText: "Cohort Delta Enrolling" },
+  { label: "Certificates Issued", value: "312", change: "100% Verifiable", trend: "up", icon: Award, color: "#d4a017", subText: "QR + Cryptographic Seal" },
+  { label: "Graduate Employability", value: "92.4%", change: "+3.1%", trend: "up", icon: Briefcase, color: "#4ade80", subText: "6-Month Placement Rate" },
+  { label: "Learner Satisfaction", value: "4.9 / 5.0", change: "NPS +78", trend: "up", icon: Sparkles, color: "#d4a017", subText: "94% Response Rate" },
+  { label: "Research & Innovation", value: "18 Projects", change: "6 Patent Drafts", trend: "up", icon: FlaskConical, color: "#818cf8", subText: "DWSA Innovation Labs" },
+];
 
-  if (isError || !data) {
-    return (
-      <div className="p-10 dwsa-glass-card rounded-3xl text-center space-y-4 max-w-xl mx-auto my-12 border border-[#d4a017]/30">
-        <div className="w-14 h-14 bg-red-950/60 border border-red-800/60 rounded-2xl flex items-center justify-center mx-auto text-red-400">
-          <ShieldAlert className="w-7 h-7" />
-        </div>
-        <h2 className="text-xl font-extrabold text-white">Access Forbidden</h2>
-        <p className="text-xs text-[#8899b4] leading-relaxed">
-          You must be signed in with an <strong className="text-[#d4a017]">ADMIN</strong> or <strong className="text-[#00d2ff]">INSTRUCTOR</strong> account to access the DWSA Financial ERP.
-        </p>
-      </div>
-    );
-  }
+const executiveInboxItems = [
+  { id: 1, title: "12 Professional Certificates Awaiting Sign-off", category: "Registry", priority: "High", time: "10 mins ago", type: "approval" },
+  { id: 2, title: "Cohort Delta Faculty Allocation Request", category: "Academic", priority: "Medium", time: "45 mins ago", type: "review" },
+  { id: 3, title: "Corporate Training Grant Proposal — First Bank PLC", category: "Corporate", priority: "High", time: "2 hours ago", type: "approval" },
+  { id: 4, title: "Scholarship Application Batch (Cohort Alpha)", category: "Admissions", priority: "Medium", time: "4 hours ago", type: "review" },
+  { id: 5, title: "Quarterly ISO 27001 Compliance Audit Ready", category: "Governance", priority: "Low", time: "Yesterday", type: "info" },
+];
 
-  const { stats, ledger = [], pendingSubmissions = [] } = data;
+const timelineMilestones = [
+  { date: "AUG 15", title: "Cohort Delta Applications Close", category: "Admissions", status: "Upcoming", color: "#d4a017" },
+  { date: "AUG 22", title: "Cohort Alpha Capstone Presentation & Demo Day", category: "Academic", status: "Scheduled", color: "#4ade80" },
+  { date: "SEP 01", title: "DWSA African Tech Summit 2026 Keynote", category: "Corporate", status: "Confirmed", color: "#818cf8" },
+  { date: "SEP 10", title: "Faculty Research & Innovation Grants Announcement", category: "Research", status: "Planning", color: "#d4a017" },
+];
 
-  // Filtered Student Ledger
-  const filteredLedger = ledger.filter(
-    (item: any) =>
-      item.name?.toLowerCase().includes(filterText.toLowerCase()) ||
-      item.email?.toLowerCase().includes(filterText.toLowerCase()) ||
-      item.cohort?.toLowerCase().includes(filterText.toLowerCase())
-  );
+const corporatePillars = [
+  { name: "Enterprise Tech Deployments", clients: "14 Enterprises", revenue: "₦28.5M", growth: "+35%" },
+  { name: "Corporate Talent Development", clients: "8 Banks & Telcos", revenue: "₦14.2M", growth: "+28%" },
+  { name: "Institutional Consulting", clients: "3 Government Agencies", revenue: "₦5.5M", growth: "+12%" },
+];
 
-  // Financial aggregates
-  const totalTuitionCommitted = ledger.reduce((acc: number, curr: any) => acc + (curr.totalAmount || 0), 0);
-  const totalTuitionPaid = ledger.reduce((acc: number, curr: any) => acc + (curr.amountPaid || 0), 0);
-  const collectionPercentage = totalTuitionCommitted > 0 ? Math.round((totalTuitionPaid / totalTuitionCommitted) * 100) : 0;
+const platformStatus = [
+  { service: "Identity Provider & NextAuth", status: "Operational", uptime: "99.99%" },
+  { service: "Paystack Payment Gateway", status: "Operational", uptime: "100%" },
+  { service: "PostgreSQL & Prisma Engine", status: "Optimal", uptime: "99.95%" },
+  { service: "Serwist PWA & Service Workers", status: "Active", uptime: "100%" },
+];
 
-  // Toggle Override Access
-  const handleToggleAccess = async (enrollmentId: string, currentStatus: string) => {
-    const newStatus = currentStatus === "ACTIVE" ? "SUSPENDED" : "ACTIVE";
-    setActionLoading(`override-${enrollmentId}`);
-    setMessage(null);
+export default function ExecutiveDashboardPage() {
+  const [inboxState, setInboxState] = useState(executiveInboxItems);
+  const [actionMessage, setActionMessage] = useState<string | null>(null);
 
-    try {
-      const res = await fetch("/api/admin/override", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({
-          enrollmentId,
-          status: newStatus,
-        }),
-      });
-
-      const json = await res.json();
-      if (!res.ok) throw new Error(json.error || "Failed to update enrollment status");
-
-      setMessage({ type: "success", text: `Student access updated to ${newStatus}.` });
-      refetch();
-    } catch (err: any) {
-      setMessage({ type: "error", text: err.message });
-    } finally {
-      setActionLoading(null);
-    }
-  };
-
-  // Grade Submission Action
-  const handleGradeSubmission = async (submissionId: string, status: "APPROVED" | "REJECTED") => {
-    setActionLoading(`grade-${submissionId}`);
-    setMessage(null);
-
-    try {
-      const res = await fetch("/api/admin/grade", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({
-          submissionId,
-          status,
-          grade: gradingScore[submissionId] || (status === "APPROVED" ? "A (Pass)" : "Re-submit"),
-          feedback: gradingFeedback[submissionId] || "Reviewed by DWSA instructor.",
-        }),
-      });
-
-      const json = await res.json();
-      if (!res.ok) throw new Error(json.error || "Failed to submit grade");
-
-      setMessage({ type: "success", text: `Submission marked as ${status}.` });
-      refetch();
-    } catch (err: any) {
-      setMessage({ type: "error", text: err.message });
-    } finally {
-      setActionLoading(null);
-    }
+  const handleAction = (id: number, actionName: string) => {
+    setInboxState((prev) => prev.filter((item) => item.id !== id));
+    setActionMessage(`Action processed: ${actionName}`);
+    setTimeout(() => setActionMessage(null), 3000);
   };
 
   return (
-    <div className="space-y-8">
-      {/* Top Banner & Executive Header */}
-      <div className="dwsa-glass-card rounded-3xl p-6 sm:p-8 relative overflow-hidden">
-        {/* Background Ambient Glow */}
-        <div className="absolute -top-24 -right-24 w-72 h-72 bg-[#d4a017]/10 rounded-full blur-3xl pointer-events-none" />
-        <div className="absolute -bottom-24 -left-24 w-72 h-72 bg-[#00d2ff]/10 rounded-full blur-3xl pointer-events-none" />
-
-        <div className="relative z-10 flex flex-col md:flex-row md:items-center justify-between gap-6">
-          <div className="space-y-2">
-            <div className="flex items-center gap-2">
-              <span className="px-3 py-1 bg-[#d4a017]/20 border border-[#d4a017]/50 text-[#d4a017] rounded-full text-[10px] font-extrabold uppercase tracking-widest flex items-center gap-1.5 shadow-sm">
-                <Sparkles className="w-3 h-3" />
-                Executive Desk & Financial ERP
-              </span>
-              <span className="px-3 py-1 bg-[#00d2ff]/20 border border-[#00d2ff]/50 text-[#00d2ff] rounded-full text-[10px] font-extrabold uppercase tracking-widest">
-                DWSA Tech Academy
-              </span>
-            </div>
-
-            <h1 className="text-2xl sm:text-3xl font-black text-white tracking-tight">
-              Financial ERP <span className="text-gold-gradient">& Command Center</span>
-            </h1>
-            <p className="text-xs text-[#8899b4] max-w-2xl leading-relaxed">
-              Real-time financial revenue tracking, candidate enrollment ledger, milestone access override control, and code pull request evaluation desk.
-            </p>
-          </div>
-
-          <div className="flex items-center gap-3">
-            <button
-              onClick={() => refetch()}
-              className="px-4 py-2.5 bg-gradient-to-r from-[#d4a017] to-[#e5a910] hover:from-[#e5a910] hover:to-[#d4a017] text-[#030e1f] font-extrabold rounded-xl text-xs flex items-center gap-2 transition-all shadow-lg shadow-[#d4a017]/20 hover:scale-[1.02] shrink-0"
-            >
-              <RefreshCw className="w-3.5 h-3.5" />
-              Refresh ERP Ledger
-            </button>
-          </div>
-        </div>
-      </div>
-
-      {/* Global Toast Alerts */}
-      {message && (
-        <div
-          className={`p-4 rounded-2xl border text-xs font-semibold flex items-center gap-3 animate-in fade-in slide-in-from-top-2 duration-200 ${
-            message.type === "success"
-              ? "bg-emerald-950/70 border-emerald-500/50 text-emerald-300 shadow-lg shadow-emerald-950/50"
-              : "bg-red-950/70 border-red-500/50 text-red-300 shadow-lg shadow-red-950/50"
-          }`}
-        >
-          {message.type === "success" ? (
-            <CheckCircle2 className="w-4 h-4 text-emerald-400 shrink-0" />
-          ) : (
-            <ShieldAlert className="w-4 h-4 text-red-400 shrink-0" />
-          )}
-          <span>{message.text}</span>
+    <div className="space-y-8 pb-12">
+      {/* Toast Alert */}
+      {actionMessage && (
+        <div className="fixed bottom-6 right-6 z-50 px-4 py-3 rounded-2xl bg-[#061428] border border-[#4ade80]/50 text-[#4ade80] text-xs font-extrabold shadow-2xl flex items-center gap-2 animate-fadeInUp">
+          <CheckCircle2 className="w-4 h-4" />
+          {actionMessage}
         </div>
       )}
 
-      {/* --- Executive KPI Metrics Cards --- */}
-      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-5">
-        {/* Total Revenue */}
-        <div className="dwsa-glass-card rounded-2xl p-5 space-y-3 relative overflow-hidden group hover:border-[#d4a017]/40 transition-all">
-          <div className="flex items-center justify-between">
-            <span className="text-[11px] font-extrabold text-[#8899b4] uppercase tracking-wider">Total Revenue</span>
-            <div className="p-2.5 bg-[#d4a017]/20 text-[#d4a017] border border-[#d4a017]/40 rounded-xl group-hover:scale-110 transition-transform">
-              <DollarSign className="w-4 h-4" />
+      {/* Top Banner: Mission & Executive Control Header */}
+      <div className="rounded-3xl bg-gradient-to-br from-[#0d1628] via-[#061428] to-[#030e1f] border border-[#d4a017]/30 p-6 sm:p-8 relative overflow-hidden shadow-2xl">
+        <div className="absolute top-0 right-0 w-96 h-96 bg-[#d4a017]/5 rounded-full blur-3xl pointer-events-none" />
+        
+        <div className="flex flex-col lg:flex-row lg:items-center justify-between gap-6 relative z-10">
+          <div className="space-y-2 max-w-2xl">
+            <div className="flex items-center gap-2">
+              <span className="px-3 py-1 rounded-full bg-[#d4a017]/15 border border-[#d4a017]/40 text-[#d4a017] text-[10px] font-black uppercase tracking-widest">
+                EXECUTIVE OPERATING SYSTEM
+              </span>
+              <span className="text-[10px] text-[#8899b4] font-bold">• InstitutionOS v3.2A</span>
             </div>
-          </div>
-          <div>
-            <p className="text-2xl font-black text-white tracking-tight">₦{(stats?.totalRevenue || 0).toLocaleString()}</p>
-            <div className="flex items-center gap-1.5 mt-1 text-[10px] text-emerald-400 font-bold">
-              <TrendingUp className="w-3 h-3" />
-              <span>{collectionPercentage}% tuition collected</span>
-            </div>
-          </div>
-        </div>
-
-        {/* Active Candidates */}
-        <div className="dwsa-glass-card-cyan rounded-2xl p-5 space-y-3 relative overflow-hidden group hover:border-[#00d2ff]/40 transition-all">
-          <div className="flex items-center justify-between">
-            <span className="text-[11px] font-extrabold text-[#8899b4] uppercase tracking-wider">Active Students</span>
-            <div className="p-2.5 bg-[#00d2ff]/20 text-[#00d2ff] border border-[#00d2ff]/40 rounded-xl group-hover:scale-110 transition-transform">
-              <UserCheck className="w-4 h-4" />
-            </div>
-          </div>
-          <div>
-            <p className="text-2xl font-black text-white tracking-tight">{stats?.activeStudents || 0}</p>
-            <p className="text-[10px] text-[#00d2ff] mt-1 font-semibold">Full workspace access granted</p>
-          </div>
-        </div>
-
-        {/* Suspended Accounts */}
-        <div className="dwsa-glass-card rounded-2xl p-5 space-y-3 relative overflow-hidden group hover:border-amber-500/40 transition-all">
-          <div className="flex items-center justify-between">
-            <span className="text-[11px] font-extrabold text-[#8899b4] uppercase tracking-wider">Suspended Accounts</span>
-            <div className="p-2.5 bg-amber-500/20 text-amber-400 border border-amber-500/40 rounded-xl group-hover:scale-110 transition-transform">
-              <AlertOctagon className="w-4 h-4" />
-            </div>
-          </div>
-          <div>
-            <p className="text-2xl font-black text-white tracking-tight">{stats?.suspendedStudents || 0}</p>
-            <p className="text-[10px] text-amber-400 mt-1 font-semibold">Overdue installment milestones</p>
-          </div>
-        </div>
-
-        {/* Pending PR Submissions */}
-        <div className="dwsa-glass-card-cyan rounded-2xl p-5 space-y-3 relative overflow-hidden group hover:border-purple-500/40 transition-all">
-          <div className="flex items-center justify-between">
-            <span className="text-[11px] font-extrabold text-[#8899b4] uppercase tracking-wider">Pending PR Reviews</span>
-            <div className="p-2.5 bg-purple-500/20 text-purple-400 border border-purple-500/40 rounded-xl group-hover:scale-110 transition-transform">
-              <FileCheck className="w-4 h-4" />
-            </div>
-          </div>
-          <div>
-            <p className="text-2xl font-black text-white tracking-tight">{stats?.pendingSubmissions || 0}</p>
-            <p className="text-[10px] text-purple-400 mt-1 font-semibold">Awaiting instructor evaluation</p>
-          </div>
-        </div>
-      </div>
-
-      {/* --- Financial Ledger Table Desk --- */}
-      <div className="dwsa-glass-card rounded-3xl p-6 sm:p-8 space-y-6 shadow-2xl">
-        <div className="flex flex-col md:flex-row md:items-center justify-between gap-4 border-b border-[#d4a017]/20 pb-5">
-          <div className="space-y-1">
-            <h3 className="text-lg font-extrabold text-white flex items-center gap-2.5">
-              <CreditCard className="w-5 h-5 text-[#d4a017]" />
-              Student Financial Ledger & Access Control Desk
-            </h3>
-            <p className="text-xs text-[#8899b4]">
-              Candidate registration directory, payment plan status, tuition audit, and instant 1-click manual access toggles.
+            <h1 className="text-2xl sm:text-3xl font-extrabold text-white tracking-tight">
+              Institution Control Centre (ICC)
+            </h1>
+            <p className="text-xs sm:text-sm text-[#8899b4] leading-relaxed">
+              Strategic visibility, academic governance, financial intelligence, and multi-tenant operating control for Digital Technology Academy.
             </p>
           </div>
 
-          {/* Search Filter input */}
-          <div className="relative w-full md:w-72">
-            <Search className="w-4 h-4 text-[#8899b4] absolute left-3.5 top-3" />
-            <input
-              type="text"
-              placeholder="Search candidate name, email..."
-              value={filterText}
-              onChange={(e) => setFilterText(e.target.value)}
-              className="w-full pl-10 pr-4 py-2.5 bg-[#061428] border border-[#d4a017]/30 rounded-xl text-xs text-white placeholder-[#8899b4] focus:outline-none focus:border-[#00d2ff] focus:ring-1 focus:ring-[#00d2ff] transition-all"
-            />
+          {/* Institutional Health Gauge Card */}
+          <div className="rounded-2xl bg-[#030e1f]/80 border border-[#d4a017]/30 p-5 flex items-center gap-5 shrink-0 shadow-lg">
+            <div className="relative flex items-center justify-center">
+              <svg viewBox="0 0 80 80" className="w-20 h-20" aria-hidden="true">
+                <circle cx="40" cy="40" r="32" fill="none" stroke="#1a2f4a" strokeWidth="8" />
+                <circle
+                  cx="40" cy="40" r="32" fill="none"
+                  stroke="#4ade80" strokeWidth="8"
+                  strokeDasharray={`${2 * Math.PI * 32 * overallHealthScore / 100} ${2 * Math.PI * 32 * (100 - overallHealthScore) / 100}`}
+                  strokeLinecap="round"
+                  transform="rotate(-90 40 40)"
+                />
+              </svg>
+              <div className="absolute text-center">
+                <span className="text-xl font-extrabold text-white">{overallHealthScore}</span>
+                <span className="block text-[8px] font-black text-[#8899b4] uppercase">/ 100</span>
+              </div>
+            </div>
+            <div>
+              <p className="text-[10px] font-black text-[#d4a017] tracking-wider uppercase">Institutional Health</p>
+              <p className="text-sm font-extrabold text-white mt-0.5">EXCELLENT</p>
+              <p className="text-[10px] text-[#4ade80] font-bold flex items-center gap-1 mt-1">
+                <CheckCircle2 className="w-3 h-3" /> All 6 Pillars Compliant
+              </p>
+            </div>
           </div>
-        </div>
-
-        {/* Collection Progress Bar */}
-        <div className="bg-[#061428] border border-[#d4a017]/20 rounded-2xl p-4 space-y-2">
-          <div className="flex items-center justify-between text-xs font-bold">
-            <span className="text-[#8899b4] flex items-center gap-1.5">
-              <TrendingUp className="w-4 h-4 text-[#00d2ff]" />
-              Tuition Ingestion Progress:
-            </span>
-            <span className="text-white">
-              <strong className="text-[#d4a017]">₦{totalTuitionPaid.toLocaleString()}</strong> / ₦{totalTuitionCommitted.toLocaleString()} ({collectionPercentage}%)
-            </span>
-          </div>
-          <div className="w-full bg-[#030e1f] h-2.5 rounded-full overflow-hidden border border-slate-800">
-            <div
-              className="h-full bg-gradient-to-r from-[#d4a017] to-[#00d2ff] transition-all duration-500 rounded-full"
-              style={{ width: `${Math.min(collectionPercentage, 100)}%` }}
-            />
-          </div>
-        </div>
-
-        {/* Ledger Table */}
-        <div className="overflow-x-auto rounded-2xl border border-[#d4a017]/20">
-          <table className="w-full text-left text-xs text-slate-300">
-            <thead className="bg-[#061428] text-[10px] uppercase tracking-wider font-extrabold text-[#8899b4] border-b border-[#d4a017]/20">
-              <tr>
-                <th className="p-4">Candidate Identity</th>
-                <th className="p-4">Cohort</th>
-                <th className="p-4">Payment Plan</th>
-                <th className="p-4">Tuition Total</th>
-                <th className="p-4">Amount Paid</th>
-                <th className="p-4">Status</th>
-                <th className="p-4 text-right">Access Override</th>
-              </tr>
-            </thead>
-            <tbody className="divide-y divide-slate-800/60 bg-[#030e1f]/60">
-              {filteredLedger.length === 0 ? (
-                <tr>
-                  <td colSpan={7} className="p-8 text-center text-[#8899b4]">
-                    <Users className="w-8 h-8 text-slate-600 mx-auto mb-2" />
-                    No matching candidate student records found.
-                  </td>
-                </tr>
-              ) : (
-                filteredLedger.map((student: any) => (
-                  <tr key={student.enrollmentId} className="hover:bg-[#0f223d]/70 transition-colors group">
-                    <td className="p-4">
-                      <span className="font-extrabold text-white block group-hover:text-[#d4a017] transition-colors">
-                        {student.name}
-                      </span>
-                      <span className="text-[10px] text-[#8899b4] font-mono">{student.email}</span>
-                    </td>
-                    <td className="p-4">
-                      <span className="px-2.5 py-1 bg-[#0f223d] border border-slate-700 rounded-lg text-[10px] font-bold text-slate-200">
-                        {student.cohort}
-                      </span>
-                    </td>
-                    <td className="p-4">
-                      <span className="px-2.5 py-1 bg-[#d4a017]/10 border border-[#d4a017]/30 text-[#d4a017] rounded-lg text-[10px] font-extrabold uppercase">
-                        {student.paymentPlan}
-                      </span>
-                    </td>
-                    <td className="p-4 font-bold text-slate-200">
-                      ₦{student.totalAmount.toLocaleString()}
-                    </td>
-                    <td className="p-4 font-black text-emerald-400">
-                      ₦{student.amountPaid.toLocaleString()}
-                    </td>
-                    <td className="p-4">
-                      <span
-                        className={`px-3 py-1 rounded-full text-[9px] font-black uppercase tracking-wider border shadow-sm ${
-                          student.status === "ACTIVE"
-                            ? "bg-emerald-950/80 border-emerald-500/50 text-emerald-400 shadow-emerald-950/50"
-                            : student.status === "SUSPENDED"
-                            ? "bg-amber-950/80 border-amber-500/50 text-amber-400 shadow-amber-950/50"
-                            : "bg-slate-800 border-slate-700 text-slate-400"
-                        }`}
-                      >
-                        {student.status}
-                      </span>
-                    </td>
-                    <td className="p-4 text-right">
-                      <button
-                        onClick={() => handleToggleAccess(student.enrollmentId, student.status)}
-                        disabled={actionLoading === `override-${student.enrollmentId}`}
-                        className={`px-3.5 py-1.5 rounded-xl text-[10px] font-extrabold tracking-wide border transition-all shadow-sm ${
-                          student.status === "ACTIVE"
-                            ? "bg-amber-950/40 hover:bg-amber-900/60 border-amber-500/50 text-amber-300 hover:scale-105"
-                            : "bg-[#00d2ff]/10 hover:bg-[#00d2ff]/20 border-[#00d2ff]/50 text-[#00d2ff] hover:scale-105"
-                        }`}
-                      >
-                        {actionLoading === `override-${student.enrollmentId}`
-                          ? "Updating..."
-                          : student.status === "ACTIVE"
-                          ? "Suspend Access"
-                          : "Override & Grant Access"}
-                      </button>
-                    </td>
-                  </tr>
-                ))
-              )}
-            </tbody>
-          </table>
         </div>
       </div>
 
-      {/* --- Assignment Grading Desk --- */}
-      <div className="dwsa-glass-card rounded-3xl p-6 sm:p-8 space-y-6 shadow-2xl">
-        <div className="border-b border-[#d4a017]/20 pb-5">
-          <h3 className="text-lg font-extrabold text-white flex items-center gap-2.5">
-            <GitPullRequest className="w-5 h-5 text-purple-400" />
-            Assignment Grading Desk (Pending Student Pull Requests)
-          </h3>
-          <p className="text-xs text-[#8899b4] mt-1">
-            Review student pull request links, evaluate code quality, issue official instructor feedback, and grade assignments.
-          </p>
+      {/* Enhancement 5: Executive AI Briefing */}
+      <div className="rounded-3xl bg-[#061428] border border-[#d4a017]/30 p-6 space-y-4 shadow-xl">
+        <div className="flex items-center justify-between">
+          <div className="flex items-center gap-2">
+            <div className="w-8 h-8 rounded-xl bg-[#d4a017]/15 border border-[#d4a017]/30 flex items-center justify-center">
+              <Sparkles className="w-4 h-4 text-[#d4a017]" />
+            </div>
+            <div>
+              <h2 className="text-sm font-extrabold text-white">Executive Intelligence Briefing</h2>
+              <p className="text-[10px] text-[#8899b4]">AI Executive Advisory · Updated 08:00 WAT Today</p>
+            </div>
+          </div>
+          <span className="px-2.5 py-1 rounded-full bg-[#d4a017]/10 border border-[#d4a017]/30 text-[#d4a017] text-[9px] font-black uppercase">
+            INTELLIGENCE PREVIEW
+          </span>
         </div>
 
-        {pendingSubmissions.length === 0 ? (
-          <div className="p-10 text-center bg-[#061428]/80 border border-[#d4a017]/20 rounded-2xl space-y-3">
-            <div className="w-12 h-12 bg-emerald-950/60 border border-emerald-500/40 rounded-2xl flex items-center justify-center mx-auto text-emerald-400">
-              <CheckCircle2 className="w-6 h-6" />
-            </div>
-            <h4 className="text-sm font-extrabold text-white">Grading Desk Clear</h4>
-            <p className="text-xs text-[#8899b4]">All submitted student Pull Requests have been evaluated and graded.</p>
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-4 pt-2">
+          <div className="space-y-2 bg-[#030e1f]/60 p-4 rounded-2xl border border-[#1a2f4a]">
+            <p className="text-[10px] font-black text-[#d4a017] uppercase tracking-wider">Good Morning, Executive.</p>
+            <ul className="space-y-1.5 text-xs text-[#8899b4]">
+              <li className="flex items-center gap-2">
+                <span className="w-1.5 h-1.5 rounded-full bg-[#4ade80]" />
+                <strong className="text-white">Admissions:</strong> Applications increased +14.2% this week (Cohort Delta).
+              </li>
+              <li className="flex items-center gap-2">
+                <span className="w-1.5 h-1.5 rounded-full bg-[#4ade80]" />
+                <strong className="text-white">Faculty:</strong> Grading completion on target (98% on-time PR reviews).
+              </li>
+              <li className="flex items-center gap-2">
+                <span className="w-1.5 h-1.5 rounded-full bg-[#4ade80]" />
+                <strong className="text-white">Finance:</strong> Tuition revenue remains 22.5% above target.
+              </li>
+              <li className="flex items-center gap-2">
+                <span className="w-1.5 h-1.5 rounded-full bg-amber-400" />
+                <strong className="text-white">Intervention:</strong> 3 learners in Cohort Alpha require academic support.
+              </li>
+            </ul>
           </div>
-        ) : (
-          <div className="space-y-4">
-            {pendingSubmissions.map((sub: any) => (
-              <div
-                key={sub.id}
-                className="p-6 bg-[#061428] border border-[#d4a017]/25 rounded-2xl space-y-5 shadow-lg relative overflow-hidden"
+
+          <div className="bg-gradient-to-br from-[#d4a017]/10 to-[#030e1f] p-4 rounded-2xl border border-[#d4a017]/30 flex flex-col justify-between">
+            <div>
+              <p className="text-[10px] font-black text-[#d4a017] uppercase tracking-wider">Today&apos;s Strategic Recommendation</p>
+              <p className="text-xs font-extrabold text-white mt-1 leading-snug">
+                &ldquo;Review enrolment trends for the School of Blockchain &amp; Digital Trust to allocate additional faculty before Cohort Delta launch.&rdquo;
+              </p>
+            </div>
+            <div className="mt-3 flex items-center gap-2">
+              <Link
+                href="/dashboard/admin/intelligence"
+                className="px-3 py-1.5 rounded-xl bg-[#d4a017] text-[#030e1f] text-[10px] font-black hover:bg-[#b8891a] transition-all flex items-center gap-1"
               >
-                <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 border-b border-slate-800 pb-4">
-                  <div className="space-y-1">
-                    <div className="flex items-center gap-2">
-                      <span className="px-2.5 py-0.5 bg-purple-950/80 border border-purple-500/40 text-purple-300 rounded-md text-[9px] font-extrabold uppercase tracking-wider">
-                        {sub.assignment?.module?.title}
-                      </span>
+                Open Digital Twin <ArrowUpRight className="w-3 h-3" />
+              </Link>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      {/* Enhancement 2: Multi-Dimensional Health Index Grid */}
+      <div className="space-y-4">
+        <h2 className="text-sm font-extrabold text-white uppercase tracking-wider flex items-center gap-2">
+          <Activity className="w-4 h-4 text-[#d4a017]" />
+          Executive Health Index Breakdown
+        </h2>
+
+        <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-3">
+          {healthPillars.map((pillar) => (
+            <div key={pillar.name} className="rounded-2xl bg-[#061428] border border-[#1a2f4a] p-4 space-y-2 hover:border-[#d4a017]/40 transition-colors">
+              <div className="flex items-center justify-between">
+                <span className="text-[9px] font-black text-[#8899b4] uppercase tracking-wider">{pillar.status}</span>
+                <span className="text-xs font-extrabold" style={{ color: pillar.color }}>{pillar.score}%</span>
+              </div>
+              <p className="text-xs font-extrabold text-white leading-tight">{pillar.name}</p>
+              <div className="h-1.5 rounded-full bg-[#030e1f] overflow-hidden">
+                <div className="h-full rounded-full transition-all" style={{ width: `${pillar.score}%`, backgroundColor: pillar.color }} />
+              </div>
+            </div>
+          ))}
+        </div>
+      </div>
+
+      {/* Strategic KPI Grid */}
+      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
+        {strategicKPIs.map((kpi) => {
+          const Icon = kpi.icon;
+          return (
+            <div key={kpi.label} className="rounded-2xl bg-[#061428] border border-[#1a2f4a] p-5 hover:border-[#d4a017]/40 transition-all shadow-md group">
+              <div className="flex items-center justify-between mb-3">
+                <div className="w-10 h-10 rounded-xl flex items-center justify-center" style={{ backgroundColor: `${kpi.color}15`, border: `1px solid ${kpi.color}30` }}>
+                  <Icon className="w-5 h-5" style={{ color: kpi.color }} />
+                </div>
+                <span className="text-[10px] font-black px-2 py-0.5 rounded-full bg-[#4ade80]/10 border border-[#4ade80]/30 text-[#4ade80]">
+                  {kpi.change}
+                </span>
+              </div>
+              <p className="text-2xl font-extrabold text-white tracking-tight">{kpi.value}</p>
+              <p className="text-xs font-extrabold text-white mt-0.5">{kpi.label}</p>
+              <p className="text-[10px] text-[#8899b4] mt-1 font-semibold">{kpi.subText}</p>
+            </div>
+          );
+        })}
+      </div>
+
+      {/* Enhancement 3 & 4: Executive Inbox + Institutional Timeline */}
+      <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
+        {/* Executive Inbox */}
+        <div className="rounded-3xl bg-[#061428] border border-[#1a2f4a] p-6 space-y-4">
+          <div className="flex items-center justify-between border-b border-[#1a2f4a] pb-4">
+            <div className="flex items-center gap-2">
+              <Inbox className="w-5 h-5 text-[#d4a017]" />
+              <div>
+                <h3 className="text-sm font-extrabold text-white">Executive Decision Inbox</h3>
+                <p className="text-[10px] text-[#8899b4]">Items requiring executive sign-off or decision</p>
+              </div>
+            </div>
+            <span className="px-2.5 py-0.5 rounded-full bg-[#d4a017]/15 border border-[#d4a017]/30 text-[#d4a017] text-[10px] font-black">
+              {inboxState.length} PENDING
+            </span>
+          </div>
+
+          <div className="space-y-3">
+            {inboxState.length === 0 ? (
+              <div className="py-8 text-center text-[#8899b4] text-xs">
+                ✓ Executive Inbox is clear. No pending items.
+              </div>
+            ) : (
+              inboxState.map((item) => (
+                <div key={item.id} className="rounded-2xl bg-[#030e1f] border border-[#1a2f4a] p-4 space-y-2 hover:border-[#d4a017]/30 transition-all">
+                  <div className="flex items-start justify-between gap-3">
+                    <div>
+                      <div className="flex items-center gap-2 mb-1">
+                        <span className="px-2 py-0.5 rounded bg-[#1a2f4a] text-[#8899b4] text-[9px] font-black uppercase">{item.category}</span>
+                        <span className={`px-2 py-0.5 rounded text-[9px] font-black uppercase ${item.priority === "High" ? "bg-amber-950/40 text-amber-400 border border-amber-800/40" : "bg-indigo-950/40 text-indigo-400"}`}>
+                          {item.priority}
+                        </span>
+                      </div>
+                      <p className="text-xs font-extrabold text-white">{item.title}</p>
+                      <p className="text-[10px] text-[#8899b4] mt-0.5">{item.time}</p>
                     </div>
-                    <h4 className="text-sm font-extrabold text-white">{sub.assignment?.title}</h4>
-                    <p className="text-xs text-[#8899b4]">
-                      Candidate: <strong className="text-white">{sub.user?.name}</strong> (<span className="text-[#00d2ff]">{sub.user?.email}</span>)
-                    </p>
-                  </div>
-
-                  {sub.githubPRUrl && (
-                    <a
-                      href={sub.githubPRUrl}
-                      target="_blank"
-                      rel="noreferrer"
-                      className="px-4 py-2 bg-[#00d2ff]/10 hover:bg-[#00d2ff]/20 border border-[#00d2ff]/40 text-[#00d2ff] rounded-xl text-xs font-extrabold flex items-center gap-2 transition-all hover:scale-105 w-fit"
-                    >
-                      <GitPullRequest className="w-4 h-4" />
-                      View GitHub PR
-                      <ExternalLink className="w-3.5 h-3.5" />
-                    </a>
-                  )}
-                </div>
-
-                <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                  <div>
-                    <label className="block text-[10px] font-extrabold text-[#8899b4] uppercase tracking-wider mb-1.5 flex items-center gap-1">
-                      <Award className="w-3.5 h-3.5 text-[#d4a017]" />
-                      Grade / Score:
-                    </label>
-                    <input
-                      type="text"
-                      placeholder="e.g. A (Excellence) or 95%"
-                      value={gradingScore[sub.id] || ""}
-                      onChange={(e) =>
-                        setGradingScore((prev) => ({ ...prev, [sub.id]: e.target.value }))
-                      }
-                      className="w-full px-3.5 py-2.5 bg-[#030e1f] border border-[#d4a017]/30 rounded-xl text-xs text-white placeholder-[#8899b4] focus:outline-none focus:border-[#00d2ff]"
-                    />
-                  </div>
-
-                  <div>
-                    <label className="block text-[10px] font-extrabold text-[#8899b4] uppercase tracking-wider mb-1.5">
-                      Instructor Review Notes:
-                    </label>
-                    <input
-                      type="text"
-                      placeholder="e.g. Clean commit architecture, tests passing."
-                      value={gradingFeedback[sub.id] || ""}
-                      onChange={(e) =>
-                        setGradingFeedback((prev) => ({ ...prev, [sub.id]: e.target.value }))
-                      }
-                      className="w-full px-3.5 py-2.5 bg-[#030e1f] border border-[#d4a017]/30 rounded-xl text-xs text-white placeholder-[#8899b4] focus:outline-none focus:border-[#00d2ff]"
-                    />
+                    <div className="flex items-center gap-1 shrink-0">
+                      <button
+                        onClick={() => handleAction(item.id, "Approved & Signed")}
+                        className="p-1.5 rounded-lg bg-[#4ade80]/15 border border-[#4ade80]/30 text-[#4ade80] hover:bg-[#4ade80]/30 transition-all"
+                        title="Approve"
+                      >
+                        <Check className="w-3.5 h-3.5" />
+                      </button>
+                      <button
+                        onClick={() => handleAction(item.id, "Deferred for Review")}
+                        className="p-1.5 rounded-lg bg-[#1a2f4a] text-[#8899b4] hover:text-white transition-all"
+                        title="Defer"
+                      >
+                        <X className="w-3.5 h-3.5" />
+                      </button>
+                    </div>
                   </div>
                 </div>
+              ))
+            )}
+          </div>
+        </div>
 
-                <div className="flex items-center justify-end gap-3 pt-2">
-                  <button
-                    onClick={() => handleGradeSubmission(sub.id, "REJECTED")}
-                    disabled={actionLoading === `grade-${sub.id}`}
-                    className="px-4 py-2 bg-rose-950/60 hover:bg-rose-900/80 border border-rose-800/80 text-rose-300 rounded-xl text-xs font-bold transition-all flex items-center gap-1.5"
-                  >
-                    <XCircle className="w-4 h-4" />
-                    Reject Submission
-                  </button>
+        {/* Institutional Timeline */}
+        <div className="rounded-3xl bg-[#061428] border border-[#1a2f4a] p-6 space-y-4">
+          <div className="flex items-center justify-between border-b border-[#1a2f4a] pb-4">
+            <div className="flex items-center gap-2">
+              <Calendar className="w-5 h-5 text-[#d4a017]" />
+              <div>
+                <h3 className="text-sm font-extrabold text-white">Strategic Institutional Timeline</h3>
+                <p className="text-[10px] text-[#8899b4]">Upcoming key academic &amp; corporate milestones</p>
+              </div>
+            </div>
+            <Link href="/dashboard/admin/academic" className="text-[10px] font-extrabold text-[#d4a017] hover:underline flex items-center gap-1">
+              View Calendar <ChevronRight className="w-3 h-3" />
+            </Link>
+          </div>
 
-                  <button
-                    onClick={() => handleGradeSubmission(sub.id, "APPROVED")}
-                    disabled={actionLoading === `grade-${sub.id}`}
-                    className="px-5 py-2 bg-gradient-to-r from-[#d4a017] to-[#e5a910] hover:from-[#e5a910] hover:to-[#d4a017] text-[#030e1f] rounded-xl text-xs font-extrabold transition-all flex items-center gap-1.5 shadow-lg shadow-[#d4a017]/20 hover:scale-105"
-                  >
-                    <CheckCircle2 className="w-4 h-4" />
-                    Approve & Pass Grade
-                  </button>
+          <div className="space-y-3">
+            {timelineMilestones.map((m) => (
+              <div key={m.title} className="flex items-center gap-4 rounded-2xl bg-[#030e1f] border border-[#1a2f4a] p-3.5 hover:border-[#d4a017]/30 transition-all">
+                <div className="w-12 h-12 rounded-xl bg-[#061428] border border-[#d4a017]/30 flex flex-col items-center justify-center shrink-0">
+                  <span className="text-[10px] font-black text-[#d4a017]">{m.date.split(" ")[0]}</span>
+                  <span className="text-xs font-black text-white">{m.date.split(" ")[1]}</span>
+                </div>
+                <div className="flex-1 min-w-0">
+                  <div className="flex items-center gap-2">
+                    <span className="text-[9px] font-black text-[#8899b4] uppercase">{m.category}</span>
+                    <span className="w-1 h-1 rounded-full bg-[#8899b4]" />
+                    <span className="text-[9px] font-black" style={{ color: m.color }}>{m.status}</span>
+                  </div>
+                  <p className="text-xs font-extrabold text-white truncate">{m.title}</p>
                 </div>
               </div>
             ))}
           </div>
-        )}
+        </div>
+      </div>
+
+      {/* Enhancement 9: Corporate Intelligence (DWSA Ecosystem Integration) */}
+      <div className="rounded-3xl bg-[#061428] border border-[#1a2f4a] p-6 space-y-4">
+        <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-2 border-b border-[#1a2f4a] pb-4">
+          <div>
+            <div className="flex items-center gap-2">
+              <Building2 className="w-5 h-5 text-[#d4a017]" />
+              <h3 className="text-sm font-extrabold text-white">DWSA Corporate &amp; Ecosystem Intelligence</h3>
+            </div>
+            <p className="text-[10px] text-[#8899b4]">Enterprise tech deployment, corporate training &amp; institutional consulting</p>
+          </div>
+          <span className="px-3 py-1 rounded-xl bg-[#030e1f] border border-[#1a2f4a] text-[#d4a017] text-[10px] font-black">
+            Total Ecosystem Revenue: ₦48.2M
+          </span>
+        </div>
+
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+          {corporatePillars.map((p) => (
+            <div key={p.name} className="rounded-2xl bg-[#030e1f] border border-[#1a2f4a] p-4 space-y-2">
+              <p className="text-xs font-extrabold text-white">{p.name}</p>
+              <div className="flex items-baseline justify-between">
+                <span className="text-lg font-black text-[#4ade80]">{p.revenue}</span>
+                <span className="text-[10px] font-bold text-[#d4a017]">{p.growth}</span>
+              </div>
+              <p className="text-[10px] text-[#8899b4]">{p.clients}</p>
+            </div>
+          ))}
+        </div>
+      </div>
+
+      {/* System Infrastructure & Navigation Hub */}
+      <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
+        {/* Quick Module Navigation Hub */}
+        <div className="lg:col-span-2 rounded-3xl bg-[#061428] border border-[#1a2f4a] p-6 space-y-4">
+          <h3 className="text-sm font-extrabold text-white flex items-center gap-2">
+            <Layers className="w-4 h-4 text-[#d4a017]" />
+            Institution Control Centre Modules
+          </h3>
+
+          <div className="grid grid-cols-2 sm:grid-cols-3 gap-3">
+            {[
+              { title: "Financial ERP", href: "/dashboard/admin/finance", icon: DollarSign, badge: "Core ERP" },
+              { title: "Admissions Pipeline", href: "/dashboard/admin/admissions", icon: Activity, badge: "Pipeline" },
+              { title: "Academic Ops", href: "/dashboard/admin/academic", icon: GraduationCap, badge: "Curriculum" },
+              { title: "Faculty Centre", href: "/dashboard/admin/faculty", icon: Users, badge: "Directory" },
+              { title: "Student Success", href: "/dashboard/admin/students", icon: TrendingUp, badge: "Analytics" },
+              { title: "Certificate Auth", href: "/dashboard/admin/certificates", icon: Award, badge: "QR Seal" },
+              { title: "Research & Innovation", href: "/dashboard/admin/research", icon: FlaskConical, badge: "Labs" },
+              { title: "Governance & Audit", href: "/dashboard/admin/governance", icon: ShieldCheck, badge: "Audit" },
+              { title: "System Settings", href: "/dashboard/admin/settings", icon: Cpu, badge: "Config" },
+            ].map((mod) => {
+              const Icon = mod.icon;
+              return (
+                <Link
+                  key={mod.title}
+                  href={mod.href}
+                  className="rounded-2xl bg-[#030e1f] border border-[#1a2f4a] p-4 hover:border-[#d4a017]/40 hover:bg-[#0f223d]/50 transition-all space-y-2 group"
+                >
+                  <div className="flex items-center justify-between">
+                    <div className="w-8 h-8 rounded-xl bg-[#d4a017]/10 border border-[#d4a017]/25 flex items-center justify-center group-hover:scale-110 transition-transform">
+                      <Icon className="w-4 h-4 text-[#d4a017]" />
+                    </div>
+                    <span className="text-[8px] font-black px-1.5 py-0.5 rounded bg-[#1a2f4a] text-[#8899b4]">{mod.badge}</span>
+                  </div>
+                  <p className="text-xs font-extrabold text-white group-hover:text-[#d4a017] transition-colors">{mod.title}</p>
+                </Link>
+              );
+            })}
+          </div>
+        </div>
+
+        {/* Platform Status */}
+        <div className="rounded-3xl bg-[#061428] border border-[#1a2f4a] p-6 space-y-4">
+          <h3 className="text-sm font-extrabold text-white flex items-center gap-2">
+            <Cpu className="w-4 h-4 text-[#4ade80]" />
+            Infrastructure Status
+          </h3>
+
+          <div className="space-y-3">
+            {platformStatus.map((ps) => (
+              <div key={ps.service} className="rounded-xl bg-[#030e1f] border border-[#1a2f4a] p-3 flex items-center justify-between">
+                <div>
+                  <p className="text-xs font-bold text-white">{ps.service}</p>
+                  <p className="text-[10px] text-[#4ade80] font-semibold flex items-center gap-1 mt-0.5">
+                    <span className="w-1.5 h-1.5 rounded-full bg-[#4ade80] animate-pulse" />
+                    {ps.status}
+                  </p>
+                </div>
+                <span className="text-[10px] font-black text-[#8899b4]">{ps.uptime}</span>
+              </div>
+            ))}
+          </div>
+
+          <div className="pt-2 border-t border-[#1a2f4a] flex items-center justify-between text-[10px] text-[#8899b4]">
+            <span>InstitutionOS Kernel v3.2A</span>
+            <span className="text-[#4ade80] font-bold">100% HEALTHY</span>
+          </div>
+        </div>
       </div>
     </div>
   );
 }
-
