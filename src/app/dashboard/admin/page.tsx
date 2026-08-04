@@ -2,6 +2,8 @@
 
 import React, { useState } from "react";
 import Link from "next/link";
+import ExecutiveAcademicInsights from "@/components/intelligence/ExecutiveAcademicInsights";
+import AcademicHealthIndex from "@/components/intelligence/AcademicHealthIndex";
 import {
   Building2, Activity, ShieldCheck, Sparkles, TrendingUp, Users,
   GraduationCap, DollarSign, Award, Calendar, CheckCircle2, Clock,
@@ -130,6 +132,10 @@ export default function ExecutiveDashboardPage() {
           </div>
         </div>
       </div>
+
+      {/* ── ACADEMIC INTELLIGENCE LAYER (v3.4) ── */}
+      <AcademicHealthIndex />
+      <ExecutiveAcademicInsights />
 
       {/* Enhancement 5: Executive AI Briefing */}
       <div className="rounded-3xl bg-[#061428] border border-[#d4a017]/30 p-6 space-y-4 shadow-xl">

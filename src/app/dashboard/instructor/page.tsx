@@ -3,6 +3,8 @@
 import React, { useState } from "react";
 import Link from "next/link";
 import { useSession } from "next-auth/react";
+import FacultyTeachingInsights from "@/components/intelligence/FacultyTeachingInsights";
+import CompetencyRadar from "@/components/intelligence/CompetencyRadar";
 import {
   AlertCircle,
   GitPullRequest,
@@ -259,6 +261,10 @@ export default function FacultyHomePage() {
           Refresh
         </button>
       </div>
+
+      {/* ─── ACADEMIC INTELLIGENCE LAYER (v3.4) ─── */}
+      <FacultyTeachingInsights />
+      <CompetencyRadar title="Cohort Competency Validation Overview" />
 
       {/* ─── Quick Stats Row ───────────────────────────────────────────────── */}
       <div className="grid grid-cols-2 sm:grid-cols-4 gap-4">

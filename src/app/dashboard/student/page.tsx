@@ -4,6 +4,10 @@ import React, { useState } from "react";
 import Link from "next/link";
 import { useQuery } from "@tanstack/react-query";
 import YouTubePlayer from "@/components/YouTubePlayer";
+import StudentSuccessDashboard from "@/components/intelligence/StudentSuccessDashboard";
+import CompetencyRadar from "@/components/intelligence/CompetencyRadar";
+import LearningTimeline from "@/components/intelligence/LearningTimeline";
+import AchievementEngine from "@/components/intelligence/AchievementEngine";
 import {
   BookOpen,
   CheckCircle2,
@@ -300,6 +304,12 @@ export default function StudentDashboardPage() {
           </Link>
         </div>
       </div>
+
+      {/* ── ACADEMIC INTELLIGENCE LAYER (v3.4) ── */}
+      <StudentSuccessDashboard studentName={enrollment.studentName} />
+      <CompetencyRadar />
+      <LearningTimeline />
+      <AchievementEngine />
 
       {/* ── 2. MY LEARNING JOURNEY ROADMAP ── */}
       <div className="p-6 bg-[#061428] border border-[#d4a017]/30 rounded-3xl space-y-4 shadow-lg">
