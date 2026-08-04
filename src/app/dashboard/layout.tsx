@@ -137,7 +137,13 @@ export default function DashboardLayout({
 
   // Institution Control Centre Shell for Administrators & Executive Leadership
   if (!isStudent && !isInstructor) {
-    const iccPageLabel = pathname.includes("/ai-governance")
+    const iccPageLabel = pathname.includes("/operations")
+      ? "Platform Health & Operations Dashboard"
+      : pathname.includes("/deployment")
+      ? "Deployment Readiness Inspector"
+      : pathname.includes("/benchmarks")
+      ? "Performance Benchmarks Dashboard"
+      : pathname.includes("/ai-governance")
       ? "AI Governance & Controls Centre"
       : pathname.includes("/admin/ai")
       ? "Executive AI Advisory Hub"

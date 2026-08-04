@@ -46,3 +46,8 @@ export * from "./AIGovernanceService";
 export * from "./ConversationMemoryService";
 export * from "./RecommendationService";
 export * from "./EnterpriseMonitoringService";
+export * from "./EnterpriseLoggingService";
+export * from "./DisasterRecoveryService";
+export * from "./ConfigManagementService";
+export * from "./OperationalAlertService";
+export * from "./BenchmarkService";
