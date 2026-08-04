@@ -3,11 +3,12 @@
 import React, { useState, useEffect } from "react";
 import Navbar from "@/components/Navbar";
 import StudentSidebar from "@/components/StudentSidebar";
+import FacultySidebar from "@/components/FacultySidebar";
 import PrideModal from "@/components/PrideModal";
 import PWAInstallBanner from "@/components/PWAInstallBanner";
 import { useSession } from "next-auth/react";
 import { useRouter, usePathname } from "next/navigation";
-import { Menu, Bell, Search, GraduationCap, ShieldCheck, User } from "lucide-react";
+import { Menu, Bell, Search, GraduationCap, ShieldCheck, User, BookMarked } from "lucide-react";
 import Link from "next/link";
 
 export default function DashboardLayout({
@@ -48,9 +49,89 @@ export default function DashboardLayout({
   }
 
   const isStudent = session?.user?.role === "STUDENT";
+  const isInstructor = session?.user?.role === "INSTRUCTOR";
 
-  // For Admin / Instructor roles, render original Navbar
-  if (!isStudent) {
+  // Faculty Workspace Shell for Instructors
+  if (isInstructor) {
+    const facultyPageLabel = pathname.includes("/cohorts")
+      ? "My Cohorts"
+      : pathname.includes("/github-reviews")
+      ? "GitHub Review Centre"
+      : pathname.includes("/assessments")
+      ? "Assessment Centre"
+      : pathname.includes("/learners")
+      ? "Learner Analytics"
+      : pathname.includes("/lessons")
+      ? "Lesson Manager"
+      : pathname.includes("/profile")
+      ? "Faculty Profile"
+      : pathname.includes("/announcements")
+      ? "Announcements"
+      : pathname.includes("/competencies")
+      ? "Competency Validation"
+      : "Faculty Home";
+
+    return (
+      <div className="min-h-screen bg-[#030e1f] text-[#f0f4ff] flex font-sans">
+        <FacultySidebar mobileOpen={mobileOpen} setMobileOpen={setMobileOpen} />
+        <div className="flex-1 flex flex-col min-w-0 min-h-screen">
+          {/* Faculty Workspace Top Header */}
+          <header className="sticky top-0 z-30 bg-[#030e1f]/90 backdrop-blur-md border-b border-[#d4a017]/20 px-4 sm:px-6 py-3 flex items-center justify-between gap-4">
+            <div className="flex items-center gap-3">
+              <button
+                onClick={() => setMobileOpen(true)}
+                className="lg:hidden p-2 rounded-xl bg-[#061428] border border-[#d4a017]/30 text-[#d4a017] hover:bg-[#d4a017] hover:text-[#030e1f] transition-all focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#d4a017]"
+                aria-label="Open faculty navigation"
+              >
+                <Menu className="w-5 h-5" />
+              </button>
+              <div>
+                <div className="flex items-center gap-2 text-[10px] font-bold text-[#8899b4]">
+                  <span>Faculty Workspace</span>
+                  <span aria-hidden="true">•</span>
+                  <span className="text-[#d4a017] uppercase tracking-wider">InstitutionOS v3.1</span>
+                </div>
+                <h1 className="text-sm sm:text-base font-extrabold text-white tracking-tight">{facultyPageLabel}</h1>
+              </div>
+            </div>
+            <div className="flex items-center gap-3">
+              <span className="hidden sm:flex items-center gap-1.5 px-3 py-1.5 rounded-xl bg-[#061428] border border-[#4ade80]/30 text-[#4ade80] text-[10px] font-black tracking-wider">
+                <BookMarked className="w-3.5 h-3.5" aria-hidden="true" />
+                FACULTY
+              </span>
+              <Link
+                href="/knowledge-hub"
+                className="p-2 rounded-xl bg-[#061428] border border-[#d4a017]/30 text-[#d4a017] hover:bg-[#0f223d] transition-all relative focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#d4a017]"
+                aria-label="View Campus Notices"
+                title="Campus Notices"
+              >
+                <Bell className="w-4 h-4" aria-hidden="true" />
+                <span className="absolute top-1.5 right-1.5 w-2 h-2 rounded-full bg-[#4ade80]" aria-hidden="true" />
+              </Link>
+              <Link
+                href="/dashboard/instructor/profile"
+                className="flex items-center gap-2 p-1.5 sm:px-3 sm:py-1.5 rounded-xl bg-[#061428] border border-[#d4a017]/40 hover:border-[#d4a017] text-white transition-all focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#d4a017]"
+              >
+                <div className="w-6 h-6 rounded-lg bg-gradient-to-br from-[#d4a017] to-[#e5a910] text-[#030e1f] flex items-center justify-center font-black text-xs shrink-0">
+                  {session?.user?.name?.[0]?.toUpperCase() || "F"}
+                </div>
+                <span className="hidden md:inline text-xs font-extrabold text-white truncate max-w-[120px]">
+                  {session?.user?.name?.split(" ")[0] || "Faculty"}
+                </span>
+              </Link>
+            </div>
+          </header>
+          <main className="flex-1 max-w-7xl w-full mx-auto px-4 sm:px-6 lg:px-8 py-6 sm:py-8">
+            {children}
+          </main>
+        </div>
+        <PWAInstallBanner />
+      </div>
+    );
+  }
+
+  // For Admin roles, render original Navbar
+  if (!isStudent && !isInstructor) {
     return (
       <div className="min-h-screen bg-[#030e1f] text-[#f0f4ff] flex flex-col font-sans">
         <Navbar />
