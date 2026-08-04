@@ -100,18 +100,6 @@ export default function PublicFooter() {
       icon: YoutubeIcon,
       name: "YouTube",
     },
-    {
-      href: "https://www.linkedin.com/company/dwsafrica",
-      label: "DWSA on LinkedIn",
-      icon: LinkedinIcon,
-      name: "LinkedIn",
-    },
-    {
-      href: "https://github.com/dwsafrica",
-      label: "DWSA on GitHub",
-      icon: GithubIcon,
-      name: "GitHub",
-    },
   ];
 
   return (
