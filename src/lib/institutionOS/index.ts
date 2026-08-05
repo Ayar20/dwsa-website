@@ -59,3 +59,24 @@ export * from "./StudyPlannerService";
 export * from "./FacultyTeachingService";
 export * from "./LearningExperienceService";
 export * from "./LearningAnalyticsService";
+
+// v4.0 — InstitutionOS Multi-Tenant Enterprise Platform Foundation
+export * from "./TenantService";
+export * from "./BrandResolverService";
+export * from "./ThemeService";
+export * from "./TenantSettingsService";
+export * from "./PlatformMetricsService";
+export * from "./TenantProvisioningService";
+export * from "./BrandAssetService";
+export * from "./LicenseService";
+export * from "./UsageAnalyticsService";
+export * from "./ThemeCompilerService";
+export * from "./OrganizationService";
+export * from "./BrandingService";
+export * from "./SubscriptionService";
+export * from "./LicensingService";
+export * from "./TenantConfigurationService";
+export * from "./TenantAnalyticsService";
+export * from "./FeatureFlagService";
+
+

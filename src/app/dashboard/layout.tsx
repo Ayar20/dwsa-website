@@ -14,6 +14,8 @@ import { useRouter, usePathname } from "next/navigation";
 import { Menu, Bell, Search, GraduationCap, ShieldCheck, User, BookMarked } from "lucide-react";
 import Link from "next/link";
 
+import PlatformSidebar from "@/components/PlatformSidebar";
+
 export default function DashboardLayout({
   children,
 }: {
@@ -55,6 +57,69 @@ export default function DashboardLayout({
 
   const isStudent = session?.user?.role === "STUDENT";
   const isInstructor = session?.user?.role === "INSTRUCTOR";
+  const isPlatformRoute = pathname.startsWith("/dashboard/platform");
+
+  // Platform Command Centre Shell for Super Admins / Platform Routes
+  if (isPlatformRoute) {
+    const platformPageLabel = pathname.includes("/tenants")
+      ? "Institution Registry"
+      : pathname.includes("/provision")
+      ? "Provision Institution Wizard"
+      : pathname.includes("/analytics")
+      ? "Platform Analytics & Consumption"
+      : pathname.includes("/marketplace")
+      ? "Institution Marketplace Blueprints"
+      : "Platform Command Centre";
+
+    return (
+      <div className="min-h-screen bg-[#030e1f] text-[#f0f4ff] flex font-sans">
+        <PlatformSidebar mobileOpen={mobileOpen} setMobileOpen={setMobileOpen} />
+        <div className="flex-1 flex flex-col min-w-0 min-h-screen">
+          {/* Platform Header Bar */}
+          <header className="sticky top-0 z-30 bg-[#030e1f]/90 backdrop-blur-md border-b border-[#d4a017]/25 px-4 sm:px-6 py-3 flex items-center justify-between gap-4">
+            <div className="flex items-center gap-3">
+              <button
+                onClick={() => setMobileOpen(true)}
+                className="lg:hidden p-2 rounded-xl bg-[#061428] border border-[#d4a017]/30 text-[#d4a017] hover:bg-[#d4a017] hover:text-[#030e1f] transition-all focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#d4a017]"
+                aria-label="Open platform navigation"
+              >
+                <Menu className="w-5 h-5" />
+              </button>
+              <div>
+                <div className="flex items-center gap-2 text-[10px] font-bold text-[#8899b4]">
+                  <span>InstitutionOS Platform</span>
+                  <span aria-hidden="true">•</span>
+                  <span className="text-[#d4a017] uppercase tracking-wider">v4.0 Super Admin</span>
+                </div>
+                <h1 className="text-sm sm:text-base font-extrabold text-white tracking-tight">{platformPageLabel}</h1>
+              </div>
+            </div>
+            <div className="flex items-center gap-3">
+              <span className="hidden sm:flex items-center gap-1.5 px-3 py-1.5 rounded-xl bg-[#061428] border border-[#a78bfa]/30 text-[#a78bfa] text-[10px] font-black tracking-wider">
+                <ShieldCheck className="w-3.5 h-3.5" aria-hidden="true" />
+                SUPER ADMIN
+              </span>
+              <button
+                onClick={() => setNotifOpen(true)}
+                className="p-2 rounded-xl bg-[#061428] border border-[#d4a017]/30 text-[#d4a017] hover:bg-[#0f223d] transition-all relative focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#d4a017]"
+                aria-label="View Platform Notifications"
+                title="Universal Notifications"
+              >
+                <Bell className="w-4 h-4" aria-hidden="true" />
+                <span className="absolute top-1.5 right-1.5 w-2 h-2 rounded-full bg-[#4ade80]" aria-hidden="true" />
+              </button>
+            </div>
+          </header>
+          <main className="flex-1 max-w-7xl w-full mx-auto px-4 sm:px-6 lg:px-8 py-6 sm:py-8">
+            {children}
+          </main>
+        </div>
+        <UniversalNotificationDrawer isOpen={notifOpen} onClose={() => setNotifOpen(false)} role={(session?.user?.role as any) || "ADMIN"} />
+        <GlobalSearchModal isOpen={searchOpen} onClose={() => setSearchOpen(false)} />
+        <PWAInstallBanner />
+      </div>
+    );
+  }
 
   // Faculty Workspace Shell for Instructors
   if (isInstructor) {
@@ -137,7 +202,9 @@ export default function DashboardLayout({
 
   // Institution Control Centre Shell for Administrators & Executive Leadership
   if (!isStudent && !isInstructor) {
-    const iccPageLabel = pathname.includes("/operations")
+    const iccPageLabel = pathname.includes("/platform")
+      ? "Platform Administration Centre"
+      : pathname.includes("/operations")
       ? "Platform Health & Operations Dashboard"
       : pathname.includes("/deployment")
       ? "Deployment Readiness Inspector"

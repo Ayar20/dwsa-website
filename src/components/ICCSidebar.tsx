@@ -118,6 +118,7 @@ const navSections: NavSection[] = [
     title: "Institution Settings",
     icon: Settings,
     items: [
+      { label: "Platform Administration", href: "/dashboard/admin/platform", badge: "v4.0 SaaS", badgeColor: "bg-[#d4a017]/20 text-[#d4a017]" },
       { label: "System & Campus Settings", href: "/dashboard/admin/settings" },
     ],
   },
@@ -150,7 +151,7 @@ export default function ICCSidebar({ mobileOpen, setMobileOpen }: ICCSidebarProp
               <span className="px-1.5 py-0.5 rounded bg-[#d4a017]/15 text-[#d4a017] text-[8px] font-black tracking-widest border border-[#d4a017]/30">ICC</span>
             </div>
             <p className="text-[10px] font-extrabold text-[#d4a017] tracking-tight">Institution Control Centre</p>
-            <p className="text-[9px] text-[#8899b4]">Powered by InstitutionOS v3.2</p>
+            <p className="text-[9px] text-[#8899b4]">Powered by InstitutionOS v4.0</p>
           </div>
         </div>
         {mobileOpen && (
