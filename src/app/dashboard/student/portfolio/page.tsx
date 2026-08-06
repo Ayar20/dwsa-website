@@ -19,18 +19,18 @@ export default function StudentPortfolioBuilderPage() {
 
   return (
     <div className="space-y-6 pb-12">
-      {/* Page Header */}
-      <div className="p-6 sm:p-8 bg-gradient-to-br from-[#15803D] to-[#0F172A] rounded-3xl shadow-xl">
+      {/* Page Header — IEDS v2.0 */}
+      <div className="p-6 sm:p-8 bg-white border border-slate-200 rounded-3xl shadow-sm">
         <div className="flex items-center gap-2 mb-2">
-          <span className="px-3 py-1 rounded-full bg-white/15 border border-white/30 text-white text-xs font-extrabold flex items-center gap-1.5">
-            <Briefcase className="w-3.5 h-3.5" />
+          <span className="px-3 py-1 rounded-full bg-[#F0FDF4] border border-[#15803D]/20 text-[#15803D] text-xs font-extrabold flex items-center gap-1.5">
+            <Briefcase className="w-3.5 h-3.5" aria-hidden="true" />
             PORTFOLIO BUILDER
           </span>
         </div>
-        <h1 className="text-2xl sm:text-3xl font-black text-white tracking-tight">
-          Professional <span className="text-[#D4A017]">Portfolio Builder</span>
+        <h1 className="text-2xl sm:text-3xl font-black text-[#0F172A] tracking-tight">
+          Professional Portfolio Builder
         </h1>
-        <p className="text-sm text-white/70 mt-1">
+        <p className="text-sm text-slate-500 mt-1">
           GitHub Sync, Verified Projects, AI Score &amp; Portfolio Publishing
         </p>
       </div>
@@ -39,7 +39,7 @@ export default function StudentPortfolioBuilderPage() {
       <div className="bg-white border border-slate-200 rounded-3xl p-6 sm:p-8 shadow-sm">
         <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
           <div>
-            <div className="text-[11px] font-black text-[#D4A017] tracking-widest uppercase mb-1">
+            <div className="text-[11px] font-black text-[#15803D] tracking-widest uppercase mb-1">
               Portfolio Score &amp; Rank
             </div>
             <div className="text-4xl font-black text-[#0F172A]">{report.overallPortfolioScore}<span className="text-xl text-slate-400">/100</span></div>

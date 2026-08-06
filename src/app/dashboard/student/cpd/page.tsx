@@ -11,36 +11,36 @@ export default function StudentCPDPage() {
 
   return (
     <div className="space-y-6 pb-12">
-      {/* Page Header */}
-      <div className="p-6 sm:p-8 bg-gradient-to-br from-[#15803D] to-[#0F172A] rounded-3xl shadow-xl">
+      {/* Page Header — IEDS v2.0 */}
+      <div className="p-6 sm:p-8 bg-white border border-slate-200 rounded-3xl shadow-sm">
         <div className="flex items-center gap-2 mb-2">
-          <span className="px-3 py-1 rounded-full bg-white/15 border border-white/30 text-white text-xs font-extrabold flex items-center gap-1.5">
-            <TrendingUp className="w-3.5 h-3.5" />
+          <span className="px-3 py-1 rounded-full bg-[#F0FDF4] border border-[#15803D]/20 text-[#15803D] text-xs font-extrabold flex items-center gap-1.5">
+            <TrendingUp className="w-3.5 h-3.5" aria-hidden="true" />
             CPD CENTRE
           </span>
         </div>
-        <h1 className="text-2xl sm:text-3xl font-black text-white tracking-tight">
-          Continuous Professional <span className="text-[#D4A017]">Development</span>
+        <h1 className="text-2xl sm:text-3xl font-black text-[#0F172A] tracking-tight">
+          Continuous Professional Development
         </h1>
-        <p className="text-sm text-white/70 mt-1">
+        <p className="text-sm text-slate-500 mt-1">
           CPD Hours Tracking, Professional Memberships &amp; Compliance Reminders
         </p>
       </div>
 
       {/* Summary Stats */}
       <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
-        <div className="bg-[#FEFCE8] border border-[#D4A017]/30 rounded-2xl p-6 flex items-center gap-4 shadow-sm">
-          <div className="w-12 h-12 rounded-2xl bg-white border border-[#D4A017]/20 flex items-center justify-center shrink-0">
-            <Clock className="w-6 h-6 text-[#D4A017]" />
+        <div className="bg-[#F0FDF4] border border-[#15803D]/20 rounded-2xl p-6 flex items-center gap-4 shadow-sm">
+          <div className="w-12 h-12 rounded-2xl bg-white border border-[#15803D]/20 flex items-center justify-center shrink-0">
+            <Clock className="w-6 h-6 text-[#15803D]" aria-hidden="true" />
           </div>
           <div>
-            <div className="text-3xl font-black text-[#D4A017]">{totalCpdHours}<span className="text-base font-bold ml-1">hrs</span></div>
+            <div className="text-3xl font-black text-[#15803D]">{totalCpdHours}<span className="text-base font-bold ml-1">hrs</span></div>
             <div className="text-xs text-slate-500 mt-0.5">CPD Hours Earned (2026)</div>
           </div>
         </div>
         <div className="bg-[#F0FDF4] border border-[#15803D]/20 rounded-2xl p-6 flex items-center gap-4 shadow-sm">
           <div className="w-12 h-12 rounded-2xl bg-white border border-[#15803D]/20 flex items-center justify-center shrink-0">
-            <Users className="w-6 h-6 text-[#15803D]" />
+            <Users className="w-6 h-6 text-[#15803D]" aria-hidden="true" />
           </div>
           <div>
             <div className="text-3xl font-black text-[#15803D]">{memberships.length}</div>

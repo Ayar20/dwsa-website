@@ -116,17 +116,17 @@ export default function FacultySidebar({ mobileOpen, setMobileOpen }: FacultySid
   };
 
   const SidebarContent = () => (
-    <div className="flex flex-col h-full bg-white text-[#0F172A] border-r border-slate-200 select-none">
+    <div className="flex flex-col h-full bg-[#15803D] text-white select-none">
       {/* Logo / Branding */}
-      <div className={`flex items-center gap-3 px-4 py-5 border-b border-slate-100 ${collapsed ? "justify-center" : ""}`}>
-        <div className="w-9 h-9 rounded-xl bg-[#15803D] flex items-center justify-center shrink-0 shadow-md">
-          <BookMarked className="w-4.5 h-4.5 text-white" aria-hidden="true" />
+      <div className={`flex items-center gap-3 px-4 py-5 border-b border-[#166534] ${collapsed ? "justify-center" : ""}`}>
+        <div className="w-9 h-9 rounded-xl bg-white flex items-center justify-center shrink-0 shadow-md">
+          <BookMarked className="w-4.5 h-4.5 text-[#15803D]" aria-hidden="true" />
         </div>
         {!collapsed && (
           <div>
-            <div className="text-[10px] font-black text-[#D4A017] tracking-widest uppercase leading-none">DTA</div>
-            <div className="text-[11px] font-extrabold text-[#0F172A] leading-tight">Faculty Workspace</div>
-            <div className="text-[9px] text-slate-500 tracking-wide">InstitutionOS v5.0</div>
+            <div className="text-[10px] font-black text-white/70 tracking-widest uppercase leading-none">DTA</div>
+            <div className="text-[11px] font-extrabold text-white leading-tight">Faculty Workspace</div>
+            <div className="text-[9px] text-white/60 tracking-wide">InstitutionOS v5.2</div>
           </div>
         )}
       </div>
@@ -136,7 +136,7 @@ export default function FacultySidebar({ mobileOpen, setMobileOpen }: FacultySid
         {navSections.map((section) => (
           <div key={section.title}>
             {!collapsed && (
-              <p className="px-2 pb-1.5 text-[9px] font-black text-slate-400 tracking-[0.15em] uppercase">
+              <p className="px-2 pb-1.5 text-[9px] font-black text-white/60 tracking-[0.15em] uppercase">
                 {section.title}
               </p>
             )}
@@ -153,23 +153,23 @@ export default function FacultySidebar({ mobileOpen, setMobileOpen }: FacultySid
                       href={item.href}
                       {...linkProps}
                       onClick={() => setMobileOpen(false)}
-                      className={`flex items-center gap-3 px-3 py-2.5 rounded-xl text-xs font-semibold transition-all duration-200 group focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#15803D] ${
+                      className={`flex items-center gap-3 px-3 py-2.5 rounded-xl text-xs font-semibold transition-all duration-200 group focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-white/60 ${
                         active
-                          ? "bg-[#F0FDF4] text-[#15803D] border border-[#15803D]/30 font-bold shadow-sm"
-                          : "text-slate-600 hover:text-[#15803D] hover:bg-slate-50 border border-transparent"
+                          ? "bg-white/20 text-white font-bold border-l-4 border-white pl-2.5"
+                          : "text-white/80 hover:text-white hover:bg-white/10 border border-transparent"
                       } ${collapsed ? "justify-center" : ""}`}
                       aria-current={active ? "page" : undefined}
                       title={collapsed ? item.label : undefined}
                     >
                       <Icon
                         className={`shrink-0 transition-colors ${collapsed ? "w-5 h-5" : "w-4 h-4"} ${
-                          active ? "text-[#15803D]" : "text-slate-400 group-hover:text-[#15803D]"
+                          active ? "text-white" : "text-white/70 group-hover:text-white"
                         }`}
                         aria-hidden="true"
                       />
                       {!collapsed && <span className="truncate">{item.label}</span>}
                       {!collapsed && active && (
-                        <span className="ml-auto w-1.5 h-1.5 rounded-full bg-[#15803D] shrink-0" aria-hidden="true" />
+                        <span className="ml-auto w-1.5 h-1.5 rounded-full bg-white shrink-0" aria-hidden="true" />
                       )}
                     </Link>
                   </li>
@@ -181,43 +181,43 @@ export default function FacultySidebar({ mobileOpen, setMobileOpen }: FacultySid
       </nav>
 
       {/* DTA Faculty AI Assistant Slot */}
-      <div className="px-3 py-3 border-t border-slate-100">
+      <div className="px-3 py-3 border-t border-[#166534]">
         {!collapsed ? (
-          <div className="rounded-2xl bg-[#FEFCE8] border border-[#D4A017]/30 p-3">
+          <div className="rounded-2xl bg-[#166534] border border-white/20 p-3">
             <div className="flex items-center gap-2 mb-1.5">
-              <div className="w-6 h-6 rounded-lg bg-[#D4A017] flex items-center justify-center">
+              <div className="w-6 h-6 rounded-lg bg-white/20 flex items-center justify-center">
                 <Sparkles className="w-3.5 h-3.5 text-white" aria-hidden="true" />
               </div>
-              <span className="text-[10px] font-black text-[#0F172A] tracking-wide">DTA FACULTY AI</span>
+              <span className="text-[10px] font-black text-white tracking-wide">DTA FACULTY AI</span>
             </div>
-            <p className="text-[9px] text-slate-500 leading-relaxed">Generate lessons, analyse cohorts &amp; more</p>
-            <div className="mt-2 px-2 py-1 rounded-lg bg-white border border-[#D4A017]/30 text-[9px] font-black text-[#D4A017] tracking-widest text-center">
+            <p className="text-[9px] text-white/70 leading-relaxed">Generate lessons, analyse cohorts &amp; more</p>
+            <div className="mt-2 px-2 py-1 rounded-lg bg-white/10 border border-white/20 text-[9px] font-black text-white tracking-widest text-center">
               ACTIVE HUB
             </div>
           </div>
         ) : (
           <div className="flex justify-center">
-            <div className="w-9 h-9 rounded-xl bg-[#FEFCE8] border border-[#D4A017]/30 flex items-center justify-center" title="DTA Faculty AI Assistant">
-              <Sparkles className="w-4 h-4 text-[#D4A017]" aria-hidden="true" />
+            <div className="w-9 h-9 rounded-xl bg-white/20 border border-white/20 flex items-center justify-center" title="DTA Faculty AI Assistant">
+              <Sparkles className="w-4 h-4 text-white" aria-hidden="true" />
             </div>
           </div>
         )}
       </div>
 
       {/* Faculty Identity Footer */}
-      <div className={`px-3 py-3 border-t border-slate-100 ${collapsed ? "flex flex-col items-center gap-2" : "flex items-center gap-3"}`}>
-        <div className="w-8 h-8 rounded-xl bg-[#15803D] flex items-center justify-center font-black text-sm text-white shrink-0">
+      <div className={`px-3 py-3 border-t border-[#166534] ${collapsed ? "flex flex-col items-center gap-2" : "flex items-center gap-3"}`}>
+        <div className="w-8 h-8 rounded-xl bg-white text-[#15803D] flex items-center justify-center font-black text-sm shrink-0">
           {session?.user?.name?.[0]?.toUpperCase() || "F"}
         </div>
         {!collapsed && (
           <div className="flex-1 min-w-0">
-            <p className="text-xs font-extrabold text-[#0F172A] truncate">{session?.user?.name || "Faculty"}</p>
-            <p className="text-[10px] text-[#15803D] font-bold">Instructor · DTA</p>
+            <p className="text-xs font-extrabold text-white truncate">{session?.user?.name || "Faculty"}</p>
+            <p className="text-[10px] text-white/70 font-bold">Instructor · DTA</p>
           </div>
         )}
         <button
           onClick={() => signOut({ callbackUrl: "/login" })}
-          className="p-1.5 rounded-lg text-slate-400 hover:text-red-600 hover:bg-red-50 transition-all focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-red-500"
+          className="p-1.5 rounded-lg text-white/60 hover:text-red-300 hover:bg-red-900/40 transition-all focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-red-400"
           aria-label="Sign out"
           title="Sign out"
         >
@@ -228,7 +228,7 @@ export default function FacultySidebar({ mobileOpen, setMobileOpen }: FacultySid
       {/* Collapse Toggle — desktop only */}
       <button
         onClick={() => setCollapsed(!collapsed)}
-        className="hidden lg:flex items-center justify-center gap-2 px-4 py-2.5 border-t border-slate-100 text-slate-400 hover:text-[#15803D] text-[10px] font-bold tracking-wider transition-all focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#15803D]"
+        className="hidden lg:flex items-center justify-center gap-2 px-4 py-2.5 border-t border-[#166534] text-white/60 hover:text-white text-[10px] font-bold tracking-wider transition-all focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-white/60"
         aria-label={collapsed ? "Expand faculty sidebar" : "Collapse faculty sidebar"}
       >
         {collapsed ? (
@@ -256,16 +256,16 @@ export default function FacultySidebar({ mobileOpen, setMobileOpen }: FacultySid
 
       {/* Mobile Drawer */}
       <aside
-        className={`fixed inset-y-0 left-0 z-50 w-64 bg-white border-r border-slate-200 flex flex-col transition-transform duration-300 ease-in-out lg:hidden ${
+        className={`fixed inset-y-0 left-0 z-50 w-64 flex flex-col transition-transform duration-300 ease-in-out lg:hidden ${
           mobileOpen ? "translate-x-0" : "-translate-x-full"
         }`}
         aria-label="Faculty navigation drawer"
       >
-        <div className="flex items-center justify-between px-4 py-3 border-b border-slate-100">
-          <span className="text-xs font-black text-[#15803D] tracking-widest uppercase">Faculty Workspace</span>
+        <div className="flex items-center justify-between px-4 py-3 border-b border-[#166534] bg-[#15803D]">
+          <span className="text-xs font-black text-white tracking-widest uppercase">Faculty Workspace</span>
           <button
             onClick={() => setMobileOpen(false)}
-            className="p-1.5 rounded-lg text-slate-400 hover:text-[#0F172A] hover:bg-slate-100 transition-all focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#15803D]"
+            className="p-1.5 rounded-lg text-white/70 hover:text-white hover:bg-white/10 transition-all focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-white/60"
             aria-label="Close faculty navigation"
           >
             <X className="w-4 h-4" aria-hidden="true" />
@@ -278,7 +278,7 @@ export default function FacultySidebar({ mobileOpen, setMobileOpen }: FacultySid
 
       {/* Desktop Fixed Sidebar */}
       <aside
-        className={`hidden lg:flex flex-col ${sidebarWidth} shrink-0 bg-white border-r border-slate-200 min-h-screen sticky top-0 transition-all duration-300 ease-in-out`}
+        className={`hidden lg:flex flex-col ${sidebarWidth} shrink-0 bg-[#15803D] min-h-screen sticky top-0 transition-all duration-300 ease-in-out`}
         aria-label="Faculty navigation"
       >
         <SidebarContent />

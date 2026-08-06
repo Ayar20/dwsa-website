@@ -13,18 +13,18 @@ export default function StudentCareerPathwaysPage() {
 
   return (
     <div className="space-y-6 pb-12">
-      {/* Page Header */}
-      <div className="p-6 sm:p-8 bg-gradient-to-br from-[#15803D] to-[#0F172A] rounded-3xl shadow-xl">
+      {/* Page Header — IEDS v2.0 */}
+      <div className="p-6 sm:p-8 bg-white border border-slate-200 rounded-3xl shadow-sm">
         <div className="flex items-center gap-2 mb-2">
-          <span className="px-3 py-1 rounded-full bg-white/15 border border-white/30 text-white text-xs font-extrabold flex items-center gap-1.5">
-            <Compass className="w-3.5 h-3.5" />
+          <span className="px-3 py-1 rounded-full bg-[#F0FDF4] border border-[#15803D]/20 text-[#15803D] text-xs font-extrabold flex items-center gap-1.5">
+            <Compass className="w-3.5 h-3.5" aria-hidden="true" />
             CAREER PATHWAYS
           </span>
         </div>
-        <h1 className="text-2xl sm:text-3xl font-black text-white tracking-tight">
-          Career <span className="text-[#D4A017]">Pathways Explorer</span>
+        <h1 className="text-2xl sm:text-3xl font-black text-[#0F172A] tracking-tight">
+          Career Pathways Explorer
         </h1>
-        <p className="text-sm text-white/70 mt-1">
+        <p className="text-sm text-slate-500 mt-1">
           Personal Lifelong Learning Roadmap &amp; Target Role Alignment
         </p>
       </div>

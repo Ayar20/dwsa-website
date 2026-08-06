@@ -208,17 +208,15 @@ export default function FacultyHomePage() {
     <div className="space-y-8 pb-12">
 
       {/* ─── Institutional Mission Banner ─────────────────────────────────── */}
-      <div className="relative rounded-3xl overflow-hidden bg-gradient-to-r from-[#15803D] to-[#0F172A] border border-[#15803D]/20 px-6 py-6 shadow-xl text-white">
-        <div className="relative flex items-center gap-4">
-          <div className="w-10 h-10 rounded-2xl bg-white/15 border border-white/20 flex items-center justify-center shrink-0">
-            <Flame className="w-5 h-5 text-[#D4A017]" aria-hidden="true" />
-          </div>
-          <div>
-            <p className="text-[10px] font-black text-[#D4A017] tracking-[0.2em] uppercase mb-0.5">DTA Institutional Mission</p>
-            <p className="text-sm font-bold text-white leading-snug">
-              Your work today contributes to building Africa&apos;s next generation of technology professionals.
-            </p>
-          </div>
+      <div className="rounded-3xl bg-[#F0FDF4] border border-[#15803D]/20 px-6 py-5 flex items-center gap-4">
+        <div className="w-10 h-10 rounded-2xl bg-[#15803D] flex items-center justify-center shrink-0">
+          <Flame className="w-5 h-5 text-white" aria-hidden="true" />
+        </div>
+        <div>
+          <p className="text-[10px] font-black text-[#15803D] tracking-[0.2em] uppercase mb-0.5">DTA Institutional Mission</p>
+          <p className="text-sm font-bold text-[#0F172A] leading-snug">
+            Your work today contributes to building Africa&apos;s next generation of technology professionals.
+          </p>
         </div>
       </div>
 
@@ -226,7 +224,7 @@ export default function FacultyHomePage() {
       <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
         <div>
           <div className="flex flex-wrap items-center gap-2 mb-2">
-            <span className="px-3 py-1 rounded-full bg-[#FEFCE8] border border-[#D4A017]/30 text-[#D4A017] text-[10px] font-black tracking-widest uppercase">
+            <span className="px-3 py-1 rounded-full bg-[#F0FDF4] border border-[#15803D]/20 text-[#15803D] text-[10px] font-black tracking-widest uppercase">
               Faculty Workspace
             </span>
             <span className="px-3 py-1 rounded-full bg-[#F0FDF4] border border-[#15803D]/20 text-[#15803D] text-[10px] font-black tracking-widest uppercase">
@@ -238,7 +236,7 @@ export default function FacultyHomePage() {
           </h2>
           <p className="text-sm text-slate-500 mt-1">
             Today is{" "}
-            <span className="text-[#D4A017] font-semibold">
+            <span className="text-slate-600 font-semibold">
               {now.toLocaleDateString("en-GB", { weekday: "long", day: "numeric", month: "long", year: "numeric" })}
             </span>
             {" "}· Academic Week 4

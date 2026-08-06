@@ -218,39 +218,39 @@ export default function StudentDashboardPage() {
   return (
     <div className="space-y-8 pb-12 animate-fadeInUp">
 
-      {/* ── 1. CAMPUS HOME INSTITUTIONAL WELCOME BANNER ── */}
-      <div className="p-6 sm:p-8 bg-gradient-to-br from-[#15803D] to-[#166534] rounded-3xl space-y-5 shadow-xl relative overflow-hidden">
+      {/* ── 1. CAMPUS HOME INSTITUTIONAL WELCOME BANNER — IEDS v2.0 ── */}
+      <div className="p-6 sm:p-8 bg-white border border-slate-200 rounded-3xl space-y-5 shadow-sm">
         <div className="flex flex-col md:flex-row md:items-center justify-between gap-6">
           <div className="space-y-2">
             <div className="flex flex-wrap items-center gap-2">
-              <span className="px-3 py-1 rounded-full bg-white/15 border border-white/30 text-white text-xs font-extrabold flex items-center gap-1.5">
+              <span className="px-3 py-1 rounded-full bg-[#F0FDF4] border border-[#15803D]/20 text-[#15803D] text-xs font-extrabold flex items-center gap-1.5">
                 <GraduationCap className="w-3.5 h-3.5" aria-hidden="true" />
                 DIGITAL CAMPUS WORKSPACE
               </span>
-              <span className="px-3 py-1 rounded-full bg-[#D4A017]/20 border border-[#D4A017]/50 text-[#D4A017] text-xs font-bold">
+              <span className="px-3 py-1 rounded-full bg-[#F0FDF4] border border-[#15803D]/20 text-[#15803D] text-xs font-bold">
                 Cohort 2026 Active
               </span>
             </div>
-            <h1 className="text-2xl sm:text-3xl font-black text-white tracking-tight">
-              Welcome to Campus Home, <span className="text-[#D4A017]">{enrollment.studentName || "Learner"}</span> 👋
+            <h1 className="text-2xl sm:text-3xl font-black text-[#0F172A] tracking-tight">
+              Welcome to Campus Home, <span className="text-[#15803D]">{enrollment.studentName || "Learner"}</span> 👋
             </h1>
-            <p className="text-xs sm:text-sm text-white/80 leading-relaxed max-w-2xl">
-              You are enrolled in the <strong>{track?.title || "8-Week AI Coding Academy"}</strong>. Your coursework, live code grading engine, and digital identity are active.
+            <p className="text-xs sm:text-sm text-slate-500 leading-relaxed max-w-2xl">
+              You are enrolled in the <strong className="text-[#0F172A]">{track?.title || "8-Week AI Coding Academy"}</strong>. Your coursework, live code grading engine, and digital identity are active.
             </p>
           </div>
 
           {/* Learning Goal Pill */}
-          <div className="shrink-0 p-4 bg-white/10 border border-white/20 rounded-2xl space-y-1.5 min-w-[200px]">
-            <span className="text-[10px] font-bold text-white/70 uppercase tracking-wider block">
+          <div className="shrink-0 p-4 bg-[#F0FDF4] border border-[#15803D]/20 rounded-2xl space-y-1.5 min-w-[200px]">
+            <span className="text-[10px] font-bold text-slate-500 uppercase tracking-wider block">
               Primary Learning Goal
             </span>
-            <strong className="text-xs font-extrabold text-white flex items-center gap-1.5">
-              <Target className="w-3.5 h-3.5 text-[#D4A017]" aria-hidden="true" />
+            <strong className="text-xs font-extrabold text-[#0F172A] flex items-center gap-1.5">
+              <Target className="w-3.5 h-3.5 text-[#15803D]" aria-hidden="true" />
               Software Engineer
             </strong>
             <Link
               href="/dashboard/student/identity"
-              className="text-[10px] text-[#D4A017] font-semibold hover:underline block pt-0.5"
+              className="text-[10px] text-[#15803D] font-semibold hover:underline block pt-0.5"
             >
               Update Digital Identity →
             </Link>
@@ -258,30 +258,30 @@ export default function StudentDashboardPage() {
         </div>
 
         {/* Quick Actions Bar */}
-        <div className="pt-3 border-t border-white/20 flex flex-wrap items-center gap-2 text-xs">
+        <div className="pt-3 border-t border-slate-100 flex flex-wrap items-center gap-2 text-xs">
           <a
             href="#my-learning"
-            className="px-4 py-2 rounded-xl bg-white text-[#15803D] font-extrabold shadow-md transition-all btn-press flex items-center gap-1.5 hover:bg-[#F0FDF4]"
+            className="px-4 py-2 rounded-xl bg-[#15803D] text-white font-extrabold shadow-sm transition-all btn-press flex items-center gap-1.5 hover:bg-[#166534]"
           >
             <BookOpen className="w-3.5 h-3.5" aria-hidden="true" /> Continue Learning
           </a>
           <Link
             href="/dashboard/student/programme"
-            className="px-4 py-2 rounded-xl bg-white/10 hover:bg-white/20 border border-white/30 text-white font-bold transition-all flex items-center gap-1.5"
+            className="px-4 py-2 rounded-xl bg-slate-50 hover:bg-slate-100 border border-slate-200 text-[#0F172A] font-bold transition-all flex items-center gap-1.5"
           >
-            <GraduationCap className="w-3.5 h-3.5" aria-hidden="true" /> My Programme
+            <GraduationCap className="w-3.5 h-3.5 text-[#15803D]" aria-hidden="true" /> My Programme
           </Link>
           <a
             href="#assignments"
-            className="px-4 py-2 rounded-xl bg-[#D4A017]/20 hover:bg-[#D4A017]/30 border border-[#D4A017]/50 text-[#D4A017] font-bold transition-all flex items-center gap-1.5"
+            className="px-4 py-2 rounded-xl bg-[#F0FDF4] hover:bg-[#dcfce7] border border-[#15803D]/20 text-[#15803D] font-bold transition-all flex items-center gap-1.5"
           >
             <GitPullRequest className="w-3.5 h-3.5" aria-hidden="true" /> Submit PR
           </a>
           <Link
             href="/dashboard/student/resources"
-            className="px-4 py-2 rounded-xl bg-white/10 hover:bg-white/20 border border-white/20 text-white font-bold transition-all flex items-center gap-1.5"
+            className="px-4 py-2 rounded-xl bg-slate-50 hover:bg-slate-100 border border-slate-200 text-slate-700 font-bold transition-all flex items-center gap-1.5"
           >
-            <BookOpen className="w-3.5 h-3.5" aria-hidden="true" /> Resource Library
+            <BookOpen className="w-3.5 h-3.5 text-[#15803D]" aria-hidden="true" /> Resource Library
           </Link>
         </div>
       </div>

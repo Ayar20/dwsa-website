@@ -26,13 +26,13 @@ const overallHealthScore = Math.round(
 );
 
 const strategicKPIs = [
-  { label: "Active Learners", value: "482", change: "+14.2%", trend: "up", icon: Users, color: "#D4A017", subText: "Across 4 Active Cohorts" },
+  { label: "Active Learners", value: "482", change: "+14.2%", trend: "up", icon: Users, color: "#15803D", subText: "Across 4 Active Cohorts" },
   { label: "Faculty Members", value: "34", change: "+2 this month", trend: "up", icon: GraduationCap, color: "#15803D", subText: "98% On-Time Grading" },
   { label: "Total Revenue", value: "₦48.2M", change: "+22.5% YoY", trend: "up", icon: DollarSign, color: "#15803D", subText: "Paystack + Corporate" },
   { label: "Admissions Pipeline", value: "128", change: "42 Under Review", trend: "up", icon: Activity, color: "#15803D", subText: "Cohort Delta Enrolling" },
-  { label: "Certificates Issued", value: "312", change: "100% Verifiable", trend: "up", icon: Award, color: "#D4A017", subText: "QR + Cryptographic Seal" },
+  { label: "Certificates Issued", value: "312", change: "100% Verifiable", trend: "up", icon: Award, color: "#15803D", subText: "QR + Cryptographic Seal" },
   { label: "Graduate Employability", value: "92.4%", change: "+3.1%", trend: "up", icon: Briefcase, color: "#15803D", subText: "6-Month Placement Rate" },
-  { label: "Learner Satisfaction", value: "4.9 / 5.0", change: "NPS +78", trend: "up", icon: Sparkles, color: "#D4A017", subText: "94% Response Rate" },
+  { label: "Learner Satisfaction", value: "4.9 / 5.0", change: "NPS +78", trend: "up", icon: Sparkles, color: "#15803D", subText: "94% Response Rate" },
   { label: "Research & Innovation", value: "18 Projects", change: "6 Patent Drafts", trend: "up", icon: FlaskConical, color: "#15803D", subText: "DWSA Innovation Labs" },
 ];
 
@@ -84,29 +84,29 @@ export default function ExecutiveDashboardPage() {
         </div>
       )}
 
-      {/* Top Banner: Mission & Executive Control Header */}
-      <div className="rounded-3xl bg-gradient-to-br from-[#15803D] to-[#0F172A] border border-[#15803D]/20 p-6 sm:p-8 relative overflow-hidden shadow-xl text-white">
-        <div className="flex flex-col lg:flex-row lg:items-center justify-between gap-6 relative z-10">
-          <div className="space-y-2 max-w-2xl">
+      {/* Page Header — IEDS v2.0 Clean White */}
+      <div className="rounded-3xl bg-white border border-slate-200 p-6 sm:p-8 shadow-sm">
+        <div className="flex flex-col lg:flex-row lg:items-center justify-between gap-6">
+          <div className="space-y-1.5 max-w-2xl">
             <div className="flex items-center gap-2">
-              <span className="px-3 py-1 rounded-full bg-white/15 border border-white/20 text-[#D4A017] text-[10px] font-black uppercase tracking-widest">
+              <span className="px-3 py-1 rounded-full bg-[#F0FDF4] border border-[#15803D]/20 text-[#15803D] text-[10px] font-black uppercase tracking-widest">
                 EXECUTIVE OPERATING SYSTEM
               </span>
-              <span className="text-[10px] text-white/70 font-bold">• InstitutionOS v5.1</span>
+              <span className="text-[10px] text-slate-500 font-bold">· InstitutionOS v5.2</span>
             </div>
-            <h1 className="text-2xl sm:text-3xl font-extrabold text-white tracking-tight">
+            <h1 className="text-2xl sm:text-3xl font-extrabold text-[#0F172A] tracking-tight">
               Institution Control Centre (ICC)
             </h1>
-            <p className="text-xs sm:text-sm text-white/80 leading-relaxed">
+            <p className="text-sm text-slate-500 leading-relaxed">
               Strategic visibility, academic governance, financial intelligence, and multi-tenant operating control for Digital Technology Academy.
             </p>
           </div>
 
-          {/* Institutional Health Gauge Card */}
-          <div className="rounded-2xl bg-white/10 backdrop-blur-md border border-white/20 p-5 flex items-center gap-5 shrink-0 shadow-sm">
+          {/* Institutional Health Gauge */}
+          <div className="rounded-2xl bg-[#F0FDF4] border border-[#15803D]/20 p-5 flex items-center gap-5 shrink-0">
             <div className="relative flex items-center justify-center">
               <svg viewBox="0 0 80 80" className="w-20 h-20" aria-hidden="true">
-                <circle cx="40" cy="40" r="32" fill="none" stroke="rgba(255,255,255,0.2)" strokeWidth="8" />
+                <circle cx="40" cy="40" r="32" fill="none" stroke="#D1FAE5" strokeWidth="8" />
                 <circle
                   cx="40" cy="40" r="32" fill="none"
                   stroke="#15803D" strokeWidth="8"
@@ -116,15 +116,15 @@ export default function ExecutiveDashboardPage() {
                 />
               </svg>
               <div className="absolute text-center">
-                <span className="text-xl font-extrabold text-white">{overallHealthScore}</span>
-                <span className="block text-[8px] font-black text-white/70 uppercase">/ 100</span>
+                <span className="text-xl font-extrabold text-[#15803D]">{overallHealthScore}</span>
+                <span className="block text-[8px] font-black text-slate-500 uppercase">/ 100</span>
               </div>
             </div>
             <div>
-              <p className="text-[10px] font-black text-[#D4A017] tracking-wider uppercase">Institutional Health</p>
-              <p className="text-sm font-extrabold text-white mt-0.5">EXCELLENT</p>
-              <p className="text-[10px] text-white font-bold flex items-center gap-1 mt-1">
-                <CheckCircle2 className="w-3 h-3 text-[#15803D]" /> All 6 Pillars Compliant
+              <p className="text-[10px] font-black text-[#15803D] tracking-wider uppercase">Institutional Health</p>
+              <p className="text-sm font-extrabold text-[#0F172A] mt-0.5">EXCELLENT</p>
+              <p className="text-[10px] text-slate-600 font-bold flex items-center gap-1 mt-1">
+                <CheckCircle2 className="w-3 h-3 text-[#15803D]" aria-hidden="true" /> All 6 Pillars Compliant
               </p>
             </div>
           </div>
@@ -154,11 +154,11 @@ export default function ExecutiveDashboardPage() {
 
         <div className="grid grid-cols-2 sm:grid-cols-4 gap-3">
           {[
-            { label: "Institution Capacity", value: "96%", sub: "482 / 500 Active Seats", color: "text-[#D4A017]" },
+            { label: "Institution Capacity", value: "96%", sub: "482 / 500 Active Seats", color: "text-[#15803D]" },
             { label: "Automation Status", value: "94%", sub: "4 Tasks Active · 2 Workflows", color: "text-[#15803D]" },
             { label: "Workflow Health", value: "100%", sub: "0 Failed Processes", color: "text-[#15803D]" },
             { label: "Comms Delivery Rate", value: "98.1%", sub: "Multi-Channel Broadcast Hub", color: "text-[#15803D]" },
-            { label: "Pending Approvals", value: "4 Items", sub: "Signature & Review Queue", color: "text-[#D4A017]" },
+            { label: "Pending Approvals", value: "4 Items", sub: "Signature & Review Queue", color: "text-[#0F172A]" },
             { label: "Upcoming Risks", value: "1 Conflict", sub: "Schedule Collision Flagged", color: "text-red-600" },
             { label: "Operational Efficiency", value: "94%", sub: "Automated Resolution Index", color: "text-[#15803D]" },
             { label: "Readiness Index", value: "92 / 100", sub: "System-Wide Health Score", color: "text-[#0F172A]" },
@@ -176,15 +176,15 @@ export default function ExecutiveDashboardPage() {
       <div className="rounded-3xl bg-white border border-slate-200 p-6 space-y-4 shadow-sm">
         <div className="flex items-center justify-between">
           <div className="flex items-center gap-2">
-            <div className="w-8 h-8 rounded-xl bg-[#FEFCE8] border border-[#D4A017]/30 flex items-center justify-center">
-              <Sparkles className="w-4 h-4 text-[#D4A017]" />
+            <div className="w-8 h-8 rounded-xl bg-[#F0FDF4] border border-[#15803D]/20 flex items-center justify-center">
+              <Sparkles className="w-4 h-4 text-[#15803D]" />
             </div>
             <div>
               <h2 className="text-sm font-extrabold text-[#0F172A]">Executive Intelligence Briefing</h2>
               <p className="text-[10px] text-slate-500">AI Executive Advisory · Updated 08:00 WAT Today</p>
             </div>
           </div>
-          <span className="px-2.5 py-1 rounded-full bg-[#FEFCE8] border border-[#D4A017]/30 text-[#D4A017] text-[9px] font-black uppercase">
+          <span className="px-2.5 py-1 rounded-full bg-[#F0FDF4] border border-[#15803D]/20 text-[#15803D] text-[9px] font-black uppercase">
             INTELLIGENCE PREVIEW
           </span>
         </div>
@@ -212,9 +212,9 @@ export default function ExecutiveDashboardPage() {
             </ul>
           </div>
 
-          <div className="bg-[#FEFCE8] p-4 rounded-2xl border border-[#D4A017]/30 flex flex-col justify-between">
+          <div className="bg-[#F8FAFC] p-4 rounded-2xl border border-slate-200 flex flex-col justify-between">
             <div>
-              <p className="text-[10px] font-black text-[#D4A017] uppercase tracking-wider">Today&apos;s Strategic Recommendation</p>
+              <p className="text-[10px] font-black text-[#15803D] uppercase tracking-wider">Today&apos;s Strategic Recommendation</p>
               <p className="text-xs font-extrabold text-[#0F172A] mt-1 leading-snug">
                 &ldquo;Review enrolment trends for the School of Blockchain &amp; Digital Trust to allocate additional faculty before Cohort Delta launch.&rdquo;
               </p>
