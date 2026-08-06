@@ -5,16 +5,17 @@ import Navbar from "@/components/Navbar";
 import StudentSidebar from "@/components/StudentSidebar";
 import FacultySidebar from "@/components/FacultySidebar";
 import ICCSidebar from "@/components/ICCSidebar";
+import PlatformSidebar from "@/components/PlatformSidebar";
 import UniversalNotificationDrawer from "@/components/platform/UniversalNotificationDrawer";
-import GlobalSearchModal from "@/components/platform/GlobalSearchModal";
+import CommandPalette from "@/components/platform/CommandPalette";
+import QuickActionsDock from "@/components/platform/QuickActionsDock";
+import FloatingAIAssistant from "@/components/platform/FloatingAIAssistant";
 import PrideModal from "@/components/PrideModal";
 import PWAInstallBanner from "@/components/PWAInstallBanner";
 import { useSession } from "next-auth/react";
 import { useRouter, usePathname } from "next/navigation";
-import { Menu, Bell, Search, GraduationCap, ShieldCheck, User, BookMarked } from "lucide-react";
+import { Menu, Bell, Search, GraduationCap, ShieldCheck, User, BookMarked, Command } from "lucide-react";
 import Link from "next/link";
-
-import PlatformSidebar from "@/components/PlatformSidebar";
 
 export default function DashboardLayout({
   children,
@@ -28,6 +29,18 @@ export default function DashboardLayout({
   const [mobileOpen, setMobileOpen] = useState(false);
   const [notifOpen, setNotifOpen] = useState(false);
   const [searchOpen, setSearchOpen] = useState(false);
+
+  // Global Ctrl+K / ⌘K keyboard listener
+  useEffect(() => {
+    const handleKeyDown = (e: KeyboardEvent) => {
+      if ((e.metaKey || e.ctrlKey) && e.key.toLowerCase() === "k") {
+        e.preventDefault();
+        setSearchOpen((prev) => !prev);
+      }
+    };
+    window.addEventListener("keydown", handleKeyDown);
+    return () => window.removeEventListener("keydown", handleKeyDown);
+  }, []);
 
   useEffect(() => {
     if (status === "unauthenticated") {
@@ -43,13 +56,13 @@ export default function DashboardLayout({
 
   if (status === "loading") {
     return (
-      <div className="min-h-screen bg-[#030e1f] flex items-center justify-center text-[#8899b4] text-sm" role="status" aria-label="Loading workspace">
+      <div className="min-h-screen bg-[#F8FAFC] flex items-center justify-center text-slate-500 text-sm" role="status" aria-label="Loading workspace">
         <div className="flex flex-col items-center gap-3 animate-fadeInUp">
-          <div className="w-10 h-10 border-3 border-[#d4a017] border-t-transparent rounded-full animate-spin" />
-          <span className="text-xs font-extrabold text-white tracking-wider">
-            INITIALIZING DIGITAL CAMPUS...
+          <div className="w-10 h-10 border-3 border-[#15803D] border-t-transparent rounded-full animate-spin" />
+          <span className="text-xs font-extrabold text-[#0F172A] tracking-wider">
+            INITIALIZING INSTITUTIONOS v5.3 (IUX)...
           </span>
-          <span className="text-[10px] text-[#8899b4]">Digital World Systems Africa Ltd</span>
+          <span className="text-[10px] text-slate-400">Digital World Systems Africa Ltd</span>
         </div>
       </div>
     );
@@ -58,6 +71,7 @@ export default function DashboardLayout({
   const isStudent = session?.user?.role === "STUDENT";
   const isInstructor = session?.user?.role === "INSTRUCTOR";
   const isPlatformRoute = pathname.startsWith("/dashboard/platform");
+  const userRole = isStudent ? "STUDENT" : isInstructor ? "INSTRUCTOR" : isPlatformRoute ? "SUPER_ADMIN" : "ADMIN";
 
   // Platform Command Centre Shell for Super Admins / Platform Routes
   if (isPlatformRoute) {
@@ -132,7 +146,7 @@ export default function DashboardLayout({
         <PlatformSidebar mobileOpen={mobileOpen} setMobileOpen={setMobileOpen} />
         <div className="flex-1 flex flex-col min-w-0 min-h-screen bg-[#F8FAFC]">
           {/* Platform Header Bar */}
-          <header className="sticky top-0 z-30 bg-white/95 backdrop-blur-md border-b border-slate-200 shadow-sm px-4 sm:px-6 py-3 flex items-center justify-between gap-4">
+          <header className="sticky top-0 z-30 bg-white/95 backdrop-blur-md border-b border-slate-200 shadow-xs px-4 sm:px-6 py-3 flex items-center justify-between gap-4">
             <div className="flex items-center gap-3">
               <button
                 onClick={() => setMobileOpen(true)}
@@ -145,16 +159,20 @@ export default function DashboardLayout({
                 <div className="flex items-center gap-2 text-[10px] font-bold text-slate-500">
                   <span>InstitutionOS Platform</span>
                   <span aria-hidden="true">•</span>
-                  <span className="text-[#15803D] uppercase tracking-wider font-extrabold">v5.0 Super Admin</span>
+                  <span className="text-[#15803D] uppercase tracking-wider font-extrabold">v5.3 IUX</span>
                 </div>
                 <h1 className="text-sm sm:text-base font-extrabold text-[#0F172A] tracking-tight">{platformPageLabel}</h1>
               </div>
             </div>
             <div className="flex items-center gap-3">
-              <span className="hidden sm:flex items-center gap-1.5 px-3 py-1.5 rounded-xl bg-[#F0FDF4] border border-[#15803D]/20 text-[#15803D] text-[10px] font-black tracking-wider">
-                <ShieldCheck className="w-3.5 h-3.5" aria-hidden="true" />
-                SUPER ADMIN
-              </span>
+              <button
+                onClick={() => setSearchOpen(true)}
+                className="hidden sm:flex items-center gap-2 px-3 py-1.5 rounded-xl bg-slate-50 border border-slate-200 hover:border-[#15803D] text-slate-600 hover:text-[#15803D] text-xs font-bold transition-all focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#15803D]"
+              >
+                <Search className="w-3.5 h-3.5 text-[#15803D]" aria-hidden="true" />
+                <span>Command Center</span>
+                <kbd className="px-1.5 py-0.5 rounded bg-white border border-slate-200 text-[10px] font-black text-slate-400">⌘K</kbd>
+              </button>
               <button
                 onClick={() => setNotifOpen(true)}
                 className="p-2 rounded-xl bg-slate-100 border border-slate-200 text-[#0F172A] hover:bg-slate-200 transition-all relative focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#15803D]"
@@ -166,12 +184,14 @@ export default function DashboardLayout({
               </button>
             </div>
           </header>
-          <main className="flex-1 max-w-7xl w-full mx-auto px-4 sm:px-6 lg:px-8 py-6 sm:py-8">
+          <main className="flex-1 max-w-7xl w-full mx-auto px-4 sm:px-6 lg:px-8 py-6 sm:py-8 space-y-6">
+            <QuickActionsDock userRole="SUPER_ADMIN" />
             {children}
           </main>
         </div>
-        <UniversalNotificationDrawer isOpen={notifOpen} onClose={() => setNotifOpen(false)} role={(session?.user?.role as any) || "ADMIN"} />
-        <GlobalSearchModal isOpen={searchOpen} onClose={() => setSearchOpen(false)} />
+        <UniversalNotificationDrawer isOpen={notifOpen} onClose={() => setNotifOpen(false)} role="SUPER_ADMIN" />
+        <CommandPalette isOpen={searchOpen} onClose={() => setSearchOpen(false)} userRole="SUPER_ADMIN" />
+        <FloatingAIAssistant userRole="SUPER_ADMIN" />
         <PWAInstallBanner />
       </div>
     );
@@ -206,7 +226,7 @@ export default function DashboardLayout({
         <FacultySidebar mobileOpen={mobileOpen} setMobileOpen={setMobileOpen} />
         <div className="flex-1 flex flex-col min-w-0 min-h-screen bg-[#F8FAFC]">
           {/* Faculty Workspace Top Header */}
-          <header className="sticky top-0 z-30 bg-white/95 backdrop-blur-md border-b border-slate-200 shadow-sm px-4 sm:px-6 py-3 flex items-center justify-between gap-4">
+          <header className="sticky top-0 z-30 bg-white/95 backdrop-blur-md border-b border-slate-200 shadow-xs px-4 sm:px-6 py-3 flex items-center justify-between gap-4">
             <div className="flex items-center gap-3">
               <button
                 onClick={() => setMobileOpen(true)}
@@ -219,16 +239,20 @@ export default function DashboardLayout({
                 <div className="flex items-center gap-2 text-[10px] font-bold text-slate-500">
                   <span>Faculty Workspace</span>
                   <span aria-hidden="true">•</span>
-                  <span className="text-[#15803D] uppercase tracking-wider font-extrabold">InstitutionOS v5.0</span>
+                  <span className="text-[#15803D] uppercase tracking-wider font-extrabold">InstitutionOS v5.3 IUX</span>
                 </div>
                 <h1 className="text-sm sm:text-base font-extrabold text-[#0F172A] tracking-tight">{facultyPageLabel}</h1>
               </div>
             </div>
             <div className="flex items-center gap-3">
-              <span className="hidden sm:flex items-center gap-1.5 px-3 py-1.5 rounded-xl bg-[#F0FDF4] border border-[#15803D]/20 text-[#15803D] text-[10px] font-black tracking-wider">
-                <BookMarked className="w-3.5 h-3.5" aria-hidden="true" />
-                FACULTY
-              </span>
+              <button
+                onClick={() => setSearchOpen(true)}
+                className="hidden sm:flex items-center gap-2 px-3 py-1.5 rounded-xl bg-slate-50 border border-slate-200 hover:border-[#15803D] text-slate-600 hover:text-[#15803D] text-xs font-bold transition-all focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#15803D]"
+              >
+                <Search className="w-3.5 h-3.5 text-[#15803D]" aria-hidden="true" />
+                <span>Search</span>
+                <kbd className="px-1.5 py-0.5 rounded bg-white border border-slate-200 text-[10px] font-black text-slate-400">⌘K</kbd>
+              </button>
               <button
                 onClick={() => setNotifOpen(true)}
                 className="p-2 rounded-xl bg-slate-100 border border-slate-200 text-[#0F172A] hover:bg-slate-200 transition-all relative focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#15803D]"
@@ -251,10 +275,14 @@ export default function DashboardLayout({
               </Link>
             </div>
           </header>
-          <main className="flex-1 max-w-7xl w-full mx-auto px-4 sm:px-6 lg:px-8 py-6 sm:py-8">
+          <main className="flex-1 max-w-7xl w-full mx-auto px-4 sm:px-6 lg:px-8 py-6 sm:py-8 space-y-6">
+            <QuickActionsDock userRole="INSTRUCTOR" />
             {children}
           </main>
         </div>
+        <UniversalNotificationDrawer isOpen={notifOpen} onClose={() => setNotifOpen(false)} role="INSTRUCTOR" />
+        <CommandPalette isOpen={searchOpen} onClose={() => setSearchOpen(false)} userRole="INSTRUCTOR" />
+        <FloatingAIAssistant userRole="INSTRUCTOR" />
         <PWAInstallBanner />
       </div>
     );
@@ -327,7 +355,7 @@ export default function DashboardLayout({
         <ICCSidebar mobileOpen={mobileOpen} setMobileOpen={setMobileOpen} />
         <div className="flex-1 flex flex-col min-w-0 min-h-screen bg-[#F8FAFC]">
           {/* Executive Header Bar */}
-          <header className="sticky top-0 z-30 bg-white/95 backdrop-blur-md border-b border-slate-200 shadow-sm px-4 sm:px-6 py-3 flex items-center justify-between gap-4">
+          <header className="sticky top-0 z-30 bg-white/95 backdrop-blur-md border-b border-slate-200 shadow-xs px-4 sm:px-6 py-3 flex items-center justify-between gap-4">
             <div className="flex items-center gap-3">
               <button
                 onClick={() => setMobileOpen(true)}
@@ -340,16 +368,20 @@ export default function DashboardLayout({
                 <div className="flex items-center gap-2 text-[10px] font-bold text-slate-500">
                   <span>Institution Control Centre</span>
                   <span aria-hidden="true">•</span>
-                  <span className="text-[#D4A017] uppercase tracking-wider font-extrabold">InstitutionOS v5.0</span>
+                  <span className="text-[#15803D] uppercase tracking-wider font-extrabold">InstitutionOS v5.3 IUX</span>
                 </div>
                 <h1 className="text-sm sm:text-base font-extrabold text-[#0F172A] tracking-tight">{iccPageLabel}</h1>
               </div>
             </div>
             <div className="flex items-center gap-3">
-              <span className="hidden sm:flex items-center gap-1.5 px-3 py-1.5 rounded-xl bg-[#FEFCE8] border border-[#D4A017]/30 text-[#D4A017] text-[10px] font-black tracking-wider">
-                <ShieldCheck className="w-3.5 h-3.5" aria-hidden="true" />
-                EXECUTIVE
-              </span>
+              <button
+                onClick={() => setSearchOpen(true)}
+                className="hidden sm:flex items-center gap-2 px-3 py-1.5 rounded-xl bg-slate-50 border border-slate-200 hover:border-[#15803D] text-slate-600 hover:text-[#15803D] text-xs font-bold transition-all focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#15803D]"
+              >
+                <Search className="w-3.5 h-3.5 text-[#15803D]" aria-hidden="true" />
+                <span>Command Center</span>
+                <kbd className="px-1.5 py-0.5 rounded bg-white border border-slate-200 text-[10px] font-black text-slate-400">⌘K</kbd>
+              </button>
               <button
                 onClick={() => setNotifOpen(true)}
                 className="p-2 rounded-xl bg-slate-100 border border-slate-200 text-[#0F172A] hover:bg-slate-200 transition-all relative focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#15803D]"
@@ -361,7 +393,7 @@ export default function DashboardLayout({
               </button>
               <Link
                 href="/dashboard/admin/settings"
-                className="flex items-center gap-2 p-1.5 sm:px-3 sm:py-1.5 rounded-xl bg-slate-100 border border-slate-200 hover:border-[#D4A017] text-[#0F172A] transition-all focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#D4A017]"
+                className="flex items-center gap-2 p-1.5 sm:px-3 sm:py-1.5 rounded-xl bg-slate-100 border border-slate-200 hover:border-[#15803D] text-[#0F172A] transition-all focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#15803D]"
               >
                 <div className="w-6 h-6 rounded-lg bg-[#0F172A] text-white flex items-center justify-center font-black text-xs shrink-0">
                   {session?.user?.name?.[0]?.toUpperCase() || "E"}
@@ -372,11 +404,15 @@ export default function DashboardLayout({
               </Link>
             </div>
           </header>
-          <main className="flex-1 max-w-7xl w-full mx-auto px-4 sm:px-6 lg:px-8 py-6 sm:py-8">
+          <main className="flex-1 max-w-7xl w-full mx-auto px-4 sm:px-6 lg:px-8 py-6 sm:py-8 space-y-6">
+            <QuickActionsDock userRole="ADMIN" />
             {children}
           </main>
         </div>
         <PrideModal isOpen={showPrideModal} onAccepted={() => setShowPrideModal(false)} />
+        <UniversalNotificationDrawer isOpen={notifOpen} onClose={() => setNotifOpen(false)} role="ADMIN" />
+        <CommandPalette isOpen={searchOpen} onClose={() => setSearchOpen(false)} userRole="ADMIN" />
+        <FloatingAIAssistant userRole="ADMIN" />
         <PWAInstallBanner />
       </div>
     );
@@ -385,17 +421,11 @@ export default function DashboardLayout({
   // Digital Campus Shell Layout for Students
   return (
     <div className="min-h-screen bg-[#F8FAFC] text-[#0F172A] flex font-sans">
-      
-      {/* Student Sidebar Navigation */}
       <StudentSidebar mobileOpen={mobileOpen} setMobileOpen={setMobileOpen} />
-
-      {/* Main Content Area */}
       <div className="flex-1 flex flex-col min-w-0 min-h-screen bg-[#F8FAFC]">
-
         {/* Institutional Campus Top Header Bar */}
-        <header className="sticky top-0 z-30 bg-white/95 backdrop-blur-md border-b border-slate-200 shadow-sm px-4 sm:px-6 py-3 flex items-center justify-between gap-4">
+        <header className="sticky top-0 z-30 bg-white/95 backdrop-blur-md border-b border-slate-200 shadow-xs px-4 sm:px-6 py-3 flex items-center justify-between gap-4">
           <div className="flex items-center gap-3">
-            {/* Mobile Sidebar Toggle Button */}
             <button
               onClick={() => setMobileOpen(true)}
               className="lg:hidden p-2 rounded-xl bg-[#F0FDF4] border border-[#15803D]/20 text-[#15803D] hover:bg-[#15803D] hover:text-white transition-all focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#15803D]"
@@ -403,13 +433,11 @@ export default function DashboardLayout({
             >
               <Menu className="w-5 h-5" />
             </button>
-
-            {/* Breadcrumb / Section Header */}
             <div>
               <div className="flex items-center gap-2 text-[10px] font-bold text-slate-500">
                 <span>DTA Digital Campus</span>
                 <span aria-hidden="true">•</span>
-                <span className="text-[#15803D] uppercase tracking-wider font-extrabold">InstitutionOS v5.0A</span>
+                <span className="text-[#15803D] uppercase tracking-wider font-extrabold">InstitutionOS v5.3 IUX</span>
               </div>
               <h1 className="text-sm sm:text-base font-extrabold text-[#0F172A] tracking-tight">
                 {pathname.includes("/transcript")
@@ -457,14 +485,14 @@ export default function DashboardLayout({
             </div>
           </div>
 
-          {/* Top Header Actions */}
           <div className="flex items-center gap-3">
             <button
               onClick={() => setSearchOpen(true)}
-              className="hidden sm:flex items-center gap-2 px-3 py-1.5 rounded-xl bg-white border border-slate-200 text-slate-700 hover:border-[#15803D] hover:text-[#15803D] text-xs font-bold transition-all focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#15803D]"
+              className="hidden sm:flex items-center gap-2 px-3 py-1.5 rounded-xl bg-slate-50 border border-slate-200 hover:border-[#15803D] text-slate-600 hover:text-[#15803D] text-xs font-bold transition-all focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#15803D]"
             >
               <Search className="w-3.5 h-3.5 text-[#15803D]" aria-hidden="true" />
-              <span>Search Library</span>
+              <span>Command Center</span>
+              <kbd className="px-1.5 py-0.5 rounded bg-white border border-slate-200 text-[10px] font-black text-slate-400">⌘K</kbd>
             </button>
 
             <button
@@ -479,7 +507,7 @@ export default function DashboardLayout({
 
             <Link
               href="/dashboard/student/identity"
-              className="flex items-center gap-2 p-1.5 sm:px-3 sm:py-1.5 rounded-xl bg-white border border-slate-200 hover:border-[#15803D] text-[#0F172A] transition-all focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#15803D] shadow-sm"
+              className="flex items-center gap-2 p-1.5 sm:px-3 sm:py-1.5 rounded-xl bg-white border border-slate-200 hover:border-[#15803D] text-[#0F172A] transition-all focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#15803D] shadow-xs"
             >
               <div className="w-6 h-6 rounded-lg bg-[#15803D] text-white flex items-center justify-center font-black text-xs shrink-0">
                 {session?.user?.name?.[0]?.toUpperCase() || "S"}
@@ -491,11 +519,10 @@ export default function DashboardLayout({
           </div>
         </header>
 
-        {/* Content Container */}
-        <main className="flex-1 max-w-7xl w-full mx-auto px-4 sm:px-6 lg:px-8 py-6 sm:py-8">
+        <main className="flex-1 max-w-7xl w-full mx-auto px-4 sm:px-6 lg:px-8 py-6 sm:py-8 space-y-6">
+          <QuickActionsDock userRole="STUDENT" />
           {children}
         </main>
-
       </div>
 
       <PrideModal isOpen={showPrideModal} onAccepted={() => setShowPrideModal(false)} />
@@ -503,12 +530,14 @@ export default function DashboardLayout({
       <UniversalNotificationDrawer
         isOpen={notifOpen}
         onClose={() => setNotifOpen(false)}
-        role={(session?.user?.role as any) || "STUDENT"}
+        role="STUDENT"
       />
-      <GlobalSearchModal
+      <CommandPalette
         isOpen={searchOpen}
         onClose={() => setSearchOpen(false)}
+        userRole="STUDENT"
       />
+      <FloatingAIAssistant userRole="STUDENT" />
     </div>
   );
 }
