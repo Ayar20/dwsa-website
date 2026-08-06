@@ -42,48 +42,48 @@ export function CodingLab({
   ] as const;
 
   return (
-    <div style={{ background: "#060f21", border: "1px solid rgba(212,160,23,0.2)", borderRadius: 12, overflow: "hidden" }}>
+    <div style={{ background: "#FFFFFF", border: "1px solid #E2E8F0", borderRadius: "16px", overflow: "hidden", boxShadow: "0 4px 16px rgba(0,0,0,0.04)" }}>
       {/* Header */}
-      <div style={{ padding: "16px 20px", borderBottom: "1px solid rgba(212,160,23,0.15)", display: "flex", alignItems: "center", gap: 12, background: "#050e1e" }}>
-        <div style={{ width: 38, height: 38, borderRadius: 10, background: "rgba(212,160,23,0.12)", display: "flex", alignItems: "center", justifyContent: "center", fontSize: 18, flexShrink: 0 }}>⚡</div>
+      <div style={{ padding: "16px 24px", borderBottom: "1px solid #E2E8F0", display: "flex", alignItems: "center", gap: 14, background: "#F0FDF4" }}>
+        <div style={{ width: 40, height: 40, borderRadius: 10, background: "#15803D", color: "#FFFFFF", display: "flex", alignItems: "center", justifyContent: "center", fontSize: 18, flexShrink: 0 }}>⚡</div>
         <div>
-          <div style={{ color: "#d4a017", fontSize: 11, fontWeight: 700, letterSpacing: "0.1em", textTransform: "uppercase", marginBottom: 2 }}>CodingLab</div>
-          <div style={{ color: "#f0f4ff", fontSize: 15, fontWeight: 700 }}>{title}</div>
+          <div style={{ color: "#15803D", fontSize: 11, fontWeight: 800, letterSpacing: "0.1em", textTransform: "uppercase", marginBottom: 2 }}>CodingLab</div>
+          <div style={{ color: "#0F172A", fontSize: 16, fontWeight: 800 }}>{title}</div>
         </div>
-        <div style={{ marginLeft: "auto", background: allDone ? "rgba(74,222,128,0.12)" : "rgba(212,160,23,0.1)", border: `1px solid ${allDone ? "rgba(74,222,128,0.3)" : "rgba(212,160,23,0.25)"}`, borderRadius: 20, padding: "4px 14px", fontSize: 12, fontWeight: 700, color: allDone ? "#4ade80" : "#d4a017" }}>
+        <div style={{ marginLeft: "auto", background: allDone ? "#F0FDF4" : "#FFFFFF", border: `1px solid ${allDone ? "#15803D" : "#CBD5E1"}`, borderRadius: 20, padding: "4px 14px", fontSize: 12, fontWeight: 700, color: allDone ? "#15803D" : "#475569" }}>
           {completedCount}/{tasks.length} Tasks
         </div>
       </div>
 
-      <div style={{ display: "grid", gridTemplateColumns: "1fr 280px", minHeight: 420 }}>
+      <div style={{ display: "grid", gridTemplateColumns: "1fr 300px", minHeight: 420 }}>
         {/* Left: Tab Panels */}
-        <div style={{ borderRight: "1px solid rgba(212,160,23,0.1)" }}>
+        <div style={{ borderRight: "1px solid #E2E8F0" }}>
           {/* Tabs */}
-          <div style={{ display: "flex", borderBottom: "1px solid rgba(212,160,23,0.1)" }}>
+          <div style={{ display: "flex", borderBottom: "1px solid #E2E8F0", background: "#F8FAFC" }}>
             {tabs.map((tab) => (
               <button
                 key={tab.key}
                 onClick={() => setActiveTab(tab.key)}
-                style={{ flex: 1, padding: "11px 0", background: "transparent", border: "none", cursor: "pointer", fontSize: 13, fontWeight: activeTab === tab.key ? 700 : 500, color: activeTab === tab.key ? "#d4a017" : "#6b7a94", borderBottom: `2px solid ${activeTab === tab.key ? "#d4a017" : "transparent"}`, transition: "all 0.2s" }}
+                style={{ flex: 1, padding: "12px 0", background: "transparent", border: "none", cursor: "pointer", fontSize: 13, fontWeight: activeTab === tab.key ? 700 : 500, color: activeTab === tab.key ? "#15803D" : "#64748B", borderBottom: `2px solid ${activeTab === tab.key ? "#15803D" : "transparent"}`, transition: "all 0.2s" }}
               >
                 {tab.label}
               </button>
             ))}
           </div>
 
-          <div style={{ padding: 20 }}>
+          <div style={{ padding: 24 }}>
             {activeTab === "instructions" && (
               <div>
                 {starterTemplateUrl && (
-                  <a href={starterTemplateUrl} target="_blank" rel="noreferrer" style={{ display: "inline-flex", alignItems: "center", gap: 8, background: "rgba(74,222,128,0.1)", border: "1px solid rgba(74,222,128,0.25)", borderRadius: 8, padding: "8px 16px", color: "#4ade80", fontSize: 13, fontWeight: 700, textDecoration: "none", marginBottom: 16 }}>
+                  <a href={starterTemplateUrl} target="_blank" rel="noreferrer" style={{ display: "inline-flex", alignItems: "center", gap: 8, background: "#F0FDF4", border: "1px solid #15803D/30", borderRadius: 8, padding: "9px 16px", color: "#15803D", fontSize: 13, fontWeight: 700, textDecoration: "none", marginBottom: 16 }}>
                     🔗 Open Starter Repository on GitHub
                   </a>
                 )}
-                <p style={{ color: "#aab4c4", fontSize: 14, lineHeight: 1.8, margin: 0 }}>{instructions}</p>
+                <p style={{ color: "#334155", fontSize: 14, lineHeight: 1.8, margin: 0 }}>{instructions}</p>
                 {instructorTip && (
-                  <div style={{ marginTop: 16, background: "rgba(212,160,23,0.07)", border: "1px solid rgba(212,160,23,0.2)", borderRadius: 8, padding: "12px 16px" }}>
-                    <div style={{ color: "#d4a017", fontSize: 12, fontWeight: 700, marginBottom: 6, letterSpacing: "0.08em" }}>💡 INSTRUCTOR TIP</div>
-                    <p style={{ color: "#aab4c4", fontSize: 13, lineHeight: 1.7, margin: 0 }}>{instructorTip}</p>
+                  <div style={{ marginTop: 20, background: "#FEFCE8", border: "1px solid #D4A017/40", borderRadius: 10, padding: "14px 18px" }}>
+                    <div style={{ color: "#D4A017", fontSize: 11, fontWeight: 800, marginBottom: 6, letterSpacing: "0.08em" }}>💡 INSTRUCTOR TIP</div>
+                    <p style={{ color: "#0F172A", fontSize: 13, lineHeight: 1.7, margin: 0, fontWeight: 500 }}>{instructorTip}</p>
                   </div>
                 )}
               </div>
@@ -91,11 +91,11 @@ export function CodingLab({
 
             {activeTab === "rubric" && (
               <div>
-                <div style={{ color: "#6b7a94", fontSize: 12, fontWeight: 600, letterSpacing: "0.08em", textTransform: "uppercase", marginBottom: 12 }}>Marking Criteria</div>
+                <div style={{ color: "#64748B", fontSize: 12, fontWeight: 700, letterSpacing: "0.08em", textTransform: "uppercase", marginBottom: 14 }}>Marking Criteria</div>
                 {rubric.map((criterion, i) => (
-                  <div key={i} style={{ display: "flex", alignItems: "flex-start", gap: 10, marginBottom: 10 }}>
-                    <div style={{ width: 24, height: 24, borderRadius: 6, background: "rgba(212,160,23,0.12)", display: "flex", alignItems: "center", justifyContent: "center", fontSize: 11, fontWeight: 700, color: "#d4a017", flexShrink: 0, marginTop: 1 }}>{i + 1}</div>
-                    <p style={{ color: "#aab4c4", fontSize: 13, lineHeight: 1.6, margin: 0 }}>{criterion}</p>
+                  <div key={i} style={{ display: "flex", alignItems: "flex-start", gap: 12, marginBottom: 12 }}>
+                    <div style={{ width: 26, height: 26, borderRadius: 8, background: "#F0FDF4", border: "1px solid #15803D/30", display: "flex", alignItems: "center", justifyContent: "center", fontSize: 12, fontWeight: 800, color: "#15803D", flexShrink: 0, marginTop: 1 }}>{i + 1}</div>
+                    <p style={{ color: "#334155", fontSize: 13, lineHeight: 1.6, margin: 0 }}>{criterion}</p>
                   </div>
                 ))}
               </div>
@@ -103,8 +103,8 @@ export function CodingLab({
 
             {activeTab === "output" && (
               <div>
-                <div style={{ color: "#6b7a94", fontSize: 12, fontWeight: 600, letterSpacing: "0.08em", textTransform: "uppercase", marginBottom: 12 }}>Expected Output</div>
-                <div style={{ background: "#030e1f", border: "1px solid rgba(74,222,128,0.2)", borderRadius: 8, padding: "14px 16px", fontFamily: "monospace", fontSize: 13, color: "#4ade80", lineHeight: 1.7, whiteSpace: "pre-wrap" }}>
+                <div style={{ color: "#64748B", fontSize: 12, fontWeight: 700, letterSpacing: "0.08em", textTransform: "uppercase", marginBottom: 14 }}>Expected Output</div>
+                <div style={{ background: "#0F172A", border: "1px solid #1E293B", borderRadius: 10, padding: "16px 18px", fontFamily: "monospace", fontSize: 13, color: "#4ADE80", lineHeight: 1.7, whiteSpace: "pre-wrap" }}>
                   {expectedOutput}
                 </div>
               </div>
@@ -113,22 +113,22 @@ export function CodingLab({
         </div>
 
         {/* Right: Task Checklist + Submission */}
-        <div style={{ padding: 20, display: "flex", flexDirection: "column", gap: 16 }}>
+        <div style={{ padding: 24, display: "flex", flexDirection: "column", gap: 16, background: "#F8FAFC" }}>
           <div>
-            <div style={{ color: "#6b7a94", fontSize: 11, fontWeight: 700, letterSpacing: "0.1em", textTransform: "uppercase", marginBottom: 12 }}>Task Checklist</div>
+            <div style={{ color: "#64748B", fontSize: 11, fontWeight: 800, letterSpacing: "0.1em", textTransform: "uppercase", marginBottom: 14 }}>Task Checklist</div>
             {tasks.map((task) => (
-              <label key={task.id} style={{ display: "flex", alignItems: "flex-start", gap: 10, cursor: "pointer", marginBottom: 12 }}>
+              <label key={task.id} style={{ display: "flex", alignItems: "flex-start", gap: 10, cursor: "pointer", marginBottom: 14 }}>
                 <div
                   onClick={() => toggleTask(task.id)}
                   role="checkbox"
                   aria-checked={task.completed}
                   tabIndex={0}
                   onKeyDown={(e) => e.key === " " && toggleTask(task.id)}
-                  style={{ width: 20, height: 20, borderRadius: 5, border: `2px solid ${task.completed ? "#4ade80" : "rgba(212,160,23,0.4)"}`, background: task.completed ? "rgba(74,222,128,0.15)" : "transparent", display: "flex", alignItems: "center", justifyContent: "center", flexShrink: 0, cursor: "pointer", transition: "all 0.2s", marginTop: 2 }}
+                  style={{ width: 20, height: 20, borderRadius: 6, border: `2px solid ${task.completed ? "#15803D" : "#CBD5E1"}`, background: task.completed ? "#15803D" : "#FFFFFF", display: "flex", alignItems: "center", justifyContent: "center", flexShrink: 0, cursor: "pointer", transition: "all 0.2s", marginTop: 2 }}
                 >
-                  {task.completed && <span style={{ color: "#4ade80", fontSize: 12, fontWeight: 700 }}>✓</span>}
+                  {task.completed && <span style={{ color: "#FFFFFF", fontSize: 12, fontWeight: 800 }}>✓</span>}
                 </div>
-                <span style={{ color: task.completed ? "#6b7a94" : "#aab4c4", fontSize: 13, lineHeight: 1.6, textDecoration: task.completed ? "line-through" : "none", transition: "all 0.2s" }}>
+                <span style={{ color: task.completed ? "#94A3B8" : "#0F172A", fontSize: 13, lineHeight: 1.6, textDecoration: task.completed ? "line-through" : "none", transition: "all 0.2s", fontWeight: task.completed ? 500 : 600 }}>
                   {task.description}
                 </span>
               </label>
@@ -138,27 +138,27 @@ export function CodingLab({
           {/* Progress Bar */}
           <div>
             <div style={{ display: "flex", justifyContent: "space-between", marginBottom: 6 }}>
-              <span style={{ color: "#6b7a94", fontSize: 11, fontWeight: 600 }}>Progress</span>
-              <span style={{ color: "#d4a017", fontSize: 11, fontWeight: 700 }}>{Math.round((completedCount / tasks.length) * 100)}%</span>
+              <span style={{ color: "#64748B", fontSize: 11, fontWeight: 700 }}>Progress</span>
+              <span style={{ color: "#15803D", fontSize: 11, fontWeight: 800 }}>{Math.round((completedCount / tasks.length) * 100)}%</span>
             </div>
-            <div style={{ height: 6, background: "rgba(255,255,255,0.07)", borderRadius: 3 }}>
-              <div style={{ height: "100%", width: `${(completedCount / tasks.length) * 100}%`, background: "linear-gradient(90deg,#d4a017,#4ade80)", borderRadius: 3, transition: "width 0.4s ease" }} />
+            <div style={{ height: 8, background: "#E2E8F0", borderRadius: 4 }}>
+              <div style={{ height: "100%", width: `${(completedCount / tasks.length) * 100}%`, background: "#15803D", borderRadius: 4, transition: "width 0.4s ease" }} />
             </div>
           </div>
 
           {/* Submit */}
           <div style={{ marginTop: "auto" }}>
             {submitted ? (
-              <div style={{ background: "rgba(74,222,128,0.1)", border: "1px solid rgba(74,222,128,0.3)", borderRadius: 10, padding: "14px 16px", textAlign: "center" }}>
-                <div style={{ fontSize: 22, marginBottom: 6 }}>🎉</div>
-                <div style={{ color: "#4ade80", fontWeight: 700, fontSize: 14 }}>Submitted for Review</div>
-                <div style={{ color: "#6b7a94", fontSize: 12, marginTop: 4 }}>Your instructor will review your PR submission.</div>
+              <div style={{ background: "#F0FDF4", border: "1px solid #15803D/30", borderRadius: 12, padding: "16px", textAlign: "center" }}>
+                <div style={{ fontSize: 24, marginBottom: 6 }}>🎉</div>
+                <div style={{ color: "#15803D", fontWeight: 800, fontSize: 14 }}>Submitted for Review</div>
+                <div style={{ color: "#64748B", fontSize: 12, marginTop: 4 }}>Your instructor will review your PR submission.</div>
               </div>
             ) : (
               <button
                 onClick={handleSubmit}
                 disabled={!allDone}
-                style={{ width: "100%", padding: "12px 0", background: allDone ? "linear-gradient(135deg,#d4a017,#b88a0e)" : "rgba(255,255,255,0.06)", color: allDone ? "#030e1f" : "#4a5568", border: "none", borderRadius: 10, cursor: allDone ? "pointer" : "not-allowed", fontWeight: 700, fontSize: 14, transition: "all 0.3s" }}
+                style={{ width: "100%", padding: "12px 0", background: allDone ? "#15803D" : "#E2E8F0", color: allDone ? "#FFFFFF" : "#94A3B8", border: "none", borderRadius: 10, cursor: allDone ? "pointer" : "not-allowed", fontWeight: 700, fontSize: 14, transition: "all 0.2s" }}
               >
                 {allDone ? "🚀 Submit for Review" : `Complete ${tasks.length - completedCount} more task${tasks.length - completedCount !== 1 ? "s" : ""} to submit`}
               </button>

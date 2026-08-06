@@ -52,14 +52,6 @@ function YoutubeIcon({ className }: { className?: string }) {
   );
 }
 
-function GithubIcon({ className }: { className?: string }) {
-  return (
-    <svg className={className} fill="currentColor" viewBox="0 0 24 24" aria-hidden="true">
-      <path fillRule="evenodd" clipRule="evenodd" d="M12 2C6.477 2 2 6.484 2 12.017c0 4.425 2.865 8.18 6.839 9.504.5.092.682-.217.682-.483 0-.237-.008-.868-.013-1.703-2.782.605-3.369-1.343-3.369-1.343-.454-1.158-1.11-1.466-1.11-1.466-.908-.62.069-.608.069-.608 1.003.07 1.53 1.032 1.53 1.032.892 1.53 2.341 1.088 2.91.832.092-.647.35-1.088.636-1.338-2.22-.253-4.555-1.113-4.555-4.951 0-1.093.39-1.988 1.029-2.688-.103-.253-.446-1.272.098-2.65 0 0 .84-.27 2.75 1.026A9.564 9.564 0 0112 6.844c.85.004 1.705.115 2.504.337 1.909-1.296 2.747-1.027 2.747-1.027.546 1.379.202 2.398.1 2.651.64.7 1.028 1.595 1.028 2.688 0 3.848-2.339 4.695-4.566 4.943.359.309.678.92.678 1.855 0 1.338-.012 2.419-.012 2.747 0 .268.18.58.688.482A10.019 10.019 0 0022 12.017C22 6.484 17.522 2 12 2z"/>
-    </svg>
-  );
-}
-
 function TiktokIcon({ className }: { className?: string }) {
   return (
     <svg className={className} fill="currentColor" viewBox="0 0 24 24" aria-hidden="true">
@@ -103,27 +95,27 @@ export default function PublicFooter() {
   ];
 
   return (
-    <footer className="mt-auto border-t border-[#d4a017]/20 bg-[#020914] pt-14 pb-8 px-4 sm:px-6 lg:px-8 text-xs text-[#8899b4]">
+    <footer className="mt-auto border-t border-slate-800 bg-[#0F172A] pt-14 pb-8 px-4 sm:px-6 lg:px-8 text-xs text-slate-400">
       <div className="max-w-7xl mx-auto space-y-12">
 
         {/* Top Footer Banner: Parent Brand Alignment */}
-        <div className="bg-[#061428] border border-[#d4a017]/30 rounded-2xl p-6 sm:p-8 flex flex-col lg:flex-row items-start lg:items-center justify-between gap-6">
+        <div className="bg-[#1E293B] border border-slate-700 rounded-2xl p-6 sm:p-8 flex flex-col lg:flex-row items-start lg:items-center justify-between gap-6">
           <div className="space-y-2">
             <div className="flex items-center gap-3">
-              <div className="p-2 bg-gradient-to-br from-[#d4a017] to-[#e5a910] rounded-xl text-[#030e1f]">
+              <div className="p-2 bg-[#15803D] rounded-xl text-white">
                 <GraduationCap className="w-6 h-6" aria-hidden="true" />
               </div>
               <div>
                 <h3 className="text-lg font-black text-white tracking-tight">
                   Digital Technology Academy (DTA)
                 </h3>
-                <p className="text-xs text-[#d4a017] font-bold">
+                <p className="text-xs text-[#D4A017] font-bold">
                   Developing Africa&apos;s Next Generation of Technology Professionals
                 </p>
               </div>
             </div>
 
-            <p className="text-xs text-[#c8d8f0] leading-relaxed max-w-2xl pt-1">
+            <p className="text-xs text-slate-300 leading-relaxed max-w-2xl pt-1">
               The Digital Technology Academy is the education and human capability development arm of{" "}
               <strong className="text-white">Digital World Systems Africa Ltd</strong>, empowering
               individuals, organizations, and institutions with practical skills in emerging technologies.
@@ -131,14 +123,14 @@ export default function PublicFooter() {
           </div>
 
           {/* Parent Organization Box */}
-          <div className="lg:text-right shrink-0 bg-[#030e1f] border border-[#d4a017]/30 p-4 rounded-xl space-y-1">
-            <span className="text-[10px] font-extrabold text-[#d4a017] uppercase tracking-wider block">
+          <div className="lg:text-right shrink-0 bg-[#0F172A] border border-slate-700 p-4 rounded-xl space-y-1">
+            <span className="text-[10px] font-extrabold text-[#D4A017] uppercase tracking-wider block">
               PARENT ORGANIZATION
             </span>
             <strong className="text-sm font-extrabold text-white block">
               Digital World Systems Africa Ltd
             </strong>
-            <span className="text-xs text-[#d4a017] font-bold block">
+            <span className="text-xs text-[#15803D] font-bold block">
               Building Africa&apos;s Digital Future
             </span>
             <span className="text-[10px] text-slate-400 block pt-0.5">
@@ -152,18 +144,18 @@ export default function PublicFooter() {
 
           {/* Col 1: Connect With DWSA */}
           <div className="lg:col-span-2 space-y-4">
-            <h4 className="text-xs font-extrabold uppercase tracking-wider text-white border-b border-[#d4a017]/30 pb-2">
+            <h4 className="text-xs font-extrabold uppercase tracking-wider text-white border-b border-slate-800 pb-2">
               Connect With DWSA
             </h4>
 
-            <p className="text-xs text-[#8899b4] leading-relaxed">
+            <p className="text-xs text-slate-400 leading-relaxed">
               Stay connected with Digital World Systems Africa Ltd for Technology Insights, Admissions Updates,
               Innovation News, Research Publications, Events, Career Opportunities, and Product Announcements.
             </p>
 
             {/* Social Media Links */}
             <div className="space-y-2 pt-1">
-              <span className="text-[10px] font-bold text-[#d4a017] uppercase tracking-widest block">
+              <span className="text-[10px] font-bold text-[#D4A017] uppercase tracking-widest block">
                 Official DWSA Ecosystem Channels
               </span>
               <div className="flex items-center gap-2 flex-wrap">
@@ -175,141 +167,120 @@ export default function PublicFooter() {
                     rel="noreferrer"
                     aria-label={label}
                     title={label}
-                    className="p-2.5 bg-[#061428] border border-[#d4a017]/30 text-[#d4a017] hover:bg-[#d4a017] hover:text-[#030e1f] rounded-xl transition-all flex items-center gap-1.5 text-xs font-bold focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#d4a017]"
+                    className="p-2.5 bg-slate-800 border border-slate-700 text-white hover:bg-[#15803D] hover:border-[#15803D] rounded-xl transition-all flex items-center gap-1.5 text-xs font-bold focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#15803D]"
                   >
                     <Icon className="w-4 h-4" aria-hidden="true" />
-                    <span className="hidden sm:inline">{name}</span>
+                    <span>{name}</span>
                   </a>
                 ))}
               </div>
             </div>
-
-            {/* Contact Info */}
-            <div className="space-y-1.5 text-[11px] pt-2">
-              <div className="flex items-center gap-2 text-slate-300">
-                <MapPin className="w-3.5 h-3.5 text-[#d4a017] shrink-0" aria-hidden="true" />
-                <span>Technology Hub & Lab: Makurdi, Benue State, Nigeria</span>
-              </div>
-              <div className="flex items-center gap-2 text-slate-300">
-                <Phone className="w-3.5 h-3.5 text-[#4ade80] shrink-0" aria-hidden="true" />
-                <a
-                  href="https://wa.me/2347082135071"
-                  target="_blank"
-                  rel="noreferrer"
-                  className="hover:text-[#4ade80] transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#4ade80] rounded"
-                >
-                  WhatsApp Support: +234 708 213 5071
-                </a>
-              </div>
-            </div>
           </div>
 
-          {/* Col 2: Digital Campus Navigation */}
+          {/* Col 2: Strategic Pillars */}
           <div className="space-y-3">
-            <h4 className="text-xs font-bold uppercase tracking-wider text-white border-b border-[#d4a017]/30 pb-2">
-              Digital Campus
+            <h4 className="text-xs font-extrabold uppercase tracking-wider text-white border-b border-slate-800 pb-2">
+              Strategic Pillars
             </h4>
-            <ul className="space-y-2">
-              {[
-                { href: "/", label: "Home" },
-                { href: "/about", label: "About DTA" },
-                { href: "/programmes", label: "Programmes" },
-                { href: "/admissions", label: "Admissions & Apply", highlight: true },
-                { href: "/login", label: "Digital Campus (Portal)" },
-              ].map(({ href, label, highlight }) => (
-                <li key={href}>
-                  <Link
-                    href={href}
-                    className={`transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#d4a017] rounded ${
-                      highlight
-                        ? "text-[#4ade80] font-semibold hover:text-[#4ade80]/80"
-                        : "hover:text-[#d4a017]"
-                    }`}
-                  >
-                    {label}
-                  </Link>
-                </li>
-              ))}
-            </ul>
-          </div>
-
-          {/* Col 3: Academic & Innovation */}
-          <div className="space-y-3">
-            <h4 className="text-xs font-bold uppercase tracking-wider text-white border-b border-[#d4a017]/30 pb-2">
-              Academic & Innovation
-            </h4>
-            <ul className="space-y-2">
-              {[
-                { href: "/schools", label: "Schools & Centres" },
-                { href: "/innovation", label: "Innovation & Research (IRC)" },
-                { href: "/careers", label: "Career & Entrepreneurship" },
-                { href: "/knowledge-hub", label: "Knowledge Hub" },
-                { href: "/corporate", label: "Corporate Learning" },
-              ].map(({ href, label }) => (
-                <li key={href}>
-                  <Link
-                    href={href}
-                    className="hover:text-[#d4a017] transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#d4a017] rounded"
-                  >
-                    {label}
-                  </Link>
-                </li>
-              ))}
-            </ul>
-          </div>
-
-          {/* Col 4: DWSA Corporate */}
-          <div className="space-y-3">
-            <h4 className="text-xs font-bold uppercase tracking-wider text-[#d4a017] border-b border-[#d4a017]/30 pb-2">
-              DWSA Corporate
-            </h4>
-            <ul className="space-y-2">
+            <ul className="space-y-2 text-xs">
               <li>
-                <Link
-                  href="/ecosystem"
-                  className="hover:text-[#d4a017] transition-colors font-semibold text-[#d4a017]/80 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#d4a017] rounded"
-                >
-                  DWSA Ecosystem (4 Pillars)
+                <Link href="/programmes" className="hover:text-[#15803D] transition-colors">
+                  Digital Technology Academy
                 </Link>
               </li>
-              {[
-                { href: "https://dws-africa.vercel.app", label: "DWSA Corporate Site" },
-                { href: "https://dws-africa.vercel.app/governance", label: "Governance" },
-                { href: "https://dws-africa.vercel.app/research", label: "Research & Dev" },
-                { href: "https://dwsa-enterpriseos.vercel.app", label: "Enterprise OS" },
-              ].map(({ href, label }) => (
-                <li key={label}>
-                  <a
-                    href={href}
-                    target="_blank"
-                    rel="noreferrer"
-                    className="hover:text-[#d4a017] transition-colors flex items-center gap-1 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#d4a017] rounded"
-                  >
-                    {label} <ExternalLink className="w-3 h-3" aria-hidden="true" />
-                  </a>
-                </li>
-              ))}
+              <li>
+                <Link href="/corporate" className="hover:text-[#15803D] transition-colors">
+                  Corporate Learning &amp; Upskilling
+                </Link>
+              </li>
+              <li>
+                <Link href="/innovation" className="hover:text-[#15803D] transition-colors">
+                  Innovation Research Centre
+                </Link>
+              </li>
+              <li>
+                <Link href="/ecosystem" className="hover:text-[#15803D] transition-colors">
+                  Enterprise Solutions &amp; Software
+                </Link>
+              </li>
+              <li>
+                <Link href="/knowledge-hub" className="hover:text-[#15803D] transition-colors">
+                  Technology Insights &amp; Publications
+                </Link>
+              </li>
+            </ul>
+          </div>
+
+          {/* Col 3: Academic Schools */}
+          <div className="space-y-3">
+            <h4 className="text-xs font-extrabold uppercase tracking-wider text-white border-b border-slate-800 pb-2">
+              Academic Schools
+            </h4>
+            <ul className="space-y-2 text-xs">
+              <li>
+                <Link href="/schools" className="hover:text-[#15803D] transition-colors">
+                  School of Software Engineering
+                </Link>
+              </li>
+              <li>
+                <Link href="/schools" className="hover:text-[#15803D] transition-colors">
+                  School of AI &amp; Data Science
+                </Link>
+              </li>
+              <li>
+                <Link href="/schools" className="hover:text-[#15803D] transition-colors">
+                  School of Cloud &amp; Cybersecurity
+                </Link>
+              </li>
+              <li>
+                <Link href="/schools" className="hover:text-[#15803D] transition-colors">
+                  School of Digital Business &amp; Product
+                </Link>
+              </li>
+              <li>
+                <Link href="/schools" className="hover:text-[#15803D] transition-colors">
+                  School of Executive Education
+                </Link>
+              </li>
+            </ul>
+          </div>
+
+          {/* Col 4: Corporate & Compliance */}
+          <div className="space-y-3">
+            <h4 className="text-xs font-extrabold uppercase tracking-wider text-white border-b border-slate-800 pb-2">
+              Corporate &amp; Contact
+            </h4>
+            <ul className="space-y-2.5 text-xs">
+              <li className="flex items-start gap-2">
+                <MapPin className="w-3.5 h-3.5 text-[#15803D] shrink-0 mt-0.5" aria-hidden="true" />
+                <span>DWSA Headquarters, Abuja / Lagos, Nigeria</span>
+              </li>
+              <li className="flex items-center gap-2">
+                <Mail className="w-3.5 h-3.5 text-[#15803D] shrink-0" aria-hidden="true" />
+                <a href="mailto:info@dwsafrica.com" className="hover:text-white transition-colors">
+                  info@dwsafrica.com
+                </a>
+              </li>
+              <li className="flex items-center gap-2">
+                <Globe className="w-3.5 h-3.5 text-[#15803D] shrink-0" aria-hidden="true" />
+                <a href="https://dwsafrica.com" target="_blank" rel="noreferrer" className="hover:text-white transition-colors">
+                  dwsafrica.com
+                </a>
+              </li>
             </ul>
           </div>
 
         </div>
 
-        {/* Bottom Copyright */}
-        <div className="pt-6 border-t border-slate-900 flex flex-col sm:flex-row items-center justify-between gap-4 text-[11px] text-[#55667e]">
-          <div>
-            &copy; {new Date().getFullYear()} Digital World Systems Africa Ltd (RC 9718724). All rights reserved.
-          </div>
-          <div className="flex items-center gap-4 flex-wrap justify-center sm:justify-end">
-            <span>A Strategic Pillar of Digital World Systems Africa Ltd</span>
-            <span aria-hidden="true">•</span>
-            <a
-              href="https://wa.me/2347082135071"
-              target="_blank"
-              rel="noreferrer"
-              className="hover:text-[#4ade80] transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#4ade80] rounded"
-            >
-              WhatsApp Support
-            </a>
+        {/* Bottom Legal Copyright Bar */}
+        <div className="pt-8 border-t border-slate-800 flex flex-col sm:flex-row items-center justify-between gap-4 text-[11px] text-slate-400">
+          <p>
+            © {new Date().getFullYear()} <strong className="text-white">Digital World Systems Africa Ltd</strong>. All rights reserved.
+          </p>
+          <div className="flex items-center gap-4">
+            <Link href="/about" className="hover:text-white transition-colors">About Us</Link>
+            <Link href="/careers" className="hover:text-white transition-colors">Careers</Link>
+            <Link href="/login" className="hover:text-[#15803D] font-bold text-white transition-colors">Digital Campus Login</Link>
           </div>
         </div>
 

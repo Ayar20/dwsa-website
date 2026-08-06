@@ -20,12 +20,8 @@ import {
   Star,
   Zap,
   ChevronRight,
-  ExternalLink,
   CheckCircle2,
-  XCircle,
   AlertTriangle,
-  BarChart3,
-  Target,
   Sparkles,
   Flame,
   Shield,
@@ -49,9 +45,9 @@ const todayPriorities = [
     desc: "Oldest submission: 18 hours ago",
     action: "Review PRs",
     href: "/dashboard/instructor/github-reviews",
-    color: "#d4a017",
-    bg: "bg-[#d4a017]/10",
-    border: "border-[#d4a017]/40",
+    color: "#D4A017",
+    bg: "bg-[#FEFCE8]",
+    border: "border-[#D4A017]/40",
   },
   {
     id: 2,
@@ -61,9 +57,9 @@ const todayPriorities = [
     desc: "React Fundamentals – Cohort Alpha",
     action: "Prepare Session",
     href: "/dashboard/instructor/cohorts",
-    color: "#4ade80",
-    bg: "bg-[#4ade80]/10",
-    border: "border-[#4ade80]/40",
+    color: "#15803D",
+    bg: "bg-[#F0FDF4]",
+    border: "border-[#15803D]/30",
   },
   {
     id: 3,
@@ -73,9 +69,9 @@ const todayPriorities = [
     desc: "Week 3 Lab submissions – due today",
     action: "Start Grading",
     href: "/dashboard/instructor/assessments",
-    color: "#f87171",
-    bg: "bg-red-950/30",
-    border: "border-red-800/40",
+    color: "#DC2626",
+    bg: "bg-red-50",
+    border: "border-red-200",
   },
   {
     id: 4,
@@ -85,9 +81,9 @@ const todayPriorities = [
     desc: "No login activity in 7+ days",
     action: "View Learners",
     href: "/dashboard/instructor/learners",
-    color: "#f59e0b",
-    bg: "bg-amber-950/30",
-    border: "border-amber-800/40",
+    color: "#D4A017",
+    bg: "bg-amber-50",
+    border: "border-amber-200",
   },
   {
     id: 5,
@@ -97,9 +93,9 @@ const todayPriorities = [
     desc: "4 urgent – awaiting your response",
     action: "View Messages",
     href: "/dashboard/instructor/learners",
-    color: "#818cf8",
-    bg: "bg-indigo-950/30",
-    border: "border-indigo-800/40",
+    color: "#15803D",
+    bg: "bg-[#F0FDF4]",
+    border: "border-[#15803D]/20",
   },
   {
     id: 6,
@@ -109,9 +105,9 @@ const todayPriorities = [
     desc: "Week 4 Schedule – not yet published",
     action: "Publish Now",
     href: "/dashboard/instructor/announcements",
-    color: "#8899b4",
-    bg: "bg-[#061428]",
-    border: "border-[#1a2f4a]",
+    color: "#64748B",
+    bg: "bg-slate-50",
+    border: "border-slate-200",
   },
 ];
 
@@ -121,8 +117,8 @@ const atRiskLearners = [
     name: "Emeka Okafor",
     cohort: "Cohort Alpha",
     risk: "Critical",
-    riskColor: "text-red-400",
-    riskBg: "bg-red-950/40 border-red-800/40",
+    riskColor: "text-red-700",
+    riskBg: "bg-red-50 border-red-200",
     indicators: ["No login (9 days)", "3 missed assignments", "0 GitHub commits"],
     progress: 12,
   },
@@ -131,8 +127,8 @@ const atRiskLearners = [
     name: "Fatima Al-Hassan",
     cohort: "Cohort Beta",
     risk: "High",
-    riskColor: "text-amber-400",
-    riskBg: "bg-amber-950/30 border-amber-800/30",
+    riskColor: "text-amber-800",
+    riskBg: "bg-amber-50 border-amber-200",
     indicators: ["Low attendance (40%)", "Low PR activity", "1 failed assessment"],
     progress: 28,
   },
@@ -141,39 +137,39 @@ const atRiskLearners = [
     name: "David Mensah",
     cohort: "Cohort Alpha",
     risk: "Medium",
-    riskColor: "text-yellow-400",
-    riskBg: "bg-yellow-950/20 border-yellow-800/30",
+    riskColor: "text-yellow-800",
+    riskBg: "bg-yellow-50 border-yellow-200",
     indicators: ["Declining progress", "2 late submissions"],
     progress: 45,
   },
 ];
 
 const kpiMetrics = [
-  { label: "PR Reviews Completed", value: "47", sub: "This month", icon: GitPullRequest, color: "#d4a017" },
-  { label: "Avg Review Time", value: "2.4h", sub: "↓ 0.6h from last month", icon: Clock, color: "#4ade80" },
-  { label: "Assignments Published", value: "12", sub: "Across 3 cohorts", icon: FileText, color: "#818cf8" },
-  { label: "Live Sessions Conducted", value: "8", sub: "This month", icon: Video, color: "#60a5fa" },
-  { label: "Student Satisfaction", value: "4.8/5", sub: "↑ 0.2 from last month", icon: Star, color: "#d4a017" },
-  { label: "Learner Completion Rate", value: "73%", sub: "Cohort average", icon: TrendingUp, color: "#4ade80" },
-  { label: "Office Hour Participation", value: "89%", sub: "Active bookings", icon: Users, color: "#f87171" },
-  { label: "Teaching Consistency", value: "96%", sub: "Sessions delivered on time", icon: Shield, color: "#4ade80" },
+  { label: "PR Reviews Completed", value: "47", sub: "This month", icon: GitPullRequest, color: "#D4A017" },
+  { label: "Avg Review Time", value: "2.4h", sub: "↓ 0.6h from last month", icon: Clock, color: "#15803D" },
+  { label: "Assignments Published", value: "12", sub: "Across 3 cohorts", icon: FileText, color: "#15803D" },
+  { label: "Live Sessions Conducted", value: "8", sub: "This month", icon: Video, color: "#15803D" },
+  { label: "Student Satisfaction", value: "4.8/5", sub: "↑ 0.2 from last month", icon: Star, color: "#D4A017" },
+  { label: "Learner Completion Rate", value: "73%", sub: "Cohort average", icon: TrendingUp, color: "#15803D" },
+  { label: "Office Hour Participation", value: "89%", sub: "Active bookings", icon: Users, color: "#15803D" },
+  { label: "Teaching Consistency", value: "96%", sub: "Sessions delivered on time", icon: Shield, color: "#15803D" },
 ];
 
 const teachingCalendar = [
-  { time: "09:00", title: "React Fundamentals – Cohort Alpha", type: "live", typeColor: "text-[#4ade80]", typeBg: "bg-[#4ade80]/10 border-[#4ade80]/30" },
-  { time: "11:00", title: "Office Hours – Open Session", type: "office-hours", typeColor: "text-[#818cf8]", typeBg: "bg-indigo-950/30 border-indigo-800/30" },
-  { time: "14:00", title: "Next.js Advanced Patterns – Cohort Beta", type: "live", typeColor: "text-[#4ade80]", typeBg: "bg-[#4ade80]/10 border-[#4ade80]/30" },
-  { time: "16:30", title: "Faculty Team Meeting", type: "meeting", typeColor: "text-[#d4a017]", typeBg: "bg-[#d4a017]/10 border-[#d4a017]/30" },
-  { time: "18:00", title: "Week 4 Capstone Review – Cohort Alpha", type: "assessment", typeColor: "text-red-400", typeBg: "bg-red-950/30 border-red-800/30" },
+  { time: "09:00", title: "React Fundamentals – Cohort Alpha", type: "live", typeColor: "text-[#15803D]", typeBg: "bg-[#F0FDF4] border-[#15803D]/20" },
+  { time: "11:00", title: "Office Hours – Open Session", type: "office-hours", typeColor: "text-[#15803D]", typeBg: "bg-[#F0FDF4] border-[#15803D]/20" },
+  { time: "14:00", title: "Next.js Advanced Patterns – Cohort Beta", type: "live", typeColor: "text-[#15803D]", typeBg: "bg-[#F0FDF4] border-[#15803D]/20" },
+  { time: "16:30", title: "Faculty Team Meeting", type: "meeting", typeColor: "text-[#D4A017]", typeBg: "bg-[#FEFCE8] border-[#D4A017]/30" },
+  { time: "18:00", title: "Week 4 Capstone Review – Cohort Alpha", type: "assessment", typeColor: "text-red-700", typeBg: "bg-red-50 border-red-200" },
 ];
 
 const recognitionBadges = [
-  { title: "Mentor of the Month", icon: Star, color: "#d4a017", earned: true },
-  { title: "PR Review Champion", icon: GitPullRequest, color: "#4ade80", earned: true },
-  { title: "Curriculum Contributor", icon: BookOpen, color: "#818cf8", earned: true },
-  { title: "Innovation Leader", icon: Zap, color: "#f59e0b", earned: false },
-  { title: "Research Excellence", icon: Activity, color: "#60a5fa", earned: false },
-  { title: "Outstanding Service", icon: Award, color: "#d4a017", earned: false },
+  { title: "Mentor of the Month", icon: Star, color: "#D4A017", earned: true },
+  { title: "PR Review Champion", icon: GitPullRequest, color: "#15803D", earned: true },
+  { title: "Curriculum Contributor", icon: BookOpen, color: "#15803D", earned: true },
+  { title: "Innovation Leader", icon: Zap, color: "#D4A017", earned: false },
+  { title: "Research Excellence", icon: Activity, color: "#15803D", earned: false },
+  { title: "Outstanding Service", icon: Award, color: "#D4A017", earned: false },
 ];
 
 const quickStats = [
@@ -184,12 +180,12 @@ const quickStats = [
 ];
 
 const quickActions = [
-  { label: "Start Live Session", icon: Video, href: "/dashboard/instructor/cohorts", color: "#4ade80" },
-  { label: "Review PRs", icon: GitPullRequest, href: "/dashboard/instructor/github-reviews", color: "#d4a017" },
-  { label: "Create Assignment", icon: PlusCircle, href: "/dashboard/instructor/assessments", color: "#818cf8" },
-  { label: "Upload Lesson", icon: Upload, href: "/dashboard/instructor/lessons", color: "#60a5fa" },
-  { label: "Post Announcement", icon: Bell, href: "/dashboard/instructor/announcements", color: "#f59e0b" },
-  { label: "Download Reports", icon: Download, href: "/dashboard/instructor/learners", color: "#f87171" },
+  { label: "Start Live Session", icon: Video, href: "/dashboard/instructor/cohorts", color: "#15803D" },
+  { label: "Review PRs", icon: GitPullRequest, href: "/dashboard/instructor/github-reviews", color: "#D4A017" },
+  { label: "Create Assignment", icon: PlusCircle, href: "/dashboard/instructor/assessments", color: "#15803D" },
+  { label: "Upload Lesson", icon: Upload, href: "/dashboard/instructor/lessons", color: "#15803D" },
+  { label: "Post Announcement", icon: Bell, href: "/dashboard/instructor/announcements", color: "#D4A017" },
+  { label: "Download Reports", icon: Download, href: "/dashboard/instructor/learners", color: "#64748B" },
 ];
 
 // ─── Component ────────────────────────────────────────────────────────────────
@@ -212,17 +208,13 @@ export default function FacultyHomePage() {
     <div className="space-y-8 pb-12">
 
       {/* ─── Institutional Mission Banner ─────────────────────────────────── */}
-      <div className="relative rounded-3xl overflow-hidden bg-gradient-to-r from-[#0d1e0d] via-[#0a1628] to-[#030e1f] border border-[#4ade80]/20 px-6 py-5">
-        <div className="absolute inset-0 pointer-events-none">
-          <div className="absolute top-0 right-0 w-64 h-64 bg-[#4ade80]/5 rounded-full blur-3xl" />
-          <div className="absolute bottom-0 left-0 w-48 h-48 bg-[#d4a017]/5 rounded-full blur-3xl" />
-        </div>
+      <div className="relative rounded-3xl overflow-hidden bg-gradient-to-r from-[#15803D] to-[#0F172A] border border-[#15803D]/20 px-6 py-6 shadow-xl text-white">
         <div className="relative flex items-center gap-4">
-          <div className="w-10 h-10 rounded-2xl bg-gradient-to-br from-[#4ade80]/20 to-[#d4a017]/20 border border-[#4ade80]/30 flex items-center justify-center shrink-0">
-            <Flame className="w-5 h-5 text-[#4ade80]" aria-hidden="true" />
+          <div className="w-10 h-10 rounded-2xl bg-white/15 border border-white/20 flex items-center justify-center shrink-0">
+            <Flame className="w-5 h-5 text-[#D4A017]" aria-hidden="true" />
           </div>
           <div>
-            <p className="text-[10px] font-black text-[#4ade80] tracking-[0.2em] uppercase mb-0.5">DTA Institutional Mission</p>
+            <p className="text-[10px] font-black text-[#D4A017] tracking-[0.2em] uppercase mb-0.5">DTA Institutional Mission</p>
             <p className="text-sm font-bold text-white leading-snug">
               Your work today contributes to building Africa&apos;s next generation of technology professionals.
             </p>
@@ -234,19 +226,19 @@ export default function FacultyHomePage() {
       <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
         <div>
           <div className="flex flex-wrap items-center gap-2 mb-2">
-            <span className="px-3 py-1 rounded-full bg-[#d4a017]/15 border border-[#d4a017]/30 text-[#d4a017] text-[10px] font-black tracking-widest uppercase">
+            <span className="px-3 py-1 rounded-full bg-[#FEFCE8] border border-[#D4A017]/30 text-[#D4A017] text-[10px] font-black tracking-widest uppercase">
               Faculty Workspace
             </span>
-            <span className="px-3 py-1 rounded-full bg-[#4ade80]/10 border border-[#4ade80]/25 text-[#4ade80] text-[10px] font-black tracking-widest uppercase">
+            <span className="px-3 py-1 rounded-full bg-[#F0FDF4] border border-[#15803D]/20 text-[#15803D] text-[10px] font-black tracking-widest uppercase">
               Academic Operations Centre
             </span>
           </div>
-          <h2 className="text-2xl sm:text-3xl font-extrabold text-white">
+          <h2 className="text-2xl sm:text-3xl font-extrabold text-[#0F172A]">
             {greeting}, {firstName} 👋
           </h2>
-          <p className="text-sm text-[#8899b4] mt-1">
+          <p className="text-sm text-slate-500 mt-1">
             Today is{" "}
-            <span className="text-[#d4a017] font-semibold">
+            <span className="text-[#D4A017] font-semibold">
               {now.toLocaleDateString("en-GB", { weekday: "long", day: "numeric", month: "long", year: "numeric" })}
             </span>
             {" "}· Academic Week 4
@@ -254,7 +246,7 @@ export default function FacultyHomePage() {
         </div>
         <button
           onClick={handleRefresh}
-          className="self-start flex items-center gap-2 px-4 py-2 rounded-xl bg-[#061428] border border-[#d4a017]/30 text-[#d4a017] text-xs font-bold hover:bg-[#0f223d] transition-all focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#d4a017]"
+          className="self-start flex items-center gap-2 px-4 py-2 rounded-xl bg-white border border-slate-200 text-[#0F172A] text-xs font-bold hover:bg-slate-50 transition-all shadow-sm focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#15803D]"
           aria-label="Refresh faculty workspace data"
         >
           <RefreshCw className={`w-3.5 h-3.5 ${refreshing ? "animate-spin" : ""}`} aria-hidden="true" />
@@ -262,7 +254,7 @@ export default function FacultyHomePage() {
         </button>
       </div>
 
-      {/* ─── ACADEMIC INTELLIGENCE LAYER (v3.4) ─── */}
+      {/* ─── ACADEMIC INTELLIGENCE LAYER ─── */}
       <FacultyTeachingInsights />
       <CompetencyRadar title="Cohort Competency Validation Overview" />
 
@@ -271,10 +263,10 @@ export default function FacultyHomePage() {
         {quickStats.map((stat) => {
           const Icon = stat.icon;
           return (
-            <div key={stat.label} className="rounded-2xl bg-[#061428] border border-[#1a2f4a] p-4 flex flex-col gap-2">
-              <Icon className="w-5 h-5 text-[#d4a017]" aria-hidden="true" />
-              <p className="text-2xl font-extrabold text-white">{stat.value}</p>
-              <p className="text-[10px] text-[#8899b4] font-semibold leading-tight">{stat.label}</p>
+            <div key={stat.label} className="rounded-2xl bg-white border border-slate-200 p-4 flex flex-col gap-2 shadow-sm">
+              <Icon className="w-5 h-5 text-[#15803D]" aria-hidden="true" />
+              <p className="text-2xl font-extrabold text-[#0F172A]">{stat.value}</p>
+              <p className="text-[10px] text-slate-500 font-semibold leading-tight">{stat.label}</p>
             </div>
           );
         })}
@@ -284,10 +276,10 @@ export default function FacultyHomePage() {
       <section aria-labelledby="priorities-heading">
         <div className="flex items-center justify-between mb-4">
           <div>
-            <h3 id="priorities-heading" className="text-base font-extrabold text-white">Today&apos;s Priorities</h3>
-            <p className="text-[11px] text-[#8899b4]">Your academic operations command centre — items requiring immediate attention</p>
+            <h3 id="priorities-heading" className="text-base font-extrabold text-[#0F172A]">Today&apos;s Priorities</h3>
+            <p className="text-[11px] text-slate-500">Your academic operations command centre — items requiring immediate attention</p>
           </div>
-          <span className="px-2.5 py-1 rounded-full bg-red-950/40 border border-red-800/40 text-red-400 text-[10px] font-black">
+          <span className="px-2.5 py-1 rounded-full bg-red-50 border border-red-200 text-red-700 text-[10px] font-black">
             {todayPriorities.filter(p => p.type === "urgent" || p.type === "high").length} Urgent
           </span>
         </div>
@@ -297,21 +289,20 @@ export default function FacultyHomePage() {
             return (
               <div
                 key={item.id}
-                className={`rounded-2xl ${item.bg} border ${item.border} p-4 flex flex-col gap-3 hover:scale-[1.01] transition-transform`}
+                className={`rounded-2xl ${item.bg} border ${item.border} p-4 flex flex-col gap-3 shadow-sm hover:scale-[1.01] transition-transform`}
               >
                 <div className="flex items-start gap-3">
-                  <div className="w-9 h-9 rounded-xl flex items-center justify-center shrink-0" style={{ backgroundColor: `${item.color}20`, border: `1px solid ${item.color}40` }}>
+                  <div className="w-9 h-9 rounded-xl flex items-center justify-center shrink-0 bg-white border border-slate-200 shadow-xs">
                     <Icon className="w-4.5 h-4.5" style={{ color: item.color }} aria-hidden="true" />
                   </div>
                   <div className="flex-1 min-w-0">
-                    <p className="text-xs font-extrabold text-white leading-snug">{item.title}</p>
-                    <p className="text-[10px] text-[#8899b4] mt-0.5">{item.desc}</p>
+                    <p className="text-xs font-extrabold text-[#0F172A] leading-snug">{item.title}</p>
+                    <p className="text-[10px] text-slate-500 mt-0.5">{item.desc}</p>
                   </div>
                 </div>
                 <Link
                   href={item.href}
-                  className="flex items-center justify-between px-3 py-2 rounded-xl text-[10px] font-black tracking-wider transition-all focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#d4a017]"
-                  style={{ backgroundColor: `${item.color}15`, color: item.color, border: `1px solid ${item.color}30` }}
+                  className="flex items-center justify-between px-3 py-2 rounded-xl text-[10px] font-black tracking-wider transition-all bg-white border border-slate-200 text-[#0F172A] hover:bg-slate-50 shadow-xs"
                 >
                   {item.action}
                   <ChevronRight className="w-3.5 h-3.5" aria-hidden="true" />
@@ -329,29 +320,27 @@ export default function FacultyHomePage() {
         <section aria-labelledby="atrisk-heading">
           <div className="flex items-center justify-between mb-4">
             <div>
-              <h3 id="atrisk-heading" className="text-base font-extrabold text-white flex items-center gap-2">
-                <AlertCircle className="w-4 h-4 text-red-400" aria-hidden="true" />
+              <h3 id="atrisk-heading" className="text-base font-extrabold text-[#0F172A] flex items-center gap-2">
+                <AlertCircle className="w-4 h-4 text-red-600" aria-hidden="true" />
                 At-Risk Learner Intelligence
               </h3>
-              <p className="text-[11px] text-[#8899b4]">Learners requiring immediate faculty intervention</p>
+              <p className="text-[11px] text-slate-500">Learners requiring immediate faculty intervention</p>
             </div>
-            <Link href="/dashboard/instructor/learners" className="text-[10px] font-black text-[#d4a017] hover:text-white flex items-center gap-1 transition-colors">
+            <Link href="/dashboard/instructor/learners" className="text-[10px] font-black text-[#15803D] hover:underline flex items-center gap-1 transition-colors">
               View All <ChevronRight className="w-3 h-3" aria-hidden="true" />
             </Link>
           </div>
           <div className="space-y-3">
             {atRiskLearners.map((learner) => (
-              <div key={learner.id} className={`rounded-2xl border p-4 ${learner.riskBg}`}>
+              <div key={learner.id} className={`rounded-2xl border p-4 bg-white shadow-sm ${learner.riskBg}`}>
                 <div className="flex items-start justify-between gap-3 mb-3">
-                  <div>
-                    <div className="flex items-center gap-2">
-                      <div className="w-7 h-7 rounded-lg bg-[#061428] border border-[#1a2f4a] flex items-center justify-center text-xs font-black text-white">
-                        {learner.name[0]}
-                      </div>
-                      <div>
-                        <p className="text-xs font-extrabold text-white">{learner.name}</p>
-                        <p className="text-[10px] text-[#8899b4]">{learner.cohort}</p>
-                      </div>
+                  <div className="flex items-center gap-2">
+                    <div className="w-7 h-7 rounded-lg bg-[#F0FDF4] border border-[#15803D]/20 flex items-center justify-center text-xs font-black text-[#15803D]">
+                      {learner.name[0]}
+                    </div>
+                    <div>
+                      <p className="text-xs font-extrabold text-[#0F172A]">{learner.name}</p>
+                      <p className="text-[10px] text-slate-500">{learner.cohort}</p>
                     </div>
                   </div>
                   <span className={`px-2 py-0.5 rounded-full text-[10px] font-black border ${learner.riskBg} ${learner.riskColor}`}>
@@ -360,24 +349,19 @@ export default function FacultyHomePage() {
                 </div>
                 <div className="flex flex-wrap gap-1.5 mb-3">
                   {learner.indicators.map((ind) => (
-                    <span key={ind} className="px-2 py-0.5 rounded-lg bg-[#030e1f]/60 border border-[#1a2f4a] text-[9px] text-[#8899b4] font-semibold">
+                    <span key={ind} className="px-2 py-0.5 rounded-lg bg-slate-100 border border-slate-200 text-[9px] text-slate-600 font-semibold">
                       {ind}
                     </span>
                   ))}
                 </div>
                 <div className="flex items-center gap-3">
-                  <div className="flex-1 h-1.5 rounded-full bg-[#030e1f]/60 overflow-hidden">
+                  <div className="flex-1 h-1.5 rounded-full bg-slate-100 overflow-hidden">
                     <div
-                      className="h-full rounded-full bg-gradient-to-r from-[#d4a017] to-[#4ade80] transition-all"
+                      className="h-full rounded-full bg-gradient-to-r from-[#D4A017] to-[#15803D] transition-all"
                       style={{ width: `${learner.progress}%` }}
-                      role="progressbar"
-                      aria-valuenow={learner.progress}
-                      aria-valuemin={0}
-                      aria-valuemax={100}
-                      aria-label={`${learner.name} learning progress: ${learner.progress}%`}
                     />
                   </div>
-                  <span className="text-[10px] font-black text-[#8899b4] shrink-0">{learner.progress}%</span>
+                  <span className="text-[10px] font-black text-slate-500 shrink-0">{learner.progress}%</span>
                 </div>
               </div>
             ))}
@@ -388,25 +372,25 @@ export default function FacultyHomePage() {
         <section aria-labelledby="calendar-heading">
           <div className="flex items-center justify-between mb-4">
             <div>
-              <h3 id="calendar-heading" className="text-base font-extrabold text-white flex items-center gap-2">
-                <Calendar className="w-4 h-4 text-[#d4a017]" aria-hidden="true" />
+              <h3 id="calendar-heading" className="text-base font-extrabold text-[#0F172A] flex items-center gap-2">
+                <Calendar className="w-4 h-4 text-[#D4A017]" aria-hidden="true" />
                 Today&apos;s Teaching Schedule
               </h3>
-              <p className="text-[11px] text-[#8899b4]">Your academic timetable for today</p>
+              <p className="text-[11px] text-slate-500">Your academic timetable for today</p>
             </div>
-            <Link href="/dashboard/instructor/cohorts" className="text-[10px] font-black text-[#d4a017] hover:text-white flex items-center gap-1 transition-colors">
+            <Link href="/dashboard/instructor/cohorts" className="text-[10px] font-black text-[#15803D] hover:underline flex items-center gap-1 transition-colors">
               Full Calendar <ChevronRight className="w-3 h-3" aria-hidden="true" />
             </Link>
           </div>
           <div className="space-y-3">
             {teachingCalendar.map((event, i) => (
-              <div key={i} className={`rounded-2xl border p-4 bg-[#061428] flex items-start gap-4`}>
+              <div key={i} className="rounded-2xl border border-slate-200 p-4 bg-white shadow-sm flex items-start gap-4">
                 <div className="text-right shrink-0 w-12">
-                  <p className="text-xs font-black text-[#d4a017]">{event.time}</p>
+                  <p className="text-xs font-black text-[#D4A017]">{event.time}</p>
                 </div>
-                <div className="w-px self-stretch bg-[#1a2f4a] shrink-0" aria-hidden="true" />
+                <div className="w-px self-stretch bg-slate-200 shrink-0" aria-hidden="true" />
                 <div className="flex-1 min-w-0">
-                  <p className="text-xs font-bold text-white leading-snug">{event.title}</p>
+                  <p className="text-xs font-bold text-[#0F172A] leading-snug">{event.title}</p>
                   <span className={`inline-block mt-1.5 px-2 py-0.5 rounded-full text-[9px] font-black border ${event.typeBg} ${event.typeColor}`}>
                     {event.type.replace("-", " ").toUpperCase()}
                   </span>
@@ -420,22 +404,22 @@ export default function FacultyHomePage() {
       {/* ─── Faculty Productivity KPI Dashboard ───────────────────────────── */}
       <section aria-labelledby="kpi-heading">
         <div className="mb-4">
-          <h3 id="kpi-heading" className="text-base font-extrabold text-white">Faculty Productivity Dashboard</h3>
-          <p className="text-[11px] text-[#8899b4]">Your professional academic performance metrics for this month</p>
+          <h3 id="kpi-heading" className="text-base font-extrabold text-[#0F172A]">Faculty Productivity Dashboard</h3>
+          <p className="text-[11px] text-slate-500">Your professional academic performance metrics for this month</p>
         </div>
         <div className="grid grid-cols-2 sm:grid-cols-4 gap-4">
           {kpiMetrics.map((kpi) => {
             const Icon = kpi.icon;
             return (
-              <div key={kpi.label} className="rounded-2xl bg-[#061428] border border-[#1a2f4a] p-4 hover:border-[#d4a017]/30 transition-colors">
+              <div key={kpi.label} className="rounded-2xl bg-white border border-slate-200 p-4 shadow-sm hover:border-[#15803D]/40 transition-colors">
                 <div className="flex items-start justify-between mb-3">
-                  <div className="w-8 h-8 rounded-xl flex items-center justify-center" style={{ backgroundColor: `${kpi.color}20`, border: `1px solid ${kpi.color}30` }}>
+                  <div className="w-8 h-8 rounded-xl flex items-center justify-center bg-[#F8FAFC] border border-slate-200">
                     <Icon className="w-4 h-4" style={{ color: kpi.color }} aria-hidden="true" />
                   </div>
                 </div>
-                <p className="text-xl font-extrabold text-white">{kpi.value}</p>
-                <p className="text-[10px] font-bold text-white mt-0.5 leading-tight">{kpi.label}</p>
-                <p className="text-[9px] text-[#8899b4] mt-0.5">{kpi.sub}</p>
+                <p className="text-xl font-extrabold text-[#0F172A]">{kpi.value}</p>
+                <p className="text-[10px] font-bold text-[#0F172A] mt-0.5 leading-tight">{kpi.label}</p>
+                <p className="text-[9px] text-slate-500 mt-0.5">{kpi.sub}</p>
               </div>
             );
           })}
@@ -448,11 +432,11 @@ export default function FacultyHomePage() {
         {/* Faculty Recognition */}
         <section aria-labelledby="recognition-heading">
           <div className="mb-4">
-            <h3 id="recognition-heading" className="text-base font-extrabold text-white flex items-center gap-2">
-              <Award className="w-4 h-4 text-[#d4a017]" aria-hidden="true" />
+            <h3 id="recognition-heading" className="text-base font-extrabold text-[#0F172A] flex items-center gap-2">
+              <Award className="w-4 h-4 text-[#D4A017]" aria-hidden="true" />
               Faculty Recognition
             </h3>
-            <p className="text-[11px] text-[#8899b4]">Institutional achievement badges earned and in progress</p>
+            <p className="text-[11px] text-slate-500">Institutional achievement badges earned and in progress</p>
           </div>
           <div className="grid grid-cols-3 gap-3">
             {recognitionBadges.map((badge) => {
@@ -462,20 +446,19 @@ export default function FacultyHomePage() {
                   key={badge.title}
                   className={`rounded-2xl p-3 text-center border transition-all ${
                     badge.earned
-                      ? "bg-[#061428] border-[#d4a017]/30 hover:border-[#d4a017]/60"
-                      : "bg-[#030e1f]/60 border-[#1a2f4a] opacity-50"
+                      ? "bg-white border-[#D4A017]/40 shadow-sm"
+                      : "bg-slate-50 border-slate-200 opacity-50"
                   }`}
                   title={badge.earned ? `${badge.title} — Earned` : `${badge.title} — Not yet earned`}
                 >
                   <div
-                    className="w-10 h-10 rounded-xl mx-auto mb-2 flex items-center justify-center"
-                    style={{ backgroundColor: `${badge.color}20`, border: `1px solid ${badge.color}40` }}
+                    className="w-10 h-10 rounded-xl mx-auto mb-2 flex items-center justify-center bg-[#FEFCE8] border border-[#D4A017]/30"
                   >
-                    <Icon className="w-5 h-5" style={{ color: badge.color }} aria-hidden="true" />
+                    <Icon className="w-5 h-5 text-[#D4A017]" aria-hidden="true" />
                   </div>
-                  <p className="text-[9px] font-bold text-[#8899b4] leading-tight">{badge.title}</p>
+                  <p className="text-[9px] font-bold text-[#0F172A] leading-tight">{badge.title}</p>
                   {badge.earned && (
-                    <span className="inline-block mt-1 text-[8px] font-black text-[#4ade80]">✓ EARNED</span>
+                    <span className="inline-block mt-1 text-[8px] font-black text-[#15803D]">✓ EARNED</span>
                   )}
                 </div>
               );
@@ -486,11 +469,11 @@ export default function FacultyHomePage() {
         {/* Quick Actions */}
         <section aria-labelledby="quickactions-heading">
           <div className="mb-4">
-            <h3 id="quickactions-heading" className="text-base font-extrabold text-white flex items-center gap-2">
-              <Zap className="w-4 h-4 text-[#d4a017]" aria-hidden="true" />
+            <h3 id="quickactions-heading" className="text-base font-extrabold text-[#0F172A] flex items-center gap-2">
+              <Zap className="w-4 h-4 text-[#15803D]" aria-hidden="true" />
               Quick Actions
             </h3>
-            <p className="text-[11px] text-[#8899b4]">Frequent academic operations — launch instantly</p>
+            <p className="text-[11px] text-slate-500">Frequent academic operations — launch instantly</p>
           </div>
           <div className="grid grid-cols-2 sm:grid-cols-3 gap-3">
             {quickActions.map((action) => {
@@ -499,15 +482,14 @@ export default function FacultyHomePage() {
                 <Link
                   key={action.label}
                   href={action.href}
-                  className="rounded-2xl p-4 bg-[#061428] border border-[#1a2f4a] hover:border-[#d4a017]/40 flex flex-col items-center gap-2.5 text-center transition-all hover:scale-[1.02] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#d4a017]"
+                  className="rounded-2xl p-4 bg-white border border-slate-200 hover:border-[#15803D]/40 flex flex-col items-center gap-2.5 text-center transition-all hover:shadow-sm focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#15803D]"
                 >
                   <div
-                    className="w-10 h-10 rounded-xl flex items-center justify-center"
-                    style={{ backgroundColor: `${action.color}15`, border: `1px solid ${action.color}30` }}
+                    className="w-10 h-10 rounded-xl flex items-center justify-center bg-[#F0FDF4] border border-[#15803D]/20"
                   >
-                    <Icon className="w-5 h-5" style={{ color: action.color }} aria-hidden="true" />
+                    <Icon className="w-5 h-5 text-[#15803D]" aria-hidden="true" />
                   </div>
-                  <span className="text-[10px] font-bold text-[#8899b4] leading-tight">{action.label}</span>
+                  <span className="text-[10px] font-bold text-[#0F172A] leading-tight">{action.label}</span>
                 </Link>
               );
             })}
@@ -517,22 +499,18 @@ export default function FacultyHomePage() {
 
       {/* ─── DTA Faculty AI Assistant Preview ─────────────────────────────── */}
       <section aria-labelledby="ai-heading">
-        <div className="rounded-3xl bg-gradient-to-br from-[#0d1628] via-[#061428] to-[#030e1f] border border-[#d4a017]/25 p-6 relative overflow-hidden">
-          <div className="absolute inset-0 pointer-events-none">
-            <div className="absolute top-0 right-0 w-80 h-80 bg-[#d4a017]/4 rounded-full blur-3xl" />
-            <div className="absolute bottom-0 left-0 w-60 h-60 bg-[#4ade80]/4 rounded-full blur-3xl" />
-          </div>
+        <div className="rounded-3xl bg-white border border-slate-200 p-6 relative overflow-hidden shadow-sm">
           <div className="relative">
             <div className="flex items-start gap-4 mb-5">
-              <div className="w-12 h-12 rounded-2xl bg-gradient-to-br from-[#d4a017] to-[#4ade80] flex items-center justify-center shrink-0 shadow-lg">
-                <Sparkles className="w-6 h-6 text-[#030e1f]" aria-hidden="true" />
+              <div className="w-12 h-12 rounded-2xl bg-[#FEFCE8] border border-[#D4A017]/30 flex items-center justify-center shrink-0">
+                <Sparkles className="w-6 h-6 text-[#D4A017]" aria-hidden="true" />
               </div>
               <div>
                 <div className="flex items-center gap-2 mb-1">
-                  <h3 id="ai-heading" className="text-base font-extrabold text-white">DTA Faculty AI Assistant</h3>
-                  <span className="px-2 py-0.5 rounded-full bg-[#d4a017]/15 border border-[#d4a017]/30 text-[#d4a017] text-[9px] font-black tracking-widest">COMING SOON</span>
+                  <h3 id="ai-heading" className="text-base font-extrabold text-[#0F172A]">DTA Faculty AI Assistant</h3>
+                  <span className="px-2 py-0.5 rounded-full bg-[#F0FDF4] border border-[#15803D]/20 text-[#15803D] text-[9px] font-black tracking-widest">ACTIVE HUB</span>
                 </div>
-                <p className="text-[11px] text-[#8899b4]">Your intelligent academic operations partner — powered by DTA AI</p>
+                <p className="text-[11px] text-slate-500">Your intelligent academic operations partner — powered by DTA AI</p>
               </div>
             </div>
             <div className="grid grid-cols-2 sm:grid-cols-4 gap-3">
@@ -546,9 +524,9 @@ export default function FacultyHomePage() {
                 "Generate teaching reports",
                 "InstitutionOS Federation",
               ].map((cap) => (
-                <div key={cap} className="flex items-center gap-2 px-3 py-2.5 rounded-xl bg-[#030e1f]/60 border border-[#d4a017]/15">
-                  <div className="w-1.5 h-1.5 rounded-full bg-[#d4a017] shrink-0" aria-hidden="true" />
-                  <span className="text-[10px] text-[#8899b4] font-semibold leading-tight">{cap}</span>
+                <div key={cap} className="flex items-center gap-2 px-3 py-2.5 rounded-xl bg-[#F8FAFC] border border-slate-200">
+                  <div className="w-1.5 h-1.5 rounded-full bg-[#15803D] shrink-0" aria-hidden="true" />
+                  <span className="text-[10px] text-slate-600 font-semibold leading-tight">{cap}</span>
                 </div>
               ))}
             </div>

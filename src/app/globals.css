@@ -2,22 +2,30 @@
 
 @layer base {
   :root {
-    --background: #030e1f;
-    --foreground: #f0f4ff;
-    --dwsa-gold: #d4a017;
-    --dwsa-gold-hover: #e5a910;
-    --dwsa-green: #4ade80;
-    --dwsa-navy: #061428;
-    --dwsa-navy-dark: #030e1f;
-    --dwsa-navy-card: #0f223d;
-    /* Cyan is RESTRICTED to interactive states only — not part of primary identity */
-    --dwsa-interactive: #00d2ff;
+    --color-primary: #15803D;
+    --color-primary-hover: #166534;
+    --color-primary-light: #DCFCE7;
+    --color-primary-dark: #14532D;
+
+    --color-surface: #FFFFFF;
+    --color-background: #F8FAFC;
+
+    --color-text: #0F172A;
+    --color-text-muted: #64748B;
+    --color-border: #E2E8F0;
+
+    --color-prestige: #D4A017;
+
+    --color-success: #15803D;
+    --color-warning: #F59E0B;
+    --color-danger: #DC2626;
+    --color-info: #64748B;
   }
 
   /* Focus-visible ring base — accessibility requirement */
   *:focus-visible {
     outline: none;
-    box-shadow: 0 0 0 2px #d4a017, 0 0 0 4px rgba(212, 160, 23, 0.2);
+    box-shadow: 0 0 0 2px #15803D, 0 0 0 4px rgba(21, 128, 61, 0.2);
     border-radius: 8px;
   }
 }
@@ -27,121 +35,84 @@ html {
 }
 
 body {
-  background-color: var(--background);
-  color: var(--foreground);
+  background-color: var(--color-background);
+  color: var(--color-text);
   font-family: 'Inter', system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
-  overflow-x: hidden; /* Prevent horizontal scroll */
+  overflow-x: hidden;
 }
 
 /* ===================================================
-   DWSA PRIMARY BRAND UTILITIES
-   Gold | White | Black/Midnight | Green
+   IEDS v1.0 ENTERPRISE UTILITIES
    =================================================== */
 
-.glow-gold {
-  box-shadow: 0 0 25px rgba(212, 160, 23, 0.25);
+.dwsa-card {
+  background-color: #FFFFFF;
+  border: 1px solid #E2E8F0;
+  border-radius: 1rem; /* Rounded XL */
+  box-shadow: 0 1px 3px 0 rgb(0 0 0 / 0.1), 0 1px 2px -1px rgb(0 0 0 / 0.1);
+  transition: border-color 0.2s ease, transform 0.2s ease, box-shadow 0.2s ease;
 }
 
-.glow-gold-sm {
-  box-shadow: 0 0 12px rgba(212, 160, 23, 0.2);
+.dwsa-card:hover {
+  border-color: rgba(21, 128, 61, 0.3);
 }
 
-.border-dwsa-gold {
-  border-color: rgba(212, 160, 23, 0.4);
+.dwsa-card-hover:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px -2px rgba(15, 23, 42, 0.08);
 }
 
-.bg-dwsa-navy-card {
-  background-color: rgba(15, 34, 61, 0.7);
-  backdrop-filter: blur(12px);
-}
-
-.dwsa-glass-card {
-  background: linear-gradient(135deg, rgba(15, 34, 61, 0.8) 0%, rgba(6, 20, 40, 0.9) 100%);
-  backdrop-filter: blur(16px);
-  border: 1px solid rgba(212, 160, 23, 0.18);
-  box-shadow: 0 10px 30px -10px rgba(3, 14, 31, 0.8);
-}
-
-.text-gold-gradient {
-  background: linear-gradient(135deg, #fff3c4 0%, #d4a017 50%, #e5a910 100%);
-  -webkit-background-clip: text;
-  -webkit-text-fill-color: transparent;
-  background-clip: text;
-}
-
-/* ===================================================
-   INTERACTION-ONLY UTILITIES (Cyan restricted)
-   Use only for: hover, focus, loading, progress
-   =================================================== */
-
-/* NOTE: dwsa-glass-card-interactive is for hover/focus states only */
-.dwsa-glass-card-interactive {
-  background: linear-gradient(135deg, rgba(15, 34, 61, 0.8) 0%, rgba(6, 20, 40, 0.9) 100%);
-  backdrop-filter: blur(16px);
-  border: 1px solid rgba(0, 210, 255, 0.2);
-  box-shadow: 0 10px 30px -10px rgba(3, 14, 31, 0.8);
-}
-
-/* ===================================================
-   CUSTOM SCROLLBAR
-   =================================================== */
+/* Custom Scrollbar */
 ::-webkit-scrollbar {
   width: 6px;
   height: 6px;
 }
 
 ::-webkit-scrollbar-track {
-  background: #030e1f;
+  background: #F8FAFC;
 }
 
 ::-webkit-scrollbar-thumb {
-  background: #0f223d;
+  background: #CBD5E1;
   border-radius: 9999px;
-  border: 1px solid rgba(212, 160, 23, 0.2);
 }
 
 ::-webkit-scrollbar-thumb:hover {
-  background: #d4a017;
+  background: #15803D;
 }
 
-/* ===================================================
-   MARKDOWN EDITOR — DWSA BRAND OVERRIDES
-   =================================================== */
+/* Markdown Editor Overrides */
 .w-md-editor {
-  background-color: #061428 !important;
-  color: #f0f4ff !important;
-  border-color: rgba(212, 160, 23, 0.2) !important;
+  background-color: #FFFFFF !important;
+  color: #0F172A !important;
+  border-color: #E2E8F0 !important;
 }
 
 .w-md-editor-toolbar {
-  background-color: #030e1f !important;
-  border-bottom: 1px solid rgba(212, 160, 23, 0.2) !important;
+  background-color: #F8FAFC !important;
+  border-bottom: 1px solid #E2E8F0 !important;
 }
 
 .w-md-editor-toolbar button {
-  color: #8899b4 !important;
+  color: #64748B !important;
 }
 
 .w-md-editor-toolbar button:hover {
-  color: #d4a017 !important;
-  background-color: rgba(212, 160, 23, 0.1) !important;
+  color: #15803D !important;
+  background-color: #F0FDF4 !important;
 }
 
 .w-md-editor-text-input {
-  color: #f0f4ff !important;
+  color: #0F172A !important;
   font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace !important;
 }
 
 .wmde-markdown {
-  background-color: #061428 !important;
-  color: #e2e8f0 !important;
+  background-color: #FFFFFF !important;
+  color: #0F172A !important;
 }
 
-/* ===================================================
-   KEYFRAME ANIMATIONS
-   =================================================== */
-
-/* Fade in from above */
+/* Keyframes */
 @keyframes fadeIn {
   from { opacity: 0; transform: translateY(-6px); }
   to   { opacity: 1; transform: translateY(0); }
@@ -151,7 +122,6 @@ body {
   animation: fadeIn 0.25s ease-out forwards;
 }
 
-/* Fade in from below */
 @keyframes fadeInUp {
   from { opacity: 0; transform: translateY(16px); }
   to   { opacity: 1; transform: translateY(0); }
@@ -161,60 +131,6 @@ body {
   animation: fadeInUp 0.4s ease-out forwards;
 }
 
-/* Slide down (mobile nav) */
-@keyframes slideDown {
-  from { opacity: 0; transform: translateY(-12px); }
-  to   { opacity: 1; transform: translateY(0); }
-}
-
-.animate-slideDown {
-  animation: slideDown 0.2s ease-out forwards;
-}
-
-/* Gold shimmer (loading state) */
-@keyframes shimmer {
-  0%   { background-position: -200% center; }
-  100% { background-position: 200% center; }
-}
-
-.animate-shimmer {
-  background-size: 200% auto;
-  animation: shimmer 2s linear infinite;
-}
-
-/* Skeleton loading */
-@keyframes skeleton {
-  0%   { background-color: #0f223d; }
-  50%  { background-color: #1a3555; }
-  100% { background-color: #0f223d; }
-}
-
-.animate-skeleton {
-  animation: skeleton 1.4s ease-in-out infinite;
-  border-radius: 6px;
-}
-
-/* Gold pulse glow */
-@keyframes pulse-gold {
-  0%, 100% { box-shadow: 0 0 12px rgba(212, 160, 23, 0.2); }
-  50%       { box-shadow: 0 0 24px rgba(212, 160, 23, 0.45); }
-}
-
-.animate-pulse-gold {
-  animation: pulse-gold 2s ease-in-out infinite;
-}
-
-/* Card lift hover utility */
-.card-hover {
-  transition: transform 0.2s ease, box-shadow 0.2s ease;
-}
-
-.card-hover:hover {
-  transform: translateY(-3px);
-  box-shadow: 0 16px 40px -12px rgba(212, 160, 23, 0.2);
-}
-
-/* Button press feedback */
 .btn-press {
   transition: transform 0.1s ease, box-shadow 0.1s ease;
 }

@@ -79,4 +79,91 @@ export * from "./TenantConfigurationService";
 export * from "./TenantAnalyticsService";
 export * from "./FeatureFlagService";
 
+// v4.1 — Enterprise Marketplace, Deployment Ecosystem & Customer Onboarding Platform
+export * from "./CustomerSuccessService";
+export * from "./MarketplaceService";
+export * from "./DeploymentService";
+export * from "./SubscriptionAnalyticsService";
+export * from "./TenantHealthService";
+export * from "./OnboardingService";
 
+// v4.2 — AI Digital Workforce & Autonomous Institution Platform
+export * from "./AIWorkforceService";
+export * from "./StudentAIAgentService";
+export * from "./FacultyAIAgentService";
+export * from "./AdminAIAgentService";
+export * from "./ExecutiveAIAgentService";
+export * from "./PlatformAIAgentService";
+
+// v4.3 & v4.3A — Enterprise Integration Platform & National Education Ecosystem
+export * from "./IntegrationRegistryService";
+export * from "./GovernmentIntegrationService";
+export * from "./EnterpriseConnectorService";
+export * from "./LMSConnectorService";
+export * from "./PaymentGatewayManager";
+export * from "./APIManagementService";
+export * from "./IntegrationAnalyticsService";
+export * from "./WebhookService";
+export * from "./SyncEngine";
+export * from "./DataPipelineService";
+export * from "./APIUsageAnalyticsService";
+export * from "./PlatformConnectivityService";
+export * from "./IntegrationHealthService";
+export * from "./DependencyGraphService";
+export * from "./SyncMonitoringService";
+export * from "./RecoveryService";
+export * from "./IntegrationMarketplaceService";
+export * from "./TemplateProvisioningService";
+
+// v4.4 & v4.4A — Enterprise Marketplace, Extension SDK & AI Agent Exchange
+export * from "./ExtensionSDKService";
+export * from "./ExtensionRegistryService";
+export * from "./ExtensionLifecycleService";
+export * from "./ExtensionPermissionService";
+export * from "./MarketplaceBillingService";
+export * from "./MarketplaceReviewService";
+export * from "./MarketplaceCertificationService";
+export * from "./MarketplaceAnalyticsService";
+export * from "./MarketplaceRevenueService";
+export * from "./MarketplaceDiscoveryService";
+export * from "./DeveloperOrganizationService";
+export * from "./MarketplaceGovernanceService";
+export * from "./MarketplaceFinanceService";
+export * from "./ExtensionQualityService";
+export * from "./CertificationWorkflowService";
+export * from "./AIGovernanceMarketplaceService";
+export * from "./MarketplaceExecutiveAnalyticsService";
+
+// v4.5 — Enterprise Sales, Customer Success & Digital Transformation Platform
+export * from "./EnterpriseCRMService";
+export * from "./OpportunityManagementService";
+export * from "./ProposalGenerationService";
+export * from "./QuoteManagementService";
+export * from "./ContractLifecycleService";
+export * from "./TransformationAssessmentService";
+export * from "./ImplementationManagementService";
+export * from "./DeploymentPlanningService";
+export * from "./ConsultantManagementService";
+export * from "./CustomerSuccessOperationsService";
+export * from "./RenewalManagementService";
+export * from "./ExpansionPlanningService";
+export * from "./CountryRegistryService";
+export * from "./RegionalOperationsService";
+export * from "./ExecutiveForecastService";
+export * from "./SalesAnalyticsService";
+export * from "./PortfolioManagementService";
+export * from "./TransformationRoadmapService";
+
+// v5.0 — Skills, Workforce & Lifelong Learning Platform
+export * from "./SkillsFrameworkService";
+export * from "./SkillsAssessmentService";
+export * from "./SkillsPassportService";
+export * from "./CompetencyEvidenceService";
+export * from "./CareerPathwayService";
+export * from "./LearningJourneyService";
+export * from "./ProfessionalDevelopmentService";
+export * from "./WorkforceIntelligenceService";
+export * from "./IndustryCompetencyService";
+export * from "./MicroCredentialService";
+export * from "./PortfolioAssessmentService";
+export * from "./SkillsAnalyticsService";

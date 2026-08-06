@@ -29,7 +29,6 @@ export default function LearningTimeline({ milestones = defaultMilestones }: { m
   const [liveEvents, setLiveEvents] = useState<EventBusPayload[]>([]);
 
   useEffect(() => {
-    // Listen to live system events via InstitutionOS EventBus
     const unsub = eventBus.subscribe("AssignmentSubmitted", (evt) => {
       setLiveEvents((prev) => [evt, ...prev]);
     });
@@ -37,16 +36,16 @@ export default function LearningTimeline({ milestones = defaultMilestones }: { m
   }, []);
 
   return (
-    <div className="rounded-3xl bg-[#061428] border border-[#1a2f4a] p-6 space-y-4 shadow-xl">
-      <div className="flex items-center justify-between border-b border-[#1a2f4a] pb-3">
+    <div className="rounded-3xl bg-white border border-slate-200 p-6 space-y-4 shadow-sm">
+      <div className="flex items-center justify-between border-b border-slate-100 pb-3">
         <div className="flex items-center gap-2">
-          <Compass className="w-5 h-5 text-[#d4a017]" />
+          <Compass className="w-5 h-5 text-[#15803D]" />
           <div>
-            <h3 className="text-sm font-extrabold text-white">Learner Academic Journey &amp; Milestones</h3>
-            <p className="text-[10px] text-[#8899b4]">Event-driven progress tracking across program lifecycle</p>
+            <h3 className="text-sm font-extrabold text-[#0F172A]">Learner Academic Journey &amp; Milestones</h3>
+            <p className="text-[10px] text-slate-500">Event-driven progress tracking across program lifecycle</p>
           </div>
         </div>
-        <span className="px-2.5 py-0.5 rounded bg-[#4ade80]/10 border border-[#4ade80]/30 text-[#4ade80] text-[9px] font-black uppercase">
+        <span className="px-2.5 py-0.5 rounded bg-[#F0FDF4] border border-[#15803D]/20 text-[#15803D] text-[9px] font-black uppercase">
           EVENTBUS CONNECTED
         </span>
       </div>
@@ -61,24 +60,26 @@ export default function LearningTimeline({ milestones = defaultMilestones }: { m
               key={m.id}
               className={`rounded-2xl p-4 border transition-all space-y-2 relative ${
                 isCompleted
-                  ? "bg-[#030e1f] border-[#4ade80]/30"
+                  ? "bg-[#F0FDF4] border-[#15803D]/30"
                   : isInProgress
-                  ? "bg-[#030e1f] border-[#d4a017]/50"
-                  : "bg-[#061428]/40 border-[#1a2f4a] opacity-60"
+                  ? "bg-[#FEFCE8] border-[#D4A017]/40"
+                  : "bg-slate-50 border-slate-200 opacity-60"
               }`}
             >
               <div className="flex items-center justify-between">
-                <div className="w-8 h-8 rounded-xl bg-[#061428] border border-[#1a2f4a] flex items-center justify-center">
-                  <Icon className={`w-4 h-4 ${isCompleted ? "text-[#4ade80]" : isInProgress ? "text-[#d4a017]" : "text-[#8899b4]"}`} />
+                <div className={`w-8 h-8 rounded-xl flex items-center justify-center ${
+                  isCompleted ? "bg-[#F0FDF4] border border-[#15803D]/30" : isInProgress ? "bg-[#FEFCE8] border border-[#D4A017]/30" : "bg-slate-100 border border-slate-200"
+                }`}>
+                  <Icon className={`w-4 h-4 ${isCompleted ? "text-[#15803D]" : isInProgress ? "text-[#D4A017]" : "text-slate-400"}`} />
                 </div>
                 <span className={`px-2 py-0.5 rounded text-[8px] font-black uppercase ${
-                  isCompleted ? "bg-[#4ade80]/15 text-[#4ade80]" : isInProgress ? "bg-[#d4a017]/15 text-[#d4a017]" : "bg-[#1a2f4a] text-[#8899b4]"
+                  isCompleted ? "bg-[#F0FDF4] text-[#15803D]" : isInProgress ? "bg-[#FEFCE8] text-[#D4A017]" : "bg-slate-100 text-slate-500"
                 }`}>
                   {m.status}
                 </span>
               </div>
-              <p className="text-xs font-extrabold text-white leading-snug">{m.title}</p>
-              <p className="text-[9px] text-[#8899b4]">{m.stage} · {m.date}</p>
+              <p className="text-xs font-extrabold text-[#0F172A] leading-snug">{m.title}</p>
+              <p className="text-[9px] text-slate-500">{m.stage} · {m.date}</p>
             </div>
           );
         })}

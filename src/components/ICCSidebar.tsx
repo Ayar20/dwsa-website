@@ -4,13 +4,22 @@ import React, { useState } from "react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import {
-  Building2, LayoutDashboard, Compass, Activity, Bell,
-  GraduationCap, BookOpen, Layers, Users, Calendar, UserCheck,
-  UserPlus, FileCheck, Award, Briefcase, FileText, FlaskConical,
-  DollarSign, CreditCard, PieChart, Lightbulb, Shield,
-  Settings, Cpu, ChevronDown, ChevronRight, X, Sparkles, SlidersHorizontal,
-  GitBranch, HelpCircle, FileCode, CheckCircle2, ShieldCheck, Lock, Database,
-  Zap, Mail
+  LayoutDashboard,
+  BarChart3,
+  DollarSign,
+  GraduationCap,
+  Users,
+  Briefcase,
+  Layers,
+  Settings,
+  ShieldCheck,
+  Building2,
+  ChevronDown,
+  ChevronRight,
+  ExternalLink,
+  Sparkles,
+  FileCheck2,
+  Lock,
 } from "lucide-react";
 
 interface ICCSidebarProps {
@@ -37,88 +46,69 @@ const navSections: NavSection[] = [
     icon: LayoutDashboard,
     items: [
       { label: "Executive Dashboard", href: "/dashboard/admin" },
-      { label: "Digital Twin & Intelligence", href: "/dashboard/admin/intelligence", badge: "AI", badgeColor: "bg-[#d4a017]/20 text-[#d4a017]" },
-      { label: "Persistent Analytics", href: "/dashboard/admin/analytics", badge: "Snapshots", badgeColor: "bg-[#4ade80]/20 text-[#4ade80]" },
+      { label: "Apex — Executive AI Agent", href: "/dashboard/admin/ai-executive", badge: "v5.0", badgeColor: "bg-[#FEFCE8] text-[#D4A017] border border-[#D4A017]/30" },
+      { label: "Executive AI Hub", href: "/dashboard/admin/ai", badge: "AI CORE", badgeColor: "bg-[#F0FDF4] text-[#15803D] border border-[#15803D]/20" },
+      { label: "Strategic Intelligence", href: "/dashboard/admin/intelligence" },
       { label: "Executive Reports", href: "/dashboard/admin/reports" },
+      { label: "Persistent Analytics", href: "/dashboard/admin/analytics" },
     ],
   },
   {
-    title: "Academic Operations",
+    title: "Academic & Student Governance",
     icon: GraduationCap,
     items: [
-      { label: "Academic Operations", href: "/dashboard/admin/academic" },
-      { label: "Module & Track Editor", href: "/dashboard/admin/modules/editor" },
+      { label: "Learning Analytics", href: "/dashboard/admin/academic" },
+      { label: "Admissions Command", href: "/dashboard/admin/admissions" },
       { label: "Student Success Centre", href: "/dashboard/admin/students" },
-    ],
-  },
-  {
-    title: "Admissions & Registry",
-    icon: UserPlus,
-    items: [
-      { label: "Admissions Command", href: "/dashboard/admin/admissions", badge: "Live Pipeline", badgeColor: "bg-[#4ade80]/20 text-[#4ade80]" },
-      { label: "Certificate Authority", href: "/dashboard/admin/certificates" },
-    ],
-  },
-  {
-    title: "Faculty Administration",
-    icon: Users,
-    items: [
       { label: "Faculty Management", href: "/dashboard/admin/faculty" },
-    ],
-  },
-  {
-    title: "Finance & Business Intelligence",
-    icon: DollarSign,
-    items: [
-      { label: "Financial ERP & Ledger", href: "/dashboard/admin/finance", badge: "ERP Core", badgeColor: "bg-[#4ade80]/20 text-[#4ade80]" },
-    ],
-  },
-  {
-    title: "Research & Innovation",
-    icon: FlaskConical,
-    items: [
+      { label: "Module & Track Editor", href: "/dashboard/admin/modules/editor" },
+      { label: "Certificate Authority", href: "/dashboard/admin/certificates" },
       { label: "Research & Innovation", href: "/dashboard/admin/research" },
     ],
   },
   {
-    title: "Governance & Compliance",
-    icon: ShieldCheck,
+    title: "Finance & Market Intelligence",
+    icon: DollarSign,
     items: [
-      { label: "Governance & Audit", href: "/dashboard/admin/governance" },
+      { label: "Financial ERP & BI", href: "/dashboard/admin/finance", badge: "ERP", badgeColor: "bg-[#FEFCE8] text-[#D4A017] border border-[#D4A017]/30" },
+      { label: "Industry Partnerships", href: "/dashboard/admin/partners" },
+      { label: "Graduate Employment", href: "/dashboard/admin/employment" },
+      { label: "Workforce Intelligence", href: "/dashboard/admin/workforce" },
+      { label: "Skills Intelligence", href: "/dashboard/admin/skills" },
     ],
   },
   {
-    title: "Enterprise Engagement",
-    icon: Users,
+    title: "Operations & Governance",
+    icon: Layers,
     items: [
-      { label: "Industry Partners Centre", href: "/dashboard/admin/partners", badge: "NEW", badgeColor: "bg-[#d4a017]/20 text-[#d4a017]" },
-      { label: "Employment Intelligence", href: "/dashboard/admin/employment", badge: "NEW", badgeColor: "bg-[#4ade80]/20 text-[#4ade80]" },
-      { label: "Employer Portal", href: "/dashboard/employer" },
-      { label: "Alumni Network", href: "/dashboard/alumni" },
-    ],
-  },
-  {
-    title: "Operational Intelligence",
-    icon: Zap,
-    items: [
-      { label: "Platform Health & Ops", href: "/dashboard/admin/operations", badge: "DEVOPS", badgeColor: "bg-[#4ade80]/20 text-[#4ade80]" },
-      { label: "Deployment Readiness", href: "/dashboard/admin/deployment", badge: "CHECK", badgeColor: "bg-[#4ade80]/20 text-[#4ade80]" },
-      { label: "Performance Benchmarks", href: "/dashboard/admin/benchmarks", badge: "SPEED", badgeColor: "bg-[#818cf8]/20 text-[#818cf8]" },
-      { label: "Executive AI Advisory", href: "/dashboard/admin/ai", badge: "AI CORE", badgeColor: "bg-[#d4a017]/20 text-[#d4a017]" },
-      { label: "AI Governance & Controls", href: "/dashboard/admin/ai-governance", badge: "POLICY", badgeColor: "bg-[#818cf8]/20 text-[#818cf8]" },
-      { label: "Automation Centre", href: "/dashboard/admin/automation", badge: "ENGINE", badgeColor: "bg-[#818cf8]/20 text-[#818cf8]" },
-      { label: "Communications Hub", href: "/dashboard/admin/communications", badge: "BROADCAST", badgeColor: "bg-[#d4a017]/20 text-[#d4a017]" },
-      { label: "Executive Approvals", href: "/dashboard/admin/approvals", badge: "SIGN", badgeColor: "bg-[#4ade80]/20 text-[#4ade80]" },
+      { label: "Platform Health", href: "/dashboard/admin/operations" },
+      { label: "Deployment Inspector", href: "/dashboard/admin/deployment" },
+      { label: "Performance Benchmarks", href: "/dashboard/admin/benchmarks" },
+      { label: "Governance & Compliance", href: "/dashboard/admin/governance" },
+      { label: "AI Governance & Controls", href: "/dashboard/admin/ai-governance", badge: "POLICY", badgeColor: "bg-[#F0FDF4] text-[#15803D] border border-[#15803D]/20" },
+      { label: "Automation Centre", href: "/dashboard/admin/automation" },
+      { label: "Communications Hub", href: "/dashboard/admin/communications" },
+      { label: "Executive Approvals", href: "/dashboard/admin/approvals", badge: "SIGN", badgeColor: "bg-[#F0FDF4] text-[#15803D] border border-[#15803D]/20" },
       { label: "Quality Assurance", href: "/dashboard/admin/quality" },
       { label: "Knowledge Centre", href: "/dashboard/admin/knowledge" },
       { label: "Operations Inbox", href: "/dashboard/admin/inbox" },
     ],
   },
   {
+    title: "AI Digital Workforce & Integrations",
+    icon: Sparkles,
+    items: [
+      { label: "Pulse — Admin AI Agent", href: "/dashboard/admin/ai-agent", badge: "v5.0", badgeColor: "bg-[#F0FDF4] text-[#15803D] border border-[#15803D]/20" },
+      { label: "Apex — Executive AI Agent", href: "/dashboard/admin/ai-executive", badge: "v5.0", badgeColor: "bg-[#FEFCE8] text-[#D4A017] border border-[#D4A017]/30" },
+      { label: "Executive Integrations", href: "/dashboard/admin/integrations", badge: "96.4%", badgeColor: "bg-[#F0FDF4] text-[#15803D] border border-[#15803D]/20" },
+      { label: "AI Workforce Registry", href: "/dashboard/platform/ai-workforce" },
+    ],
+  },
+  {
     title: "Institution Settings",
     icon: Settings,
     items: [
-      { label: "Platform Administration", href: "/dashboard/admin/platform", badge: "v4.0 SaaS", badgeColor: "bg-[#d4a017]/20 text-[#d4a017]" },
+      { label: "Platform Administration", href: "/dashboard/admin/platform", badge: "SaaS", badgeColor: "bg-[#FEFCE8] text-[#D4A017] border border-[#D4A017]/30" },
       { label: "System & Campus Settings", href: "/dashboard/admin/settings" },
     ],
   },
@@ -136,82 +126,80 @@ export default function ICCSidebar({ mobileOpen, setMobileOpen }: ICCSidebarProp
   };
 
   const SidebarContent = () => (
-    <div className="flex flex-col h-full bg-[#061428] text-[#f0f4ff] border-r border-[#d4a017]/20 select-none">
+    <div className="flex flex-col h-full bg-white text-[#0F172A] border-r border-slate-200 select-none">
       {/* Brand Header */}
-      <div className="p-5 border-b border-[#1a2f4a] flex items-center justify-between">
+      <div className="p-5 border-b border-slate-100 flex items-center justify-between">
         <div className="flex items-center gap-3">
-          <div className="w-10 h-10 rounded-2xl bg-gradient-to-br from-[#d4a017] to-[#b8891a] p-0.5 shadow-lg shadow-[#d4a017]/10 flex items-center justify-center shrink-0">
-            <div className="w-full h-full bg-[#030e1f] rounded-[14px] flex items-center justify-center">
-              <Building2 className="w-5 h-5 text-[#d4a017]" />
-            </div>
+          <div className="w-10 h-10 rounded-2xl bg-[#0F172A] p-0.5 shadow-md flex items-center justify-center shrink-0">
+            <Building2 className="w-5 h-5 text-[#D4A017]" />
           </div>
           <div>
-            <div className="flex items-center gap-1.5">
-              <span className="text-xs font-black tracking-wider text-white uppercase">DTA Academy</span>
-              <span className="px-1.5 py-0.5 rounded bg-[#d4a017]/15 text-[#d4a017] text-[8px] font-black tracking-widest border border-[#d4a017]/30">ICC</span>
-            </div>
-            <p className="text-[10px] font-extrabold text-[#d4a017] tracking-tight">Institution Control Centre</p>
-            <p className="text-[9px] text-[#8899b4]">Powered by InstitutionOS v4.0</p>
+            <span className="text-[10px] font-black tracking-widest text-[#D4A017] uppercase block leading-none">
+              INSTITUTION CONTROL
+            </span>
+            <span className="text-sm font-black text-[#0F172A] tracking-tight block">
+              Executive Centre
+            </span>
           </div>
         </div>
-        {mobileOpen && (
-          <button
-            onClick={() => setMobileOpen(false)}
-            className="lg:hidden p-1.5 rounded-xl text-[#8899b4] hover:text-white hover:bg-[#0f223d] transition-all"
-            aria-label="Close sidebar"
-          >
-            <X className="w-5 h-5" />
-          </button>
-        )}
+        <span className="px-2 py-0.5 rounded-md bg-[#F0FDF4] border border-[#15803D]/20 text-[#15803D] text-[9px] font-black uppercase">
+          v5.0 ICC
+        </span>
       </div>
 
       {/* Navigation Sections */}
-      <div className="flex-1 overflow-y-auto px-3 py-4 space-y-4 custom-scrollbar">
+      <div className="flex-1 overflow-y-auto px-3 py-4 space-y-4">
         {navSections.map((section) => {
           const SectionIcon = section.icon;
           const isCollapsed = collapsedSections[section.title];
-          const hasActiveChild = section.items.some(
-            (item) => pathname === item.href || (item.href !== "/dashboard/admin" && pathname.startsWith(item.href))
-          );
+          const hasActiveChild = section.items.some((item) => pathname === item.href);
 
           return (
             <div key={section.title} className="space-y-1">
               <button
                 onClick={() => toggleSection(section.title)}
-                className={`w-full flex items-center justify-between px-3 py-2 rounded-xl text-[10px] font-black uppercase tracking-wider transition-all ${
-                  hasActiveChild ? "text-[#d4a017]" : "text-[#8899b4] hover:text-white"
+                className={`w-full flex items-center justify-between px-3 py-2 rounded-xl text-[11px] font-black uppercase tracking-wider transition-colors ${
+                  hasActiveChild
+                    ? "text-[#15803D] bg-[#F0FDF4]/50"
+                    : "text-slate-400 hover:text-[#0F172A]"
                 }`}
               >
                 <div className="flex items-center gap-2">
-                  <SectionIcon className={`w-3.5 h-3.5 ${hasActiveChild ? "text-[#d4a017]" : "text-[#8899b4]"}`} />
+                  <SectionIcon className={`w-3.5 h-3.5 ${hasActiveChild ? "text-[#15803D]" : "text-slate-400"}`} />
                   <span>{section.title}</span>
                 </div>
                 {isCollapsed ? (
-                  <ChevronRight className="w-3.5 h-3.5" />
+                  <ChevronRight className="w-3.5 h-3.5 opacity-60" />
                 ) : (
-                  <ChevronDown className="w-3.5 h-3.5" />
+                  <ChevronDown className="w-3.5 h-3.5 opacity-60" />
                 )}
               </button>
 
               {!isCollapsed && (
-                <div className="ml-3 pl-3 border-l border-[#1a2f4a] space-y-1 mt-1">
+                <div className="space-y-0.5 pl-2">
                   {section.items.map((item) => {
-                    const isActive =
-                      pathname === item.href || (item.href !== "/dashboard/admin" && pathname.startsWith(item.href));
+                    const isActive = pathname === item.href;
+
                     return (
                       <Link
                         key={item.href}
                         href={item.href}
                         onClick={() => setMobileOpen(false)}
-                        className={`flex items-center justify-between px-3 py-2 rounded-xl text-xs font-semibold transition-all focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#d4a017] ${
+                        className={`flex items-center justify-between px-3 py-2 rounded-xl text-xs font-semibold transition-all ${
                           isActive
-                            ? "bg-[#d4a017]/15 text-[#d4a017] border border-[#d4a017]/30 font-bold"
-                            : "text-[#8899b4] hover:text-white hover:bg-[#0f223d]/60"
+                            ? "bg-[#15803D] text-white font-bold shadow-sm"
+                            : "text-slate-600 hover:text-[#15803D] hover:bg-slate-50"
                         }`}
                       >
                         <span className="truncate">{item.label}</span>
                         {item.badge && (
-                          <span className={`px-1.5 py-0.5 rounded text-[8px] font-black uppercase tracking-wider shrink-0 ${item.badgeColor || "bg-[#030e1f] text-[#8899b4]"}`}>
+                          <span
+                            className={`px-1.5 py-0.5 rounded text-[9px] font-black tracking-wider ${
+                              isActive
+                                ? "bg-white/20 text-white"
+                                : item.badgeColor || "bg-slate-100 text-slate-600"
+                            }`}
+                          >
                             {item.badge}
                           </span>
                         )}
@@ -224,18 +212,11 @@ export default function ICCSidebar({ mobileOpen, setMobileOpen }: ICCSidebarProp
           );
         })}
 
-        {/* InstitutionOS Foundation Indicator */}
-        <div className="pt-4 mt-6 border-t border-[#1a2f4a] px-3">
-          <div className="rounded-2xl bg-[#030e1f] border border-[#d4a017]/25 p-3.5 space-y-2">
-            <div className="flex items-center gap-2">
-              <Sparkles className="w-4 h-4 text-[#d4a017]" />
-              <span className="text-[10px] font-black text-white tracking-wider uppercase">InstitutionOS Multi-Tenant</span>
-            </div>
-            <p className="text-[10px] text-[#8899b4] leading-relaxed">
-              Enterprise Multi-Tenant Operating System architecture ready for polytechnics, universities, and corporate academies.
-            </p>
-            <div className="flex items-center gap-1.5 pt-1 text-[9px] font-black text-[#4ade80]">
-              <span className="w-1.5 h-1.5 rounded-full bg-[#4ade80] animate-pulse" />
+        {/* System Active Status Pill */}
+        <div className="pt-2">
+          <div className="p-3 rounded-2xl bg-[#F8FAFC] border border-slate-200">
+            <div className="flex items-center gap-2 text-[10px] font-extrabold text-[#15803D]">
+              <span className="w-2 h-2 rounded-full bg-[#15803D] animate-pulse" />
               SYSTEM ACTIVE · ALL MODULES READY
             </div>
           </div>
@@ -243,10 +224,10 @@ export default function ICCSidebar({ mobileOpen, setMobileOpen }: ICCSidebarProp
       </div>
 
       {/* Executive Footer */}
-      <div className="p-4 border-t border-[#1a2f4a] bg-[#030e1f]/50">
-        <div className="flex items-center justify-between text-[10px] text-[#8899b4]">
-          <span className="font-bold text-white">Digital World Systems Africa</span>
-          <span className="text-[#d4a017] font-black">v3.2A Executive</span>
+      <div className="p-4 border-t border-slate-100 bg-slate-50">
+        <div className="flex items-center justify-between text-[10px]">
+          <span className="font-bold text-[#0F172A]">Digital World Systems Africa</span>
+          <span className="text-[#D4A017] font-black">v5.0 Executive</span>
         </div>
       </div>
     </div>
@@ -262,7 +243,7 @@ export default function ICCSidebar({ mobileOpen, setMobileOpen }: ICCSidebarProp
       {/* Mobile Drawer Backdrop */}
       {mobileOpen && (
         <div
-          className="fixed inset-0 bg-[#030e1f]/80 backdrop-blur-sm z-40 lg:hidden"
+          className="fixed inset-0 bg-slate-900/50 backdrop-blur-sm z-40 lg:hidden"
           onClick={() => setMobileOpen(false)}
           aria-hidden="true"
         />

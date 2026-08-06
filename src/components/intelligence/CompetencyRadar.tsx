@@ -32,30 +32,30 @@ export default function CompetencyRadar({
   );
 
   return (
-    <div className="rounded-3xl bg-[#061428] border border-[#1a2f4a] p-6 space-y-4 shadow-xl">
-      <div className="flex items-center justify-between border-b border-[#1a2f4a] pb-3">
+    <div className="rounded-3xl bg-white border border-slate-200 p-6 space-y-4 shadow-sm">
+      <div className="flex items-center justify-between border-b border-slate-100 pb-3">
         <div className="flex items-center gap-2">
-          <Shield className="w-5 h-5 text-[#d4a017]" />
+          <Shield className="w-5 h-5 text-[#15803D]" />
           <div>
-            <h3 className="text-sm font-extrabold text-white">{title}</h3>
-            <p className="text-[10px] text-[#8899b4]">Evaluated across 8 core institutional competencies</p>
+            <h3 className="text-sm font-extrabold text-[#0F172A]">{title}</h3>
+            <p className="text-[10px] text-slate-500">Evaluated across 8 core institutional competencies</p>
           </div>
         </div>
-        <span className="px-3 py-1 rounded-full bg-[#4ade80]/10 border border-[#4ade80]/30 text-[#4ade80] text-[10px] font-black">
+        <span className="px-3 py-1 rounded-full bg-[#F0FDF4] border border-[#15803D]/20 text-[#15803D] text-[10px] font-black">
           Overall Proficiency: {avgScore}%
         </span>
       </div>
 
       <div className="grid grid-cols-1 md:grid-cols-2 gap-3 pt-1">
         {competencies.map((c) => (
-          <div key={c.name} className="rounded-2xl bg-[#030e1f] border border-[#1a2f4a] p-3.5 space-y-2 hover:border-[#d4a017]/30 transition-all">
+          <div key={c.name} className="rounded-2xl bg-[#F8FAFC] border border-slate-200 p-3.5 space-y-2 hover:border-[#15803D]/30 transition-all">
             <div className="flex items-center justify-between text-xs">
-              <span className="font-extrabold text-white">{c.name}</span>
-              <span className="text-[10px] font-black text-[#d4a017]">{c.score}% · {c.level}</span>
+              <span className="font-extrabold text-[#0F172A]">{c.name}</span>
+              <span className="text-[10px] font-black text-[#15803D]">{c.score}% · {c.level}</span>
             </div>
-            <div className="h-1.5 rounded-full bg-[#061428] overflow-hidden">
+            <div className="h-1.5 rounded-full bg-slate-200 overflow-hidden">
               <div
-                className="h-full rounded-full bg-gradient-to-r from-[#d4a017] to-[#4ade80] transition-all"
+                className="h-full rounded-full bg-[#15803D] transition-all"
                 style={{ width: `${c.score}%` }}
               />
             </div>

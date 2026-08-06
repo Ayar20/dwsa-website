@@ -111,9 +111,9 @@ export function StudentVideoPlayer({
   const progress = duration > 0 ? (currentTime / duration) * 100 : 0;
 
   return (
-    <div ref={containerRef} style={{ background: "#030e1f", borderRadius: "12px", overflow: "hidden", border: "1px solid rgba(212,160,23,0.2)" }}>
+    <div ref={containerRef} style={{ background: "#FFFFFF", borderRadius: "16px", overflow: "hidden", border: "1px solid #E2E8F0", boxShadow: "0 4px 16px rgba(0,0,0,0.04)" }}>
       {/* Video Area */}
-      <div style={{ position: "relative", background: "#000", aspectRatio: "16/9" }}>
+      <div style={{ position: "relative", background: "#0F172A", aspectRatio: "16/9" }}>
         <video
           ref={videoRef}
           src={videoUrl}
@@ -129,19 +129,19 @@ export function StudentVideoPlayer({
             aria-label="Play video"
             style={{ position: "absolute", inset: 0, display: "flex", alignItems: "center", justifyContent: "center", background: "transparent", border: "none", cursor: "pointer" }}
           >
-            <div style={{ width: 72, height: 72, borderRadius: "50%", background: "rgba(212,160,23,0.9)", display: "flex", alignItems: "center", justifyContent: "center", boxShadow: "0 0 32px rgba(212,160,23,0.5)" }}>
-              <span style={{ color: "#030e1f", fontSize: 28, marginLeft: 4 }}>▶</span>
+            <div style={{ width: 72, height: 72, borderRadius: "50%", background: "#15803D", display: "flex", alignItems: "center", justifyContent: "center", boxShadow: "0 0 24px rgba(21,128,61,0.4)" }}>
+              <span style={{ color: "#FFFFFF", fontSize: 28, marginLeft: 4 }}>▶</span>
             </div>
           </button>
         )}
       </div>
 
       {/* Control Bar */}
-      <div style={{ padding: "12px 16px", background: "#050f20" }}>
+      <div style={{ padding: "14px 20px", background: "#F8FAFC", borderTop: "1px solid #E2E8F0" }}>
         {/* Seek Bar */}
-        <div style={{ marginBottom: 10, position: "relative" }}>
-          <div style={{ height: 4, background: "rgba(255,255,255,0.15)", borderRadius: 2, position: "relative" }}>
-            <div style={{ height: "100%", width: `${progress}%`, background: "linear-gradient(90deg,#d4a017,#f0c040)", borderRadius: 2, transition: "width 0.1s" }} />
+        <div style={{ marginBottom: 12, position: "relative" }}>
+          <div style={{ height: 6, background: "#E2E8F0", borderRadius: 3, position: "relative" }}>
+            <div style={{ height: "100%", width: `${progress}%`, background: "#15803D", borderRadius: 3, transition: "width 0.1s" }} />
           </div>
           <input
             type="range" min={0} max={duration || 100} value={currentTime}
@@ -164,7 +164,7 @@ export function StudentVideoPlayer({
           <button onClick={() => { if (videoRef.current) videoRef.current.currentTime += 10; }} aria-label="Forward 10s" style={ctrlBtn}>10s ⟫</button>
 
           {/* Time */}
-          <span style={{ color: "#aab4c4", fontSize: 13, fontFamily: "monospace", minWidth: 90 }}>
+          <span style={{ color: "#475569", fontSize: 13, fontFamily: "monospace", minWidth: 90, fontWeight: 600 }}>
             {formatTime(currentTime)} / {formatTime(duration)}
           </span>
 
@@ -175,16 +175,16 @@ export function StudentVideoPlayer({
             type="range" min={0} max={1} step={0.1} value={volume}
             aria-label="Volume"
             onChange={(e) => { const v = Number(e.target.value); setVolume(v); if (videoRef.current) videoRef.current.volume = v; }}
-            style={{ width: 80, accentColor: "#d4a017" }}
+            style={{ width: 80, accentColor: "#15803D" }}
           />
 
           {/* Speed */}
           <div style={{ position: "relative" }}>
             <button onClick={() => setShowSpeedMenu((v) => !v)} style={ctrlBtn}>{speed}×</button>
             {showSpeedMenu && (
-              <div style={{ position: "absolute", bottom: "100%", right: 0, background: "#0c1a30", border: "1px solid rgba(212,160,23,0.3)", borderRadius: 8, padding: "4px 0", zIndex: 50 }}>
+              <div style={{ position: "absolute", bottom: "100%", right: 0, background: "#FFFFFF", border: "1px solid #E2E8F0", borderRadius: 8, padding: "4px 0", zIndex: 50, boxShadow: "0 10px 25px -5px rgba(0,0,0,0.1)" }}>
                 {[0.5, 0.75, 1, 1.25, 1.5, 1.75, 2].map((s) => (
-                  <button key={s} onClick={() => changeSpeed(s)} style={{ display: "block", width: "100%", padding: "6px 18px", background: speed === s ? "rgba(212,160,23,0.15)" : "transparent", color: speed === s ? "#d4a017" : "#aab4c4", border: "none", cursor: "pointer", fontSize: 13, textAlign: "left", whiteSpace: "nowrap" }}>
+                  <button key={s} onClick={() => changeSpeed(s)} style={{ display: "block", width: "100%", padding: "6px 18px", background: speed === s ? "#F0FDF4" : "transparent", color: speed === s ? "#15803D" : "#334155", border: "none", cursor: "pointer", fontSize: 13, textAlign: "left", whiteSpace: "nowrap", fontWeight: speed === s ? 700 : 500 }}>
                     {s}×
                   </button>
                 ))}
@@ -193,10 +193,10 @@ export function StudentVideoPlayer({
           </div>
 
           {/* Transcript Toggle */}
-          <button onClick={() => setShowTranscript((v) => !v)} style={{ ...ctrlBtn, color: showTranscript ? "#d4a017" : "#aab4c4" }} aria-label="Toggle transcript">📄</button>
+          <button onClick={() => setShowTranscript((v) => !v)} style={{ ...ctrlBtn, color: showTranscript ? "#15803D" : "#475569" }} aria-label="Toggle transcript">📄</button>
 
           {/* Notes Toggle */}
-          <button onClick={() => setShowNotes((v) => !v)} style={{ ...ctrlBtn, color: showNotes ? "#d4a017" : "#aab4c4" }} aria-label="Toggle notes">✏️</button>
+          <button onClick={() => setShowNotes((v) => !v)} style={{ ...ctrlBtn, color: showNotes ? "#15803D" : "#475569" }} aria-label="Toggle notes">✏️</button>
 
           {/* PiP */}
           <button onClick={togglePiP} style={ctrlBtn} aria-label="Picture-in-picture">⧉</button>
@@ -208,46 +208,46 @@ export function StudentVideoPlayer({
 
       {/* Transcript Panel */}
       {showTranscript && (
-        <div style={{ padding: "16px 20px", borderTop: "1px solid rgba(212,160,23,0.15)", background: "#060f21" }}>
-          <h4 style={{ color: "#d4a017", fontSize: 13, fontWeight: 700, marginBottom: 10, letterSpacing: "0.08em", textTransform: "uppercase" }}>Lesson Transcript</h4>
-          <p style={{ color: "#aab4c4", fontSize: 14, lineHeight: 1.7 }}>{transcript}</p>
+        <div style={{ padding: "20px", borderTop: "1px solid #E2E8F0", background: "#FFFFFF" }}>
+          <h4 style={{ color: "#15803D", fontSize: 13, fontWeight: 700, marginBottom: 10, letterSpacing: "0.08em", textTransform: "uppercase" }}>Lesson Transcript</h4>
+          <p style={{ color: "#334155", fontSize: 14, lineHeight: 1.7 }}>{transcript}</p>
         </div>
       )}
 
       {/* Notes Panel */}
       {showNotes && (
-        <div style={{ padding: "16px 20px", borderTop: "1px solid rgba(212,160,23,0.15)", background: "#060f21" }}>
-          <h4 style={{ color: "#d4a017", fontSize: 13, fontWeight: 700, marginBottom: 12, letterSpacing: "0.08em", textTransform: "uppercase" }}>Timestamped Notes</h4>
-          <div style={{ display: "flex", gap: 8, marginBottom: 12 }}>
+        <div style={{ padding: "20px", borderTop: "1px solid #E2E8F0", background: "#FFFFFF" }}>
+          <h4 style={{ color: "#15803D", fontSize: 13, fontWeight: 700, marginBottom: 12, letterSpacing: "0.08em", textTransform: "uppercase" }}>Timestamped Notes</h4>
+          <div style={{ display: "flex", gap: 10, marginBottom: 14 }}>
             <input
               type="text" value={newNote} onChange={(e) => setNewNote(e.target.value)}
               onKeyDown={(e) => e.key === "Enter" && addNote()}
               placeholder={`Add note at ${formatTime(currentTime)}…`}
-              style={{ flex: 1, background: "rgba(255,255,255,0.06)", border: "1px solid rgba(212,160,23,0.25)", borderRadius: 8, padding: "8px 12px", color: "#f0f4ff", fontSize: 13, outline: "none" }}
+              style={{ flex: 1, background: "#FFFFFF", border: "1px solid #CBD5E1", borderRadius: 8, padding: "8px 14px", color: "#0F172A", fontSize: 13, outline: "none" }}
             />
-            <button onClick={addNote} style={{ background: "#d4a017", color: "#030e1f", border: "none", borderRadius: 8, padding: "8px 16px", cursor: "pointer", fontWeight: 700, fontSize: 13 }}>Add</button>
+            <button onClick={addNote} style={{ background: "#15803D", color: "#FFFFFF", border: "none", borderRadius: 8, padding: "8px 18px", cursor: "pointer", fontWeight: 700, fontSize: 13 }}>Add</button>
           </div>
           {notes.map((n) => (
             <div key={n.id} style={{ display: "flex", gap: 10, alignItems: "flex-start", marginBottom: 10 }}>
-              <span style={{ background: "rgba(212,160,23,0.15)", color: "#d4a017", borderRadius: 6, padding: "2px 8px", fontSize: 11, fontFamily: "monospace", whiteSpace: "nowrap", flexShrink: 0 }}>{n.timestampFormatted}</span>
-              <p style={{ color: "#aab4c4", fontSize: 13, lineHeight: 1.6, margin: 0 }}>{n.noteText}</p>
+              <span style={{ background: "#F0FDF4", color: "#15803D", border: "1px solid #15803D/20", borderRadius: 6, padding: "2px 8px", fontSize: 11, fontFamily: "monospace", whiteSpace: "nowrap", flexShrink: 0, fontWeight: 700 }}>{n.timestampFormatted}</span>
+              <p style={{ color: "#334155", fontSize: 13, lineHeight: 1.6, margin: 0 }}>{n.noteText}</p>
             </div>
           ))}
         </div>
       )}
 
       {/* Bottom Navigation Bar */}
-      <div style={{ padding: "12px 20px", borderTop: "1px solid rgba(212,160,23,0.1)", background: "#050f20", display: "flex", alignItems: "center", gap: 12, flexWrap: "wrap" }}>
-        <button onClick={onPrevLesson} style={{ background: "rgba(255,255,255,0.06)", color: "#aab4c4", border: "1px solid rgba(255,255,255,0.1)", borderRadius: 8, padding: "8px 16px", cursor: "pointer", fontSize: 13 }}>← Previous</button>
+      <div style={{ padding: "14px 20px", borderTop: "1px solid #E2E8F0", background: "#F8FAFC", display: "flex", alignItems: "center", gap: 12, flexWrap: "wrap" }}>
+        <button onClick={onPrevLesson} style={{ background: "#FFFFFF", color: "#334155", border: "1px solid #CBD5E1", borderRadius: 8, padding: "8px 16px", cursor: "pointer", fontSize: 13, fontWeight: 600 }}>← Previous</button>
         <button
           onClick={handleComplete}
-          style={{ background: completed ? "rgba(74,222,128,0.15)" : "rgba(212,160,23,0.12)", color: completed ? "#4ade80" : "#d4a017", border: `1px solid ${completed ? "rgba(74,222,128,0.3)" : "rgba(212,160,23,0.3)"}`, borderRadius: 8, padding: "8px 20px", cursor: "pointer", fontWeight: 700, fontSize: 13, transition: "all 0.2s" }}
+          style={{ background: completed ? "#F0FDF4" : "#15803D", color: completed ? "#15803D" : "#FFFFFF", border: `1px solid ${completed ? "#15803D" : "#15803D"}`, borderRadius: 8, padding: "8px 20px", cursor: "pointer", fontWeight: 700, fontSize: 13, transition: "all 0.2s" }}
         >
           {completed ? "✓ Completed" : "Mark as Complete"}
         </button>
         <div style={{ flex: 1 }} />
         {nextLessonTitle && (
-          <button onClick={onNextLesson} style={{ background: "linear-gradient(135deg,#d4a017,#b88a0e)", color: "#030e1f", border: "none", borderRadius: 8, padding: "8px 20px", cursor: "pointer", fontWeight: 700, fontSize: 13 }}>
+          <button onClick={onNextLesson} style={{ background: "#15803D", color: "#FFFFFF", border: "none", borderRadius: 8, padding: "8px 20px", cursor: "pointer", fontWeight: 700, fontSize: 13 }}>
             Next: {nextLessonTitle} →
           </button>
         )}
@@ -259,11 +259,12 @@ export function StudentVideoPlayer({
 const ctrlBtn: React.CSSProperties = {
   background: "transparent",
   border: "none",
-  color: "#aab4c4",
+  color: "#334155",
   cursor: "pointer",
   fontSize: 14,
-  padding: "4px 6px",
-  borderRadius: 4,
-  transition: "color 0.2s",
+  padding: "6px 8px",
+  borderRadius: 6,
+  transition: "all 0.2s",
   whiteSpace: "nowrap",
+  fontWeight: 600,
 };

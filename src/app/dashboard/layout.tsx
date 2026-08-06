@@ -61,52 +61,108 @@ export default function DashboardLayout({
 
   // Platform Command Centre Shell for Super Admins / Platform Routes
   if (isPlatformRoute) {
-    const platformPageLabel = pathname.includes("/tenants")
+    const platformPageLabel = pathname.includes("/onboarding")
+      ? "Customer Onboarding Centre"
+      : pathname.includes("/subscriptions")
+      ? "Subscription & MRR Management"
+      : pathname.includes("/health")
+      ? "Tenant Health Monitoring"
+      : pathname.includes("/customers")
+      ? "Customer Success Centre"
+      : pathname.includes("/tenants")
       ? "Institution Registry"
       : pathname.includes("/provision")
       ? "Provision Institution Wizard"
       : pathname.includes("/analytics")
       ? "Platform Analytics & Consumption"
+      : pathname.includes("/ecosystem")
+      ? "Enterprise Extension Marketplace"
+      : pathname.includes("/ai-marketplace")
+      ? "AI Agent Exchange"
+      : pathname.includes("/marketplace-intelligence")
+      ? "Marketplace Executive Intelligence"
+      : pathname.includes("/certification")
+      ? "Marketplace Certification Centre"
+      : pathname.includes("/marketplace-governance")
+      ? "Marketplace Governance Centre"
+      : pathname.includes("/marketplace-finance")
+      ? "Marketplace Financial Operations"
       : pathname.includes("/marketplace")
-      ? "Institution Marketplace Blueprints"
+      ? "Enterprise Module Marketplace"
+      : pathname.includes("/ai-workforce")
+      ? "AI Digital Workforce Registry"
+      : pathname.includes("/ai-agent")
+      ? "Atlas — Platform Operator Agent"
+      : pathname.includes("/integrations")
+      ? "Enterprise Integration Marketplace"
+      : pathname.includes("/integration-intelligence")
+      ? "Integration Intelligence & Recovery"
+      : pathname.includes("/templates")
+      ? "Deployment Templates & Provisioning"
+      : pathname.includes("/developers")
+      ? "API Developer Centre"
+      : pathname.includes("/data-exchange")
+      ? "Data Exchange & Migration Hub"
+      : pathname.includes("/partners")
+      ? "Digital Partner Network"
+      : pathname.includes("/crm")
+      ? "Enterprise CRM"
+      : pathname.includes("/pipeline")
+      ? "Transformation Pipeline"
+      : pathname.includes("/implementation")
+      ? "Implementation Command Centre"
+      : pathname.includes("/sales-intelligence")
+      ? "Sales Intelligence"
+      : pathname.includes("/proposals")
+      ? "Proposal Centre"
+      : pathname.includes("/assessment")
+      ? "Digital Transformation Assessment"
+      : pathname.includes("/africa")
+      ? "Africa Expansion Centre"
+      : pathname.includes("/customer-success")
+      ? "Customer Success Operations"
+      : pathname.includes("/workforce")
+      ? "Africa Workforce Intelligence"
+      : pathname.includes("/skills-market")
+      ? "Skills Marketplace"
       : "Platform Command Centre";
 
     return (
-      <div className="min-h-screen bg-[#030e1f] text-[#f0f4ff] flex font-sans">
+      <div className="min-h-screen bg-[#F8FAFC] text-[#0F172A] flex font-sans">
         <PlatformSidebar mobileOpen={mobileOpen} setMobileOpen={setMobileOpen} />
-        <div className="flex-1 flex flex-col min-w-0 min-h-screen">
+        <div className="flex-1 flex flex-col min-w-0 min-h-screen bg-[#F8FAFC]">
           {/* Platform Header Bar */}
-          <header className="sticky top-0 z-30 bg-[#030e1f]/90 backdrop-blur-md border-b border-[#d4a017]/25 px-4 sm:px-6 py-3 flex items-center justify-between gap-4">
+          <header className="sticky top-0 z-30 bg-white/95 backdrop-blur-md border-b border-slate-200 shadow-sm px-4 sm:px-6 py-3 flex items-center justify-between gap-4">
             <div className="flex items-center gap-3">
               <button
                 onClick={() => setMobileOpen(true)}
-                className="lg:hidden p-2 rounded-xl bg-[#061428] border border-[#d4a017]/30 text-[#d4a017] hover:bg-[#d4a017] hover:text-[#030e1f] transition-all focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#d4a017]"
+                className="lg:hidden p-2 rounded-xl bg-slate-100 border border-slate-200 text-[#0F172A] hover:bg-slate-200 transition-all focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#15803D]"
                 aria-label="Open platform navigation"
               >
                 <Menu className="w-5 h-5" />
               </button>
               <div>
-                <div className="flex items-center gap-2 text-[10px] font-bold text-[#8899b4]">
+                <div className="flex items-center gap-2 text-[10px] font-bold text-slate-500">
                   <span>InstitutionOS Platform</span>
                   <span aria-hidden="true">•</span>
-                  <span className="text-[#d4a017] uppercase tracking-wider">v4.0 Super Admin</span>
+                  <span className="text-[#15803D] uppercase tracking-wider font-extrabold">v5.0 Super Admin</span>
                 </div>
-                <h1 className="text-sm sm:text-base font-extrabold text-white tracking-tight">{platformPageLabel}</h1>
+                <h1 className="text-sm sm:text-base font-extrabold text-[#0F172A] tracking-tight">{platformPageLabel}</h1>
               </div>
             </div>
             <div className="flex items-center gap-3">
-              <span className="hidden sm:flex items-center gap-1.5 px-3 py-1.5 rounded-xl bg-[#061428] border border-[#a78bfa]/30 text-[#a78bfa] text-[10px] font-black tracking-wider">
+              <span className="hidden sm:flex items-center gap-1.5 px-3 py-1.5 rounded-xl bg-[#F0FDF4] border border-[#15803D]/20 text-[#15803D] text-[10px] font-black tracking-wider">
                 <ShieldCheck className="w-3.5 h-3.5" aria-hidden="true" />
                 SUPER ADMIN
               </span>
               <button
                 onClick={() => setNotifOpen(true)}
-                className="p-2 rounded-xl bg-[#061428] border border-[#d4a017]/30 text-[#d4a017] hover:bg-[#0f223d] transition-all relative focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#d4a017]"
+                className="p-2 rounded-xl bg-slate-100 border border-slate-200 text-[#0F172A] hover:bg-slate-200 transition-all relative focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#15803D]"
                 aria-label="View Platform Notifications"
                 title="Universal Notifications"
               >
                 <Bell className="w-4 h-4" aria-hidden="true" />
-                <span className="absolute top-1.5 right-1.5 w-2 h-2 rounded-full bg-[#4ade80]" aria-hidden="true" />
+                <span className="absolute top-1.5 right-1.5 w-2 h-2 rounded-full bg-[#15803D]" aria-hidden="true" />
               </button>
             </div>
           </header>
@@ -139,53 +195,57 @@ export default function DashboardLayout({
       ? "Announcements"
       : pathname.includes("/competencies")
       ? "Competency Validation"
+      : pathname.includes("/ai-agent")
+      ? "Sage — AI Teaching Agent"
+      : pathname.includes("/integrations")
+      ? "Faculty Connected Academic Workspace"
       : "Faculty Home";
 
     return (
-      <div className="min-h-screen bg-[#030e1f] text-[#f0f4ff] flex font-sans">
+      <div className="min-h-screen bg-[#F8FAFC] text-[#0F172A] flex font-sans">
         <FacultySidebar mobileOpen={mobileOpen} setMobileOpen={setMobileOpen} />
-        <div className="flex-1 flex flex-col min-w-0 min-h-screen">
+        <div className="flex-1 flex flex-col min-w-0 min-h-screen bg-[#F8FAFC]">
           {/* Faculty Workspace Top Header */}
-          <header className="sticky top-0 z-30 bg-[#030e1f]/90 backdrop-blur-md border-b border-[#d4a017]/20 px-4 sm:px-6 py-3 flex items-center justify-between gap-4">
+          <header className="sticky top-0 z-30 bg-white/95 backdrop-blur-md border-b border-slate-200 shadow-sm px-4 sm:px-6 py-3 flex items-center justify-between gap-4">
             <div className="flex items-center gap-3">
               <button
                 onClick={() => setMobileOpen(true)}
-                className="lg:hidden p-2 rounded-xl bg-[#061428] border border-[#d4a017]/30 text-[#d4a017] hover:bg-[#d4a017] hover:text-[#030e1f] transition-all focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#d4a017]"
+                className="lg:hidden p-2 rounded-xl bg-slate-100 border border-slate-200 text-[#0F172A] hover:bg-slate-200 transition-all focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#15803D]"
                 aria-label="Open faculty navigation"
               >
                 <Menu className="w-5 h-5" />
               </button>
               <div>
-                <div className="flex items-center gap-2 text-[10px] font-bold text-[#8899b4]">
+                <div className="flex items-center gap-2 text-[10px] font-bold text-slate-500">
                   <span>Faculty Workspace</span>
                   <span aria-hidden="true">•</span>
-                  <span className="text-[#d4a017] uppercase tracking-wider">InstitutionOS v3.9</span>
+                  <span className="text-[#15803D] uppercase tracking-wider font-extrabold">InstitutionOS v5.0</span>
                 </div>
-                <h1 className="text-sm sm:text-base font-extrabold text-white tracking-tight">{facultyPageLabel}</h1>
+                <h1 className="text-sm sm:text-base font-extrabold text-[#0F172A] tracking-tight">{facultyPageLabel}</h1>
               </div>
             </div>
             <div className="flex items-center gap-3">
-              <span className="hidden sm:flex items-center gap-1.5 px-3 py-1.5 rounded-xl bg-[#061428] border border-[#4ade80]/30 text-[#4ade80] text-[10px] font-black tracking-wider">
+              <span className="hidden sm:flex items-center gap-1.5 px-3 py-1.5 rounded-xl bg-[#F0FDF4] border border-[#15803D]/20 text-[#15803D] text-[10px] font-black tracking-wider">
                 <BookMarked className="w-3.5 h-3.5" aria-hidden="true" />
                 FACULTY
               </span>
               <button
                 onClick={() => setNotifOpen(true)}
-                className="p-2 rounded-xl bg-[#061428] border border-[#d4a017]/30 text-[#d4a017] hover:bg-[#0f223d] transition-all relative focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#d4a017]"
+                className="p-2 rounded-xl bg-slate-100 border border-slate-200 text-[#0F172A] hover:bg-slate-200 transition-all relative focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#15803D]"
                 aria-label="View Campus Notifications"
                 title="Universal Notifications"
               >
                 <Bell className="w-4 h-4" aria-hidden="true" />
-                <span className="absolute top-1.5 right-1.5 w-2 h-2 rounded-full bg-[#4ade80]" aria-hidden="true" />
+                <span className="absolute top-1.5 right-1.5 w-2 h-2 rounded-full bg-[#15803D]" aria-hidden="true" />
               </button>
               <Link
                 href="/dashboard/instructor/profile"
-                className="flex items-center gap-2 p-1.5 sm:px-3 sm:py-1.5 rounded-xl bg-[#061428] border border-[#d4a017]/40 hover:border-[#d4a017] text-white transition-all focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#d4a017]"
+                className="flex items-center gap-2 p-1.5 sm:px-3 sm:py-1.5 rounded-xl bg-slate-100 border border-slate-200 hover:border-[#15803D] text-[#0F172A] transition-all focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#15803D]"
               >
-                <div className="w-6 h-6 rounded-lg bg-gradient-to-br from-[#d4a017] to-[#e5a910] text-[#030e1f] flex items-center justify-center font-black text-xs shrink-0">
+                <div className="w-6 h-6 rounded-lg bg-[#15803D] text-white flex items-center justify-center font-black text-xs shrink-0">
                   {session?.user?.name?.[0]?.toUpperCase() || "F"}
                 </div>
-                <span className="hidden md:inline text-xs font-extrabold text-white truncate max-w-[120px]">
+                <span className="hidden md:inline text-xs font-extrabold text-[#0F172A] truncate max-w-[120px]">
                   {session?.user?.name?.split(" ")[0] || "Faculty"}
                 </span>
               </Link>
@@ -256,53 +316,57 @@ export default function DashboardLayout({
       ? "Governance & Compliance Centre"
       : pathname.includes("/settings")
       ? "Institution Settings"
+      : pathname.includes("/ai-agent")
+      ? "Pulse — Admin Operations Agent"
+      : pathname.includes("/ai-executive")
+      ? "Apex — Executive Intelligence Agent"
       : "Executive Dashboard";
 
     return (
-      <div className="min-h-screen bg-[#030e1f] text-[#f0f4ff] flex font-sans">
+      <div className="min-h-screen bg-[#F8FAFC] text-[#0F172A] flex font-sans">
         <ICCSidebar mobileOpen={mobileOpen} setMobileOpen={setMobileOpen} />
-        <div className="flex-1 flex flex-col min-w-0 min-h-screen">
+        <div className="flex-1 flex flex-col min-w-0 min-h-screen bg-[#F8FAFC]">
           {/* Executive Header Bar */}
-          <header className="sticky top-0 z-30 bg-[#030e1f]/90 backdrop-blur-md border-b border-[#d4a017]/25 px-4 sm:px-6 py-3 flex items-center justify-between gap-4">
+          <header className="sticky top-0 z-30 bg-white/95 backdrop-blur-md border-b border-slate-200 shadow-sm px-4 sm:px-6 py-3 flex items-center justify-between gap-4">
             <div className="flex items-center gap-3">
               <button
                 onClick={() => setMobileOpen(true)}
-                className="lg:hidden p-2 rounded-xl bg-[#061428] border border-[#d4a017]/30 text-[#d4a017] hover:bg-[#d4a017] hover:text-[#030e1f] transition-all focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#d4a017]"
+                className="lg:hidden p-2 rounded-xl bg-slate-100 border border-slate-200 text-[#0F172A] hover:bg-slate-200 transition-all focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#15803D]"
                 aria-label="Open executive navigation"
               >
                 <Menu className="w-5 h-5" />
               </button>
               <div>
-                <div className="flex items-center gap-2 text-[10px] font-bold text-[#8899b4]">
+                <div className="flex items-center gap-2 text-[10px] font-bold text-slate-500">
                   <span>Institution Control Centre</span>
                   <span aria-hidden="true">•</span>
-                  <span className="text-[#d4a017] uppercase tracking-wider">Powered by InstitutionOS v3.2</span>
+                  <span className="text-[#D4A017] uppercase tracking-wider font-extrabold">InstitutionOS v5.0</span>
                 </div>
-                <h1 className="text-sm sm:text-base font-extrabold text-white tracking-tight">{iccPageLabel}</h1>
+                <h1 className="text-sm sm:text-base font-extrabold text-[#0F172A] tracking-tight">{iccPageLabel}</h1>
               </div>
             </div>
             <div className="flex items-center gap-3">
-              <span className="hidden sm:flex items-center gap-1.5 px-3 py-1.5 rounded-xl bg-[#061428] border border-[#d4a017]/30 text-[#d4a017] text-[10px] font-black tracking-wider">
+              <span className="hidden sm:flex items-center gap-1.5 px-3 py-1.5 rounded-xl bg-[#FEFCE8] border border-[#D4A017]/30 text-[#D4A017] text-[10px] font-black tracking-wider">
                 <ShieldCheck className="w-3.5 h-3.5" aria-hidden="true" />
                 EXECUTIVE
               </span>
               <button
                 onClick={() => setNotifOpen(true)}
-                className="p-2 rounded-xl bg-[#061428] border border-[#d4a017]/30 text-[#d4a017] hover:bg-[#0f223d] transition-all relative focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#d4a017]"
+                className="p-2 rounded-xl bg-slate-100 border border-slate-200 text-[#0F172A] hover:bg-slate-200 transition-all relative focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#15803D]"
                 aria-label="View Institution Notifications"
                 title="Universal Notifications"
               >
                 <Bell className="w-4 h-4" aria-hidden="true" />
-                <span className="absolute top-1.5 right-1.5 w-2 h-2 rounded-full bg-[#4ade80]" aria-hidden="true" />
+                <span className="absolute top-1.5 right-1.5 w-2 h-2 rounded-full bg-[#15803D]" aria-hidden="true" />
               </button>
               <Link
                 href="/dashboard/admin/settings"
-                className="flex items-center gap-2 p-1.5 sm:px-3 sm:py-1.5 rounded-xl bg-[#061428] border border-[#d4a017]/40 hover:border-[#d4a017] text-white transition-all focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#d4a017]"
+                className="flex items-center gap-2 p-1.5 sm:px-3 sm:py-1.5 rounded-xl bg-slate-100 border border-slate-200 hover:border-[#D4A017] text-[#0F172A] transition-all focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#D4A017]"
               >
-                <div className="w-6 h-6 rounded-lg bg-gradient-to-br from-[#d4a017] to-[#e5a910] text-[#030e1f] flex items-center justify-center font-black text-xs shrink-0">
+                <div className="w-6 h-6 rounded-lg bg-[#0F172A] text-white flex items-center justify-center font-black text-xs shrink-0">
                   {session?.user?.name?.[0]?.toUpperCase() || "E"}
                 </div>
-                <span className="hidden md:inline text-xs font-extrabold text-white truncate max-w-[120px]">
+                <span className="hidden md:inline text-xs font-extrabold text-[#0F172A] truncate max-w-[120px]">
                   {session?.user?.name?.split(" ")[0] || "Executive"}
                 </span>
               </Link>
@@ -320,21 +384,21 @@ export default function DashboardLayout({
 
   // Digital Campus Shell Layout for Students
   return (
-    <div className="min-h-screen bg-[#030e1f] text-[#f0f4ff] flex font-sans">
+    <div className="min-h-screen bg-[#F8FAFC] text-[#0F172A] flex font-sans">
       
       {/* Student Sidebar Navigation */}
       <StudentSidebar mobileOpen={mobileOpen} setMobileOpen={setMobileOpen} />
 
       {/* Main Content Area */}
-      <div className="flex-1 flex flex-col min-w-0 min-h-screen">
+      <div className="flex-1 flex flex-col min-w-0 min-h-screen bg-[#F8FAFC]">
 
         {/* Institutional Campus Top Header Bar */}
-        <header className="sticky top-0 z-30 bg-[#030e1f]/90 backdrop-blur-md border-b border-[#d4a017]/20 px-4 sm:px-6 py-3 flex items-center justify-between gap-4">
+        <header className="sticky top-0 z-30 bg-white/95 backdrop-blur-md border-b border-slate-200 shadow-sm px-4 sm:px-6 py-3 flex items-center justify-between gap-4">
           <div className="flex items-center gap-3">
             {/* Mobile Sidebar Toggle Button */}
             <button
               onClick={() => setMobileOpen(true)}
-              className="lg:hidden p-2 rounded-xl bg-[#061428] border border-[#d4a017]/30 text-[#d4a017] hover:bg-[#d4a017] hover:text-[#030e1f] transition-all focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#d4a017]"
+              className="lg:hidden p-2 rounded-xl bg-[#F0FDF4] border border-[#15803D]/20 text-[#15803D] hover:bg-[#15803D] hover:text-white transition-all focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#15803D]"
               aria-label="Open campus navigation menu"
             >
               <Menu className="w-5 h-5" />
@@ -342,12 +406,12 @@ export default function DashboardLayout({
 
             {/* Breadcrumb / Section Header */}
             <div>
-              <div className="flex items-center gap-2 text-[10px] font-bold text-[#8899b4]">
+              <div className="flex items-center gap-2 text-[10px] font-bold text-slate-500">
                 <span>DTA Digital Campus</span>
                 <span aria-hidden="true">•</span>
-                <span className="text-[#d4a017] uppercase tracking-wider">InstitutionOS v3.0</span>
+                <span className="text-[#15803D] uppercase tracking-wider font-extrabold">InstitutionOS v5.0A</span>
               </div>
-              <h1 className="text-sm sm:text-base font-extrabold text-white tracking-tight">
+              <h1 className="text-sm sm:text-base font-extrabold text-[#0F172A] tracking-tight">
                 {pathname.includes("/transcript")
                   ? "Official Digital Transcript"
                   : pathname.includes("/credentials")
@@ -366,8 +430,14 @@ export default function DashboardLayout({
                   ? "Mentor Operations Hub"
                   : pathname.includes("/student/ai")
                   ? "Student AI Learning Assistant"
+                  : pathname.includes("/student/ai-agent")
+                  ? "Aida — AI Learning Agent"
+                  : pathname.includes("/student/integrations")
+                  ? "Student Connected Apps & Services"
                   : pathname.includes("/instructor/ai")
                   ? "Faculty AI Co-Pilot"
+                  : pathname.includes("/instructor/ai-agent")
+                  ? "Sage — AI Teaching Agent"
                   : pathname.includes("/student/inbox")
                   ? "My Campus Inbox"
                   : pathname.includes("/instructor/inbox")
@@ -391,30 +461,30 @@ export default function DashboardLayout({
           <div className="flex items-center gap-3">
             <button
               onClick={() => setSearchOpen(true)}
-              className="hidden sm:flex items-center gap-2 px-3 py-1.5 rounded-xl bg-[#061428] border border-[#d4a017]/30 text-[#d4a017] hover:bg-[#0f223d] text-xs font-bold transition-all focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#d4a017]"
+              className="hidden sm:flex items-center gap-2 px-3 py-1.5 rounded-xl bg-white border border-slate-200 text-slate-700 hover:border-[#15803D] hover:text-[#15803D] text-xs font-bold transition-all focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#15803D]"
             >
-              <Search className="w-3.5 h-3.5" aria-hidden="true" />
+              <Search className="w-3.5 h-3.5 text-[#15803D]" aria-hidden="true" />
               <span>Search Library</span>
             </button>
 
             <button
               onClick={() => setNotifOpen(true)}
-              className="p-2 rounded-xl bg-[#061428] border border-[#d4a017]/30 text-[#d4a017] hover:bg-[#0f223d] transition-all relative focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#d4a017]"
+              className="p-2 rounded-xl bg-[#F0FDF4] border border-[#15803D]/20 text-[#15803D] hover:bg-[#15803D] hover:text-white transition-all relative focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#15803D]"
               aria-label="View Campus Notices & Notifications"
               title="Campus Notifications"
             >
               <Bell className="w-4 h-4" aria-hidden="true" />
-              <span className="absolute top-1.5 right-1.5 w-2 h-2 rounded-full bg-[#4ade80]" aria-hidden="true" />
+              <span className="absolute top-1.5 right-1.5 w-2 h-2 rounded-full bg-[#15803D]" aria-hidden="true" />
             </button>
 
             <Link
               href="/dashboard/student/identity"
-              className="flex items-center gap-2 p-1.5 sm:px-3 sm:py-1.5 rounded-xl bg-[#061428] border border-[#d4a017]/40 hover:border-[#d4a017] text-white transition-all focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#d4a017]"
+              className="flex items-center gap-2 p-1.5 sm:px-3 sm:py-1.5 rounded-xl bg-white border border-slate-200 hover:border-[#15803D] text-[#0F172A] transition-all focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#15803D] shadow-sm"
             >
-              <div className="w-6 h-6 rounded-lg bg-gradient-to-br from-[#d4a017] to-[#e5a910] text-[#030e1f] flex items-center justify-center font-black text-xs shrink-0">
+              <div className="w-6 h-6 rounded-lg bg-[#15803D] text-white flex items-center justify-center font-black text-xs shrink-0">
                 {session?.user?.name?.[0]?.toUpperCase() || "S"}
               </div>
-              <span className="hidden md:inline text-xs font-extrabold text-white truncate max-w-[120px]">
+              <span className="hidden md:inline text-xs font-extrabold text-[#0F172A] truncate max-w-[120px]">
                 {session?.user?.name?.split(" ")[0] || "Learner"}
               </span>
             </Link>
