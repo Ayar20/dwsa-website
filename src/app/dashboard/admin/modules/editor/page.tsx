@@ -222,16 +222,16 @@ export default function ModuleEditorPage() {
       {/* --- MAIN EDITOR SPLIT LAYOUT --- */}
       <div className="grid grid-cols-1 xl:grid-cols-3 gap-8 items-start">
 
-        {/* === LEFT: Module Editor Form === */}
+        {/* === LEFT: Module Editor Form — IEDS v2.0 === */}
         <div className="xl:col-span-2 space-y-6">
-          <form onSubmit={handleSubmit} className="dwsa-glass-card rounded-3xl p-6 sm:p-8 space-y-6 shadow-2xl">
-            <div className="flex items-center justify-between border-b border-[#d4a017]/20 pb-4">
-              <h2 className="text-base font-extrabold text-white flex items-center gap-2.5">
-                <Layers className="w-5 h-5 text-[#00d2ff]" />
+          <form onSubmit={handleSubmit} className="bg-white border border-slate-200 rounded-3xl p-6 sm:p-8 space-y-6 shadow-sm">
+            <div className="flex items-center justify-between border-b border-slate-100 pb-4">
+              <h2 className="text-base font-extrabold text-[#0F172A] flex items-center gap-2.5">
+                <Layers className="w-5 h-5 text-[#15803D]" />
                 {form.id ? "Edit Module Content" : "Create New Track Module"}
               </h2>
               {form.id && (
-                <span className="px-3 py-1 bg-[#d4a017]/10 border border-[#d4a017]/40 text-[#d4a017] rounded-full text-[10px] font-bold">
+                <span className="px-3 py-1 bg-[#F0FDF4] border border-[#15803D]/20 text-[#15803D] rounded-full text-[10px] font-bold">
                   Editing ID: {form.id.slice(0, 8)}...
                 </span>
               )}
@@ -240,27 +240,27 @@ export default function ModuleEditorPage() {
             {/* Row 1: Track + Order */}
             <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
               <div className="sm:col-span-2">
-                <label className="block text-[10px] font-extrabold text-[#8899b4] uppercase tracking-wider mb-1.5">
+                <label className="block text-[10px] font-extrabold text-slate-500 uppercase tracking-wider mb-1.5">
                   Assign to Track *
                 </label>
                 <div className="relative">
                   <select
                     value={form.trackId}
                     onChange={(e) => setForm((f) => ({ ...f, trackId: e.target.value }))}
-                    className="w-full px-3.5 py-2.5 bg-[#061428] border border-[#d4a017]/30 rounded-xl text-xs text-white focus:outline-none focus:border-[#00d2ff] focus:ring-1 focus:ring-[#00d2ff] appearance-none pr-8 font-semibold"
+                    className="w-full px-3.5 py-2.5 bg-slate-50 border border-slate-200 rounded-xl text-xs text-[#0F172A] focus:outline-none focus:ring-2 focus:ring-[#15803D] appearance-none pr-8 font-semibold"
                   >
                     <option value="">— Select Course Track —</option>
                     {tracks.map((t) => (
                       <option key={t.id} value={t.id}>{t.title}</option>
                     ))}
                   </select>
-                  <ChevronDown className="w-4 h-4 text-[#8899b4] absolute right-3 top-3 pointer-events-none" />
+                  <ChevronDown className="w-4 h-4 text-slate-400 absolute right-3 top-3 pointer-events-none" />
                 </div>
-                {errors.trackId && <p className="text-[10px] text-red-400 mt-1">{errors.trackId}</p>}
+                {errors.trackId && <p className="text-[10px] text-red-500 mt-1">{errors.trackId}</p>}
               </div>
 
               <div>
-                <label className="block text-[10px] font-extrabold text-[#8899b4] uppercase tracking-wider mb-1.5">
+                <label className="block text-[10px] font-extrabold text-slate-500 uppercase tracking-wider mb-1.5">
                   Module Sequence Order *
                 </label>
                 <input
@@ -268,15 +268,15 @@ export default function ModuleEditorPage() {
                   min={1}
                   value={form.order}
                   onChange={(e) => setForm((f) => ({ ...f, order: Number(e.target.value) }))}
-                  className="w-full px-3.5 py-2.5 bg-[#061428] border border-[#d4a017]/30 rounded-xl text-xs text-white focus:outline-none focus:border-[#00d2ff] font-bold"
+                  className="w-full px-3.5 py-2.5 bg-slate-50 border border-slate-200 rounded-xl text-xs text-[#0F172A] focus:outline-none focus:ring-2 focus:ring-[#15803D] font-bold"
                 />
-                {errors.order && <p className="text-[10px] text-red-400 mt-1">{errors.order}</p>}
+                {errors.order && <p className="text-[10px] text-red-500 mt-1">{errors.order}</p>}
               </div>
             </div>
 
             {/* Row 2: Module Title */}
             <div>
-              <label className="block text-[10px] font-extrabold text-[#8899b4] uppercase tracking-wider mb-1.5">
+              <label className="block text-[10px] font-extrabold text-slate-500 uppercase tracking-wider mb-1.5">
                 Module Title *
               </label>
               <input
@@ -284,16 +284,16 @@ export default function ModuleEditorPage() {
                 value={form.title}
                 onChange={(e) => setForm((f) => ({ ...f, title: e.target.value }))}
                 placeholder="e.g. Module 4: Database Modeling & Schema Management with Prisma"
-                className="w-full px-3.5 py-2.5 bg-[#061428] border border-[#d4a017]/30 rounded-xl text-xs text-white placeholder-[#8899b4]/60 focus:outline-none focus:border-[#00d2ff] focus:ring-1 focus:ring-[#00d2ff]"
+                className="w-full px-3.5 py-2.5 bg-slate-50 border border-slate-200 rounded-xl text-xs text-[#0F172A] placeholder-slate-400 focus:outline-none focus:ring-2 focus:ring-[#15803D]"
               />
-              {errors.title && <p className="text-[10px] text-red-400 mt-1">{errors.title}</p>}
+              {errors.title && <p className="text-[10px] text-red-500 mt-1">{errors.title}</p>}
             </div>
 
             {/* Row 3: YouTube ID + Duration + Free Preview */}
             <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
               <div className="sm:col-span-1">
-                <label className="block text-[10px] font-extrabold text-[#8899b4] uppercase tracking-wider mb-1.5 flex items-center gap-1.5">
-                  <Clapperboard className="w-3.5 h-3.5 text-rose-400" />
+                <label className="block text-[10px] font-extrabold text-slate-500 uppercase tracking-wider mb-1.5 flex items-center gap-1.5">
+                  <Clapperboard className="w-3.5 h-3.5 text-rose-500" />
                   YouTube Video ID
                 </label>
                 <input
@@ -302,14 +302,14 @@ export default function ModuleEditorPage() {
                   onChange={(e) => setForm((f) => ({ ...f, youtubeId: e.target.value }))}
                   placeholder="e.g. dQw4w9WgXcQ"
                   maxLength={11}
-                  className="w-full px-3.5 py-2.5 bg-[#061428] border border-[#d4a017]/30 rounded-xl text-xs text-white placeholder-[#8899b4]/60 focus:outline-none focus:border-rose-400 font-mono tracking-wider"
+                  className="w-full px-3.5 py-2.5 bg-slate-50 border border-slate-200 rounded-xl text-xs text-[#0F172A] placeholder-slate-400 focus:outline-none focus:ring-2 focus:ring-[#15803D] font-mono tracking-wider"
                 />
-                {errors.youtubeId && <p className="text-[10px] text-red-400 mt-1">{errors.youtubeId}</p>}
+                {errors.youtubeId && <p className="text-[10px] text-red-500 mt-1">{errors.youtubeId}</p>}
               </div>
 
               <div>
-                <label className="block text-[10px] font-extrabold text-[#8899b4] uppercase tracking-wider mb-1.5 flex items-center gap-1.5">
-                  <Video className="w-3.5 h-3.5 text-[#00d2ff]" />
+                <label className="block text-[10px] font-extrabold text-slate-500 uppercase tracking-wider mb-1.5 flex items-center gap-1.5">
+                  <Video className="w-3.5 h-3.5 text-[#15803D]" />
                   Duration (Minutes)
                 </label>
                 <input
@@ -318,12 +318,12 @@ export default function ModuleEditorPage() {
                   value={form.durationMinutes || ""}
                   onChange={(e) => setForm((f) => ({ ...f, durationMinutes: e.target.value as any }))}
                   placeholder="e.g. 45"
-                  className="w-full px-3.5 py-2.5 bg-[#061428] border border-[#d4a017]/30 rounded-xl text-xs text-white placeholder-[#8899b4]/60 focus:outline-none focus:border-[#00d2ff]"
+                  className="w-full px-3.5 py-2.5 bg-slate-50 border border-slate-200 rounded-xl text-xs text-[#0F172A] placeholder-slate-400 focus:outline-none focus:ring-2 focus:ring-[#15803D]"
                 />
               </div>
 
               <div className="flex flex-col justify-end">
-                <label className="flex items-center gap-3 cursor-pointer select-none group h-full pb-1 p-2 bg-[#061428] border border-[#d4a017]/20 rounded-xl">
+                <label className="flex items-center gap-3 cursor-pointer select-none group h-full pb-1 p-2 bg-slate-50 border border-slate-200 rounded-xl">
                   <div className="relative">
                     <input
                       type="checkbox"
@@ -334,20 +334,20 @@ export default function ModuleEditorPage() {
                     <div
                       className={`w-10 h-5 rounded-full transition-colors border ${
                         form.isFreePreview
-                          ? "bg-gradient-to-r from-[#d4a017] to-[#e5a910] border-[#d4a017]"
-                          : "bg-[#030e1f] border-slate-700"
+                          ? "bg-[#15803D] border-[#15803D]"
+                          : "bg-slate-200 border-slate-300"
                       }`}
                     >
                       <div
-                        className={`w-4 h-4 rounded-full bg-[#030e1f] shadow-sm absolute top-0.5 transition-transform ${
-                          form.isFreePreview ? "translate-x-5 bg-white" : "translate-x-0.5"
+                        className={`w-4 h-4 rounded-full bg-white shadow-xs absolute top-0.5 transition-transform ${
+                          form.isFreePreview ? "translate-x-5" : "translate-x-0.5"
                         }`}
                       />
                     </div>
                   </div>
                   <div>
-                    <span className="block text-[10px] font-extrabold text-white uppercase tracking-wider">Free Preview</span>
-                    <span className="block text-[9px] text-[#8899b4]">Accessible without tuition payment</span>
+                    <span className="block text-[10px] font-extrabold text-[#0F172A] uppercase tracking-wider">Free Preview</span>
+                    <span className="block text-[9px] text-slate-500">Accessible without tuition payment</span>
                   </div>
                 </label>
               </div>
@@ -355,8 +355,8 @@ export default function ModuleEditorPage() {
 
             {/* Row 4: GitHub Starter Repo */}
             <div>
-              <label className="block text-[10px] font-extrabold text-[#8899b4] uppercase tracking-wider mb-1.5 flex items-center gap-1.5">
-                <Code className="w-3.5 h-3.5 text-[#00d2ff]" />
+              <label className="block text-[10px] font-extrabold text-slate-500 uppercase tracking-wider mb-1.5 flex items-center gap-1.5">
+                <Code className="w-3.5 h-3.5 text-[#15803D]" />
                 GitHub Starter Repository URL
               </label>
               <input
@@ -364,51 +364,51 @@ export default function ModuleEditorPage() {
                 value={form.githubStarterRepo || ""}
                 onChange={(e) => setForm((f) => ({ ...f, githubStarterRepo: e.target.value }))}
                 placeholder="https://github.com/dwsa-academy/module-starter"
-                className="w-full px-3.5 py-2.5 bg-[#061428] border border-[#d4a017]/30 rounded-xl text-xs text-white placeholder-[#8899b4]/60 focus:outline-none focus:border-[#00d2ff]"
+                className="w-full px-3.5 py-2.5 bg-slate-50 border border-slate-200 rounded-xl text-xs text-[#0F172A] placeholder-slate-400 focus:outline-none focus:ring-2 focus:ring-[#15803D]"
               />
               {errors.githubStarterRepo && (
-                <p className="text-[10px] text-red-400 mt-1">{errors.githubStarterRepo}</p>
+                <p className="text-[10px] text-red-500 mt-1">{errors.githubStarterRepo}</p>
               )}
             </div>
 
             {/* Row 5: Markdown Lesson Content */}
             <div>
-              <label className="block text-[10px] font-extrabold text-[#8899b4] uppercase tracking-wider mb-2 flex items-center gap-1.5">
-                <BookOpen className="w-3.5 h-3.5 text-[#d4a017]" />
+              <label className="block text-[10px] font-extrabold text-slate-500 uppercase tracking-wider mb-2 flex items-center gap-1.5">
+                <BookOpen className="w-3.5 h-3.5 text-[#15803D]" />
                 Lesson Curriculum Content (Markdown) *
               </label>
               <div
-                data-color-mode="dark"
-                className="rounded-2xl overflow-hidden border border-[#d4a017]/30 shadow-inner"
+                data-color-mode="light"
+                className="rounded-2xl overflow-hidden border border-slate-200 shadow-xs"
               >
                 <MDEditor
                   value={form.contentMarkdown}
                   onChange={(val) => setForm((f) => ({ ...f, contentMarkdown: val || "" }))}
                   height={420}
                   preview="live"
-                  className="!bg-[#061428]"
+                  className="!bg-white"
                 />
               </div>
               {errors.contentMarkdown && (
-                <p className="text-[10px] text-red-400 mt-1">{errors.contentMarkdown}</p>
+                <p className="text-[10px] text-red-500 mt-1">{errors.contentMarkdown}</p>
               )}
             </div>
 
             {/* Submit Action Row */}
-            <div className="flex items-center justify-end gap-3 pt-4 border-t border-[#d4a017]/20">
+            <div className="flex items-center justify-end gap-3 pt-4 border-t border-slate-100">
               <button
                 type="button"
                 onClick={handleNewModule}
-                className="px-4 py-2.5 bg-[#061428] hover:bg-[#0f223d] border border-slate-700 text-slate-300 text-xs font-extrabold rounded-xl transition-all flex items-center gap-1.5"
+                className="px-4 py-2.5 bg-slate-100 hover:bg-slate-200 text-slate-700 text-xs font-extrabold rounded-xl transition-all flex items-center gap-1.5"
               >
-                <RotateCcw className="w-3.5 h-3.5 text-[#8899b4]" />
+                <RotateCcw className="w-3.5 h-3.5 text-slate-500" />
                 Clear Form
               </button>
 
               <button
                 type="submit"
                 disabled={saveMutation.isPending}
-                className="px-6 py-2.5 bg-gradient-to-r from-[#d4a017] to-[#e5a910] hover:from-[#e5a910] hover:to-[#d4a017] text-[#030e1f] text-xs font-black rounded-xl shadow-lg shadow-[#d4a017]/25 transition-all flex items-center gap-2 hover:scale-105"
+                className="px-6 py-2.5 bg-[#15803D] hover:bg-[#166534] text-white text-xs font-extrabold rounded-xl shadow-sm transition-all flex items-center gap-2"
               >
                 {saveMutation.isPending ? (
                   <>
