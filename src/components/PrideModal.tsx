@@ -99,7 +99,7 @@ export default function PrideModal({ isOpen, onAccepted }: PrideModalProps) {
             </div>
 
             <div className="p-3 bg-slate-800/50 rounded-xl border border-slate-700/50 md:col-span-2 flex gap-3">
-              <CheckCircle2 className="w-5 h-5 text-purple-400 shrink-0 mt-0.5" />
+              <CheckCircle2 className="w-5 h-5 text-[#15803D] shrink-0 mt-0.5" />
               <div>
                 <h4 className="font-semibold text-white text-xs">E - Excellence</h4>
                 <p className="text-xs text-slate-400 mt-1">Strive for production-ready code quality, comprehensive documentation, and clean architecture.</p>

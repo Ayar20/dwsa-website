@@ -169,29 +169,25 @@ export default function ModuleEditorPage() {
 
   return (
     <div className="space-y-8">
-      {/* Top Banner & Header */}
-      <div className="dwsa-glass-card rounded-3xl p-6 sm:p-8 relative overflow-hidden">
-        {/* Background Ambient Glow */}
-        <div className="absolute -top-24 -right-24 w-72 h-72 bg-[#00d2ff]/10 rounded-full blur-3xl pointer-events-none" />
-        <div className="absolute -bottom-24 -left-24 w-72 h-72 bg-[#d4a017]/10 rounded-full blur-3xl pointer-events-none" />
-
-        <div className="relative z-10 flex flex-col md:flex-row md:items-center justify-between gap-6">
+      {/* Top Banner & Header — IEDS v2.0 */}
+      <div className="bg-white border border-slate-200 rounded-3xl p-6 sm:p-8 shadow-sm">
+        <div className="flex flex-col md:flex-row md:items-center justify-between gap-6">
           <div className="space-y-2">
             <div className="flex items-center gap-2">
-              <span className="px-3 py-1 bg-[#00d2ff]/20 border border-[#00d2ff]/50 text-[#00d2ff] rounded-full text-[10px] font-extrabold uppercase tracking-widest flex items-center gap-1.5 shadow-sm">
+              <span className="px-3 py-1 bg-[#F0FDF4] border border-[#15803D]/20 text-[#15803D] rounded-full text-[10px] font-extrabold uppercase tracking-widest flex items-center gap-1.5 shadow-xs">
                 <FilePen className="w-3 h-3" />
                 Curriculum Management
               </span>
-              <span className="px-3 py-1 bg-[#d4a017]/20 border border-[#d4a017]/50 text-[#d4a017] rounded-full text-[10px] font-extrabold uppercase tracking-widest">
+              <span className="px-3 py-1 bg-[#F0FDF4] border border-[#15803D]/20 text-[#15803D] rounded-full text-[10px] font-extrabold uppercase tracking-widest">
                 DWSA Tech Academy
               </span>
             </div>
 
-            <h1 className="text-2xl sm:text-3xl font-black text-white tracking-tight">
-              Admin <span className="text-cyan-gradient">Module & Curriculum Editor</span>
+            <h1 className="text-2xl sm:text-3xl font-black text-[#0F172A] tracking-tight">
+              Module &amp; Track Studio
             </h1>
-            <p className="text-xs text-[#8899b4] max-w-2xl leading-relaxed">
-              Create, publish, and update course modules — complete with Markdown lessons, YouTube video streams, GitHub starter repositories, and free preview access flags.
+            <p className="text-xs sm:text-sm text-slate-500 max-w-2xl leading-relaxed">
+              Create, edit, and organize academic modules, video lectures, coding assignments, and track progression across the DWSA curriculum engine.
             </p>
           </div>
 
@@ -430,18 +426,18 @@ export default function ModuleEditorPage() {
           </form>
         </div>
 
-        {/* === RIGHT: YouTube Video Preview + Module Library === */}
+        {/* === RIGHT: YouTube Video Preview + Module Library — IEDS v2.0 === */}
         <div className="space-y-6">
 
           {/* YouTube Video Preview Card */}
-          <div className="dwsa-glass-card-cyan rounded-3xl p-6 space-y-4 shadow-xl">
-            <h3 className="text-xs font-extrabold text-[#8899b4] uppercase tracking-wider flex items-center gap-2">
-              <Eye className="w-4 h-4 text-rose-400" />
+          <div className="bg-white border border-slate-200 rounded-3xl p-6 space-y-4 shadow-sm">
+            <h3 className="text-xs font-extrabold text-slate-500 uppercase tracking-wider flex items-center gap-2">
+              <Eye className="w-4 h-4 text-rose-500" />
               YouTube Video Stream Preview
             </h3>
             {youtubePreviewUrl ? (
               <div className="space-y-3">
-                <div className="aspect-video rounded-2xl overflow-hidden border border-[#00d2ff]/40 shadow-lg bg-[#030e1f] relative group">
+                <div className="aspect-video rounded-2xl overflow-hidden border border-slate-200 shadow-sm bg-black relative group">
                   {/* eslint-disable-next-line @next/next/no-img-element */}
                   <img
                     src={youtubePreviewUrl}
@@ -449,28 +445,28 @@ export default function ModuleEditorPage() {
                     className="w-full h-full object-cover group-hover:scale-105 transition-transform"
                   />
                   <div className="absolute inset-0 bg-black/40 flex items-center justify-center">
-                    <div className="p-3 bg-[#d4a017] text-[#030e1f] rounded-full shadow-lg glow-gold-sm">
+                    <div className="p-3 bg-[#15803D] text-white rounded-full shadow-md">
                       <Play className="w-5 h-5 fill-current ml-0.5" />
                     </div>
                   </div>
                 </div>
-                <p className="text-[10px] text-[#8899b4] text-center font-mono">
-                  Video ID: <span className="text-[#00d2ff] font-bold">{form.youtubeId}</span>
+                <p className="text-[10px] text-slate-500 text-center font-mono font-bold">
+                  Video ID: <span className="text-[#15803D] font-bold">{form.youtubeId}</span>
                 </p>
               </div>
             ) : (
-              <div className="aspect-video rounded-2xl border border-dashed border-[#00d2ff]/30 bg-[#030e1f]/60 flex flex-col items-center justify-center space-y-2 text-[#8899b4]">
-                <Clapperboard className="w-8 h-8 text-slate-600" />
+              <div className="aspect-video rounded-2xl border border-dashed border-slate-200 bg-slate-50 flex flex-col items-center justify-center space-y-2 text-slate-400">
+                <Clapperboard className="w-8 h-8 text-slate-400" />
                 <p className="text-[11px] text-center">Enter a valid 11-character YouTube ID to preview thumbnail</p>
               </div>
             )}
           </div>
 
           {/* Module Library Directory */}
-          <div className="dwsa-glass-card rounded-3xl p-6 space-y-4 shadow-xl">
-            <div className="flex items-center justify-between border-b border-[#d4a017]/20 pb-3">
-              <h3 className="text-xs font-extrabold text-[#8899b4] uppercase tracking-wider flex items-center gap-2">
-                <Sparkles className="w-4 h-4 text-[#d4a017]" />
+          <div className="bg-white border border-slate-200 rounded-3xl p-6 space-y-4 shadow-sm">
+            <div className="flex items-center justify-between border-b border-slate-100 pb-3">
+              <h3 className="text-xs font-extrabold text-slate-500 uppercase tracking-wider flex items-center gap-2">
+                <Sparkles className="w-4 h-4 text-[#15803D]" />
                 Curriculum Library
               </h3>
 
@@ -479,34 +475,34 @@ export default function ModuleEditorPage() {
                 <select
                   value={selectedTrackId}
                   onChange={(e) => setSelectedTrackId(e.target.value)}
-                  className="pl-2.5 pr-6 py-1 bg-[#061428] border border-[#d4a017]/30 rounded-lg text-[10px] text-white focus:outline-none focus:border-[#00d2ff] appearance-none font-bold"
+                  className="pl-2.5 pr-6 py-1 bg-slate-50 border border-slate-200 rounded-xl text-[10px] text-[#0F172A] focus:outline-none focus:ring-2 focus:ring-[#15803D] appearance-none font-bold"
                 >
                   <option value="all">All Tracks</option>
                   {tracks.map((t) => (
                     <option key={t.id} value={t.id}>{t.title}</option>
                   ))}
                 </select>
-                <ChevronDown className="w-3 h-3 text-[#8899b4] absolute right-1.5 top-2 pointer-events-none" />
+                <ChevronDown className="w-3 h-3 text-slate-400 absolute right-1.5 top-2 pointer-events-none" />
               </div>
             </div>
 
             {isLoading ? (
-              <div className="py-8 flex items-center justify-center gap-2 text-xs text-[#8899b4]">
-                <Loader2 className="w-4 h-4 animate-spin text-[#d4a017]" />
+              <div className="py-8 flex items-center justify-center gap-2 text-xs text-slate-500">
+                <Loader2 className="w-4 h-4 animate-spin text-[#15803D]" />
                 <span>Fetching curriculum modules...</span>
               </div>
             ) : (
               <div className="space-y-4 max-h-[60vh] overflow-y-auto pr-1">
                 {filteredTracks.length === 0 ? (
-                  <p className="text-xs text-[#8899b4] text-center py-6">No track modules created yet.</p>
+                  <p className="text-xs text-slate-400 text-center py-6">No track modules created yet.</p>
                 ) : (
                   filteredTracks.map((track) => (
                     <div key={track.id} className="space-y-2">
-                      <p className="text-[10px] uppercase tracking-widest font-black text-[#d4a017] px-1">
+                      <p className="text-[10px] uppercase tracking-widest font-black text-[#15803D] px-1">
                         {track.title}
                       </p>
                       {track.modules.length === 0 ? (
-                        <p className="text-[10px] text-[#8899b4] italic px-2">No modules yet in this track.</p>
+                        <p className="text-[10px] text-slate-400 italic px-2">No modules yet in this track.</p>
                       ) : (
                         track.modules.map((mod) => (
                           <button
@@ -514,31 +510,31 @@ export default function ModuleEditorPage() {
                             onClick={() => handleEditModule(mod)}
                             className={`w-full p-3.5 rounded-2xl border text-left transition-all group ${
                               form.id === mod.id
-                                ? "bg-[#0f223d] border-[#d4a017] text-white glow-gold-sm"
-                                : "bg-[#061428]/80 border-[#d4a017]/20 text-[#8899b4] hover:border-[#00d2ff]/40 hover:text-white"
+                                ? "bg-[#F0FDF4] border-[#15803D] text-[#0F172A] shadow-xs"
+                                : "bg-slate-50 border-slate-200 text-slate-700 hover:border-[#15803D]/30 hover:bg-[#F0FDF4]/40"
                             }`}
                           >
                             <div className="flex items-start justify-between gap-2">
                               <div className="min-w-0 space-y-1">
-                                <span className="block text-xs font-bold truncate group-hover:text-[#00d2ff] transition-colors">
+                                <span className="block text-xs font-bold truncate group-hover:text-[#15803D] transition-colors">
                                   {mod.order}. {mod.title}
                                 </span>
                                 <div className="flex items-center gap-2 flex-wrap">
                                   {mod.youtubeId && (
-                                    <span className="text-[9px] text-rose-400 flex items-center gap-0.5 font-bold">
+                                    <span className="text-[9px] text-rose-600 flex items-center gap-0.5 font-bold">
                                       <Clapperboard className="w-2.5 h-2.5" />
                                       Video
                                     </span>
                                   )}
                                   {mod.isFreePreview && (
-                                    <span className="text-[9px] text-emerald-400 font-bold">Free Preview</span>
+                                    <span className="text-[9px] text-[#15803D] font-bold">Free Preview</span>
                                   )}
                                   {mod.durationMinutes && (
-                                    <span className="text-[9px] text-[#8899b4] font-semibold">{mod.durationMinutes} mins</span>
+                                    <span className="text-[9px] text-slate-500 font-semibold">{mod.durationMinutes} mins</span>
                                   )}
                                 </div>
                               </div>
-                              <FilePen className="w-4 h-4 text-slate-600 group-hover:text-[#d4a017] transition-colors shrink-0 mt-0.5" />
+                              <FilePen className="w-4 h-4 text-slate-400 group-hover:text-[#15803D] transition-colors shrink-0 mt-0.5" />
                             </div>
                           </button>
                         ))

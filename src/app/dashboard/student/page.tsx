@@ -847,7 +847,7 @@ export default function StudentDashboardPage() {
               <button
                 onClick={() => handlePayInstallment(outstandingBalance || 80000)}
                 disabled={paying}
-                className="w-full py-2.5 rounded-xl text-xs font-extrabold transition-all bg-[#D4A017] text-white hover:bg-[#B8860B]"
+                className="w-full py-2.5 rounded-xl text-xs font-extrabold transition-all bg-[#15803D] text-white hover:bg-[#166534]"
               >
                 {paying ? "Processing…" : `Unlock — ₦${(outstandingBalance || 80000).toLocaleString()}`}
               </button>

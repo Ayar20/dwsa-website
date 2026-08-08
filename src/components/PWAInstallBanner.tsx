@@ -72,49 +72,32 @@ export default function PWAInstallBanner() {
       className="fixed bottom-0 left-0 right-0 z-50 px-4 pb-4 sm:pb-6 sm:px-6 pointer-events-none"
       style={{ animation: "slideUp 0.4s cubic-bezier(0.22,1,0.36,1) forwards" }}
     >
-      <div
-        className="pointer-events-auto max-w-lg mx-auto rounded-2xl border p-4 flex items-center gap-4 shadow-2xl"
-        style={{
-          background: "linear-gradient(135deg, rgba(6,20,40,0.97) 0%, rgba(15,34,61,0.97) 100%)",
-          borderColor: "rgba(212,160,23,0.35)",
-          backdropFilter: "blur(24px)",
-          boxShadow: "0 -4px 40px rgba(212,160,23,0.12), 0 20px 60px rgba(0,0,0,0.6)",
-        }}
-      >
-        {/* Top gold line */}
-        <div
-          className="absolute top-0 left-8 right-8 h-px rounded-full"
-          style={{ background: "linear-gradient(90deg, transparent, #d4a017, #00d2ff, transparent)" }}
-        />
+      <div className="pointer-events-auto max-w-lg mx-auto rounded-3xl border border-slate-200 p-4 flex items-center gap-4 bg-white shadow-2xl text-[#0F172A]">
+        {/* Top Emerald border highlight */}
+        <div className="absolute top-0 left-8 right-8 h-0.5 rounded-full bg-[#15803D]" />
 
         {/* Icon */}
-        <div
-          className="shrink-0 w-12 h-12 rounded-xl flex items-center justify-center border"
-          style={{
-            background: "rgba(212,160,23,0.12)",
-            borderColor: "rgba(212,160,23,0.3)",
-          }}
-        >
+        <div className="shrink-0 w-12 h-12 rounded-2xl bg-[#F0FDF4] border border-[#15803D]/20 flex items-center justify-center">
           {isIOS ? (
-            <Share className="w-5 h-5 text-[#d4a017]" />
+            <Share className="w-5 h-5 text-[#15803D]" />
           ) : (
-            <Smartphone className="w-5 h-5 text-[#d4a017]" />
+            <Smartphone className="w-5 h-5 text-[#15803D]" />
           )}
         </div>
 
         {/* Text */}
         <div className="flex-1 min-w-0">
-          <p className="text-sm font-extrabold text-white leading-tight">
-            Install DWSA Academy
+          <p className="text-sm font-extrabold text-[#0F172A] leading-tight">
+            Install DWSA Digital Campus
           </p>
           {isIOS ? (
-            <p className="text-[11px] text-[#8899b4] mt-0.5 leading-snug">
-              Tap <span className="text-[#00d2ff] font-bold">Share</span> then{" "}
-              <span className="text-[#00d2ff] font-bold">"Add to Home Screen"</span> to install
+            <p className="text-[11px] text-slate-500 mt-0.5 leading-snug">
+              Tap <span className="text-[#15803D] font-extrabold">Share</span> then{" "}
+              <span className="text-[#15803D] font-extrabold">&quot;Add to Home Screen&quot;</span> to install
             </p>
           ) : (
-            <p className="text-[11px] text-[#8899b4] mt-0.5 leading-snug">
-              Install for offline access & a faster, app-like experience
+            <p className="text-[11px] text-slate-500 mt-0.5 leading-snug">
+              Install for offline access &amp; a faster, app-like experience
             </p>
           )}
         </div>
@@ -125,12 +108,7 @@ export default function PWAInstallBanner() {
             <button
               onClick={handleInstall}
               disabled={installing}
-              className="px-4 py-2 rounded-xl text-xs font-extrabold flex items-center gap-1.5 transition-all disabled:opacity-60 hover:scale-105"
-              style={{
-                background: "linear-gradient(135deg, #d4a017, #e5b520)",
-                color: "#030e1f",
-                boxShadow: "0 4px 16px rgba(212,160,23,0.3)",
-              }}
+              className="px-4 py-2 rounded-xl text-xs font-extrabold flex items-center gap-1.5 transition-all bg-[#15803D] text-white hover:bg-[#166534] shadow-sm focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#15803D]"
             >
               <Download className="w-3.5 h-3.5" />
               {installing ? "Installing…" : "Install"}
@@ -138,20 +116,13 @@ export default function PWAInstallBanner() {
           )}
           <button
             onClick={handleDismiss}
-            className="p-2 rounded-xl transition-all text-[#8899b4] hover:text-white hover:bg-[#0f223d]"
-            aria-label="Dismiss install banner"
+            className="p-1.5 rounded-xl text-slate-400 hover:text-[#0F172A] hover:bg-slate-100 transition-colors"
+            aria-label="Dismiss banner"
           >
             <X className="w-4 h-4" />
           </button>
         </div>
       </div>
-
-      <style>{`
-        @keyframes slideUp {
-          from { opacity: 0; transform: translateY(100%); }
-          to   { opacity: 1; transform: translateY(0); }
-        }
-      `}</style>
     </div>
   );
 }

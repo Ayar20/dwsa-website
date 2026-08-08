@@ -7,110 +7,125 @@ const health = LearningAnalyticsService.getCurriculumHealth();
 
 function ScoreBar({ value, max = 100, color }: { value: number; max?: number; color: string }) {
   return (
-    <div style={{ height: 6, background: "rgba(255,255,255,0.07)", borderRadius: 3, flex: 1 }}>
-      <div style={{ height: "100%", width: `${(value / max) * 100}%`, background: color, borderRadius: 3, transition: "width 0.5s ease" }} />
+    <div className="h-1.5 bg-slate-100 rounded-full flex-1 overflow-hidden">
+      <div
+        className="h-full rounded-full transition-all duration-500"
+        style={{ width: `${(value / max) * 100}%`, backgroundColor: color }}
+      />
     </div>
   );
 }
 
 export default function LearningAnalyticsDashboardPage() {
   const trendConfig = {
-    Rising: { color: "#4ade80", icon: "↑" },
-    Stable: { color: "#d4a017", icon: "→" },
-    Declining: { color: "#f87171", icon: "↓" },
+    Rising: { color: "#15803D", bg: "#F0FDF4", border: "border-[#15803D]/20", icon: "↑" },
+    Stable: { color: "#15803D", bg: "#F0FDF4", border: "border-[#15803D]/20", icon: "→" },
+    Declining: { color: "#DC2626", bg: "#FEF2F2", border: "border-red-200", icon: "↓" },
   }[health.engagementTrend];
 
   const healthCards = [
-    { label: "Curriculum Health", value: health.overallHealth, color: "#d4a017", icon: "🏛" },
-    { label: "Content Quality", value: health.contentQuality, color: "#4ade80", icon: "📚" },
-    { label: "Assessment Quality", value: health.assessmentQuality, color: "#d4a017", icon: "📝" },
-    { label: "Learner Satisfaction", value: health.learnerSatisfaction, color: "#4ade80", icon: "⭐" },
-    { label: "Graduation Forecast", value: health.graduationForecast, color: "#d4a017", icon: "🎓" },
+    { label: "Curriculum Health", value: health.overallHealth, color: "#15803D", icon: "🏛" },
+    { label: "Content Quality", value: health.contentQuality, color: "#15803D", icon: "📚" },
+    { label: "Assessment Quality", value: health.assessmentQuality, color: "#15803D", icon: "📝" },
+    { label: "Learner Satisfaction", value: health.learnerSatisfaction, color: "#15803D", icon: "⭐" },
+    { label: "Graduation Forecast", value: health.graduationForecast, color: "#15803D", icon: "🎓" },
   ];
 
   return (
-    <div style={{ minHeight: "100vh", background: "#030e1f", color: "#f0f4ff", fontFamily: "'Inter','Outfit',sans-serif", padding: "24px 28px" }}>
-      {/* Header */}
-      <div style={{ marginBottom: 24 }}>
-        <h1 style={{ fontSize: 24, fontWeight: 800, color: "#f0f4ff", margin: "0 0 4px" }}>Institutional Learning Analytics</h1>
-        <p style={{ color: "#6b7a94", fontSize: 14, margin: 0 }}>Academic quality metrics, module effectiveness, and programme health indicators.</p>
+    <div className="space-y-6 pb-12">
+      {/* Header — IEDS v2.0 */}
+      <div className="p-6 sm:p-8 bg-white border border-slate-200 rounded-3xl shadow-sm">
+        <div className="flex items-center gap-2 mb-2">
+          <span className="px-3 py-1 rounded-full bg-[#F0FDF4] border border-[#15803D]/20 text-[#15803D] text-xs font-extrabold flex items-center gap-1.5 uppercase tracking-wider">
+            Academic Intelligence
+          </span>
+        </div>
+        <h1 className="text-2xl sm:text-3xl font-black text-[#0F172A] tracking-tight">
+          Institutional Learning Analytics
+        </h1>
+        <p className="text-sm text-slate-500 mt-1">
+          Academic quality metrics, module effectiveness, and programme health indicators.
+        </p>
       </div>
 
       {/* Curriculum Health Snapshot */}
-      <div style={{ background: "#060f21", border: "1px solid rgba(212,160,23,0.2)", borderRadius: 12, padding: "20px 24px", marginBottom: 24 }}>
-        <div style={{ display: "flex", alignItems: "center", gap: 16, marginBottom: 20, flexWrap: "wrap" }}>
+      <div className="bg-white border border-slate-200 rounded-3xl p-6 shadow-sm space-y-6">
+        <div className="flex flex-wrap items-center justify-between gap-4">
           <div>
-            <div style={{ color: "#d4a017", fontSize: 11, fontWeight: 700, letterSpacing: "0.1em", textTransform: "uppercase", marginBottom: 4 }}>Curriculum Health Snapshot</div>
-            <div style={{ display: "flex", alignItems: "center", gap: 12 }}>
-              <span style={{ color: "#f0f4ff", fontSize: 36, fontWeight: 900 }}>{health.overallHealth}</span>
-              <span style={{ color: "#6b7a94", fontSize: 16, alignSelf: "flex-end", marginBottom: 4 }}>/100</span>
+            <div className="text-[11px] font-extrabold text-[#15803D] tracking-widest uppercase mb-1">
+              Curriculum Health Snapshot
+            </div>
+            <div className="flex items-baseline gap-2">
+              <span className="text-4xl font-black text-[#0F172A]">{health.overallHealth}</span>
+              <span className="text-sm font-bold text-slate-400">/100</span>
             </div>
           </div>
-          <div style={{ background: `${trendConfig.color}18`, border: `1px solid ${trendConfig.color}40`, borderRadius: 20, padding: "6px 16px", display: "flex", alignItems: "center", gap: 6 }}>
-            <span style={{ color: trendConfig.color, fontSize: 16, fontWeight: 800 }}>{trendConfig.icon}</span>
-            <span style={{ color: trendConfig.color, fontSize: 13, fontWeight: 700 }}>Engagement {health.engagementTrend}</span>
+          <div className={`px-4 py-2 rounded-2xl ${trendConfig.bg} border ${trendConfig.border} flex items-center gap-2 text-xs font-extrabold`} style={{ color: trendConfig.color }}>
+            <span className="text-sm">{trendConfig.icon}</span>
+            <span>Engagement {health.engagementTrend}</span>
           </div>
         </div>
-        <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit,minmax(160px,1fr))", gap: 14 }}>
+
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-5 gap-3">
           {healthCards.map((c) => (
-            <div key={c.label} style={{ background: "rgba(255,255,255,0.03)", border: "1px solid rgba(255,255,255,0.07)", borderRadius: 10, padding: "14px 16px" }}>
-              <div style={{ fontSize: 20, marginBottom: 6 }}>{c.icon}</div>
-              <div style={{ color: c.color, fontSize: 22, fontWeight: 800, marginBottom: 4 }}>{c.value}%</div>
-              <div style={{ color: "#6b7a94", fontSize: 11, fontWeight: 600 }}>{c.label}</div>
-              <div style={{ marginTop: 8 }}><ScoreBar value={c.value} color={c.color} /></div>
+            <div key={c.label} className="p-4 bg-slate-50 border border-slate-200 rounded-2xl space-y-2">
+              <div className="text-lg">{c.icon}</div>
+              <div className="text-2xl font-black text-[#0F172A]">{c.value}%</div>
+              <div className="text-[11px] font-bold text-slate-500">{c.label}</div>
+              <ScoreBar value={c.value} color={c.color} />
             </div>
           ))}
         </div>
       </div>
 
       {/* Module Effectiveness Table */}
-      <div style={{ background: "#060f21", border: "1px solid rgba(212,160,23,0.15)", borderRadius: 12, overflow: "hidden" }}>
-        <div style={{ padding: "16px 20px", borderBottom: "1px solid rgba(212,160,23,0.1)", background: "#050e1e" }}>
-          <div style={{ color: "#d4a017", fontSize: 11, fontWeight: 700, letterSpacing: "0.1em", textTransform: "uppercase" }}>Module Effectiveness Report</div>
+      <div className="bg-white border border-slate-200 rounded-3xl shadow-sm overflow-hidden">
+        <div className="p-5 border-b border-slate-100 bg-slate-50 flex items-center justify-between">
+          <h2 className="text-xs font-extrabold text-[#15803D] uppercase tracking-widest">
+            Module Effectiveness Report
+          </h2>
         </div>
-        <table style={{ width: "100%", borderCollapse: "collapse" }}>
-          <thead>
-            <tr style={{ borderBottom: "1px solid rgba(212,160,23,0.1)" }}>
-              {["Module", "Completion Rate", "Avg Grade", "Drop-off %", "Satisfaction", "Faculty Score"].map((h) => (
-                <th key={h} style={{ padding: "12px 16px", textAlign: "left", color: "#6b7a94", fontSize: 11, fontWeight: 700, letterSpacing: "0.07em", textTransform: "uppercase", background: "#050e1e", whiteSpace: "nowrap" }}>{h}</th>
-              ))}
-            </tr>
-          </thead>
-          <tbody>
-            {modules.map((mod, i) => (
-              <tr key={mod.moduleId} style={{ borderBottom: i < modules.length - 1 ? "1px solid rgba(255,255,255,0.05)" : "none" }}>
-                <td style={{ padding: "14px 16px" }}>
-                  <div style={{ color: "#f0f4ff", fontSize: 13, fontWeight: 600, marginBottom: 2 }}>{mod.moduleTitle}</div>
-                  <div style={{ color: "#4a5568", fontSize: 11 }}>{mod.moduleId}</div>
-                </td>
-                <td style={{ padding: "14px 16px" }}>
-                  <div style={{ display: "flex", alignItems: "center", gap: 10 }}>
-                    <span style={{ color: mod.completionRate >= 90 ? "#4ade80" : "#d4a017", fontWeight: 700, fontSize: 13 }}>{mod.completionRate}%</span>
-                    <ScoreBar value={mod.completionRate} color={mod.completionRate >= 90 ? "#4ade80" : "#d4a017"} />
-                  </div>
-                </td>
-                <td style={{ padding: "14px 16px" }}>
-                  <span style={{ color: mod.avgGrade >= 80 ? "#4ade80" : "#d4a017", fontWeight: 700, fontSize: 13 }}>{mod.avgGrade}%</span>
-                </td>
-                <td style={{ padding: "14px 16px" }}>
-                  <span style={{ color: mod.dropOffRate >= 15 ? "#f87171" : mod.dropOffRate >= 8 ? "#d4a017" : "#4ade80", fontWeight: 700, fontSize: 13 }}>{mod.dropOffRate}%</span>
-                </td>
-                <td style={{ padding: "14px 16px" }}>
-                  <div style={{ display: "flex", alignItems: "center", gap: 10 }}>
-                    <span style={{ color: "#d4a017", fontWeight: 700, fontSize: 13 }}>{mod.satisfactionScore}%</span>
-                    <ScoreBar value={mod.satisfactionScore} color="#d4a017" />
-                  </div>
-                </td>
-                <td style={{ padding: "14px 16px" }}>
-                  <div style={{ display: "flex", alignItems: "center", gap: 10 }}>
-                    <span style={{ color: mod.facultyEffectivenessScore >= 93 ? "#4ade80" : "#d4a017", fontWeight: 700, fontSize: 13 }}>{mod.facultyEffectivenessScore}%</span>
-                    <ScoreBar value={mod.facultyEffectivenessScore} color={mod.facultyEffectivenessScore >= 93 ? "#4ade80" : "#d4a017"} />
-                  </div>
-                </td>
+        <div className="overflow-x-auto">
+          <table className="w-full text-left border-collapse">
+            <thead>
+              <tr className="border-b border-slate-200 bg-slate-50 text-[10px] font-extrabold text-slate-500 uppercase tracking-wider">
+                {["Module", "Completion Rate", "Avg Grade", "Drop-off %", "Satisfaction", "Faculty Score"].map((h) => (
+                  <th key={h} className="px-5 py-3.5 whitespace-nowrap">{h}</th>
+                ))}
               </tr>
-            ))}
-          </tbody>
-        </table>
+            </thead>
+            <tbody className="divide-y divide-slate-100 text-xs text-[#0F172A]">
+              {modules.map((mod) => (
+                <tr key={mod.moduleId} className="hover:bg-slate-50 transition-colors">
+                  <td className="px-5 py-4">
+                    <div className="font-extrabold text-[#0F172A]">{mod.moduleTitle}</div>
+                    <div className="text-[10px] text-slate-400 font-mono">{mod.moduleId}</div>
+                  </td>
+                  <td className="px-5 py-4">
+                    <div className="flex items-center gap-3">
+                      <span className="font-extrabold text-[#15803D]">{mod.completionRate}%</span>
+                      <ScoreBar value={mod.completionRate} color="#15803D" />
+                    </div>
+                  </td>
+                  <td className="px-5 py-4 font-extrabold text-[#15803D]">{mod.avgGrade}%</td>
+                  <td className="px-5 py-4 font-extrabold text-slate-700">{mod.dropOffRate}%</td>
+                  <td className="px-5 py-4">
+                    <div className="flex items-center gap-3">
+                      <span className="font-extrabold text-[#15803D]">{mod.satisfactionScore}%</span>
+                      <ScoreBar value={mod.satisfactionScore} color="#15803D" />
+                    </div>
+                  </td>
+                  <td className="px-5 py-4">
+                    <div className="flex items-center gap-3">
+                      <span className="font-extrabold text-[#15803D]">{mod.facultyEffectivenessScore}%</span>
+                      <ScoreBar value={mod.facultyEffectivenessScore} color="#15803D" />
+                    </div>
+                  </td>
+                </tr>
+              ))}
+            </tbody>
+          </table>
+        </div>
       </div>
     </div>
   );
