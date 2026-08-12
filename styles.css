@@ -1,12 +1,17 @@
-/* Color Palette & Variables */
+/* Color Palette & Variables - DWSA Institutional Brand System */
 :root {
     --color-navy: #0A1A2F;
+    --color-navy-dark: #030E1F;
     --color-navy-light: #112240;
     --color-gold: #D4A017;
     --color-gold-hover: #b88a14;
+    --color-gold-light: #f5d77f;
     --color-green: #0F8A5F;
+    --color-green-accent: #00C853;
     --color-white: #FFFFFF;
+    --color-black: #060D18;
     --color-text-muted: #8892B0;
+    --color-glass-border: rgba(212, 160, 23, 0.2);
     
     --font-heading: 'Montserrat', sans-serif;
     --font-body: 'Inter', sans-serif;
@@ -2433,3 +2438,478 @@ ul {
         gap: 0;
     }
 }
+
+/* ═════════════════════════════════════════════════════════════════
+   DWSA INSTITUTIONAL ENHANCEMENT STYLES (Governance Manual v1.1)
+   ═════════════════════════════════════════════════════════════════ */
+
+.institutional-badge {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+    padding: 0.4rem 1rem;
+    border-radius: 50px;
+    background: rgba(212, 160, 23, 0.1);
+    border: 1px solid var(--color-gold);
+    color: var(--color-gold);
+    font-size: 0.82rem;
+    font-weight: 700;
+    letter-spacing: 1px;
+    text-transform: uppercase;
+    margin-bottom: 1rem;
+}
+
+.institutional-badge.green-badge {
+    background: rgba(15, 138, 95, 0.12);
+    border-color: var(--color-green-accent);
+    color: var(--color-green-accent);
+}
+
+.btn-secondary.btn-green {
+    background: transparent;
+    border: 2px solid var(--color-green-accent);
+    color: var(--color-green-accent);
+}
+.btn-secondary.btn-green:hover {
+    background: var(--color-green-accent);
+    color: var(--color-black);
+    box-shadow: 0 0 20px rgba(0, 200, 83, 0.4);
+}
+
+.hero-actions-trio {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 1rem;
+    justify-content: center;
+    margin-top: 2rem;
+}
+
+.hero-positioning-statement {
+    font-size: 1.15rem;
+    color: #e2e8f0;
+    max-width: 900px;
+    margin: 1.25rem auto 0;
+    line-height: 1.7;
+    font-weight: 400;
+    border-left: 3px solid var(--color-gold);
+    padding-left: 1.25rem;
+    text-align: left;
+    background: rgba(10, 26, 47, 0.6);
+    padding: 1.25rem 1.5rem;
+    border-radius: 0 12px 12px 0;
+}
+
+/* Strategic Pillars Section */
+.pillars-section {
+    padding: 6rem 5%;
+    background: linear-gradient(180deg, var(--color-navy) 0%, var(--color-navy-dark) 100%);
+    position: relative;
+}
+
+.pillars-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+    gap: 2rem;
+    margin-top: 3rem;
+}
+
+.pillar-card {
+    background: var(--color-navy-light);
+    border: 1px solid rgba(212, 160, 23, 0.15);
+    border-radius: 16px;
+    padding: 2.25rem 1.75rem;
+    transition: var(--transition-smooth);
+    position: relative;
+    overflow: hidden;
+    display: flex;
+    flex-direction: column;
+}
+
+.pillar-card::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 4px;
+    background: linear-gradient(90deg, var(--color-gold), var(--color-green-accent));
+    opacity: 0;
+    transition: var(--transition-smooth);
+}
+
+.pillar-card:hover {
+    transform: translateY(-8px);
+    border-color: var(--color-gold);
+    box-shadow: 0 16px 36px rgba(0, 0, 0, 0.4), 0 0 20px rgba(212, 160, 23, 0.15);
+}
+
+.pillar-card:hover::before {
+    opacity: 1;
+}
+
+.pillar-number {
+    font-family: var(--font-accent);
+    font-size: 0.9rem;
+    font-weight: 700;
+    color: var(--color-gold);
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    margin-bottom: 0.75rem;
+}
+
+.pillar-icon {
+    width: 56px;
+    height: 56px;
+    border-radius: 12px;
+    background: rgba(212, 160, 23, 0.1);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: var(--color-gold);
+    margin-bottom: 1.25rem;
+}
+
+.pillar-card:nth-child(2) .pillar-icon {
+    background: rgba(15, 138, 95, 0.15);
+    color: var(--color-green-accent);
+}
+
+.pillar-card:nth-child(3) .pillar-icon {
+    background: rgba(0, 210, 255, 0.12);
+    color: #00d2ff;
+}
+
+.pillar-title {
+    font-size: 1.4rem;
+    margin-bottom: 0.75rem;
+    color: var(--color-white);
+}
+
+.pillar-desc {
+    font-size: 0.95rem;
+    color: var(--color-text-muted);
+    line-height: 1.6;
+    margin-bottom: 1.5rem;
+    flex-grow: 1;
+}
+
+.pillar-capabilities-list {
+    list-style: none;
+    border-top: 1px solid rgba(255, 255, 255, 0.08);
+    padding-top: 1.25rem;
+}
+
+.pillar-capabilities-list li {
+    font-size: 0.88rem;
+    color: #cbd5e1;
+    margin-bottom: 0.5rem;
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+}
+
+.pillar-capabilities-list li::before {
+    content: "✦";
+    color: var(--color-gold);
+    font-size: 0.75rem;
+}
+
+/* Strategic Technology Domains */
+.domains-section {
+    padding: 6rem 5%;
+    background: var(--color-navy-dark);
+    text-align: center;
+}
+
+.domains-diagram-wrapper {
+    margin-top: 3rem;
+    background: var(--color-navy-light);
+    border: 1px solid var(--color-glass-border);
+    border-radius: 20px;
+    padding: 3rem 2rem;
+    position: relative;
+    overflow: hidden;
+}
+
+.domains-core-hub {
+    display: inline-block;
+    background: linear-gradient(135deg, var(--color-gold) 0%, #b88a14 100%);
+    color: var(--color-black);
+    padding: 1rem 2.5rem;
+    border-radius: 50px;
+    font-weight: 800;
+    font-family: var(--font-heading);
+    font-size: 1.2rem;
+    letter-spacing: 1px;
+    box-shadow: 0 0 30px rgba(212, 160, 23, 0.4);
+    margin-bottom: 2rem;
+}
+
+.domains-subhead {
+    font-size: 1.1rem;
+    color: var(--color-gold);
+    text-transform: uppercase;
+    letter-spacing: 2px;
+    margin-bottom: 2.5rem;
+    font-family: var(--font-accent);
+}
+
+.domains-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+    gap: 1.5rem;
+}
+
+.domain-chip {
+    background: rgba(10, 26, 47, 0.8);
+    border: 1px solid rgba(212, 160, 23, 0.2);
+    border-radius: 12px;
+    padding: 1.25rem 1rem;
+    transition: var(--transition-smooth);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 0.75rem;
+}
+
+.domain-chip:hover {
+    border-color: var(--color-green-accent);
+    background: rgba(15, 138, 95, 0.15);
+    transform: translateY(-4px);
+    box-shadow: 0 8px 24px rgba(0, 200, 83, 0.2);
+}
+
+.domain-chip svg {
+    width: 32px;
+    height: 32px;
+    color: var(--color-gold);
+}
+
+.domain-chip:hover svg {
+    color: var(--color-green-accent);
+}
+
+.domain-title {
+    font-size: 0.95rem;
+    font-weight: 600;
+    color: var(--color-white);
+}
+
+/* Quote Box Component */
+.institutional-quote-box {
+    background: linear-gradient(135deg, rgba(15, 138, 95, 0.15) 0%, rgba(10, 26, 47, 0.8) 100%);
+    border-left: 4px solid var(--color-green-accent);
+    border-radius: 12px;
+    padding: 2rem;
+    margin: 3rem 0;
+    font-size: 1.25rem;
+    line-height: 1.7;
+    color: #f1f5f9;
+    font-style: italic;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
+}
+
+.quote-author {
+    display: block;
+    margin-top: 1rem;
+    font-size: 0.9rem;
+    font-style: normal;
+    font-weight: 700;
+    color: var(--color-gold);
+    letter-spacing: 1px;
+    text-transform: uppercase;
+}
+
+/* Future Schools Grid (Academy Page) */
+.future-schools-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+    gap: 1.75rem;
+    margin-top: 2.5rem;
+}
+
+.future-school-card {
+    background: rgba(17, 34, 64, 0.6);
+    border: 1px dashed rgba(212, 160, 23, 0.3);
+    border-radius: 14px;
+    padding: 1.75rem;
+    position: relative;
+    transition: var(--transition-smooth);
+}
+
+.future-school-card:hover {
+    border-style: solid;
+    border-color: var(--color-gold);
+    background: rgba(17, 34, 64, 0.95);
+    transform: translateY(-5px);
+}
+
+.future-badge {
+    position: absolute;
+    top: 1rem;
+    right: 1rem;
+    font-size: 0.7rem;
+    padding: 0.2rem 0.6rem;
+    background: rgba(212, 160, 23, 0.15);
+    color: var(--color-gold);
+    border-radius: 20px;
+    border: 1px solid var(--color-gold);
+    font-weight: 700;
+    letter-spacing: 0.5px;
+}
+
+/* Governance & Responsibility Grid */
+.governance-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+    gap: 2rem;
+    margin-top: 3rem;
+}
+
+.governance-card {
+    background: var(--color-navy-light);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    border-radius: 16px;
+    padding: 2rem;
+    transition: var(--transition-smooth);
+}
+
+.governance-card:hover {
+    border-color: var(--color-gold);
+    box-shadow: 0 12px 30px rgba(0,0,0,0.4);
+    transform: translateY(-4px);
+}
+
+.governance-icon {
+    width: 48px;
+    height: 48px;
+    border-radius: 10px;
+    background: rgba(15, 138, 95, 0.2);
+    color: var(--color-green-accent);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-bottom: 1.25rem;
+}
+
+/* Architecture SVG Container */
+.arch-diagram-container {
+    margin: 3rem auto;
+    max-width: 1000px;
+    background: rgba(3, 14, 31, 0.9);
+    border: 1px solid var(--color-gold);
+    border-radius: 16px;
+    padding: 2rem;
+    box-shadow: 0 20px 50px rgba(0, 0, 0, 0.5);
+}
+
+.arch-svg-graphic {
+    width: 100%;
+    height: auto;
+}
+
+/* Responsive adjustments */
+@media (max-width: 768px) {
+    .hero-positioning-statement {
+        font-size: 1rem;
+        padding: 1rem;
+    }
+    .domains-grid {
+        grid-template-columns: repeat(2, 1fr);
+    }
+    .hero-actions-trio {
+        flex-direction: column;
+        width: 100%;
+    }
+    .hero-actions-trio .btn-primary,
+    .hero-actions-trio .btn-secondary {
+        width: 100%;
+    }
+}
+
+/* ── Governance & R&D Specific Components ── */
+.philosophy-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+    gap: 1.5rem;
+    margin-top: 2.5rem;
+}
+
+.philosophy-card {
+    background: rgba(17, 34, 64, 0.7);
+    border: 1px solid rgba(212, 160, 23, 0.2);
+    border-radius: 14px;
+    padding: 1.75rem;
+    transition: var(--transition-smooth);
+}
+
+.philosophy-card:hover {
+    border-color: var(--color-green-accent);
+    background: rgba(17, 34, 64, 0.95);
+    transform: translateY(-5px);
+    box-shadow: 0 10px 25px rgba(0, 200, 83, 0.15);
+}
+
+.philosophy-icon {
+    font-size: 1.8rem;
+    margin-bottom: 0.75rem;
+}
+
+.philosophy-title {
+    font-family: var(--font-heading);
+    font-size: 1.15rem;
+    color: var(--color-gold);
+    margin-bottom: 0.5rem;
+}
+
+.philosophy-text {
+    font-size: 0.9rem;
+    color: var(--color-text-muted);
+    line-height: 1.6;
+}
+
+/* Innovation Process Flow */
+.process-svg-wrapper {
+    background: rgba(3, 14, 31, 0.95);
+    border: 1px solid var(--color-glass-border);
+    border-radius: 20px;
+    padding: 2.5rem 1.5rem;
+    margin-top: 3rem;
+    box-shadow: 0 15px 45px rgba(0,0,0,0.5);
+}
+
+.collaboration-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+    gap: 1.5rem;
+    margin-top: 2.5rem;
+}
+
+.collaboration-card {
+    background: rgba(10, 26, 47, 0.8);
+    border: 1px solid rgba(255,255,255,0.1);
+    border-radius: 14px;
+    padding: 1.5rem;
+    text-align: center;
+    transition: var(--transition-smooth);
+}
+
+.collaboration-card:hover {
+    border-color: var(--color-gold);
+    transform: translateY(-4px);
+    background: rgba(17, 34, 64, 0.9);
+}
+
+.collaboration-icon {
+    font-size: 2.2rem;
+    margin-bottom: 0.75rem;
+}
+
+.collaboration-title {
+    font-family: var(--font-heading);
+    font-size: 1.05rem;
+    color: var(--color-white);
+    font-weight: 700;
+}
+
+

@@ -21,17 +21,12 @@
       ]
     }
   ],
+  "rewrites": [
+    { "source": "/apply", "destination": "/academy.html" },
+    { "source": "/bootcamp", "destination": "/academy.html" },
+    { "source": "/dta", "destination": "/academy.html" }
+  ],
   "redirects": [
-    {
-      "source": "/apply",
-      "destination": "/academy.html",
-      "permanent": false
-    },
-    {
-      "source": "/bootcamp",
-      "destination": "/academy.html",
-      "permanent": false
-    },
     {
       "source": "/enterprise",
       "destination": "https://dwsa-enterpriseos.vercel.app",
@@ -74,3 +69,4 @@
     }
   ]
 }
+
