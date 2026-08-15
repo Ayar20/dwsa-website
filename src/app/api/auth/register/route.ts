@@ -61,7 +61,7 @@ export async function POST(req: Request) {
     });
 
     // Locate active cohort for the programme
-    let cohort = programme?.cohorts?.[0];
+    let cohort: any = programme?.cohorts?.[0];
     if (!cohort) {
       cohort = await prisma.cohort.findFirst({
         where: { status: "UPCOMING" },

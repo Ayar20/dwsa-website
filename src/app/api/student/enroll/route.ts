@@ -31,7 +31,7 @@ export async function POST(req: Request) {
       });
     }
 
-    let cohort = programme?.cohorts?.[0];
+    let cohort: any = programme?.cohorts?.[0];
     if (!cohort) {
       cohort = await prisma.cohort.findFirst({
         where: { status: "UPCOMING" },
