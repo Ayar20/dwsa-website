@@ -126,6 +126,21 @@ export default function LoginPage() {
             </button>
           </form>
 
+          {/* New Applicant / Register Link */}
+          <div className="p-3.5 bg-[#F0FDF4] border border-[#15803D]/20 rounded-2xl flex items-center justify-between text-xs">
+            <div>
+              <p className="font-extrabold text-[#0F172A]">New Applicant?</p>
+              <p className="text-[11px] text-slate-500">Register for Cohort 2026</p>
+            </div>
+            <Link
+              href="/register"
+              className="px-3.5 py-1.5 bg-[#15803D] hover:bg-[#166534] text-white font-extrabold text-xs rounded-xl shadow-xs transition-colors flex items-center gap-1"
+            >
+              <span>Register</span>
+              <ArrowRight className="w-3.5 h-3.5" />
+            </Link>
+          </div>
+
           {/* Quick Demo Logins */}
           <div className="pt-4 border-t border-slate-100 space-y-3">
             <span className="block text-[11px] font-bold text-center text-slate-400 uppercase tracking-wider">

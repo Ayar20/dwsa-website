@@ -48,6 +48,8 @@ export default function StudentDashboardPage() {
   const [depositRefInput, setDepositRefInput] = useState("");
   const [isSubmittingDeposit, setIsSubmittingDeposit] = useState(false);
   const [copiedAccount, setCopiedAccount] = useState<string | null>(null);
+  const [registeringPlan, setRegisteringPlan] = useState<"FULL_UPFRONT" | "INSTALLMENT">("FULL_UPFRONT");
+  const [isRegisteringCohort, setIsRegisteringCohort] = useState(false);
 
   // 1. Student Main Dashboard Data
   const { data, isLoading, isError, refetch } = useQuery({
@@ -171,6 +173,32 @@ export default function StudentDashboardPage() {
       }
     };
 
+    const handleSelfEnroll = async () => {
+      setIsRegisteringCohort(true);
+      setMessage(null);
+      try {
+        const res = await fetch("/api/student/enroll", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({
+            programmeSlug: "generative-ai-for-work-and-productivity",
+            paymentPlan: registeringPlan,
+          }),
+        });
+        const json = await res.json();
+        if (!res.ok) throw new Error(json.error || "Failed to register enrolment");
+        setMessage({
+          type: "success",
+          text: "Registration successful! Please complete tuition payment to unlock your workspace.",
+        });
+        refetch();
+      } catch (err: any) {
+        setMessage({ type: "error", text: err.message || "Failed to register" });
+      } finally {
+        setIsRegisteringCohort(false);
+      }
+    };
+
     const dwsaBankAccounts = [
       { bankName: "Zenith Bank", accountNumber: "1312782600", accountName: "Digital World Systems Africa Ltd" },
       { bankName: "Fidelity Bank", accountNumber: "5601785436", accountName: "Digital World Systems Africa Ltd" },
@@ -234,7 +262,7 @@ export default function StudentDashboardPage() {
                     <p className="text-xs text-slate-500 font-mono mt-0.5">Cohort: {enrollment.cohort?.cohortCode || "GENAI-WP-001"}</p>
                   </div>
                   <span className="px-3 py-1 rounded-full bg-[#F0FDF4] border border-[#15803D]/20 text-[#15803D] text-xs font-black">
-                    FULL UPFRONT
+                    {enrollment.paymentPlan || "FULL UPFRONT"}
                   </span>
                 </div>
 
@@ -353,10 +381,82 @@ export default function StudentDashboardPage() {
               </div>
             </div>
           ) : (
-            <div className="text-center space-y-4">
-              <p className="text-xs text-slate-500 leading-relaxed max-w-sm mx-auto">
-                {data?.message || "You are not registered in an active DWSA cohort. Please contact administration or sign in with an enrolled student account."}
-              </p>
+            <div className="space-y-6">
+              <div className="p-5 rounded-2xl bg-[#F8FAFC] border border-slate-200 space-y-4">
+                <div className="flex items-center justify-between">
+                  <span className="text-[10px] font-extrabold text-[#15803D] uppercase tracking-wider flex items-center gap-1">
+                    <Sparkles className="w-3.5 h-3.5 text-[#15803D]" /> Available Flagship Programme
+                  </span>
+                  <span className="text-[10px] font-mono font-bold text-slate-500">Cohort GENAI-WP-001</span>
+                </div>
+
+                <div>
+                  <h3 className="text-base font-extrabold text-[#0F172A]">Generative AI for Work &amp; Productivity</h3>
+                  <p className="text-xs text-slate-600 mt-1">
+                    Master workplace AI automation, prompt engineering, agentic workflows, custom GPT construction, and document intelligence.
+                  </p>
+                </div>
+
+                <div className="grid grid-cols-2 gap-3 pt-2 border-t border-slate-200/60 text-xs">
+                  <div>
+                    <span className="text-[10px] text-slate-400 font-semibold uppercase block">Duration</span>
+                    <strong className="text-xs font-black text-[#0F172A]">8 Weeks (Live-Online)</strong>
+                  </div>
+                  <div>
+                    <span className="text-[10px] text-slate-400 font-semibold uppercase block">Academic Unit</span>
+                    <strong className="text-xs font-black text-[#15803D]">School of Generative AI</strong>
+                  </div>
+                </div>
+              </div>
+
+              <div>
+                <label className="block text-xs font-bold text-[#0F172A] mb-2">Select Tuition Payment Plan</label>
+                <div className="grid grid-cols-2 gap-2.5">
+                  <button
+                    type="button"
+                    onClick={() => setRegisteringPlan("FULL_UPFRONT")}
+                    className={`p-3.5 rounded-xl border text-left transition-all ${
+                      registeringPlan === "FULL_UPFRONT"
+                        ? "bg-[#F0FDF4] border-[#15803D] text-[#0F172A] shadow-xs"
+                        : "bg-white border-slate-200 text-slate-600 hover:border-slate-300"
+                    }`}
+                  >
+                    <div className="flex items-center justify-between">
+                      <span className="text-xs font-extrabold">Full Tuition</span>
+                      {registeringPlan === "FULL_UPFRONT" && <CheckCircle2 className="w-4 h-4 text-[#15803D]" />}
+                    </div>
+                    <strong className="text-base font-black text-[#15803D] block mt-1">₦150,000</strong>
+                    <span className="text-[10px] text-slate-400 block">Instant access upon payment</span>
+                  </button>
+
+                  <button
+                    type="button"
+                    onClick={() => setRegisteringPlan("INSTALLMENT")}
+                    className={`p-3.5 rounded-xl border text-left transition-all ${
+                      registeringPlan === "INSTALLMENT"
+                        ? "bg-[#F0FDF4] border-[#15803D] text-[#0F172A] shadow-xs"
+                        : "bg-white border-slate-200 text-slate-600 hover:border-slate-300"
+                    }`}
+                  >
+                    <div className="flex items-center justify-between">
+                      <span className="text-xs font-extrabold">2 Installments</span>
+                      {registeringPlan === "INSTALLMENT" && <CheckCircle2 className="w-4 h-4 text-[#15803D]" />}
+                    </div>
+                    <strong className="text-base font-black text-[#D4A017] block mt-1">₦75,000 × 2</strong>
+                    <span className="text-[10px] text-slate-400 block">50% initial deposit</span>
+                  </button>
+                </div>
+              </div>
+
+              <button
+                type="button"
+                onClick={handleSelfEnroll}
+                disabled={isRegisteringCohort}
+                className="w-full py-3.5 rounded-xl bg-[#15803D] hover:bg-[#166534] text-white text-xs font-black flex items-center justify-center gap-2 shadow-md disabled:opacity-50 transition-colors"
+              >
+                <BookOpen className="w-4 h-4" />
+                {isRegisteringCohort ? "Registering for Cohort…" : "Register for Cohort & Proceed to Payment"}
+              </button>
             </div>
           )}
         </div>
