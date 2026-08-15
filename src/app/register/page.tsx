@@ -24,7 +24,6 @@ export default function RegisterPage() {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [phone, setPhone] = useState("");
-  const [paymentPlan, setPaymentPlan] = useState<"FULL_UPFRONT" | "INSTALLMENT">("FULL_UPFRONT");
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
 
@@ -168,47 +167,6 @@ export default function RegisterPage() {
                   />
                 </div>
               </div>
-            </div>
-
-            <div>
-              <label className="block text-xs font-bold text-[#0F172A] mb-1.5">Preferred Payment Plan</label>
-              <div className="grid grid-cols-2 gap-2.5">
-                <button
-                  type="button"
-                  onClick={() => setPaymentPlan("FULL_UPFRONT")}
-                  className={`p-3 rounded-xl border text-left transition-all ${
-                    paymentPlan === "FULL_UPFRONT"
-                      ? "bg-[#F0FDF4] border-[#15803D] text-[#0F172A] shadow-xs"
-                      : "bg-white border-slate-200 text-slate-600 hover:border-slate-300"
-                  }`}
-                >
-                  <div className="flex items-center justify-between">
-                    <span className="text-xs font-extrabold">Full Tuition</span>
-                    {paymentPlan === "FULL_UPFRONT" && <CheckCircle2 className="w-3.5 h-3.5 text-[#15803D]" />}
-                  </div>
-                  <strong className="text-sm font-black text-[#15803D] block mt-0.5">₦150,000</strong>
-                  <span className="text-[10px] text-slate-400 block">Instant access upon payment</span>
-                </button>
-
-                <button
-                  type="button"
-                  onClick={() => setPaymentPlan("INSTALLMENT")}
-                  className={`p-3 rounded-xl border text-left transition-all ${
-                    paymentPlan === "INSTALLMENT"
-                      ? "bg-[#F0FDF4] border-[#15803D] text-[#0F172A] shadow-xs"
-                      : "bg-white border-slate-200 text-slate-600 hover:border-slate-300"
-                  }`}
-                >
-                  <div className="flex items-center justify-between">
-                    <span className="text-xs font-extrabold">Installments</span>
-                    {paymentPlan === "INSTALLMENT" && <CheckCircle2 className="w-3.5 h-3.5 text-[#15803D]" />}
-                  </div>
-                  <strong className="text-sm font-black text-[#D4A017] block mt-0.5">₦75,000 × 2</strong>
-                  <span className="text-[10px] text-slate-400 block">50% initial deposit</span>
-                </button>
-              </div>
-            </div>
-
             <button
               type="submit"
               disabled={loading}

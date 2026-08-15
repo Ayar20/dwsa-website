@@ -94,8 +94,7 @@ export async function POST(req: Request) {
       const enrollment = paymentRecord.enrollment;
       const totalAmount = Number(enrollment.totalAmount);
       const amountPaid = Number(enrollment.amountPaid);
-      const outstandingBalance = totalAmount - amountPaid;
-      const expectedKobo = Math.round(outstandingBalance * 100);
+      const expectedKobo = Math.round(Number(paymentRecord.amount) * 100);
 
       // Verify exact expected kobo amount
       if (verifiedTx.amount < expectedKobo) {
@@ -106,8 +105,10 @@ export async function POST(req: Request) {
       // 6. Perform Atomic Database Transaction
       const paidNaira = verifiedTx.amount / 100;
       const newAmountPaid = amountPaid + paidNaira;
+      const isFullyPaid = newAmountPaid >= totalAmount;
+      const newStatus = isFullyPaid ? "ENROLLED" : enrollment.status;
 
-      await prisma.$transaction([
+      const transactionOps: any[] = [
         // Update PaymentRecord
         prisma.paymentRecord.update({
           where: { id: paymentRecord.id },
@@ -117,12 +118,12 @@ export async function POST(req: Request) {
             verificationDate: new Date(),
           },
         }),
-        // Update Enrollment to ENROLLED
+        // Update Enrollment
         prisma.enrollment.update({
           where: { id: enrollment.id },
           data: {
             amountPaid: newAmountPaid,
-            status: "ENROLLED",
+            status: newStatus,
           },
         }),
         // Write AuditLog
@@ -131,18 +132,25 @@ export async function POST(req: Request) {
             userId: enrollment.userId,
             action: "PAYMENT_SUCCESSFUL",
             targetId: enrollment.id,
-            details: `Paystack payment verified via API & Webhook. Ref: ${reference}, Amount: ₦${paidNaira.toLocaleString()}`,
+            details: `Paystack payment verified via Webhook. Ref: ${reference}, Amount: ₦${paidNaira.toLocaleString()}`,
           },
         }),
-        prisma.auditLog.create({
-          data: {
-            userId: enrollment.userId,
-            action: "ENROLLMENT_ACTIVATED",
-            targetId: enrollment.id,
-            details: `Enrollment activated to ENROLLED state for Cohort ${enrollment.cohortId}`,
-          },
-        }),
-      ]);
+      ];
+
+      if (isFullyPaid) {
+        transactionOps.push(
+          prisma.auditLog.create({
+            data: {
+              userId: enrollment.userId,
+              action: "ENROLLMENT_ACTIVATED",
+              targetId: enrollment.id,
+              details: `Enrollment activated to ENROLLED state for Cohort ${enrollment.cohortId}`,
+            },
+          })
+        );
+      }
+
+      await prisma.$transaction(transactionOps);
 
       console.log(`Paystack Webhook Success: Activated enrollment ${enrollment.id} for reference ${reference}`);
     }

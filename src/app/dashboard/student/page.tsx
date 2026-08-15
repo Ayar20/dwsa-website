@@ -50,6 +50,9 @@ export default function StudentDashboardPage() {
   const [copiedAccount, setCopiedAccount] = useState<string | null>(null);
   const [registeringPlan, setRegisteringPlan] = useState<"FULL_UPFRONT" | "INSTALLMENT">("FULL_UPFRONT");
   const [isRegisteringCohort, setIsRegisteringCohort] = useState(false);
+  const [payAmountMode, setPayAmountMode] = useState<"full" | "test" | "custom">("full");
+  const [customPayAmount, setCustomPayAmount] = useState<string>("");
+  const [isVerifyingSync, setIsVerifyingSync] = useState(false);
 
   // 1. Student Main Dashboard Data
   const { data, isLoading, isError, refetch } = useQuery({
@@ -84,14 +87,40 @@ export default function StudentDashboardPage() {
     enabled: !!activeQuizId && !!data?.enrolled,
   });
 
-  useEffect(() => {
-    if (paymentStatus === "processing" && paymentRef) {
-      setMessage({
-        type: "info",
-        text: `Payment reference ${paymentRef} received. Server webhook verification in progress. Please refresh to access workspace.`,
-      });
+  // On-demand real-time Paystack payment verification & sync
+  const handleVerifySync = async (refToCheck?: string) => {
+    const reference = refToCheck || paymentRef;
+    setIsVerifyingSync(true);
+    try {
+      if (reference) {
+        const res = await fetch(`/api/payments/verify/${encodeURIComponent(reference)}`);
+        const json = await res.json();
+        if (json.success) {
+          setMessage({
+            type: "success",
+            text: json.message || "Payment verified successfully! Workspace updated.",
+          });
+        } else {
+          setMessage({
+            type: "info",
+            text: json.message || "Payment verification in progress. Click Refresh Status once complete.",
+          });
+        }
+      }
+      await refetch();
+    } catch (err: any) {
+      console.error("Verification sync failed:", err);
+      await refetch();
+    } finally {
+      setIsVerifyingSync(false);
     }
-  }, [paymentStatus, paymentRef]);
+  };
+
+  useEffect(() => {
+    if (paymentRef) {
+      handleVerifySync(paymentRef);
+    }
+  }, [paymentRef]);
 
   if (isLoading) {
     return (
@@ -119,15 +148,39 @@ export default function StudentDashboardPage() {
     const amountPaid = Number(enrollment?.amountPaid) || 0;
     const outstandingBalance = totalAmount - amountPaid;
 
+    let targetChargeAmount = outstandingBalance;
+    if (payAmountMode === "test") {
+      targetChargeAmount = Math.min(100, outstandingBalance);
+    } else if (payAmountMode === "custom") {
+      const parsed = parseFloat(customPayAmount);
+      if (!isNaN(parsed) && parsed >= 100) {
+        targetChargeAmount = Math.min(parsed, outstandingBalance);
+      }
+    }
+
     const handlePaystackCheckout = async () => {
       if (!enrollment?.id) return;
       setIsInitializingPaystack(true);
       setMessage(null);
       try {
+        let chargeAmt = outstandingBalance;
+        if (payAmountMode === "test") {
+          chargeAmt = Math.min(100, outstandingBalance);
+        } else if (payAmountMode === "custom") {
+          const parsed = parseFloat(customPayAmount);
+          if (isNaN(parsed) || parsed < 100) {
+            throw new Error("Minimum payment amount is ₦100");
+          }
+          chargeAmt = Math.min(parsed, outstandingBalance);
+        }
+
         const res = await fetch("/api/payments/initialize", {
           method: "POST",
           headers: { "Content-Type": "application/json" },
-          body: JSON.stringify({ enrollmentId: enrollment.id }),
+          body: JSON.stringify({
+            enrollmentId: enrollment.id,
+            amount: chargeAmt,
+          }),
         });
         const json = await res.json();
         if (!res.ok) throw new Error(json.error || "Payment checkout failed");
@@ -225,10 +278,11 @@ export default function StudentDashboardPage() {
           >
             <span>{message.text}</span>
             <button
-              onClick={() => refetch()}
-              className="px-2.5 py-1 rounded-lg bg-white border border-slate-200 text-[#0F172A] font-bold text-[10px] shrink-0 hover:bg-slate-50 flex items-center gap-1"
+              onClick={() => handleVerifySync()}
+              disabled={isVerifyingSync}
+              className="px-2.5 py-1 rounded-lg bg-white border border-slate-200 text-[#0F172A] font-bold text-[10px] shrink-0 hover:bg-slate-50 flex items-center gap-1 disabled:opacity-50"
             >
-              <RefreshCw className="w-3 h-3 text-[#15803D]" /> Refresh Status
+              <RefreshCw className={`w-3 h-3 text-[#15803D] ${isVerifyingSync ? "animate-spin" : ""}`} /> {isVerifyingSync ? "Verifying..." : "Refresh Status"}
             </button>
           </div>
         )}
@@ -306,17 +360,88 @@ export default function StudentDashboardPage() {
                 </div>
 
                 {paymentTab === "paystack" ? (
-                  <div className="p-5 rounded-2xl border border-slate-200 bg-white text-center space-y-4">
-                    <p className="text-xs text-slate-600 leading-relaxed">
-                      Pay securely with Debit Card, Bank Transfer, USSD, or Apple Pay via Paystack. Your workspace will activate automatically upon payment verification.
-                    </p>
+                  <div className="p-5 rounded-2xl border border-slate-200 bg-white space-y-4">
+                    <div>
+                      <label className="block text-xs font-bold text-[#0F172A] mb-2">Select Payment Amount</label>
+                      <div className="grid grid-cols-1 sm:grid-cols-3 gap-2">
+                        <button
+                          type="button"
+                          onClick={() => setPayAmountMode("full")}
+                          className={`p-3 rounded-xl border text-left transition-all ${
+                            payAmountMode === "full"
+                              ? "bg-[#F0FDF4] border-[#15803D] text-[#0F172A] shadow-xs"
+                              : "bg-white border-slate-200 text-slate-600 hover:border-slate-300"
+                          }`}
+                        >
+                          <span className="text-[10px] font-bold text-slate-400 block uppercase">Full Balance</span>
+                          <strong className="text-xs font-black text-[#15803D] block mt-0.5">
+                            ₦{outstandingBalance.toLocaleString()}
+                          </strong>
+                        </button>
+
+                        <button
+                          type="button"
+                          onClick={() => setPayAmountMode("test")}
+                          className={`p-3 rounded-xl border text-left transition-all ${
+                            payAmountMode === "test"
+                              ? "bg-[#F0FDF4] border-[#15803D] text-[#0F172A] shadow-xs"
+                              : "bg-white border-slate-200 text-slate-600 hover:border-slate-300"
+                          }`}
+                        >
+                          <span className="text-[10px] font-bold text-[#D4A017] block uppercase">Test Payment</span>
+                          <strong className="text-xs font-black text-[#0F172A] block mt-0.5">
+                            ₦100 (Min)
+                          </strong>
+                        </button>
+
+                        <button
+                          type="button"
+                          onClick={() => setPayAmountMode("custom")}
+                          className={`p-3 rounded-xl border text-left transition-all ${
+                            payAmountMode === "custom"
+                              ? "bg-[#F0FDF4] border-[#15803D] text-[#0F172A] shadow-xs"
+                              : "bg-white border-slate-200 text-slate-600 hover:border-slate-300"
+                          }`}
+                        >
+                          <span className="text-[10px] font-bold text-slate-400 block uppercase">Custom Partial</span>
+                          <strong className="text-xs font-black text-slate-700 block mt-0.5">
+                            Enter Amount
+                          </strong>
+                        </button>
+                      </div>
+                    </div>
+
+                    {payAmountMode === "custom" && (
+                      <div className="p-3 bg-slate-50 border border-slate-200 rounded-xl space-y-1">
+                        <label className="block text-[11px] font-bold text-[#0F172A]">Enter Amount in Naira (Minimum ₦100)</label>
+                        <div className="relative">
+                          <span className="absolute left-3 top-2 text-xs font-bold text-slate-400">₦</span>
+                          <input
+                            type="number"
+                            min={100}
+                            max={outstandingBalance}
+                            value={customPayAmount}
+                            onChange={(e) => setCustomPayAmount(e.target.value)}
+                            placeholder="e.g. 50000"
+                            className="w-full pl-7 pr-3 py-1.5 bg-white border border-slate-200 rounded-lg text-xs font-bold text-[#0F172A] focus:outline-none focus:border-[#15803D]"
+                          />
+                        </div>
+                      </div>
+                    )}
+
+                    <div className="p-3 bg-amber-50/80 border border-amber-200/80 rounded-xl text-[11px] text-amber-900 leading-relaxed">
+                      💡 <strong>Note</strong>: You can make partial or test payments (minimum ₦100). Your complete digital campus workspace and course modules will unlock automatically once total tuition (₦{totalAmount.toLocaleString()}) is 100% completed.
+                    </div>
+
                     <button
                       onClick={handlePaystackCheckout}
                       disabled={isInitializingPaystack}
                       className="w-full py-3.5 rounded-xl bg-[#15803D] hover:bg-[#166534] text-white text-xs font-black flex items-center justify-center gap-2 shadow-md disabled:opacity-50 transition-colors"
                     >
                       <CreditCard className="w-4 h-4" />
-                      {isInitializingPaystack ? "Initializing Paystack Gateway…" : `Proceed to Pay ₦${outstandingBalance.toLocaleString()}`}
+                      {isInitializingPaystack
+                        ? "Initializing Paystack Gateway…"
+                        : `Proceed to Pay ₦${targetChargeAmount.toLocaleString()}`}
                     </button>
                   </div>
                 ) : (

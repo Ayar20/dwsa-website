@@ -6,6 +6,7 @@ import { z } from "zod";
 
 const initializeSchema = z.object({
   enrollmentId: z.string().min(1, "Enrollment ID is required"),
+  amount: z.number().min(100, "Minimum payment amount is ₦100").optional(),
 });
 
 export async function POST(req: Request) {
@@ -35,10 +36,10 @@ export async function POST(req: Request) {
 
     // Check if already fully enrolled
     if (enrollment.status === "ENROLLED" || enrollment.status === "COMPLETED") {
-      return NextResponse.json({ error: "Enrollment is already fully active" }, { status: 400 });
+      return NextResponse.json({ error: "Enrollment is already fully active and paid" }, { status: 400 });
     }
 
-    // 2. Authoritative server-side amount calculation (Decimal -> float math avoided)
+    // 2. Authoritative server-side amount calculation
     const totalAmount = Number(enrollment.totalAmount);
     const amountPaid = Number(enrollment.amountPaid);
     const outstandingBalance = totalAmount - amountPaid;
@@ -47,8 +48,13 @@ export async function POST(req: Request) {
       return NextResponse.json({ error: "No outstanding tuition balance remains for this enrollment" }, { status: 400 });
     }
 
+    // Determine charge amount: if user specified a partial amount, validate min ₦100 up to outstanding balance
+    const chargeAmount = validated.amount
+      ? Math.min(Math.max(validated.amount, 100), outstandingBalance)
+      : outstandingBalance;
+
     // Convert to Paystack currency subunit (kobo integer)
-    const amountInKobo = Math.round(outstandingBalance * 100);
+    const amountInKobo = Math.round(chargeAmount * 100);
 
     // 3. Hyphen-only Paystack reference format: DWSA-DTA-GENAI-<suffix>-<timestamp>
     const reference = `DWSA-DTA-GENAI-${enrollment.id.slice(-6)}-${Date.now()}`;
