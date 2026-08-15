@@ -6,8 +6,15 @@ import { prisma } from "@/lib/prisma";
 export async function GET() {
   try {
     const session = await getServerSession(authOptions);
-    if (!session || !session.user || session.user.role !== "ADMIN") {
-      return NextResponse.json({ error: "Forbidden" }, { status: 403 });
+    if (!session || !session.user) {
+      return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
+    }
+
+    const role = session.user.role || "LEARNER";
+    const isAdmin = role === "DTA_ADMINISTRATOR" || role === "ADMIN" || role === "SUPER_ADMINISTRATOR" || role === "DTA_MANAGEMENT";
+
+    if (!isAdmin) {
+      return NextResponse.json({ error: "Forbidden: Admin access required" }, { status: 403 });
     }
 
     // 1. Calculate Aggregates
@@ -15,9 +22,9 @@ export async function GET() {
       include: { user: true, cohort: true },
     });
 
-    const activeStudents = enrollments.filter(e => e.status === "ACTIVE").length;
+    const activeStudents = enrollments.filter(e => e.status === "ENROLLED").length;
     const suspendedStudents = enrollments.filter(e => e.status === "SUSPENDED").length;
-    const totalRevenue = enrollments.reduce((acc, curr) => acc + curr.amountPaid, 0);
+    const totalRevenue = enrollments.reduce((acc, curr) => acc + Number(curr.amountPaid), 0);
 
     const pendingSubmissionsCount = await prisma.submission.count({
       where: { status: "PENDING" },
@@ -30,10 +37,10 @@ export async function GET() {
       name: e.user.name,
       email: e.user.email,
       phone: e.user.phone,
-      cohort: e.cohort.title,
+      cohort: e.cohort?.title || "Default Cohort",
       paymentPlan: e.paymentPlan,
-      totalAmount: e.totalAmount,
-      amountPaid: e.amountPaid,
+      totalAmount: Number(e.totalAmount),
+      amountPaid: Number(e.amountPaid),
       status: e.status,
     }));
 

@@ -17,11 +17,11 @@ export async function POST(req: Request) {
       return NextResponse.json({ error: "Assignment ID is required" }, { status: 400 });
     }
 
-    // 1. Verify student has an ACTIVE enrollment
+    // 1. Verify student has an ENROLLED status
     const enrollment = await prisma.enrollment.findFirst({
       where: {
         userId: session.user.id,
-        status: "ACTIVE",
+        status: "ENROLLED",
       },
     });
 
@@ -59,7 +59,6 @@ export async function POST(req: Request) {
 
       const githubPat = process.env.GITHUB_PAT;
       if (githubPat) {
-        // Real GitHub API check
         try {
           const githubResponse = await fetch(`https://api.github.com/repos/${owner}/${repo}/pulls/${pullNumber}`, {
             headers: {
@@ -79,7 +78,6 @@ export async function POST(req: Request) {
           console.log(`GitHub PR Verified: ${prData.html_url} (${prData.state})`);
         } catch (e: any) {
           console.error("Error calling GitHub API:", e);
-          // Allow fallback if network issue
         }
       } else {
         console.warn("GITHUB_PAT is missing. Mock-validating GitHub PR URL...");

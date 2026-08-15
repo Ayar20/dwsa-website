@@ -6,14 +6,24 @@ const prisma = new PrismaClient();
 async function main() {
   console.log("Seeding database...");
 
-  // Clean existing data
+  // Clean existing data in dependency order
+  await prisma.auditLog.deleteMany();
+  await prisma.certificateRecord.deleteMany();
+  await prisma.assessmentAttempt.deleteMany();
+  await prisma.assessment.deleteMany();
+  await prisma.attendance.deleteMany();
+  await prisma.liveClass.deleteMany();
   await prisma.submission.deleteMany();
   await prisma.assignment.deleteMany();
   await prisma.module.deleteMany();
   await prisma.track.deleteMany();
   await prisma.paymentRecord.deleteMany();
   await prisma.enrollment.deleteMany();
+  await prisma.application.deleteMany();
   await prisma.cohort.deleteMany();
+  await prisma.programme.deleteMany();
+  await prisma.lead.deleteMany();
+  await prisma.organization.deleteMany();
   await prisma.user.deleteMany();
 
   // Create Hashed Passwords
@@ -28,7 +38,7 @@ async function main() {
       email: "admin@dwsa.edu",
       passwordHash: adminPassword,
       phone: "+2348011112222",
-      role: "ADMIN",
+      role: "DTA_ADMINISTRATOR",
       prideAccepted: true,
     },
   });
@@ -50,182 +60,75 @@ async function main() {
       email: "student@dwsa.edu",
       passwordHash: studentPassword,
       phone: "+2348033334444",
-      role: "STUDENT",
-      prideAccepted: false, // Will prompt P.R.I.D.E modal on first login
+      role: "LEARNER",
+      prideAccepted: false,
     },
   });
 
-  const suspendedStudent = await prisma.user.create({
+  console.log("Users created:", { admin: admin.email, instructor: instructor.email, student: activeStudent.email });
+
+  // 2. Flagship Programme
+  const flagshipProgramme = await prisma.programme.create({
     data: {
-      name: "Amara Kalu",
-      email: "suspended@dwsa.edu",
-      passwordHash: studentPassword,
-      phone: "+2348044445555",
-      role: "STUDENT",
-      prideAccepted: true,
+      title: "Generative AI for Work & Productivity",
+      slug: "generative-ai-for-work-and-productivity",
+      school: "School of Generative Artificial Intelligence",
+      description: "Master workplace AI automation, prompt engineering, agentic workflows, custom GPT construction, and document intelligence.",
+      objectives: [
+        "Master prompt engineering & zero-shot/few-shot technique",
+        "Build workplace AI agents and automated email/document workflows",
+        "Construct custom GPTs & domain-specific knowledge bases",
+        "Deploy enterprise AI tools safely adhering to data privacy standards",
+      ],
+      durationWeeks: 8,
+      deliveryMode: "ONLINE_LIVE",
+      price: 150000.00,
+      earlyBirdPrice: 120000.00,
+      isPublished: false,
     },
   });
 
-  console.log("Users created:", { admin: admin.email, instructor: instructor.email, student: activeStudent.email, suspended: suspendedStudent.email });
+  console.log("Flagship Programme created:", flagshipProgramme.title);
 
-  // 2. Cohorts
+  // 3. Initial Cohort (GENAI-WP-001)
   const cohort = await prisma.cohort.create({
     data: {
-      title: "Cohort 5 (Alpha)",
-      startDate: new Date("2026-07-01"),
-      endDate: new Date("2026-10-01"),
-      status: "ACTIVE",
+      programmeId: flagshipProgramme.id,
+      cohortCode: "GENAI-WP-001",
+      title: "Generative AI Cohort 1 (Alpha)",
+      startDate: new Date("2026-09-01"),
+      endDate: new Date("2026-10-31"),
+      capacity: 30,
+      instructorId: instructor.id,
+      status: "UPCOMING",
     },
   });
 
-  console.log("Cohort created:", cohort.title);
+  console.log("Cohort created:", cohort.cohortCode);
 
-  // 3. Enrollments & Payments
-  const enrollmentActive = await prisma.enrollment.create({
+  // 4. Sample Lead & Admissions Application
+  await prisma.lead.create({
+    data: {
+      name: "Dr. Adaeze Okonkwo",
+      email: "adaeze@example.com",
+      phone: "+2348099998888",
+      programmeInterest: "Generative AI for Work & Productivity",
+      source: "LinkedIn",
+      campaign: "GENAI-SEPT-2026",
+      status: "NEW",
+    },
+  });
+
+  await prisma.application.create({
     data: {
       userId: activeStudent.id,
-      cohortId: cohort.id,
-      paymentPlan: "INSTALLMENT",
-      totalAmount: 180000,
-      amountPaid: 100000,
-      status: "ACTIVE",
+      programmeId: flagshipProgramme.id,
+      status: "SUBMITTED",
+      backgroundNotes: "Executive Manager seeking to automate organizational workflow reporting.",
     },
   });
 
-  await prisma.paymentRecord.create({
-    data: {
-      enrollmentId: enrollmentActive.id,
-      paystackRef: "T_MOCK_REF_11111",
-      amount: 100000,
-      channel: "card",
-    },
-  });
-
-  const enrollmentSuspended = await prisma.enrollment.create({
-    data: {
-      userId: suspendedStudent.id,
-      cohortId: cohort.id,
-      paymentPlan: "INSTALLMENT",
-      totalAmount: 180000,
-      amountPaid: 50000,
-      status: "SUSPENDED",
-    },
-  });
-
-  await prisma.paymentRecord.create({
-    data: {
-      enrollmentId: enrollmentSuspended.id,
-      paystackRef: "T_MOCK_REF_22222",
-      amount: 50000,
-      channel: "ussd",
-    },
-  });
-
-  console.log("Enrollments created.");
-
-  // 4. Tracks & Modules with YouTube Video Feeds
-  const track = await prisma.track.create({
-    data: {
-      title: "Software Engineering & AI",
-      slug: "software-engineering-ai",
-      description: "Comprehensive pathway covering front-end, back-end, cloud deployment, and integration of AI APIs.",
-    },
-  });
-
-  const m1 = await prisma.module.create({
-    data: {
-      trackId: track.id,
-      title: "Module 1: Git & Version Control Workflow",
-      order: 1,
-      youtubeId: "RGOj5yH7evE",
-      durationMinutes: 45,
-      isFreePreview: true,
-      githubStarterRepo: "https://github.com/dwsa-academy/git-starter",
-      contentMarkdown: `## Welcome to Module 1: Git & Version Control Workflow
-Git is the industry standard for code versioning and collaborative software development. Watch the HD masterclass above before attempting the practical assignments.
-
-### Key Objectives
-1. **Repository Initialization**: Setting up local Git configuration.
-2. **Branching & Merging**: Creating feature branches and resolving merge conflicts.
-3. **Pull Request Protocol**: Pushing code to GitHub and opening verified PRs.
-
-### Task Instructions
-Clone the starter repository below, create a feature branch \`feature/my-first-pr\`, commit your code changes, push to your GitHub account, and submit the Pull Request link in the submission box.`,
-    },
-  });
-
-  const m2 = await prisma.module.create({
-    data: {
-      trackId: track.id,
-      title: "Module 2: HTML/CSS & Modern Tailwind CSS",
-      order: 2,
-      youtubeId: "mU6anWqZJcc",
-      durationMinutes: 60,
-      isFreePreview: false,
-      githubStarterRepo: "https://github.com/dwsa-academy/typescript-advanced",
-      contentMarkdown: `## Welcome to Module 2: HTML/CSS & Modern Tailwind CSS
-Learn to construct high-performance, responsive web interfaces using semantic HTML5 elements and Tailwind CSS design tokens.
-
-### Key Objectives
-1. **Semantic HTML5 Layouts**: Structural landmarks (\`<header>\`, \`<main>\`, \`<section>\`, \`<article>\`).
-2. **Tailwind Design Systems**: Utility-first styling, responsive break-points, and glassmorphism.
-3. **Flexbox & Grid Alignment**: Dynamic container math and media queries.`,
-    },
-  });
-
-  const m3 = await prisma.module.create({
-    data: {
-      trackId: track.id,
-      title: "Module 3: Full Stack Next.js App Router",
-      order: 3,
-      youtubeId: "SqcY0GlETPk",
-      durationMinutes: 90,
-      isFreePreview: false,
-      githubStarterRepo: "https://github.com/dwsa-academy/nextjs-starter",
-      contentMarkdown: `## Welcome to Module 3: Full Stack Next.js App Router
-Master modern React server architecture, API routing, NextAuth.js role-based guards, and Prisma PostgreSQL ORM integration.
-
-### Key Objectives
-1. **Server vs Client Components**: Static pre-rendering, dynamic server rendering, and hydration.
-2. **Prisma ORM & PostgreSQL**: Database schemas, migrations, and relationship joins.
-3. **API Route Handlers**: Secure REST endpoints, webhooks, and session management.`,
-    },
-  });
-
-  console.log("Track and Modules created.");
-
-  // 5. Assignments & Submissions
-  const a1 = await prisma.assignment.create({
-    data: {
-      moduleId: m1.id,
-      title: "Assignment 1.1: Git Repository Setup & Push",
-      instructions: "Clone the starter repo, add a README.md file with your profile name, commit, and push it to your own public GitHub repository.",
-      githubPRRequired: false,
-      dueDate: new Date(Date.now() + 7 * 24 * 60 * 60 * 1000),
-    },
-  });
-
-  const a2 = await prisma.assignment.create({
-    data: {
-      moduleId: m1.id,
-      title: "Assignment 1.2: Branching and Pull Request",
-      instructions: "Clone the starter repo, create a branch named 'feature/profile', update index.html, commit, push, create a Pull Request on GitHub, and submit the PR link.",
-      githubPRRequired: true,
-      dueDate: new Date(Date.now() + 14 * 24 * 60 * 60 * 1000),
-    },
-  });
-
-  await prisma.submission.create({
-    data: {
-      userId: activeStudent.id,
-      assignmentId: a1.id,
-      githubPRUrl: "https://github.com/student/git-starter/pull/1",
-      status: "PENDING",
-    },
-  });
-
-  console.log("Assignments & Sample Submission created successfully.");
-  console.log("Seeding complete!");
+  console.log("Seeding complete successfully!");
 }
 
 main()

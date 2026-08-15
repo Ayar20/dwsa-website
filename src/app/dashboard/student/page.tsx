@@ -1,118 +1,55 @@
 "use client";
 
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import Link from "next/link";
+import { useSearchParams } from "next/navigation";
 import { useQuery } from "@tanstack/react-query";
 import YouTubePlayer from "@/components/YouTubePlayer";
-import StudentSuccessDashboard from "@/components/intelligence/StudentSuccessDashboard";
-import CompetencyRadar from "@/components/intelligence/CompetencyRadar";
-import LearningTimeline from "@/components/intelligence/LearningTimeline";
-import AchievementEngine from "@/components/intelligence/AchievementEngine";
 import {
   BookOpen,
   CheckCircle2,
   Clock,
-  Code,
   CreditCard,
-  ExternalLink,
-  GitPullRequest,
   Lock,
-  AlertTriangle,
-  Send,
   Sparkles,
-  ChevronRight,
-  ShieldAlert,
-  PlayCircle,
-  Trophy,
-  Zap,
-  Star,
   Target,
-  TrendingUp,
-  Award,
-  Users,
-  BarChart3,
-  Flame,
+  Building2,
+  Copy,
+  Check,
+  RefreshCw,
   GraduationCap,
+  Video,
+  Award,
+  HelpCircle,
+  ExternalLink,
+  ChevronRight,
+  ShieldCheck,
+  FileCheck,
 } from "lucide-react";
 
-// ─── Animated Progress Ring ──────────────────────────────────────────────────
-function ProgressRing({ percent }: { percent: number }) {
-  const r = 52;
-  const circ = 2 * Math.PI * r;
-  const dash = (percent / 100) * circ;
-  return (
-    <svg width="130" height="130" className="rotate-[-90deg]">
-      <circle cx="65" cy="65" r={r} fill="none" stroke="#E2E8F0" strokeWidth="10" />
-      <circle
-        cx="65"
-        cy="65"
-        r={r}
-        fill="none"
-        stroke="url(#ringGrad)"
-        strokeWidth="10"
-        strokeDasharray={`${dash} ${circ}`}
-        strokeLinecap="round"
-        style={{ transition: "stroke-dasharray 1s ease" }}
-      />
-      <defs>
-        <linearGradient id="ringGrad" x1="0%" y1="0%" x2="100%" y2="0%">
-          <stop offset="0%" stopColor="#15803D" />
-          <stop offset="100%" stopColor="#D4A017" />
-        </linearGradient>
-      </defs>
-    </svg>
-  );
-}
-
-// ─── Stat Card ────────────────────────────────────────────────────────────────
-function StatCard({
-  icon: Icon,
-  label,
-  value,
-  sub,
-  accent,
-}: {
-  icon: React.ElementType;
-  label: string;
-  value: string | number;
-  sub?: string;
-  accent: string;
-}) {
-  return (
-    <div
-      className="relative p-5 rounded-2xl border overflow-hidden group hover:scale-[1.02] transition-transform duration-300 bg-white shadow-sm"
-      style={{ borderColor: `${accent}33` }}
-    >
-      <div className="flex items-start justify-between relative">
-        <div
-          className="p-2.5 rounded-xl border"
-          style={{
-            background: `${accent}18`,
-            borderColor: `${accent}44`,
-          }}
-        >
-          <Icon className="w-4 h-4" style={{ color: accent }} />
-        </div>
-      </div>
-      <div className="mt-4 relative">
-        <div className="text-2xl font-black text-[#0F172A] leading-none">{value}</div>
-        <div className="text-[10px] font-semibold uppercase tracking-wider mt-1" style={{ color: accent }}>
-          {label}
-        </div>
-        {sub && <div className="text-[10px] text-slate-500 mt-0.5">{sub}</div>}
-      </div>
-    </div>
-  );
-}
-
-// ─── Main Page ────────────────────────────────────────────────────────────────
 export default function StudentDashboardPage() {
-  const [selectedModuleId, setSelectedModuleId] = useState<string | null>(null);
-  const [prUrls, setPrUrls] = useState<Record<string, string>>({});
-  const [submittingId, setSubmittingId] = useState<string | null>(null);
-  const [message, setMessage] = useState<{ type: "success" | "error"; text: string } | null>(null);
-  const [paying, setPaying] = useState(false);
+  const searchParams = useSearchParams();
+  const paymentStatus = searchParams.get("payment");
+  const paymentRef = searchParams.get("ref");
 
+  const [activeTab, setActiveTab] = useState<"curriculum" | "live" | "quizzes" | "credentials">("curriculum");
+  const [selectedModuleId, setSelectedModuleId] = useState<string | null>(null);
+  const [message, setMessage] = useState<{ type: "success" | "error" | "info"; text: string } | null>(null);
+
+  // Quiz Attempt State
+  const [activeQuizId, setActiveQuizId] = useState<string | null>(null);
+  const [quizAnswers, setQuizAnswers] = useState<Record<string, string>>({});
+  const [isSubmittingQuiz, setIsSubmittingQuiz] = useState(false);
+  const [quizResult, setQuizResult] = useState<{ score: number; passed: boolean; passScore: number } | null>(null);
+
+  // Payment states
+  const [paymentTab, setPaymentTab] = useState<"paystack" | "bank">("paystack");
+  const [isInitializingPaystack, setIsInitializingPaystack] = useState(false);
+  const [depositRefInput, setDepositRefInput] = useState("");
+  const [isSubmittingDeposit, setIsSubmittingDeposit] = useState(false);
+  const [copiedAccount, setCopiedAccount] = useState(false);
+
+  // 1. Student Main Dashboard Data
   const { data, isLoading, isError, refetch } = useQuery({
     queryKey: ["student-dashboard"],
     queryFn: async () => {
@@ -121,6 +58,38 @@ export default function StudentDashboardPage() {
       return res.json();
     },
   });
+
+  // 2. Student Live Classes Data (Only fetched if ENROLLED)
+  const { data: liveClassesData } = useQuery({
+    queryKey: ["student-live-classes"],
+    queryFn: async () => {
+      const res = await fetch("/api/student/live-classes");
+      if (!res.ok) return { liveClasses: [] };
+      return res.json();
+    },
+    enabled: !!data?.enrolled,
+  });
+
+  // 3. Active Quiz Data
+  const { data: quizData, refetch: refetchQuiz } = useQuery({
+    queryKey: ["student-assessment", activeQuizId],
+    queryFn: async () => {
+      if (!activeQuizId) return null;
+      const res = await fetch(`/api/student/assessments/${activeQuizId}`);
+      if (!res.ok) throw new Error("Failed to load assessment");
+      return res.json();
+    },
+    enabled: !!activeQuizId && !!data?.enrolled,
+  });
+
+  useEffect(() => {
+    if (paymentStatus === "processing" && paymentRef) {
+      setMessage({
+        type: "info",
+        text: `Payment reference ${paymentRef} received. Server webhook verification in progress. Please refresh to access workspace.`,
+      });
+    }
+  }, [paymentStatus, paymentRef]);
 
   if (isLoading) {
     return (
@@ -140,721 +109,601 @@ export default function StudentDashboardPage() {
     );
   }
 
+  // Handle Unenrolled / Pending Payment State
   if (isError || !data || !data.enrolled) {
+    const isPendingPayment = data?.enrollmentStatus === "PENDING_PAYMENT";
+    const enrollment = data?.enrollment;
+    const totalAmount = enrollment?.totalAmount || 150000;
+    const amountPaid = enrollment?.amountPaid || 0;
+    const outstandingBalance = totalAmount - amountPaid;
+
+    const handlePaystackCheckout = async () => {
+      if (!enrollment?.id) return;
+      setIsInitializingPaystack(true);
+      setMessage(null);
+      try {
+        const res = await fetch("/api/payments/initialize", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({ enrollmentId: enrollment.id }),
+        });
+        const json = await res.json();
+        if (!res.ok) throw new Error(json.error || "Payment checkout failed");
+
+        if (json.checkoutUrl) {
+          window.location.href = json.checkoutUrl;
+        } else {
+          throw new Error("No authorization URL returned from payment server");
+        }
+      } catch (err: any) {
+        setMessage({ type: "error", text: err.message || "Payment initialization failed" });
+        setIsInitializingPaystack(false);
+      }
+    };
+
+    const handleBankDepositSubmit = async (e: React.FormEvent) => {
+      e.preventDefault();
+      if (!enrollment?.id || !depositRefInput.trim()) return;
+      setIsSubmittingDeposit(true);
+      setMessage(null);
+      try {
+        const res = await fetch("/api/admin/payments/manual", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({
+            enrollmentId: enrollment.id,
+            depositReference: depositRefInput.trim(),
+          }),
+        });
+        const json = await res.json();
+        if (!res.ok) throw new Error(json.error || "Failed to submit bank deposit reference");
+
+        setMessage({
+          type: "success",
+          text: "Bank transfer claim submitted successfully! A DTA Administrator will verify your payment shortly.",
+        });
+        setDepositRefInput("");
+        refetch();
+      } catch (err: any) {
+        setMessage({ type: "error", text: err.message || "Failed to submit deposit claim" });
+      } finally {
+        setIsSubmittingDeposit(false);
+      }
+    };
+
+    const copyAccountNumber = () => {
+      navigator.clipboard.writeText("0123456789");
+      setCopiedAccount(true);
+      setTimeout(() => setCopiedAccount(false), 2000);
+    };
+
     return (
-      <div className="max-w-lg mx-auto mt-16">
-        <div className="p-8 rounded-3xl border border-slate-200 bg-white text-center space-y-5 shadow-sm">
-          <div className="mx-auto w-16 h-16 rounded-2xl bg-[#FEFCE8] flex items-center justify-center border border-[#D4A017]/30">
-            <AlertTriangle className="w-8 h-8 text-[#D4A017]" />
-          </div>
-          <div>
-            <h2 className="text-xl font-black text-[#0F172A]">Enrollment Required</h2>
-            <p className="text-xs text-slate-500 mt-2 leading-relaxed max-w-sm mx-auto">
-              You are not registered in an active DWSA cohort. Please contact administration
-              or sign in with an enrolled student account.
-            </p>
-          </div>
-          <div className="flex gap-3 pt-2 justify-center">
-            <div className="px-3 py-1.5 rounded-lg bg-[#F0FDF4] border border-[#15803D]/20 text-[10px] font-bold text-[#15803D] flex items-center gap-1.5">
-              <BookOpen className="w-3 h-3" /> DWSA Academy
-            </div>
-            <div className="px-3 py-1.5 rounded-lg bg-[#F0FDF4] border border-[#15803D]/20 text-[10px] font-bold text-[#15803D] flex items-center gap-1.5">
-              <Users className="w-3 h-3" /> Contact Admin
-            </div>
-          </div>
-        </div>
-      </div>
-    );
-  }
-
-  const { enrollment, track, progressPercent } = data;
-  const isSuspended = enrollment.status === "SUSPENDED";
-  const modules = track?.modules || [];
-  const activeModule = modules.find((m: any) => m.id === selectedModuleId) || modules[0];
-  const outstandingBalance = Math.max(0, enrollment.totalAmount - enrollment.amountPaid);
-  const completedCount = modules.filter((m: any) =>
-    m.assignments?.every((a: any) => a.submissions?.some((s: any) => s.status === "APPROVED"))
-  ).length;
-
-  const handleSubmitPR = async (assignmentId: string) => {
-    const url = prUrls[assignmentId];
-    setSubmittingId(assignmentId);
-    setMessage(null);
-    try {
-      const res = await fetch("/api/submissions", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ assignmentId, githubPRUrl: url }),
-      });
-      const json = await res.json();
-      if (!res.ok) throw new Error(json.error || "Submission failed");
-      setMessage({ type: "success", text: "Pull Request submitted successfully for grading!" });
-      refetch();
-    } catch (err: any) {
-      setMessage({ type: "error", text: err.message || "Failed to submit PR" });
-    } finally {
-      setSubmittingId(null);
-    }
-  };
-
-  const handlePayInstallment = async (amountToPay: number) => {
-    setPaying(true);
-    setMessage(null);
-    try {
-      const res = await fetch("/api/payments/checkout", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ enrollmentId: enrollment.id, amount: amountToPay }),
-      });
-      const json = await res.json();
-      if (!res.ok) throw new Error(json.error || "Payment checkout failed");
-      if (json.checkoutUrl) window.location.href = json.checkoutUrl;
-    } catch (err: any) {
-      setMessage({ type: "error", text: err.message || "Payment error" });
-      setPaying(false);
-    }
-  };
-
-  return (
-    <div className="space-y-8 pb-12 animate-fadeInUp">
-
-      {/* ── 1. CAMPUS HOME INSTITUTIONAL WELCOME BANNER — IEDS v2.0 ── */}
-      <div className="p-6 sm:p-8 bg-white border border-slate-200 rounded-3xl space-y-5 shadow-sm">
-        <div className="flex flex-col md:flex-row md:items-center justify-between gap-6">
-          <div className="space-y-2">
-            <div className="flex flex-wrap items-center gap-2">
-              <span className="px-3 py-1 rounded-full bg-[#F0FDF4] border border-[#15803D]/20 text-[#15803D] text-xs font-extrabold flex items-center gap-1.5">
-                <GraduationCap className="w-3.5 h-3.5" aria-hidden="true" />
-                DIGITAL CAMPUS WORKSPACE
-              </span>
-              <span className="px-3 py-1 rounded-full bg-[#F0FDF4] border border-[#15803D]/20 text-[#15803D] text-xs font-bold">
-                Cohort 2026 Active
-              </span>
-            </div>
-            <h1 className="text-2xl sm:text-3xl font-black text-[#0F172A] tracking-tight">
-              Welcome to Campus Home, <span className="text-[#15803D]">{enrollment.studentName || "Learner"}</span> 👋
-            </h1>
-            <p className="text-xs sm:text-sm text-slate-500 leading-relaxed max-w-2xl">
-              You are enrolled in the <strong className="text-[#0F172A]">{track?.title || "8-Week AI Coding Academy"}</strong>. Your coursework, live code grading engine, and digital identity are active.
-            </p>
-          </div>
-
-          {/* Learning Goal Pill */}
-          <div className="shrink-0 p-4 bg-[#F0FDF4] border border-[#15803D]/20 rounded-2xl space-y-1.5 min-w-[200px]">
-            <span className="text-[10px] font-bold text-slate-500 uppercase tracking-wider block">
-              Primary Learning Goal
-            </span>
-            <strong className="text-xs font-extrabold text-[#0F172A] flex items-center gap-1.5">
-              <Target className="w-3.5 h-3.5 text-[#15803D]" aria-hidden="true" />
-              Software Engineer
-            </strong>
-            <Link
-              href="/dashboard/student/identity"
-              className="text-[10px] text-[#15803D] font-semibold hover:underline block pt-0.5"
+      <div className="max-w-2xl mx-auto my-12 space-y-6">
+        {message && (
+          <div
+            className={`p-4 rounded-2xl border text-xs font-semibold flex items-center justify-between gap-3 ${
+              message.type === "success"
+                ? "bg-[#F0FDF4] border-[#15803D]/30 text-[#15803D]"
+                : message.type === "info"
+                ? "bg-blue-50 border-blue-200 text-blue-800"
+                : "bg-red-50 border-red-200 text-red-700"
+            }`}
+          >
+            <span>{message.text}</span>
+            <button
+              onClick={() => refetch()}
+              className="px-2.5 py-1 rounded-lg bg-white border border-slate-200 text-[#0F172A] font-bold text-[10px] shrink-0 hover:bg-slate-50 flex items-center gap-1"
             >
-              Update Digital Identity →
-            </Link>
+              <RefreshCw className="w-3 h-3 text-[#15803D]" /> Refresh Status
+            </button>
           </div>
-        </div>
+        )}
 
-        {/* Quick Actions Bar */}
-        <div className="pt-3 border-t border-slate-100 flex flex-wrap items-center gap-2 text-xs">
-          <a
-            href="#my-learning"
-            className="px-4 py-2 rounded-xl bg-[#15803D] text-white font-extrabold shadow-sm transition-all btn-press flex items-center gap-1.5 hover:bg-[#166534]"
-          >
-            <BookOpen className="w-3.5 h-3.5" aria-hidden="true" /> Continue Learning
-          </a>
-          <Link
-            href="/dashboard/student/programme"
-            className="px-4 py-2 rounded-xl bg-slate-50 hover:bg-slate-100 border border-slate-200 text-[#0F172A] font-bold transition-all flex items-center gap-1.5"
-          >
-            <GraduationCap className="w-3.5 h-3.5 text-[#15803D]" aria-hidden="true" /> My Programme
-          </Link>
-          <a
-            href="#assignments"
-            className="px-4 py-2 rounded-xl bg-[#F0FDF4] hover:bg-[#dcfce7] border border-[#15803D]/20 text-[#15803D] font-bold transition-all flex items-center gap-1.5"
-          >
-            <GitPullRequest className="w-3.5 h-3.5" aria-hidden="true" /> Submit PR
-          </a>
-          <Link
-            href="/dashboard/student/resources"
-            className="px-4 py-2 rounded-xl bg-slate-50 hover:bg-slate-100 border border-slate-200 text-slate-700 font-bold transition-all flex items-center gap-1.5"
-          >
-            <BookOpen className="w-3.5 h-3.5 text-[#15803D]" aria-hidden="true" /> Resource Library
-          </Link>
-        </div>
-      </div>
-
-      {/* ── ACADEMIC INTELLIGENCE LAYER (v3.4) ── */}
-      <StudentSuccessDashboard studentName={enrollment.studentName} />
-      <CompetencyRadar />
-      <LearningTimeline />
-      <AchievementEngine />
-
-      {/* ── 2. MY LEARNING JOURNEY ROADMAP ── */}
-      <div className="p-6 bg-white border border-slate-200 rounded-3xl space-y-4 shadow-sm">
-        <div className="flex items-center justify-between">
-          <div>
-            <h2 className="text-base font-extrabold text-[#0F172A] flex items-center gap-2">
-              <TrendingUp className="w-4 h-4 text-[#15803D]" aria-hidden="true" />
-              My Learning Journey
-            </h2>
-            <p className="text-xs text-slate-500">Your institutional academic progression roadmap</p>
-          </div>
-          <span className="text-xs font-bold text-[#15803D] bg-[#F0FDF4] border border-[#15803D]/20 px-3 py-1 rounded-full">
-            Stage 4: Active Learning
-          </span>
-        </div>
-
-        {/* Progression Stage Bar */}
-        <div className="grid grid-cols-2 sm:grid-cols-4 lg:grid-cols-7 gap-2 text-center pt-2">
-          {[
-            { stage: "01. Application", status: "completed" },
-            { stage: "02. Admission", status: "completed" },
-            { stage: "03. Orientation", status: "completed" },
-            { stage: "04. Active Learning", status: "current" },
-            { stage: "05. PR Evaluation", status: "upcoming" },
-            { stage: "06. Certification", status: "upcoming" },
-            { stage: "07. Career Launch", status: "upcoming" },
-          ].map((s) => (
-            <div
-              key={s.stage}
-              className={`p-2.5 rounded-xl border text-[11px] font-bold transition-all ${
-                s.status === "completed"
-                  ? "bg-[#F0FDF4] border-[#15803D]/30 text-[#15803D]"
-                  : s.status === "current"
-                  ? "bg-[#FEFCE8] border-[#D4A017] text-[#D4A017] shadow-sm"
-                  : "bg-slate-50 border-slate-200 text-slate-400"
-              }`}
-            >
-              {s.status === "completed" && <span className="block text-[9px] text-[#15803D]">✓ Done</span>}
-              {s.status === "current" && <span className="block text-[9px] text-[#D4A017]">● Active Now</span>}
-              {s.status === "upcoming" && <span className="block text-[9px] text-slate-400">○ Pending</span>}
-              <span className="truncate block mt-0.5">{s.stage}</span>
-            </div>
-          ))}
-        </div>
-      </div>
-
-      {/* ── Suspension Banner ── */}
-      {isSuspended && (
-        <div
-          className="relative p-6 rounded-2xl border overflow-hidden flex flex-col md:flex-row items-start md:items-center justify-between gap-4"
-          style={{
-            background: "#FFFBEB",
-            borderColor: "#F59E0B",
-          }}
-        >
-          <div className="flex items-start gap-4 relative">
-            <div className="p-3 bg-amber-100 text-amber-700 rounded-xl border border-amber-200 shrink-0">
-              <Lock className="w-6 h-6" />
+        <div className="p-8 rounded-3xl border border-slate-200 bg-white space-y-6 shadow-sm">
+          <div className="flex items-center gap-4 border-b border-slate-100 pb-6">
+            <div className="w-14 h-14 rounded-2xl bg-[#FEFCE8] flex items-center justify-center border border-[#D4A017]/30 shrink-0">
+              <Lock className="w-7 h-7 text-[#D4A017]" />
             </div>
             <div>
-              <h3 className="text-sm font-extrabold text-amber-900">Account Suspended — Installment Overdue</h3>
-              <p className="text-xs text-amber-800/80 mt-1 max-w-xl leading-relaxed">
-                Your video lessons and assignment access are locked. Settle your outstanding balance to restore full workspace privileges.
-              </p>
-            </div>
-          </div>
-          <button
-            onClick={() => handlePayInstallment(outstandingBalance || 80000)}
-            disabled={paying}
-            className="relative w-full md:w-auto px-6 py-3 font-extrabold rounded-xl text-xs shadow-lg transition-all flex items-center justify-center gap-2 shrink-0 bg-[#F59E0B] text-white hover:bg-[#D97706]"
-          >
-            <CreditCard className="w-4 h-4" />
-            {paying ? "Processing…" : `Pay Now — ₦${(outstandingBalance || 80000).toLocaleString()}`}
-          </button>
-        </div>
-      )}
-
-      {/* ── Flash Message ── */}
-      {message && (
-        <div
-          className={`p-4 rounded-2xl border text-xs flex items-center gap-3 animate-fadeIn ${
-            message.type === "success"
-              ? "bg-[#F0FDF4] border-[#15803D]/20 text-[#15803D]"
-              : "bg-red-50 border-red-200 text-red-700"
-          }`}
-        >
-          {message.type === "success" ? (
-            <CheckCircle2 className="w-4 h-4 text-[#15803D] shrink-0" />
-          ) : (
-            <ShieldAlert className="w-4 h-4 text-red-400 shrink-0" />
-          )}
-          <span className="font-medium">{message.text}</span>
-        </div>
-      )}
-
-      {/* ── Hero Stats Row ── */}
-      <div className="grid grid-cols-2 lg:grid-cols-4 gap-4">
-        {/* Progress Ring Card */}
-        <div className="col-span-2 sm:col-span-1 relative p-5 rounded-2xl border border-slate-200 overflow-hidden bg-white shadow-sm">
-          <div className="text-[10px] font-bold uppercase tracking-widest text-slate-500 mb-3">Track Progress</div>
-          <div className="relative flex items-center justify-center">
-            <ProgressRing percent={progressPercent} />
-            <div className="absolute inset-0 flex flex-col items-center justify-center rotate-0">
-              <span className="text-2xl font-black text-[#0F172A]">{progressPercent}%</span>
-              <span className="text-[9px] text-slate-500 font-semibold">Complete</span>
-            </div>
-          </div>
-          <div className="mt-3 text-center">
-            <div className="text-[10px] text-slate-500">
-              Cohort: <span className="text-[#0F172A] font-bold">{enrollment.cohort?.title || "DWSA Cohort"}</span>
-            </div>
-          </div>
-        </div>
-
-        <StatCard icon={Trophy} label="Modules Done" value={`${completedCount}/${modules.length}`} sub="Completed lessons" accent="#D4A017" />
-        <StatCard
-          icon={BarChart3}
-          label="Total Paid"
-          value={`₦${enrollment.amountPaid.toLocaleString()}`}
-          sub={enrollment.paymentPlan}
-          accent="#15803D"
-        />
-        <StatCard
-          icon={outstandingBalance > 0 ? Flame : Award}
-          label={outstandingBalance > 0 ? "Balance Due" : "Fully Paid"}
-          value={outstandingBalance > 0 ? `₦${outstandingBalance.toLocaleString()}` : "✓ Cleared"}
-          sub={outstandingBalance > 0 ? "Outstanding" : "No balance"}
-          accent={outstandingBalance > 0 ? "#DC2626" : "#15803D"}
-        />
-      </div>
-
-      {/* ── 3. MEET YOUR MENTOR & CAMPUS NEWS ROW ── */}
-      <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-
-        {/* Meet Your Mentor Card */}
-        <div className="p-6 bg-white border border-slate-200 rounded-3xl space-y-4 flex flex-col justify-between shadow-sm">
-          <div className="space-y-3">
-            <div className="flex items-center justify-between">
-              <span className="text-[10px] font-extrabold text-[#D4A017] bg-[#FEFCE8] px-2.5 py-0.5 rounded-full border border-[#D4A017]/30 uppercase">
-                ACADEMIC FACULTY MENTOR
+              <span className="px-2.5 py-0.5 rounded-full bg-[#FEFCE8] border border-[#D4A017]/30 text-[#D4A017] text-[10px] font-black uppercase tracking-wider">
+                {isPendingPayment ? "Enrolment Pending Payment" : "Active Enrolment Required"}
               </span>
-              <span className="text-[10px] text-[#15803D] font-bold uppercase">Office Hours Active</span>
-            </div>
-
-            <div className="flex items-center gap-4">
-              <div className="w-14 h-14 rounded-2xl bg-[#15803D] text-white flex items-center justify-center font-black text-xl shadow-md shrink-0">
-                AJ
-              </div>
-              <div>
-                <h3 className="text-base font-bold text-[#0F172A]">Ayar Japheth Idyege</h3>
-                <p className="text-xs text-[#15803D] font-semibold">Lead Software Architect &amp; DTA Faculty Instructor</p>
-                <p className="text-[11px] text-slate-500 mt-0.5">Office Hours: Mon–Fri, 2:00 PM – 6:00 PM WAT</p>
-              </div>
-            </div>
-          </div>
-
-          <div className="pt-2 border-t border-slate-100 flex items-center justify-between">
-            <a
-              href="https://wa.me/2347082135071?text=Hello%20Ayar%20Japheth%2C%20I%20want%20to%20request%20a%20PR%20review%20or%20mentorship%20session"
-              target="_blank"
-              rel="noreferrer"
-              className="w-full py-2.5 rounded-xl bg-[#F0FDF4] hover:bg-[#15803D] hover:text-white border border-[#15803D]/20 text-[#15803D] font-bold text-xs flex items-center justify-center gap-2 transition-all"
-            >
-              <Users className="w-3.5 h-3.5" aria-hidden="true" /> Request 1-on-1 PR Review Session
-            </a>
-          </div>
-        </div>
-
-        {/* Campus News Widget */}
-        <div className="p-6 bg-white border border-slate-200 rounded-3xl space-y-4 flex flex-col justify-between shadow-sm">
-          <div className="space-y-3">
-            <div className="flex items-center justify-between">
-              <span className="text-[10px] font-extrabold text-[#15803D] bg-[#F0FDF4] px-2.5 py-0.5 rounded-full border border-[#15803D]/20 uppercase">
-                INSTITUTIONAL NEWS
-              </span>
-              <Link href="/knowledge-hub" className="text-[10px] text-[#15803D] font-bold hover:underline">
-                View All News →
-              </Link>
-            </div>
-
-            <div className="space-y-2">
-              <div className="p-3 bg-[#F8FAFC] border border-slate-200 rounded-xl space-y-1">
-                <span className="text-[9px] text-[#D4A017] font-bold uppercase">ANNOUNCEMENT</span>
-                <h4 className="text-xs font-bold text-[#0F172A] leading-snug">
-                  Annual Pan-African Student Hackathon Announced for Cohort 2026
-                </h4>
-                <p className="text-[11px] text-slate-500">Top 3 winning capstone projects will receive seed mentorship and DWSA cloud infrastructure credits.</p>
-              </div>
-            </div>
-          </div>
-        </div>
-
-      </div>
-
-      {/* ── Financial Status Panel ── */}
-      <div className="relative p-6 rounded-2xl border border-slate-200 overflow-hidden bg-white shadow-sm">
-        <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">
-          <div className="flex items-center gap-3">
-            <div className="p-2.5 rounded-xl border border-[#D4A017]/30 bg-[#FEFCE8]">
-              <CreditCard className="w-5 h-5 text-[#D4A017]" />
-            </div>
-            <div>
-              <h3 className="text-sm font-extrabold text-[#0F172A]">Tuition Financial Overview</h3>
-              <p className="text-[11px] text-slate-500 mt-0.5">
-                {enrollment.paymentPlan === "INSTALLMENT"
-                  ? "Installment plan — milestones unlock modular access"
-                  : "Full tuition paid in advance — all access granted"}
+              <h2 className="text-xl font-black text-[#0F172A] mt-1">
+                School of Generative Artificial Intelligence
+              </h2>
+              <p className="text-xs text-slate-500 mt-0.5">
+                Complete your tuition payment to unlock your active cohort workspace &amp; digital campus tools.
               </p>
             </div>
           </div>
 
-          <div className="flex items-center gap-3">
-            <span
-              className={`px-3 py-1 rounded-full text-[10px] font-black uppercase tracking-widest border ${
-                enrollment.status === "ACTIVE"
-                  ? "bg-[#F0FDF4] border-[#15803D]/20 text-[#15803D]"
-                  : enrollment.status === "SUSPENDED"
-                  ? "bg-[#FEFCE8] border-[#D4A017]/30 text-[#D4A017]"
-                  : "bg-slate-100 border-slate-200 text-slate-500"
-              }`}
-            >
-              {enrollment.status}
-            </span>
-
-            {outstandingBalance > 0 && !isSuspended && (
-              <button
-                onClick={() => handlePayInstallment(outstandingBalance)}
-                disabled={paying}
-                className="px-5 py-2.5 font-extrabold rounded-xl text-xs transition-all flex items-center gap-2 shadow-sm btn-press bg-[#D4A017] text-white hover:bg-[#B8860B]"
-              >
-                <CreditCard className="w-3.5 h-3.5" />
-                {paying ? "Processing…" : `Pay ₦${outstandingBalance.toLocaleString()}`}
-              </button>
-            )}
-          </div>
-        </div>
-
-        {/* Progress Bar */}
-        <div className="mt-5 space-y-2">
-          <div className="flex justify-between text-[10px] text-slate-500">
-            <span>Payment Progress</span>
-            <span className="text-[#0F172A] font-bold">
-              ₦{enrollment.amountPaid.toLocaleString()} / ₦{enrollment.totalAmount.toLocaleString()}
-            </span>
-          </div>
-          <div className="h-2 bg-slate-100 rounded-full overflow-hidden border border-slate-200">
-            <div
-              className="h-full rounded-full transition-all duration-700"
-              style={{
-                width: `${Math.min(100, (enrollment.amountPaid / enrollment.totalAmount) * 100)}%`,
-                background: "linear-gradient(90deg, #15803D, #D4A017)",
-              }}
-            />
-          </div>
-        </div>
-      </div>
-
-      {/* ── Main Content: Player + Sidebar ── */}
-      <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
-
-        {/* Left: Video Player + Lesson Content */}
-        <div className="lg:col-span-2 space-y-5">
-          {activeModule ? (
-            <div className="rounded-2xl border border-slate-200 overflow-hidden bg-white shadow-sm">
-              {/* Video */}
-              <div className="p-5 pb-3">
-                <YouTubePlayer
-                  youtubeId={activeModule.youtubeId}
-                  title={activeModule.title}
-                  durationMinutes={activeModule.durationMinutes}
-                  isFreePreview={activeModule.isFreePreview}
-                />
-              </div>
-
-              {/* Lesson Header */}
-              <div className="px-5 py-4 border-t border-slate-100">
-                <div className="flex items-center justify-between flex-wrap gap-3">
-                  <div className="flex items-center gap-2">
-                    <span className="px-2.5 py-1 rounded-lg text-[10px] font-black uppercase tracking-widest border bg-[#FEFCE8] border-[#D4A017]/40 text-[#D4A017]">
-                      Module {activeModule.order}
-                    </span>
-                    <span className="text-[10px] text-[#15803D] font-bold uppercase tracking-wider">
-                      HD Masterclass
-                    </span>
+          {isPendingPayment && enrollment ? (
+            <div className="space-y-6">
+              {/* Invoice Breakdown Card */}
+              <div className="p-5 rounded-2xl bg-[#F8FAFC] border border-slate-200 space-y-4">
+                <div className="flex justify-between items-start">
+                  <div>
+                    <span className="text-[10px] font-bold uppercase tracking-wider text-slate-400">Programme</span>
+                    <p className="text-sm font-extrabold text-[#0F172A]">Generative AI for Work &amp; Productivity</p>
+                    <p className="text-xs text-slate-500 font-mono mt-0.5">Cohort: {enrollment.cohort?.cohortCode || "GENAI-WP-001"}</p>
                   </div>
-                  {activeModule.githubStarterRepo && (
-                    <a
-                      href={activeModule.githubStarterRepo}
-                      target="_blank"
-                      rel="noreferrer"
-                      className="px-3 py-1.5 rounded-xl text-xs font-semibold flex items-center gap-1.5 transition-all hover:scale-105 border bg-[#F0FDF4] border-[#15803D]/20 text-[#15803D] hover:bg-[#15803D] hover:text-white"
-                    >
-                      <Code className="w-3.5 h-3.5" />
-                      Starter Repo
-                      <ExternalLink className="w-3 h-3 opacity-60" />
-                    </a>
-                  )}
-                </div>
-                <h2 className="text-xl font-black text-[#0F172A] mt-3">{activeModule.title}</h2>
-              </div>
-
-              {/* Lesson Notes */}
-              <div className="mx-5 mb-5 p-5 rounded-xl text-xs leading-relaxed whitespace-pre-wrap border border-slate-200 bg-[#F8FAFC] text-[#334155]" style={{ fontFamily: "'JetBrains Mono','Fira Code',monospace", fontSize: "11.5px", lineHeight: "1.8" }}>
-                <div className="flex items-center gap-2 mb-3 pb-3 border-b border-slate-200">
-                  <BookOpen className="w-3.5 h-3.5 text-[#15803D]" />
-                  <span className="text-[10px] font-black uppercase tracking-widest text-[#15803D]">
-                    Lesson Notes
+                  <span className="px-3 py-1 rounded-full bg-[#F0FDF4] border border-[#15803D]/20 text-[#15803D] text-xs font-black">
+                    FULL UPFRONT
                   </span>
                 </div>
-                {activeModule.contentMarkdown}
+
+                <div className="grid grid-cols-3 gap-3 pt-2 border-t border-slate-200/60 text-center">
+                  <div>
+                    <span className="text-[10px] text-slate-400 font-semibold uppercase block">Total Tuition</span>
+                    <strong className="text-sm font-black text-[#0F172A]">₦{totalAmount.toLocaleString()}</strong>
+                  </div>
+                  <div>
+                    <span className="text-[10px] text-slate-400 font-semibold uppercase block">Amount Paid</span>
+                    <strong className="text-sm font-black text-[#15803D]">₦{amountPaid.toLocaleString()}</strong>
+                  </div>
+                  <div>
+                    <span className="text-[10px] text-slate-400 font-semibold uppercase block">Outstanding Balance</span>
+                    <strong className="text-sm font-black text-[#D4A017]">₦{outstandingBalance.toLocaleString()}</strong>
+                  </div>
+                </div>
               </div>
 
-              {/* Assignments */}
-              <div className="px-5 pb-5 space-y-4">
-                <h4 className="text-xs font-black text-[#0F172A] uppercase tracking-wider flex items-center gap-2 pb-3 border-b border-slate-100">
-                  <div className="p-1.5 rounded-lg bg-[#F0FDF4] border border-[#15803D]/20">
-                    <GitPullRequest className="w-3.5 h-3.5 text-[#15803D]" />
-                  </div>
-                  Assignments & Code Submissions
-                </h4>
+              {/* Payment Methods */}
+              <div className="space-y-4">
+                <div className="flex rounded-xl bg-slate-100 p-1 border border-slate-200">
+                  <button
+                    onClick={() => setPaymentTab("paystack")}
+                    className={`flex-1 py-2 text-xs font-extrabold rounded-lg transition-all flex items-center justify-center gap-2 ${
+                      paymentTab === "paystack" ? "bg-white text-[#0F172A] shadow-sm" : "text-slate-500 hover:text-slate-900"
+                    }`}
+                  >
+                    <CreditCard className="w-3.5 h-3.5 text-[#15803D]" />
+                    Pay via Paystack (Instant)
+                  </button>
+                  <button
+                    onClick={() => setPaymentTab("bank")}
+                    className={`flex-1 py-2 text-xs font-extrabold rounded-lg transition-all flex items-center justify-center gap-2 ${
+                      paymentTab === "bank" ? "bg-white text-[#0F172A] shadow-sm" : "text-slate-500 hover:text-slate-900"
+                    }`}
+                  >
+                    <Building2 className="w-3.5 h-3.5 text-[#D4A017]" />
+                    Manual Bank Transfer
+                  </button>
+                </div>
 
-                {activeModule.assignments?.length === 0 ? (
-                  <div className="py-8 text-center">
-                    <div className="w-10 h-10 mx-auto rounded-xl bg-[#F0FDF4] border border-[#15803D]/20 flex items-center justify-center mb-3">
-                      <CheckCircle2 className="w-5 h-5 text-[#15803D]" />
-                    </div>
-                    <p className="text-xs text-slate-500">No assignments for this module.</p>
+                {paymentTab === "paystack" ? (
+                  <div className="p-5 rounded-2xl border border-slate-200 bg-white text-center space-y-4">
+                    <p className="text-xs text-slate-600 leading-relaxed">
+                      Pay securely with Debit Card, Bank Transfer, USSD, or Apple Pay via Paystack. Your workspace will activate automatically upon payment verification.
+                    </p>
+                    <button
+                      onClick={handlePaystackCheckout}
+                      disabled={isInitializingPaystack}
+                      className="w-full py-3.5 rounded-xl bg-[#15803D] hover:bg-[#166534] text-white text-xs font-black flex items-center justify-center gap-2 shadow-md disabled:opacity-50 transition-colors"
+                    >
+                      <CreditCard className="w-4 h-4" />
+                      {isInitializingPaystack ? "Initializing Paystack Gateway…" : `Proceed to Pay ₦${outstandingBalance.toLocaleString()}`}
+                    </button>
                   </div>
                 ) : (
-                  <div className="space-y-4">
-                    {activeModule.assignments.map((assignment: any) => {
-                      const sub = assignment.submissions?.[0];
-                      const isApproved = sub?.status === "APPROVED";
-                      const isRejected = sub?.status === "REJECTED";
-                      const isPending = sub && !isApproved && !isRejected;
-
-                      return (
-                        <div
-                          key={assignment.id}
-                          className={`p-5 rounded-xl border space-y-4 transition-all ${
-                            isApproved
-                              ? "bg-[#F0FDF4] border-[#15803D]/20"
-                              : isRejected
-                              ? "bg-red-50 border-red-200"
-                              : isPending
-                              ? "bg-[#FEFCE8] border-[#D4A017]/30"
-                              : "bg-[#F8FAFC] border-slate-200"
-                          }`}
-                        >
-                          <div className="flex items-start justify-between gap-4">
-                            <div className="flex-1">
-                              <h5 className="text-xs font-black text-[#0F172A] flex items-center gap-2 flex-wrap">
-                                {assignment.title}
-                                {assignment.githubPRRequired && (
-                                  <span className="px-2 py-0.5 bg-[#F0FDF4] text-[#15803D] border border-[#15803D]/20 text-[9px] font-bold rounded-md">
-                                    PR Required
-                                  </span>
-                                )}
-                              </h5>
-                              <p className="text-[11px] text-slate-600 mt-1.5 leading-relaxed">
-                                {assignment.instructions}
-                              </p>
-                            </div>
-                            {sub && (
-                              <span
-                                className={`px-2.5 py-1 rounded-lg text-[10px] font-black border uppercase tracking-wider shrink-0 ${
-                                  isApproved
-                                    ? "bg-[#F0FDF4] border-[#15803D]/20 text-[#15803D]"
-                                    : isRejected
-                                    ? "bg-red-50 border-red-200 text-red-700"
-                                    : "bg-[#FEFCE8] border-[#D4A017]/30 text-[#D4A017]"
-                                }`}
-                              >
-                                {sub.status}
-                              </span>
-                            )}
-                          </div>
-
-                          {sub?.feedback && (
-                            <div className="p-4 rounded-xl border border-slate-200 bg-white space-y-1.5">
-                              <span className="text-[10px] font-black text-slate-500 uppercase tracking-wider block">
-                                Instructor Feedback
-                              </span>
-                              <p className="text-xs text-[#334155] italic leading-relaxed">{sub.feedback}</p>
-                              {sub.grade && (
-                                <div className="flex items-center gap-1.5 mt-1">
-                                  <Star className="w-3 h-3 text-[#D4A017]" />
-                                  <span className="text-[#D4A017] font-black text-xs">Grade: {sub.grade}</span>
-                                </div>
-                              )}
-                            </div>
-                          )}
-
-                          {!isApproved && !isSuspended && (
-                            <div className="space-y-2 pt-1 border-t border-slate-200">
-                              <label className="block text-[11px] font-bold text-slate-600">
-                                {assignment.githubPRRequired
-                                  ? "Submit GitHub Pull Request URL"
-                                  : "Submit Code Repository Link"}
-                              </label>
-                              <div className="flex gap-2">
-                                <input
-                                  type="url"
-                                  placeholder={
-                                    assignment.githubPRRequired
-                                      ? "https://github.com/owner/repo/pull/1"
-                                      : "https://github.com/owner/repo"
-                                  }
-                                  value={prUrls[assignment.id] ?? sub?.githubPRUrl ?? ""}
-                                  onChange={(e) =>
-                                    setPrUrls((prev) => ({ ...prev, [assignment.id]: e.target.value }))
-                                  }
-                                  className="flex-1 px-3 py-2.5 rounded-xl text-xs text-[#0F172A] placeholder-slate-400 focus:outline-none transition-all border border-slate-200 focus:border-[#15803D] bg-white"
-                                />
-                                <button
-                                  onClick={() => handleSubmitPR(assignment.id)}
-                                  disabled={submittingId === assignment.id}
-                                  className="px-4 py-2 font-extrabold rounded-xl text-xs transition-all flex items-center gap-1.5 shrink-0 disabled:opacity-60 bg-[#15803D] text-white hover:bg-[#166534]"
-                                >
-                                  <Send className="w-3.5 h-3.5" />
-                                  {submittingId === assignment.id ? "Validating…" : "Submit PR"}
-                                </button>
-                              </div>
-                            </div>
-                          )}
+                  <div className="p-5 rounded-2xl border border-slate-200 bg-white space-y-5">
+                    <div className="p-4 rounded-xl bg-slate-50 border border-slate-200 space-y-2 text-xs">
+                      <div className="flex justify-between items-center text-slate-500 font-semibold text-[11px] border-b border-slate-200 pb-2">
+                        <span>Bank Name</span>
+                        <strong className="text-[#0F172A]">Guaranty Trust Bank (GTBank)</strong>
+                      </div>
+                      <div className="flex justify-between items-center text-slate-500 font-semibold text-[11px] border-b border-slate-200 pb-2">
+                        <span>Account Name</span>
+                        <strong className="text-[#0F172A]">Digital World Systems Africa Ltd</strong>
+                      </div>
+                      <div className="flex justify-between items-center text-slate-500 font-semibold text-[11px]">
+                        <span>Account Number</span>
+                        <div className="flex items-center gap-1.5">
+                          <strong className="text-[#15803D] font-mono text-xs">0123456789</strong>
+                          <button
+                            type="button"
+                            onClick={copyAccountNumber}
+                            className="p-1 text-slate-400 hover:text-slate-600"
+                            title="Copy Account Number"
+                          >
+                            {copiedAccount ? <Check className="w-3.5 h-3.5 text-[#15803D]" /> : <Copy className="w-3.5 h-3.5" />}
+                          </button>
                         </div>
-                      );
-                    })}
+                      </div>
+                    </div>
+
+                    <form onSubmit={handleBankDepositSubmit} className="space-y-3">
+                      <div>
+                        <label className="block text-[11px] font-extrabold text-[#0F172A] mb-1">
+                          Deposit / Transfer Reference Number
+                        </label>
+                        <input
+                          type="text"
+                          required
+                          value={depositRefInput}
+                          onChange={(e) => setDepositRefInput(e.target.value)}
+                          placeholder="e.g. GTB/TRSF/20260814/99120"
+                          className="w-full px-3.5 py-2.5 rounded-xl border border-slate-200 text-xs font-mono text-[#0F172A] focus:ring-2 focus:ring-[#15803D] focus:outline-none"
+                        />
+                      </div>
+                      <button
+                        type="submit"
+                        disabled={isSubmittingDeposit || !depositRefInput.trim()}
+                        className="w-full py-3 rounded-xl bg-[#D4A017] hover:bg-[#b58712] text-white text-xs font-extrabold flex items-center justify-center gap-2 shadow-sm disabled:opacity-50 transition-colors"
+                      >
+                        {isSubmittingDeposit ? "Submitting Deposit Claim…" : "Submit Deposit Claim for Admin Verification"}
+                      </button>
+                    </form>
                   </div>
                 )}
               </div>
             </div>
           ) : (
-            <div className="rounded-2xl border border-slate-200 bg-white flex flex-col items-center justify-center min-h-[400px] text-center p-10 space-y-4 shadow-sm">
-              <div className="w-16 h-16 rounded-2xl bg-[#F0FDF4] border border-[#15803D]/20 flex items-center justify-center">
-                <PlayCircle className="w-8 h-8 text-[#15803D]" />
-              </div>
-              <div>
-                <h3 className="text-sm font-bold text-[#0F172A]">Ready to Learn?</h3>
-                <p className="text-xs text-slate-500 mt-1">Select a module from the playlist to begin streaming.</p>
-              </div>
-            </div>
-          )}
-        </div>
-
-        {/* Right: Module Playlist Sidebar */}
-        <div className="space-y-3">
-          {/* Sidebar Header */}
-          <div className="p-4 rounded-2xl border border-slate-200 bg-white flex items-center justify-between shadow-sm">
-            <div>
-              <h3 className="text-xs font-black text-[#0F172A] flex items-center gap-2">
-                <Zap className="w-3.5 h-3.5 text-[#15803D]" />
-                Cohort Playlist
-              </h3>
-              <p className="text-[10px] text-slate-500 mt-0.5">
-                {completedCount} of {modules.length} completed
+            <div className="text-center space-y-4">
+              <p className="text-xs text-slate-500 leading-relaxed max-w-sm mx-auto">
+                {data?.message || "You are not registered in an active DWSA cohort. Please contact administration or sign in with an enrolled student account."}
               </p>
-            </div>
-            <div className="flex items-center gap-1.5">
-              <div className="text-[10px] font-black text-[#15803D]">{progressPercent}%</div>
-              <TrendingUp className="w-3.5 h-3.5 text-[#15803D]" />
-            </div>
-          </div>
-
-          {/* Mini overall progress */}
-          <div className="h-1.5 bg-slate-200 rounded-full overflow-hidden">
-            <div
-              className="h-full rounded-full transition-all duration-700"
-              style={{
-                width: `${progressPercent}%`,
-                background: "linear-gradient(90deg, #15803D, #D4A017)",
-              }}
-            />
-          </div>
-
-          {/* Module List */}
-          <div className="space-y-2">
-            {modules.map((mod: any, idx: number) => {
-              const isSelected = activeModule?.id === mod.id;
-              const hasCompleted = mod.assignments?.every((a: any) =>
-                a.submissions?.some((s: any) => s.status === "APPROVED")
-              );
-
-              return (
-                <button
-                  key={mod.id}
-                  onClick={() => !isSuspended && setSelectedModuleId(mod.id)}
-                  disabled={isSuspended}
-                  className={`w-full p-4 rounded-xl border text-left transition-all group relative overflow-hidden ${
-                    isSuspended ? "opacity-40 cursor-not-allowed" : "hover:shadow-sm"
-                  } ${
-                    isSelected
-                      ? "bg-[#F0FDF4] border-[#15803D]/40 shadow-sm"
-                      : "bg-white border-slate-200 hover:border-[#15803D]/30"
-                  }`}
-                >
-                  {isSelected && (
-                    <div className="absolute left-0 top-0 bottom-0 w-1 bg-[#15803D] rounded-r-full" />
-                  )}
-
-                  <div className="flex items-start gap-3">
-                    <div className={`w-7 h-7 rounded-lg flex items-center justify-center shrink-0 border text-[10px] font-black mt-0.5 ${
-                      hasCompleted
-                        ? "bg-[#F0FDF4] border-[#15803D]/30 text-[#15803D]"
-                        : isSelected
-                        ? "bg-[#F0FDF4] border-[#15803D]/40 text-[#15803D]"
-                        : "bg-slate-50 border-slate-200 text-slate-500"
-                    }`}>
-                      {hasCompleted ? (
-                        <CheckCircle2 className="w-3.5 h-3.5" />
-                      ) : isSelected ? (
-                        <PlayCircle className="w-3.5 h-3.5" />
-                      ) : (
-                        <span>{String(idx + 1).padStart(2, "0")}</span>
-                      )}
-                    </div>
-
-                    <div className="flex-1 min-w-0">
-                      <span className={`block text-xs font-bold leading-tight truncate transition-colors ${
-                        isSelected ? "text-[#15803D]" : "text-[#0F172A]"
-                      }`}>
-                        {mod.title}
-                      </span>
-                      <div className="flex items-center gap-2 text-[10px] text-slate-500 mt-1">
-                        {mod.durationMinutes && (
-                          <span className="flex items-center gap-1">
-                            <Clock className="w-2.5 h-2.5" />
-                            {mod.durationMinutes}m
-                          </span>
-                        )}
-                        <span>•</span>
-                        <span>{mod.assignments?.length || 0} task(s)</span>
-                      </div>
-                    </div>
-
-                    <ChevronRight
-                      className={`w-3.5 h-3.5 shrink-0 mt-1 transition-colors ${
-                        isSelected ? "text-[#15803D]" : "text-slate-400"
-                      }`}
-                    />
-                  </div>
-                </button>
-              );
-            })}
-          </div>
-
-          {/* Bottom CTA if suspended */}
-          {isSuspended && (
-            <div className="p-4 rounded-2xl border border-amber-200 bg-amber-50 text-center space-y-3">
-              <Lock className="w-5 h-5 text-amber-600 mx-auto" />
-              <p className="text-[11px] text-amber-700 leading-relaxed">
-                Modules locked. Clear your balance to resume access.
-              </p>
-              <button
-                onClick={() => handlePayInstallment(outstandingBalance || 80000)}
-                disabled={paying}
-                className="w-full py-2.5 rounded-xl text-xs font-extrabold transition-all bg-[#15803D] text-white hover:bg-[#166534]"
-              >
-                {paying ? "Processing…" : `Unlock — ₦${(outstandingBalance || 80000).toLocaleString()}`}
-              </button>
             </div>
           )}
         </div>
       </div>
+    );
+  }
+
+  // Active Enrolled Learner View
+  const { enrollment, track } = data;
+  const modules = track?.modules || [];
+  const activeModule = modules.find((m: any) => m.id === selectedModuleId) || modules[0];
+  const liveClasses = liveClassesData?.liveClasses || [];
+
+  const handleQuizSubmit = async (e: React.FormEvent) => {
+    e.preventDefault();
+    if (!activeQuizId) return;
+    setIsSubmittingQuiz(true);
+    setQuizResult(null);
+    try {
+      const res = await fetch(`/api/student/assessments/${activeQuizId}/submit`, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ submittedAnswers: quizAnswers }),
+      });
+      const json = await res.json();
+      if (!res.ok) throw new Error(json.error || "Quiz submission failed");
+
+      setQuizResult({
+        score: json.score,
+        passed: json.passed,
+        passScore: json.passScore,
+      });
+      refetchQuiz();
+    } catch (err: any) {
+      alert(err.message || "Failed to submit quiz");
+    } finally {
+      setIsSubmittingQuiz(false);
+    }
+  };
+
+  return (
+    <div className="space-y-8 pb-12 animate-fadeInUp">
+      {/* Welcome Banner */}
+      <div className="p-6 sm:p-8 bg-white border border-slate-200 rounded-3xl space-y-5 shadow-sm">
+        <div className="flex flex-col md:flex-row md:items-center justify-between gap-6">
+          <div className="space-y-2">
+            <div className="flex flex-wrap items-center gap-2">
+              <span className="px-3 py-1 rounded-full bg-[#F0FDF4] border border-[#15803D]/20 text-[#15803D] text-xs font-extrabold flex items-center gap-1.5">
+                <GraduationCap className="w-3.5 h-3.5" />
+                DIGITAL CAMPUS WORKSPACE
+              </span>
+              <span className="px-3 py-1 rounded-full bg-[#F0FDF4] border border-[#15803D]/20 text-[#15803D] text-xs font-bold">
+                Cohort Active (ENROLLED)
+              </span>
+            </div>
+            <h1 className="text-2xl sm:text-3xl font-black text-[#0F172A] tracking-tight">
+              Welcome to Campus Home, <span className="text-[#15803D]">{enrollment?.user?.name || "Learner"}</span> 👋
+            </h1>
+            <p className="text-xs sm:text-sm text-slate-500 leading-relaxed max-w-2xl">
+              You are enrolled in the <strong className="text-[#0F172A]">{track?.title || "Generative AI for Work & Productivity"}</strong>. Your coursework, live sessions, and verifiable certification portal are active.
+            </p>
+          </div>
+
+          <div className="shrink-0 p-4 bg-[#F0FDF4] border border-[#15803D]/20 rounded-2xl space-y-1.5 min-w-[200px]">
+            <span className="text-[10px] font-bold text-slate-500 uppercase tracking-wider block">
+              Primary Learning Goal
+            </span>
+            <strong className="text-xs font-extrabold text-[#0F172A] flex items-center gap-1.5">
+              <Target className="w-3.5 h-3.5 text-[#15803D]" />
+              Generative AI Engineer
+            </strong>
+          </div>
+        </div>
+
+        {/* Phase 4 Main Workspace Navigation Tabs */}
+        <div className="flex rounded-2xl bg-slate-100 p-1 border border-slate-200 overflow-x-auto">
+          <button
+            onClick={() => setActiveTab("curriculum")}
+            className={`px-4 py-2 text-xs font-black rounded-xl transition-all flex items-center gap-2 whitespace-nowrap ${
+              activeTab === "curriculum" ? "bg-white text-[#0F172A] shadow-sm" : "text-slate-500 hover:text-slate-900"
+            }`}
+          >
+            <BookOpen className="w-3.5 h-3.5 text-[#15803D]" /> Curriculum &amp; Video Lessons
+          </button>
+          <button
+            onClick={() => setActiveTab("live")}
+            className={`px-4 py-2 text-xs font-black rounded-xl transition-all flex items-center gap-2 whitespace-nowrap ${
+              activeTab === "live" ? "bg-white text-[#0F172A] shadow-sm" : "text-slate-500 hover:text-slate-900"
+            }`}
+          >
+            <Video className="w-3.5 h-3.5 text-[#15803D]" /> Live Classes ({liveClasses.length})
+          </button>
+          <button
+            onClick={() => setActiveTab("quizzes")}
+            className={`px-4 py-2 text-xs font-black rounded-xl transition-all flex items-center gap-2 whitespace-nowrap ${
+              activeTab === "quizzes" ? "bg-white text-[#0F172A] shadow-sm" : "text-slate-500 hover:text-slate-900"
+            }`}
+          >
+            <HelpCircle className="w-3.5 h-3.5 text-[#D4A017]" /> Assessments &amp; Quizzes
+          </button>
+          <button
+            onClick={() => setActiveTab("credentials")}
+            className={`px-4 py-2 text-xs font-black rounded-xl transition-all flex items-center gap-2 whitespace-nowrap ${
+              activeTab === "credentials" ? "bg-white text-[#0F172A] shadow-sm" : "text-slate-500 hover:text-slate-900"
+            }`}
+          >
+            <Award className="w-3.5 h-3.5 text-[#15803D]" /> My Credentials
+          </button>
+        </div>
+      </div>
+
+      {/* TAB 1: CURRICULUM & LESSONS */}
+      {activeTab === "curriculum" && (
+        <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
+          <div className="lg:col-span-2 space-y-5">
+            {activeModule ? (
+              <div className="rounded-2xl border border-slate-200 overflow-hidden bg-white shadow-sm">
+                <div className="p-5 pb-3">
+                  <YouTubePlayer
+                    youtubeId={activeModule.youtubeId}
+                    title={activeModule.title}
+                    durationMinutes={activeModule.durationMinutes}
+                    isFreePreview={activeModule.isFreePreview}
+                  />
+                </div>
+
+                <div className="px-5 py-4 border-t border-slate-100 flex justify-between items-center">
+                  <h2 className="text-xl font-black text-[#0F172A]">{activeModule.title}</h2>
+                  {activeModule.assessments?.[0] && (
+                    <button
+                      onClick={() => {
+                        setActiveQuizId(activeModule.assessments[0].id);
+                        setActiveTab("quizzes");
+                      }}
+                      className="px-3.5 py-1.5 rounded-xl bg-[#FEFCE8] border border-[#D4A017]/30 text-[#D4A017] text-xs font-extrabold flex items-center gap-1.5"
+                    >
+                      <HelpCircle className="w-3.5 h-3.5" /> Take Module Quiz
+                    </button>
+                  )}
+                </div>
+              </div>
+            ) : (
+              <div className="rounded-2xl border border-slate-200 bg-white flex flex-col items-center justify-center min-h-[300px] p-8 text-center">
+                <p className="text-xs text-slate-500">Select a lesson module from your playlist.</p>
+              </div>
+            )}
+          </div>
+        </div>
+      )}
+
+      {/* TAB 2: LIVE CLASSES */}
+      {activeTab === "live" && (
+        <div className="space-y-4">
+          <h3 className="text-lg font-black text-[#0F172A]">Scheduled Cohort Live Sessions</h3>
+          {liveClasses.length === 0 ? (
+            <div className="p-8 rounded-2xl bg-white border border-slate-200 text-center text-slate-500 text-xs font-semibold shadow-sm">
+              No live classes currently scheduled for your cohort. Check back soon!
+            </div>
+          ) : (
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+              {liveClasses.map((cls: any) => (
+                <div key={cls.id} className="p-5 rounded-2xl bg-white border border-slate-200 shadow-sm space-y-3">
+                  <div className="flex justify-between items-start">
+                    <div>
+                      <span className="text-[10px] font-black text-[#15803D] uppercase tracking-wider block">Live Session</span>
+                      <h4 className="text-base font-extrabold text-[#0F172A]">{cls.title}</h4>
+                      <p className="text-xs text-slate-500 mt-0.5">Instructor: {cls.instructorName}</p>
+                    </div>
+                    <span className="px-2.5 py-1 rounded-full bg-[#F0FDF4] border border-[#15803D]/20 text-[#15803D] text-[10px] font-black">
+                      {cls.durationMins} mins
+                    </span>
+                  </div>
+
+                  <div className="flex items-center gap-2 text-xs text-slate-600 font-medium border-t border-slate-100 pt-3">
+                    <Clock className="w-3.5 h-3.5 text-[#D4A017]" />
+                    <span>{new Date(cls.scheduledAt).toLocaleString("en-GB", { weekday: "short", day: "numeric", month: "short", hour: "2-digit", minute: "2-digit" })}</span>
+                  </div>
+
+                  <div className="pt-2">
+                    <a
+                      href={cls.meetingUrl}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="w-full py-2.5 rounded-xl bg-[#15803D] hover:bg-[#166534] text-white text-xs font-black flex items-center justify-center gap-2 shadow-sm transition-colors"
+                    >
+                      <Video className="w-4 h-4" /> Join Virtual Classroom
+                    </a>
+                  </div>
+                </div>
+              ))}
+            </div>
+          )}
+        </div>
+      )}
+
+      {/* TAB 3: ASSESSMENTS & QUIZZES */}
+      {activeTab === "quizzes" && (
+        <div className="space-y-6">
+          {!activeQuizId ? (
+            <div className="space-y-4">
+              <h3 className="text-lg font-black text-[#0F172A]">Module Quizzes &amp; Competency Assessments</h3>
+              <p className="text-xs text-slate-500">Select an assessment to evaluate your knowledge and satisfy academic graduation criteria.</p>
+
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                {modules.map((m: any) => (
+                  <div key={m.id} className="p-5 rounded-2xl bg-white border border-slate-200 shadow-sm space-y-3">
+                    <div className="flex justify-between items-start">
+                      <div>
+                        <span className="text-[10px] font-mono text-slate-400 uppercase">Module {m.order}</span>
+                        <h4 className="text-base font-extrabold text-[#0F172A]">{m.title}</h4>
+                      </div>
+                      <span className="px-2.5 py-1 rounded-full bg-[#FEFCE8] border border-[#D4A017]/30 text-[#D4A017] text-[10px] font-black">
+                        Pass: 70%
+                      </span>
+                    </div>
+
+                    <p className="text-xs text-slate-500">Evaluates generative AI prompt engineering, code structure, and agent workflow principles.</p>
+
+                    <button
+                      onClick={() => setActiveQuizId(m.assessments?.[0]?.id || m.id)}
+                      className="w-full py-2.5 rounded-xl bg-[#0F172A] hover:bg-slate-800 text-white text-xs font-bold flex items-center justify-center gap-2 shadow-sm transition-colors"
+                    >
+                      <HelpCircle className="w-4 h-4 text-[#D4A017]" /> Launch Assessment
+                    </button>
+                  </div>
+                ))}
+              </div>
+            </div>
+          ) : (
+            <div className="p-6 sm:p-8 rounded-3xl bg-white border border-slate-200 shadow-sm space-y-6">
+              <div className="flex justify-between items-center border-b border-slate-100 pb-4">
+                <div>
+                  <button
+                    onClick={() => { setActiveQuizId(null); setQuizResult(null); }}
+                    className="text-xs font-bold text-[#15803D] hover:underline flex items-center gap-1 mb-1"
+                  >
+                    ← Back to Assessments List
+                  </button>
+                  <h3 className="text-xl font-black text-[#0F172A]">{quizData?.assessment?.title || "Module Quiz"}</h3>
+                  <p className="text-xs text-slate-500">{quizData?.assessment?.moduleTitle} · Pass Score: {quizData?.assessment?.passScore}%</p>
+                </div>
+                <span className="px-3 py-1 rounded-full bg-[#FEFCE8] border border-[#D4A017]/30 text-[#D4A017] text-xs font-black">
+                  Max Attempts: {quizData?.assessment?.maxAttempts || 3}
+                </span>
+              </div>
+
+              {quizResult && (
+                <div
+                  className={`p-5 rounded-2xl border text-xs font-bold space-y-2 ${
+                    quizResult.passed
+                      ? "bg-[#F0FDF4] border-[#15803D]/30 text-[#15803D]"
+                      : "bg-red-50 border-red-200 text-red-700"
+                  }`}
+                >
+                  <div className="flex items-center gap-2 text-sm font-black">
+                    {quizResult.passed ? <CheckCircle2 className="w-5 h-5" /> : <Lock className="w-5 h-5" />}
+                    {quizResult.passed ? "Congratulations! You PASSED!" : "Assessment Result: FAILED"}
+                  </div>
+                  <p>Your Score: <strong>{quizResult.score}%</strong> (Required Pass Score: {quizResult.passScore}%)</p>
+                </div>
+              )}
+
+              {quizData?.assessment?.questions?.length > 0 ? (
+                <form onSubmit={handleQuizSubmit} className="space-y-6">
+                  {quizData.assessment.questions.map((q: any, idx: number) => {
+                    const qId = q.id || `q_${idx + 1}`;
+                    return (
+                      <div key={qId} className="p-5 rounded-2xl bg-[#F8FAFC] border border-slate-200 space-y-3">
+                        <p className="text-xs font-extrabold text-[#0F172A]">
+                          Question {idx + 1}: {q.question || q.text}
+                        </p>
+
+                        <div className="space-y-2">
+                          {(q.options || ["Option A", "Option B", "Option C", "Option D"]).map((opt: string, optIdx: number) => (
+                            <label
+                              key={optIdx}
+                              className={`flex items-center gap-3 p-3 rounded-xl border text-xs font-semibold cursor-pointer transition-colors ${
+                                quizAnswers[qId] === opt
+                                  ? "bg-white border-[#15803D] text-[#15803D] shadow-xs"
+                                  : "bg-white border-slate-200 text-slate-700 hover:border-slate-300"
+                              }`}
+                            >
+                              <input
+                                type="radio"
+                                name={qId}
+                                value={opt}
+                                checked={quizAnswers[qId] === opt}
+                                onChange={() => setQuizAnswers((p) => ({ ...p, [qId]: opt }))}
+                                className="text-[#15803D] focus:ring-[#15803D]"
+                              />
+                              <span>{opt}</span>
+                            </label>
+                          ))}
+                        </div>
+                      </div>
+                    );
+                  })}
+
+                  <button
+                    type="submit"
+                    disabled={isSubmittingQuiz}
+                    className="w-full py-3.5 rounded-xl bg-[#15803D] hover:bg-[#166534] text-white text-xs font-black flex items-center justify-center gap-2 shadow-md disabled:opacity-50 transition-colors"
+                  >
+                    <CheckCircle2 className="w-4 h-4" />
+                    {isSubmittingQuiz ? "Submitting Quiz for Server Evaluation…" : "Submit Quiz Answers"}
+                  </button>
+                </form>
+              ) : (
+                <p className="text-xs text-slate-500 text-center py-4">No questions loaded for this assessment.</p>
+              )}
+            </div>
+          )}
+        </div>
+      )}
+
+      {/* TAB 4: MY CREDENTIALS */}
+      {activeTab === "credentials" && (
+        <div className="space-y-4">
+          <h3 className="text-lg font-black text-[#0F172A]">My Verified Academic Credentials</h3>
+
+          {enrollment?.certificates?.length > 0 ? (
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+              {enrollment.certificates.map((cert: any) => (
+                <div key={cert.id} className="p-6 rounded-2xl bg-white border border-[#D4A017]/40 shadow-sm space-y-4">
+                  <div className="flex justify-between items-start">
+                    <div>
+                      <span className="text-[10px] font-black text-[#15803D] uppercase tracking-wider block">Official Diploma</span>
+                      <h4 className="text-base font-extrabold text-[#0F172A]">{cert.certificateType}</h4>
+                      <p className="text-xs font-bold text-[#D4A017]">{cert.programmeTitleSnapshot}</p>
+                    </div>
+                    <span className="px-2.5 py-1 rounded-full bg-[#F0FDF4] border border-[#15803D]/20 text-[#15803D] text-[10px] font-black">
+                      {cert.verificationStatus}
+                    </span>
+                  </div>
+
+                  <div className="space-y-1 text-xs text-slate-600 font-mono">
+                    <p>Number: <strong>{cert.certificateNumber}</strong></p>
+                    <p>Issued: {new Date(cert.issueDate).toLocaleDateString()}</p>
+                  </div>
+
+                  <Link
+                    href={`/certificates/verify/${encodeURIComponent(cert.verificationCode)}`}
+                    target="_blank"
+                    className="w-full py-2.5 rounded-xl bg-[#0F172A] hover:bg-slate-800 text-white text-xs font-black flex items-center justify-center gap-2 shadow-sm transition-colors"
+                  >
+                    <ShieldCheck className="w-4 h-4 text-[#D4A017]" /> View Public Verification Badge
+                  </Link>
+                </div>
+              ))}
+            </div>
+          ) : (
+            <div className="p-8 rounded-2xl bg-white border border-slate-200 text-center space-y-3 shadow-sm">
+              <Award className="w-10 h-10 text-[#D4A017] mx-auto" />
+              <h4 className="text-sm font-extrabold text-[#0F172A]">Certificate Pending Graduation Eligibility</h4>
+              <p className="text-xs text-slate-500 max-w-md mx-auto leading-relaxed">
+                Complete 100% of module assessments and receive approved status on your practical GitHub PR assignments to be awarded your official DTA Professional Diploma.
+              </p>
+            </div>
+          )}
+        </div>
+      )}
     </div>
   );
 }

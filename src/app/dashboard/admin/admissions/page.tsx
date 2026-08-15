@@ -1,238 +1,298 @@
 "use client";
 
 import React, { useState } from "react";
+import { useQuery } from "@tanstack/react-query";
 import {
-  UserPlus, Search, Filter, CheckCircle2, Clock, XCircle,
-  Mail, Phone, Globe, Award, Briefcase, GraduationCap, ChevronRight,
-  Send, ShieldCheck, ChevronDown, Download, Layers
+  FileCheck2,
+  Users,
+  Search,
+  CheckCircle2,
+  XCircle,
+  Clock,
+  ShieldAlert,
+  Sparkles,
+  RefreshCw,
+  Award,
+  Filter,
 } from "lucide-react";
 
-type PipelineStage =
-  | "Application Received"
-  | "Under Review"
-  | "Interview Scheduled"
-  | "Offer Issued"
-  | "Offer Accepted"
-  | "Enrollment Completed";
+export default function AdminAdmissionsPage() {
+  const [statusFilter, setStatusFilter] = useState<string>("");
+  const [filterText, setFilterText] = useState<string>("");
+  const [reviewNotes, setReviewNotes] = useState<Record<string, string>>({});
+  const [actionLoading, setActionLoading] = useState<string | null>(null);
+  const [toast, setToast] = useState<{ type: "success" | "error"; text: string } | null>(null);
 
-interface Applicant {
-  id: number;
-  name: string;
-  email: string;
-  country: string;
-  state: string;
-  programme: string;
-  cohort: string;
-  scholarship: boolean;
-  corporateSponsor: string | null;
-  stage: PipelineStage;
-  appliedDate: string;
-  score: number;
-}
-
-const pipelineStages: PipelineStage[] = [
-  "Application Received",
-  "Under Review",
-  "Interview Scheduled",
-  "Offer Issued",
-  "Offer Accepted",
-  "Enrollment Completed",
-];
-
-const initialApplicants: Applicant[] = [
-  { id: 1, name: "Olamide Bakare", email: "olamide.b@example.com", country: "Nigeria", state: "Lagos", programme: "Full-Stack Software Engineering", cohort: "Cohort Delta", scholarship: true, corporateSponsor: null, stage: "Under Review", appliedDate: "2 days ago", score: 88 },
-  { id: 2, name: "Kwame Mensah", email: "kwame.m@example.com", country: "Ghana", state: "Accra", programme: "Full-Stack Software Engineering", cohort: "Cohort Delta", scholarship: false, corporateSponsor: "MTN Ghana", stage: "Interview Scheduled", appliedDate: "3 days ago", score: 92 },
-  { id: 3, name: "Zainab Al-Mansoor", email: "zainab.a@example.com", country: "Kenya", state: "Nairobi", programme: "AI & Data Engineering", cohort: "Cohort Delta", scholarship: true, corporateSponsor: null, stage: "Offer Issued", appliedDate: "5 days ago", score: 95 },
-  { id: 4, name: "Emeka Nwosu", email: "emeka.n@example.com", country: "Nigeria", state: "Enugu", programme: "Blockchain & Digital Trust", cohort: "Cohort Delta", scholarship: false, corporateSponsor: "Access Bank", stage: "Offer Accepted", appliedDate: "1 week ago", score: 90 },
-  { id: 5, name: "Fatima Bello", email: "fatima.b@example.com", country: "Nigeria", state: "Kano", programme: "Full-Stack Software Engineering", cohort: "Cohort Delta", scholarship: true, corporateSponsor: null, stage: "Application Received", appliedDate: "Today", score: 84 },
-  { id: 6, name: "David Okonjo", email: "david.o@example.com", country: "Nigeria", state: "Abuja", programme: "AI & Data Engineering", cohort: "Cohort Delta", scholarship: false, corporateSponsor: null, stage: "Enrollment Completed", appliedDate: "2 weeks ago", score: 96 },
-];
-
-export default function AdmissionsPage() {
-  const [applicants, setApplicants] = useState<Applicant[]>(initialApplicants);
-  const [search, setSearch] = useState("");
-  const [selectedProgramme, setSelectedProgramme] = useState("All");
-  const [selectedCountry, setSelectedCountry] = useState("All");
-  const [selectedStage, setSelectedStage] = useState("All");
-  const [activeApplicant, setActiveApplicant] = useState<Applicant | null>(null);
-  const [toastMsg, setToastMsg] = useState<string | null>(null);
-
-  const filtered = applicants.filter((a) => {
-    const matchSearch =
-      a.name.toLowerCase().includes(search.toLowerCase()) ||
-      a.email.toLowerCase().includes(search.toLowerCase());
-    const matchProg = selectedProgramme === "All" || a.programme === selectedProgramme;
-    const matchCountry = selectedCountry === "All" || a.country === selectedCountry;
-    const matchStage = selectedStage === "All" || a.stage === selectedStage;
-    return matchSearch && matchProg && matchCountry && matchStage;
+  const { data, isLoading, isError, refetch } = useQuery({
+    queryKey: ["admin-applications", statusFilter],
+    queryFn: async () => {
+      const url = statusFilter ? `/api/admin/applications?status=${statusFilter}` : "/api/admin/applications";
+      const res = await fetch(url);
+      if (!res.ok) throw new Error("Failed to fetch applications");
+      return res.json();
+    },
   });
 
-  const moveStage = (id: number, nextStage: PipelineStage) => {
-    setApplicants((prev) =>
-      prev.map((a) => (a.id === id ? { ...a, stage: nextStage } : a))
-    );
-    setToastMsg(`Applicant stage updated to "${nextStage}"`);
-    setTimeout(() => setToastMsg(null), 2500);
+  const handleUpdateStatus = async (applicationId: string, newStatus: string) => {
+    setActionLoading(applicationId);
+    setToast(null);
+
+    try {
+      const res = await fetch("/api/admin/applications", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          applicationId,
+          status: newStatus,
+          reviewNotes: reviewNotes[applicationId] || "Reviewed by DTA Admissions Office.",
+        }),
+      });
+
+      const json = await res.json();
+      if (!res.ok) throw new Error(json.error || "Failed to update application status");
+
+      setToast({ type: "success", text: `Application status updated to ${newStatus}.` });
+      refetch();
+    } catch (err: any) {
+      setToast({ type: "error", text: err.message });
+    } finally {
+      setActionLoading(null);
+    }
   };
 
+  if (isLoading) {
+    return (
+      <div className="py-20 text-center text-slate-500 text-xs flex flex-col items-center justify-center gap-3">
+        <div className="w-10 h-10 border-2 border-[#15803D] border-t-transparent rounded-full animate-spin" />
+        <span className="font-extrabold text-[#0F172A]">Loading DTA Admissions Registry...</span>
+      </div>
+    );
+  }
+
+  if (isError) {
+    return (
+      <div className="p-8 bg-rose-950/20 border border-rose-800/40 rounded-3xl text-center space-y-3 max-w-md mx-auto my-10 text-rose-300">
+        <ShieldAlert className="w-8 h-8 mx-auto text-rose-400" />
+        <h3 className="text-base font-extrabold">Access Restricted</h3>
+        <p className="text-xs text-slate-400">Admin privileges required to access the Admissions Command Centre.</p>
+      </div>
+    );
+  }
+
+  const applications = data?.applications || [];
+
+  const filteredApps = applications.filter((app: any) => {
+    const term = filterText.toLowerCase();
+    return (
+      app.user?.name?.toLowerCase().includes(term) ||
+      app.user?.email?.toLowerCase().includes(term) ||
+      app.user?.country?.toLowerCase().includes(term) ||
+      app.programme?.title?.toLowerCase().includes(term)
+    );
+  });
+
+  const totalSubmitted = applications.filter((a: any) => a.status === "SUBMITTED").length;
+  const totalUnderReview = applications.filter((a: any) => a.status === "UNDER_REVIEW").length;
+  const totalApproved = applications.filter((a: any) => a.status === "APPROVED").length;
+
   return (
-    <div className="space-y-8 pb-12">
+    <div className="space-y-8">
+      {/* Executive Header */}
+      <div className="bg-white border border-slate-200 rounded-3xl p-6 sm:p-8 space-y-4 shadow-sm">
+        <div className="flex flex-col md:flex-row md:items-center justify-between gap-4">
+          <div>
+            <div className="inline-flex items-center gap-2 px-3 py-1 bg-[#FEFCE8] border border-[#D4A017]/30 text-[#D4A017] rounded-full text-[10px] font-extrabold uppercase tracking-widest mb-2">
+              <Sparkles className="w-3 h-3" /> DTA Operations Command
+            </div>
+            <h1 className="text-2xl sm:text-3xl font-black text-[#0F172A] tracking-tight">
+              Admissions Application <span className="text-[#15803D]">Review Desk</span>
+            </h1>
+            <p className="text-xs text-slate-500 max-w-2xl mt-1">
+              Review incoming candidate applications for the School of Generative Artificial Intelligence, evaluate candidate backgrounds, and issue admission decisions.
+            </p>
+          </div>
+
+          <button
+            onClick={() => refetch()}
+            className="px-4 py-2.5 bg-[#15803D] hover:bg-[#166534] text-white rounded-xl text-xs font-extrabold flex items-center gap-2 transition-all shadow-sm w-fit"
+          >
+            <RefreshCw className="w-3.5 h-3.5" />
+            Refresh Registry
+          </button>
+        </div>
+
+        {/* Stats Row */}
+        <div className="grid grid-cols-2 sm:grid-cols-4 gap-3 pt-2 border-t border-slate-100">
+          <div className="p-4 bg-[#F8FAFC] border border-slate-200 rounded-2xl">
+            <span className="text-[10px] font-extrabold text-slate-400 uppercase block">Total Candidates</span>
+            <span className="text-2xl font-black text-[#0F172A]">{applications.length}</span>
+          </div>
+          <div className="p-4 bg-blue-50/50 border border-blue-200 rounded-2xl">
+            <span className="text-[10px] font-extrabold text-blue-600 uppercase block">Submitted</span>
+            <span className="text-2xl font-black text-blue-700">{totalSubmitted}</span>
+          </div>
+          <div className="p-4 bg-amber-50/50 border border-amber-200 rounded-2xl">
+            <span className="text-[10px] font-extrabold text-amber-600 uppercase block">Under Review</span>
+            <span className="text-2xl font-black text-amber-700">{totalUnderReview}</span>
+          </div>
+          <div className="p-4 bg-emerald-50/50 border border-emerald-200 rounded-2xl">
+            <span className="text-[10px] font-extrabold text-emerald-600 uppercase block">Approved</span>
+            <span className="text-2xl font-black text-emerald-700">{totalApproved}</span>
+          </div>
+        </div>
+      </div>
+
       {/* Toast Alert */}
-      {toastMsg && (
-        <div className="fixed bottom-6 right-6 z-50 px-4 py-3 rounded-2xl bg-[#061428] border border-[#4ade80]/50 text-[#4ade80] text-xs font-extrabold shadow-2xl flex items-center gap-2 animate-fadeInUp">
-          <CheckCircle2 className="w-4 h-4" />
-          {toastMsg}
+      {toast && (
+        <div
+          className={`p-4 rounded-2xl border text-xs font-semibold flex items-center gap-3 ${
+            toast.type === "success"
+              ? "bg-emerald-950/80 border-emerald-500/50 text-emerald-300"
+              : "bg-rose-950/80 border-rose-800/80 text-rose-300"
+          }`}
+        >
+          {toast.type === "success" ? (
+            <CheckCircle2 className="w-4 h-4 text-emerald-400" />
+          ) : (
+            <ShieldAlert className="w-4 h-4 text-rose-400" />
+          )}
+          <span>{toast.text}</span>
         </div>
       )}
 
-      {/* Header */}
-      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
-        <div>
-          <div className="flex items-center gap-2">
-            <span className="px-2.5 py-0.5 rounded bg-[#d4a017]/15 text-[#d4a017] text-[9px] font-black uppercase">ADMISSIONS PIPELINE</span>
-            <span className="text-[10px] text-[#8899b4]">CRM Ready</span>
-          </div>
-          <h2 className="text-2xl font-extrabold text-white mt-1">Admissions Command Centre</h2>
-          <p className="text-xs text-[#8899b4]">Manage 6-stage application pipeline, scholarships, corporate sponsorships &amp; enrollment</p>
-        </div>
-        <div className="flex items-center gap-2">
-          <button className="flex items-center gap-2 px-3 py-2 rounded-xl bg-[#061428] border border-[#1a2f4a] text-[#8899b4] text-xs font-bold hover:text-white transition-all">
-            <Download className="w-3.5 h-3.5" /> Export Pipeline CSV
-          </button>
-        </div>
-      </div>
+      {/* Main Table Desk */}
+      <div className="bg-white border border-slate-200 rounded-3xl p-6 sm:p-8 space-y-6 shadow-sm">
+        <div className="flex flex-col md:flex-row md:items-center justify-between gap-4 border-b border-slate-100 pb-5">
+          <h3 className="text-base font-extrabold text-[#0F172A] flex items-center gap-2">
+            <FileCheck2 className="w-5 h-5 text-[#15803D]" />
+            Candidate Admissions Registry
+          </h3>
 
-      {/* Search & Multi-Filter Bar */}
-      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-3">
-        <div className="relative">
-          <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-[#8899b4]" />
-          <input
-            type="search"
-            placeholder="Search applicants by name or email…"
-            value={search}
-            onChange={(e) => setSearch(e.target.value)}
-            className="w-full pl-9 pr-4 py-2.5 rounded-xl bg-[#061428] border border-[#1a2f4a] text-xs text-white placeholder-[#8899b4] focus:outline-none focus:border-[#d4a017]/60"
-          />
-        </div>
-
-        <select
-          value={selectedProgramme}
-          onChange={(e) => setSelectedProgramme(e.target.value)}
-          className="px-3 py-2.5 rounded-xl bg-[#061428] border border-[#1a2f4a] text-xs text-white focus:outline-none focus:border-[#d4a017]/60"
-        >
-          <option value="All">All Programmes</option>
-          <option value="Full-Stack Software Engineering">Full-Stack Software Engineering</option>
-          <option value="AI & Data Engineering">AI &amp; Data Engineering</option>
-          <option value="Blockchain & Digital Trust">Blockchain &amp; Digital Trust</option>
-        </select>
-
-        <select
-          value={selectedCountry}
-          onChange={(e) => setSelectedCountry(e.target.value)}
-          className="px-3 py-2.5 rounded-xl bg-[#061428] border border-[#1a2f4a] text-xs text-white focus:outline-none focus:border-[#d4a017]/60"
-        >
-          <option value="All">All Countries</option>
-          <option value="Nigeria">Nigeria</option>
-          <option value="Ghana">Ghana</option>
-          <option value="Kenya">Kenya</option>
-        </select>
-
-        <select
-          value={selectedStage}
-          onChange={(e) => setSelectedStage(e.target.value)}
-          className="px-3 py-2.5 rounded-xl bg-[#061428] border border-[#1a2f4a] text-xs text-white focus:outline-none focus:border-[#d4a017]/60"
-        >
-          <option value="All">All Pipeline Stages</option>
-          {pipelineStages.map((s) => (
-            <option key={s} value={s}>{s}</option>
-          ))}
-        </select>
-      </div>
-
-      {/* Pipeline Kanban Overview */}
-      <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-6 gap-3">
-        {pipelineStages.map((stage) => {
-          const count = applicants.filter((a) => a.stage === stage).length;
-          return (
-            <div
-              key={stage}
-              onClick={() => setSelectedStage(selectedStage === stage ? "All" : stage)}
-              className={`rounded-2xl p-3 border transition-all cursor-pointer ${
-                selectedStage === stage
-                  ? "bg-[#d4a017]/15 border-[#d4a017] text-[#d4a017]"
-                  : "bg-[#061428] border-[#1a2f4a] hover:border-[#d4a017]/40"
-              }`}
+          <div className="flex items-center gap-3">
+            {/* Filter Dropdown */}
+            <select
+              value={statusFilter}
+              onChange={(e) => setStatusFilter(e.target.value)}
+              className="px-3.5 py-2 bg-[#F8FAFC] border border-slate-200 rounded-xl text-xs text-[#0F172A] font-semibold"
             >
-              <p className="text-[9px] font-black uppercase text-[#8899b4] truncate">{stage}</p>
-              <p className="text-xl font-extrabold text-white mt-1">{count}</p>
-            </div>
-          );
-        })}
-      </div>
+              <option value="">All Statuses</option>
+              <option value="SUBMITTED">Submitted</option>
+              <option value="UNDER_REVIEW">Under Review</option>
+              <option value="APPROVED">Approved</option>
+              <option value="REJECTED">Rejected</option>
+            </select>
 
-      {/* Applicant Cards List */}
-      <div className="space-y-3">
-        {filtered.length === 0 ? (
-          <div className="rounded-2xl bg-[#061428] border border-[#1a2f4a] p-12 text-center text-[#8899b4] text-xs">
-            No applicants match your filter options.
+            {/* Search Input */}
+            <div className="relative w-full sm:w-64">
+              <Search className="w-4 h-4 text-slate-400 absolute left-3 top-2.5" />
+              <input
+                type="text"
+                placeholder="Search name, email, country..."
+                value={filterText}
+                onChange={(e) => setFilterText(e.target.value)}
+                className="w-full pl-9 pr-3.5 py-2 bg-[#F8FAFC] border border-slate-200 rounded-xl text-xs text-[#0F172A] focus:outline-none focus:border-[#15803D]"
+              />
+            </div>
+          </div>
+        </div>
+
+        {/* Applications List */}
+        {filteredApps.length === 0 ? (
+          <div className="py-12 text-center text-slate-400 space-y-2">
+            <Users className="w-8 h-8 mx-auto text-slate-300" />
+            <p className="text-xs font-semibold">No admissions applications found matching your criteria.</p>
           </div>
         ) : (
-          filtered.map((a) => (
-            <div key={a.id} className="rounded-2xl bg-[#061428] border border-[#1a2f4a] hover:border-[#d4a017]/30 transition-all p-5">
-              <div className="flex flex-col lg:flex-row lg:items-center justify-between gap-4">
-                <div className="flex items-start gap-4">
-                  <div className="w-10 h-10 rounded-xl bg-[#d4a017]/10 border border-[#d4a017]/30 text-[#d4a017] flex items-center justify-center font-black text-base shrink-0">
-                    {a.name[0]}
-                  </div>
+          <div className="space-y-4">
+            {filteredApps.map((app: any) => (
+              <div
+                key={app.id}
+                className="p-5 rounded-2xl bg-[#F8FAFC] border border-slate-200 space-y-4 hover:border-[#15803D]/40 transition-all"
+              >
+                <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 border-b border-slate-200/60 pb-3">
                   <div>
-                    <div className="flex items-center gap-2 flex-wrap">
-                      <h3 className="text-sm font-extrabold text-white">{a.name}</h3>
-                      <span className="px-2.5 py-0.5 rounded-full bg-[#d4a017]/10 border border-[#d4a017]/30 text-[#d4a017] text-[9px] font-black">
-                        {a.stage}
-                      </span>
-                      {a.scholarship && (
-                        <span className="px-2.5 py-0.5 rounded-full bg-[#4ade80]/10 border border-[#4ade80]/30 text-[#4ade80] text-[9px] font-black">
-                          Scholarship Applicant
-                        </span>
-                      )}
-                      {a.corporateSponsor && (
-                        <span className="px-2.5 py-0.5 rounded-full bg-indigo-950/40 border border-indigo-800/40 text-indigo-400 text-[9px] font-black">
-                          Sponsor: {a.corporateSponsor}
-                        </span>
-                      )}
+                    <div className="flex items-center gap-2">
+                      <h4 className="text-sm font-extrabold text-[#0F172A]">{app.user?.name || "Candidate"}</h4>
+                      <span className="text-[10px] text-slate-400 font-mono">({app.user?.email})</span>
                     </div>
-                    <p className="text-xs text-[#8899b4] mt-0.5">{a.programme} · {a.cohort}</p>
-                    <div className="flex items-center gap-3 text-[10px] text-[#8899b4] mt-1">
-                      <span><Globe className="w-3 h-3 inline mr-1" />{a.state}, {a.country}</span>
-                      <span>• Applied {a.appliedDate}</span>
-                      <span>• Assessment Score: <strong className="text-white">{a.score}/100</strong></span>
-                    </div>
+                    <p className="text-xs text-slate-500">
+                      Location: <strong className="text-[#0F172A]">{app.user?.country || "Nigeria"}</strong> {app.user?.state && `(${app.user.state})`} • Phone: <span className="font-mono">{app.user?.phone || "N/A"}</span>
+                    </p>
+                  </div>
+
+                  <div>
+                    <span
+                      className={`px-3 py-1 rounded-full text-[10px] font-black uppercase tracking-wider border ${
+                        app.status === "APPROVED"
+                          ? "bg-emerald-100 border-emerald-300 text-emerald-800"
+                          : app.status === "UNDER_REVIEW"
+                          ? "bg-amber-100 border-amber-300 text-amber-800"
+                          : app.status === "REJECTED"
+                          ? "bg-rose-100 border-rose-300 text-rose-800"
+                          : "bg-blue-100 border-blue-300 text-blue-800"
+                      }`}
+                    >
+                      {app.status}
+                    </span>
                   </div>
                 </div>
 
-                {/* Stage Advancement Action Bar */}
-                <div className="flex items-center gap-2 shrink-0 flex-wrap">
-                  {a.stage !== "Enrollment Completed" && (
-                    <select
-                      value={a.stage}
-                      onChange={(e) => moveStage(a.id, e.target.value as PipelineStage)}
-                      className="px-3 py-1.5 rounded-xl bg-[#030e1f] border border-[#d4a017]/30 text-[#d4a017] text-[10px] font-extrabold focus:outline-none"
-                    >
-                      {pipelineStages.map((stg) => (
-                        <option key={stg} value={stg}>Advance to: {stg}</option>
-                      ))}
-                    </select>
-                  )}
-
-                  {a.stage === "Enrollment Completed" && (
-                    <span className="px-3 py-1.5 rounded-xl bg-[#4ade80]/15 border border-[#4ade80]/30 text-[#4ade80] text-[10px] font-black flex items-center gap-1">
-                      <CheckCircle2 className="w-3.5 h-3.5" /> ENROLLED LEARNER
+                {/* Candidate Background */}
+                <div className="grid grid-cols-1 md:grid-cols-3 gap-3 text-xs">
+                  <div className="p-3 bg-white border border-slate-200 rounded-xl space-y-1">
+                    <span className="text-[9px] font-black text-slate-400 uppercase block">Programme</span>
+                    <span className="font-extrabold text-[#0F172A] block">{app.programme?.title}</span>
+                  </div>
+                  <div className="p-3 bg-white border border-slate-200 rounded-xl space-y-1">
+                    <span className="text-[9px] font-black text-slate-400 uppercase block">Experience &amp; Format</span>
+                    <span className="font-semibold text-slate-700 block">
+                      {app.user?.experienceLevel || "BEGINNER"} • {app.user?.preferredFormat || "HYBRID"}
                     </span>
-                  )}
+                  </div>
+                  <div className="p-3 bg-white border border-slate-200 rounded-xl space-y-1">
+                    <span className="text-[9px] font-black text-slate-400 uppercase block">Professional Background</span>
+                    <span className="text-slate-600 line-clamp-2">{app.user?.professionalBackground || "No background details submitted"}</span>
+                  </div>
+                </div>
+
+                {/* Review Notes & Actions */}
+                <div className="flex flex-col sm:flex-row items-center justify-between gap-3 pt-2">
+                  <input
+                    type="text"
+                    placeholder="Instructor / Admin review notes..."
+                    value={reviewNotes[app.id] || ""}
+                    onChange={(e) => setReviewNotes((prev) => ({ ...prev, [app.id]: e.target.value }))}
+                    className="w-full sm:w-80 px-3.5 py-1.5 bg-white border border-slate-200 rounded-xl text-xs text-[#0F172A] focus:outline-none focus:border-[#15803D]"
+                  />
+
+                  <div className="flex items-center gap-2 shrink-0">
+                    <button
+                      onClick={() => handleUpdateStatus(app.id, "UNDER_REVIEW")}
+                      disabled={actionLoading === app.id}
+                      className="px-3 py-1.5 rounded-xl bg-amber-50 border border-amber-200 text-amber-800 text-[11px] font-bold hover:bg-amber-100 transition-all"
+                    >
+                      Under Review
+                    </button>
+                    <button
+                      onClick={() => handleUpdateStatus(app.id, "REJECTED")}
+                      disabled={actionLoading === app.id}
+                      className="px-3 py-1.5 rounded-xl bg-rose-50 border border-rose-200 text-rose-800 text-[11px] font-bold hover:bg-rose-100 transition-all"
+                    >
+                      Reject
+                    </button>
+                    <button
+                      onClick={() => handleUpdateStatus(app.id, "APPROVED")}
+                      disabled={actionLoading === app.id}
+                      className="px-4 py-1.5 rounded-xl bg-[#15803D] hover:bg-[#166534] text-white text-[11px] font-extrabold shadow-sm transition-all flex items-center gap-1"
+                    >
+                      <CheckCircle2 className="w-3.5 h-3.5" />
+                      Approve Candidate
+                    </button>
+                  </div>
                 </div>
               </div>
-            </div>
-          ))
+            ))}
+          </div>
         )}
       </div>
     </div>

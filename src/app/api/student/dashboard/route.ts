@@ -19,15 +19,18 @@ export async function GET() {
       },
     });
 
-    if (!enrollment) {
+    // Security Gate: Paid course content is unlocked ONLY when enrollment.status === "ENROLLED"
+    if (!enrollment || enrollment.status !== "ENROLLED") {
       return NextResponse.json({
         enrolled: false,
-        message: "You are not enrolled in any cohort yet.",
+        enrollmentStatus: enrollment?.status || "NO_ENROLMENT",
+        message: enrollment
+          ? "Your enrolment is currently PENDING_PAYMENT. Verified tuition payment is required to access paid course modules."
+          : "You are not enrolled in an active cohort.",
       });
     }
 
-    // 2. Fetch track, modules, and assignments. 
-    // Since there's one main track, we'll fetch the first available track or search for it.
+    // 2. Fetch track, modules, and assignments for verified ENROLLED students
     const track = await prisma.track.findFirst({
       include: {
         modules: {

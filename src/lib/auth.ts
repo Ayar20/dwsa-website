@@ -26,8 +26,8 @@ export const authOptions: NextAuthOptions = {
 
         let isValid = bcrypt.compareSync(credentials.password, user.passwordHash);
 
-        // Fallback for common demo password variations (student123 / password123 / admin123)
-        if (!isValid) {
+        // Fallback for common demo password variations (development/testing environments only)
+        if (!isValid && process.env.NODE_ENV !== "production") {
           if (
             (credentials.email === "student@dwsa.edu" && (credentials.password === "student123" || credentials.password === "password123")) ||
             (credentials.email === "admin@dwsa.edu" && (credentials.password === "admin123" || credentials.password === "password123")) ||

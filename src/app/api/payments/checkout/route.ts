@@ -30,13 +30,14 @@ export async function POST(req: Request) {
       console.warn("PAYSTACK_SECRET_KEY is missing. Simulating mock payment...");
 
       // Update enrollment directly in mock mode
-      const newAmountPaid = enrollment.amountPaid + amount;
+      const currentPaid = Number(enrollment.amountPaid);
+      const newAmountPaid = currentPaid + amount;
       let newStatus = enrollment.status;
 
-      if (enrollment.paymentPlan === "FULL_UPFRONT" && newAmountPaid >= 180000) {
-        newStatus = "ACTIVE";
+      if (enrollment.paymentPlan === "FULL_UPFRONT" && newAmountPaid >= Number(enrollment.totalAmount)) {
+        newStatus = "ENROLLED";
       } else if (enrollment.paymentPlan === "INSTALLMENT" && newAmountPaid >= 100000) {
-        newStatus = "ACTIVE"; // Week 1-4 unlocked, active
+        newStatus = "ENROLLED"; // Week 1-4 unlocked, active
       }
 
       await prisma.$transaction([
@@ -50,9 +51,11 @@ export async function POST(req: Request) {
         prisma.paymentRecord.create({
           data: {
             enrollmentId,
-            paystackRef: `MOCK_PAY_${Date.now()}_${Math.floor(Math.random() * 1000)}`,
+            provider: "PAYSTACK",
+            providerRef: `MOCK_PAY_${Date.now()}_${Math.floor(Math.random() * 1000)}`,
             amount,
-            channel: "mock_gateway",
+            currency: "NGN",
+            status: "SUCCESSFUL",
           },
         }),
       ]);
