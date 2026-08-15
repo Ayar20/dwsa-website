@@ -81,13 +81,24 @@ export async function POST(req: Request) {
       },
     });
 
-    // Dynamic public bank instructions returned securely
-    const bankDetails = {
-      bankName: process.env.DWSA_BANK_NAME || "Guaranty Trust Bank (GTBank)",
-      accountNumber: process.env.DWSA_ACCOUNT_NUMBER || "0123456789",
-      accountName: process.env.DWSA_ACCOUNT_NAME || "Digital World Systems Africa Ltd (RC 9718724)",
-      sortCode: process.env.DWSA_BANK_SORT_CODE || "058152052",
-    };
+    // Dynamic official corporate bank accounts returned securely
+    const bankDetails = [
+      {
+        bankName: "Zenith Bank",
+        accountNumber: "1312782600",
+        accountName: "Digital World Systems Africa Ltd",
+      },
+      {
+        bankName: "Fidelity Bank",
+        accountNumber: "5601785436",
+        accountName: "Digital World Systems Africa Ltd",
+      },
+      {
+        bankName: "United Bank for Africa (UBA)",
+        accountNumber: "1031059065",
+        accountName: "Digital World Systems Africa Ltd",
+      },
+    ];
 
     return NextResponse.json({
       success: true,

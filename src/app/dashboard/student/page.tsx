@@ -171,10 +171,16 @@ export default function StudentDashboardPage() {
       }
     };
 
-    const copyAccountNumber = () => {
-      navigator.clipboard.writeText("0123456789");
-      setCopiedAccount(true);
-      setTimeout(() => setCopiedAccount(false), 2000);
+    const dwsaBankAccounts = [
+      { bankName: "Zenith Bank", accountNumber: "1312782600", accountName: "Digital World Systems Africa Ltd" },
+      { bankName: "Fidelity Bank", accountNumber: "5601785436", accountName: "Digital World Systems Africa Ltd" },
+      { bankName: "United Bank for Africa (UBA)", accountNumber: "1031059065", accountName: "Digital World Systems Africa Ltd" },
+    ];
+
+    const copyAccountNumber = (accNo: string) => {
+      navigator.clipboard.writeText(accNo);
+      setCopiedAccount(accNo);
+      setTimeout(() => setCopiedAccount(null), 2000);
     };
 
     return (
@@ -287,29 +293,37 @@ export default function StudentDashboardPage() {
                   </div>
                 ) : (
                   <div className="p-5 rounded-2xl border border-slate-200 bg-white space-y-5">
-                    <div className="p-4 rounded-xl bg-slate-50 border border-slate-200 space-y-2 text-xs">
-                      <div className="flex justify-between items-center text-slate-500 font-semibold text-[11px] border-b border-slate-200 pb-2">
-                        <span>Bank Name</span>
-                        <strong className="text-[#0F172A]">Guaranty Trust Bank (GTBank)</strong>
-                      </div>
-                      <div className="flex justify-between items-center text-slate-500 font-semibold text-[11px] border-b border-slate-200 pb-2">
-                        <span>Account Name</span>
-                        <strong className="text-[#0F172A]">Digital World Systems Africa Ltd</strong>
-                      </div>
-                      <div className="flex justify-between items-center text-slate-500 font-semibold text-[11px]">
-                        <span>Account Number</span>
-                        <div className="flex items-center gap-1.5">
-                          <strong className="text-[#15803D] font-mono text-xs">0123456789</strong>
-                          <button
-                            type="button"
-                            onClick={copyAccountNumber}
-                            className="p-1 text-slate-400 hover:text-slate-600"
-                            title="Copy Account Number"
-                          >
-                            {copiedAccount ? <Check className="w-3.5 h-3.5 text-[#15803D]" /> : <Copy className="w-3.5 h-3.5" />}
-                          </button>
+                    <p className="text-xs text-slate-600">
+                      Transfer tuition to any of the official DWSA corporate bank accounts below and submit your transaction reference:
+                    </p>
+
+                    <div className="space-y-3">
+                      {dwsaBankAccounts.map((bank) => (
+                        <div key={bank.accountNumber} className="p-3.5 rounded-xl bg-slate-50 border border-slate-200 space-y-1 text-xs">
+                          <div className="flex justify-between items-center text-slate-500 font-semibold text-[11px]">
+                            <span className="font-extrabold text-[#0F172A]">{bank.bankName}</span>
+                            <span className="text-[10px] text-slate-400">{bank.accountName}</span>
+                          </div>
+                          <div className="flex justify-between items-center pt-1 border-t border-slate-200/60">
+                            <span className="text-[10px] text-slate-500 uppercase tracking-wider font-semibold">Account No.</span>
+                            <div className="flex items-center gap-1.5">
+                              <strong className="text-[#15803D] font-mono text-xs tracking-wider">{bank.accountNumber}</strong>
+                              <button
+                                type="button"
+                                onClick={() => copyAccountNumber(bank.accountNumber)}
+                                className="p-1 text-slate-400 hover:text-[#15803D] rounded transition-colors"
+                                title="Copy Account Number"
+                              >
+                                {copiedAccount === bank.accountNumber ? (
+                                  <Check className="w-3.5 h-3.5 text-[#15803D]" />
+                                ) : (
+                                  <Copy className="w-3.5 h-3.5" />
+                                )}
+                              </button>
+                            </div>
+                          </div>
                         </div>
-                      </div>
+                      ))}
                     </div>
 
                     <form onSubmit={handleBankDepositSubmit} className="space-y-3">
