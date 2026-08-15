@@ -20,7 +20,12 @@ export default function Navbar() {
   const pathname = usePathname();
   const [mobileOpen, setMobileOpen] = useState(false);
 
-  const role = session?.user?.role || "STUDENT";
+  const rawRole = session?.user?.role;
+  const role = rawRole === "LEARNER" || rawRole === "APPLICANT"
+    ? "STUDENT"
+    : rawRole === "DTA_ADMINISTRATOR" || rawRole === "SUPER_ADMINISTRATOR" || rawRole === "DTA_MANAGEMENT"
+    ? "ADMIN"
+    : rawRole || "STUDENT";
 
   const roleColors: Record<string, string> = {
     ADMIN: "bg-[#d4a017]/20 border-[#d4a017]/50 text-[#d4a017]",

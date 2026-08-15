@@ -28,7 +28,13 @@ export default function LoginPage() {
       setError("Invalid credentials. Use Quick Login buttons below for testing.");
       setLoading(false);
     } else {
-      router.push("/dashboard/student");
+      if (email.toLowerCase().includes("admin")) {
+        router.push("/dashboard/admin");
+      } else if (email.toLowerCase().includes("instructor")) {
+        router.push("/dashboard/instructor");
+      } else {
+        router.push("/dashboard/student");
+      }
       router.refresh();
     }
   };

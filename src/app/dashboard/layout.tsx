@@ -46,7 +46,7 @@ export default function DashboardLayout({
     if (status === "unauthenticated") {
       router.push("/login");
     } else if (status === "authenticated" && session?.user) {
-      if (session.user.role === "STUDENT" && !session.user.prideAccepted) {
+      if ((session.user.role === "STUDENT" || session.user.role === "LEARNER" || session.user.role === "APPLICANT") && !session.user.prideAccepted) {
         setShowPrideModal(true);
       } else {
         setShowPrideModal(false);
@@ -68,7 +68,7 @@ export default function DashboardLayout({
     );
   }
 
-  const isStudent = session?.user?.role === "STUDENT";
+  const isStudent = session?.user?.role === "STUDENT" || session?.user?.role === "LEARNER" || session?.user?.role === "APPLICANT";
   const isInstructor = session?.user?.role === "INSTRUCTOR";
   const isPlatformRoute = pathname.startsWith("/dashboard/platform");
   const userRole = isStudent ? "STUDENT" : isInstructor ? "INSTRUCTOR" : isPlatformRoute ? "SUPER_ADMIN" : "ADMIN";
