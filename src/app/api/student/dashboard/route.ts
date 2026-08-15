@@ -23,6 +23,7 @@ export async function GET() {
     if (!enrollment || enrollment.status !== "ENROLLED") {
       return NextResponse.json({
         enrolled: false,
+        enrollment,
         enrollmentStatus: enrollment?.status || "NO_ENROLMENT",
         message: enrollment
           ? "Your enrolment is currently PENDING_PAYMENT. Verified tuition payment is required to access paid course modules."

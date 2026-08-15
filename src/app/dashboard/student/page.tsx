@@ -113,8 +113,8 @@ export default function StudentDashboardPage() {
   if (isError || !data || !data.enrolled) {
     const isPendingPayment = data?.enrollmentStatus === "PENDING_PAYMENT";
     const enrollment = data?.enrollment;
-    const totalAmount = enrollment?.totalAmount || 150000;
-    const amountPaid = enrollment?.amountPaid || 0;
+    const totalAmount = Number(enrollment?.totalAmount) || 150000;
+    const amountPaid = Number(enrollment?.amountPaid) || 0;
     const outstandingBalance = totalAmount - amountPaid;
 
     const handlePaystackCheckout = async () => {
