@@ -42,7 +42,7 @@ export default function RegisterPage() {
           password,
           phone,
           programmeSlug: "generative-ai-for-work-and-productivity",
-          paymentPlan,
+          paymentPlan: "FULL_UPFRONT",
         }),
       });
 
