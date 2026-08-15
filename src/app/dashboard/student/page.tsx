@@ -47,7 +47,7 @@ export default function StudentDashboardPage() {
   const [isInitializingPaystack, setIsInitializingPaystack] = useState(false);
   const [depositRefInput, setDepositRefInput] = useState("");
   const [isSubmittingDeposit, setIsSubmittingDeposit] = useState(false);
-  const [copiedAccount, setCopiedAccount] = useState(false);
+  const [copiedAccount, setCopiedAccount] = useState<string | null>(null);
 
   // 1. Student Main Dashboard Data
   const { data, isLoading, isError, refetch } = useQuery({
