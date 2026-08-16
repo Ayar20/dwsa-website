@@ -2,7 +2,7 @@
 
 import React, { useState } from "react";
 import { Sparkles, Send, TrendingUp, RefreshCw, FileText, CheckCircle2, Building2 } from "lucide-react";
-import { AIOrchestrator } from "@/lib/institutionOS/AIOrchestrator";
+import { requestAI } from "@/lib/ai-client";
 import { PromptLibraryService } from "@/lib/institutionOS/PromptLibraryService";
 
 export default function ExecutiveAIAssistantPage() {
@@ -17,9 +17,12 @@ export default function ExecutiveAIAssistantPage() {
     if (!query.trim()) return;
 
     setLoading(true);
-    const res = await AIOrchestrator.processRequest(query, { role: "Admin" });
-    setBriefing(res.response);
-    setLoading(false);
+    try {
+      const res = await requestAI(query, "Admin");
+      setBriefing(res.response);
+    } finally {
+      setLoading(false);
+    }
   };
 
   return (
@@ -27,7 +30,7 @@ export default function ExecutiveAIAssistantPage() {
       <div>
         <div className="flex items-center gap-2 mb-1">
           <span className="px-2.5 py-0.5 rounded bg-[#d4a017]/15 text-[#d4a017] text-[9px] font-black uppercase border border-[#d4a017]/30">EXECUTIVE AI</span>
-          <span className="text-[10px] text-[#8899b4]">InstitutionOS v3.8 · Provider: {AIOrchestrator.getActiveProvider()}</span>
+          <span className="text-[10px] text-[#8899b4]">InstitutionOS v3.8 · Provider: Gemini</span>
         </div>
         <h2 className="text-2xl font-extrabold text-white">Executive AI Advisory Hub</h2>
         <p className="text-xs text-[#8899b4]">Executive briefings, institution health analysis, revenue insights &amp; natural-language report synthesis</p>

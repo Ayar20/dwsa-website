@@ -3,8 +3,9 @@
 import React, { useState } from "react";
 import { ShieldCheck, Cpu, Sliders, CheckCircle2, AlertTriangle, RefreshCw, Lock } from "lucide-react";
 import { AIGovernanceService, AIGovernanceConfig } from "@/lib/institutionOS/AIGovernanceService";
-import { AIOrchestrator, LLMProvider } from "@/lib/institutionOS/AIOrchestrator";
 import { AIAnalyticsService } from "@/lib/institutionOS/AIAnalyticsService";
+
+type LLMProvider = AIGovernanceConfig["activeProvider"];
 
 export default function AIGovernanceCentrePage() {
   const [config, setConfig] = useState<AIGovernanceConfig>(() => AIGovernanceService.getConfig());
@@ -13,7 +14,11 @@ export default function AIGovernanceCentrePage() {
   const [toast, setToast] = useState<string | null>(null);
 
   const handleProviderChange = (provider: LLMProvider) => {
-    AIOrchestrator.setActiveProvider(provider);
+    if (provider !== "Gemini") {
+      setToast(`${provider} is not configured for live requests yet.`);
+      setTimeout(() => setToast(null), 3000);
+      return;
+    }
     const updated = AIGovernanceService.updateConfig({ activeProvider: provider });
     setConfig(updated);
     setToast(`Active LLM Provider switched to ${provider}`);

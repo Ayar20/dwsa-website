@@ -2,7 +2,7 @@
 
 import React, { useState } from "react";
 import { Sparkles, Send, BookOpen, Code, Briefcase, Star, Bookmark, Share2, RefreshCw, CheckCircle2 } from "lucide-react";
-import { AIOrchestrator, AIResponse } from "@/lib/institutionOS/AIOrchestrator";
+import { requestAI } from "@/lib/ai-client";
 import { PromptLibraryService, PromptTemplate } from "@/lib/institutionOS/PromptLibraryService";
 import { RecommendationService, AIRecommendation } from "@/lib/institutionOS/RecommendationService";
 
@@ -30,18 +30,14 @@ export default function StudentAIAssistantPage() {
     if (!textToSend) setPrompt("");
     setLoading(true);
 
-    const res: AIResponse = await AIOrchestrator.processRequest(query, { role: "Student" });
-
-    setChatHistory((prev) => [
-      ...prev,
-      {
-        sender: "ai",
-        text: res.response,
-        sources: res.groundedSources,
-        time: res.timestamp,
-      },
-    ]);
-    setLoading(false);
+    try {
+      const res = await requestAI(query, "Student");
+      setChatHistory((prev) => [...prev, { sender: "ai", text: res.response, sources: res.groundedSources, time: res.timestamp }]);
+    } catch (error) {
+      setToast(error instanceof Error ? error.message : "Unable to reach the AI service.");
+    } finally {
+      setLoading(false);
+    }
   };
 
   const handlePromptClick = (p: PromptTemplate) => {
@@ -61,7 +57,7 @@ export default function StudentAIAssistantPage() {
       <div>
         <div className="flex items-center gap-2 mb-1">
           <span className="px-2.5 py-0.5 rounded bg-[#818cf8]/15 text-[#818cf8] text-[9px] font-black uppercase border border-[#818cf8]/30">AI COMPANION</span>
-          <span className="text-[10px] text-[#8899b4]">InstitutionOS v3.8 · Provider: {AIOrchestrator.getActiveProvider()}</span>
+          <span className="text-[10px] text-[#8899b4]">InstitutionOS v3.8 · Provider: Gemini</span>
         </div>
         <h2 className="text-2xl font-extrabold text-white">Student AI Learning Assistant</h2>
         <p className="text-xs text-[#8899b4]">Personalized learning coach, code reviewer, assignment guide &amp; career placement advisor</p>
