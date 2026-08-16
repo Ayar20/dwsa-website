@@ -42,8 +42,13 @@ export class AIOrchestrator {
   }
 
   public static async processRequest(prompt: string, options: AICompletionOptions): Promise<AIResponse> {
-    const apiKey = process.env.GEMINI_API_KEY;
-    if (!apiKey) throw new Error("AI service is not configured. Add GEMINI_API_KEY to the server environment.");
+    const apiKey =
+      process.env.GEMINI_API_KEY ||
+      process.env.GOOGLE_API_KEY ||
+      process.env.GOOGLE_GENERATIVE_AI_API_KEY ||
+      process.env.GOOGLE_AI_KEY;
+
+    if (!apiKey) throw new Error("AI service is not configured. Add GEMINI_API_KEY (or GOOGLE_API_KEY) to the server environment.");
 
     const model = process.env.GEMINI_MODEL || "gemini-2.0-flash";
     const startTime = Date.now();
