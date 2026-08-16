@@ -1,6 +1,6 @@
 const { Pool } = require('pg');
 
-export default async function handler(req, res) {
+module.exports = async function handler(req, res) {
   if (req.method !== 'GET') {
     return res.status(405).json({ message: 'Method Not Allowed' });
   }
@@ -21,7 +21,7 @@ export default async function handler(req, res) {
 
   try {
     const result = await pool.query(
-      "SELECT id, name, email, program, to_char(created_at, 'MM/DD/YYYY') as date FROM registrations ORDER BY created_at DESC"
+      "SELECT id, name, email, phone, program, payment_option, learning_mode, to_char(created_at, 'MM/DD/YYYY') as date FROM registrations ORDER BY created_at DESC"
     );
 
     res.status(200).json({ success: true, data: result.rows });
@@ -31,4 +31,4 @@ export default async function handler(req, res) {
   } finally {
     await pool.end();
   }
-}
+};

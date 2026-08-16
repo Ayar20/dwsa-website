@@ -1,11 +1,10 @@
 const { Pool } = require('pg');
 
-export default async function handler(req, res) {
+module.exports = async function handler(req, res) {
   if (req.method !== 'POST') {
     return res.status(405).json({ message: 'Method Not Allowed' });
   }
 
-  // Validate admin token
   const authHeader = req.headers.authorization;
   const adminPassword = process.env.ADMIN_PASSWORD || 'admin123';
   const expectedToken = `Bearer ${Buffer.from(adminPassword).toString('base64')}`;
@@ -27,7 +26,6 @@ export default async function handler(req, res) {
   });
 
   try {
-    // Auto-create the books table if it doesn't exist
     await pool.query(`
       CREATE TABLE IF NOT EXISTS books (
         id SERIAL PRIMARY KEY,
@@ -52,4 +50,4 @@ export default async function handler(req, res) {
   } finally {
     await pool.end();
   }
-}
+};

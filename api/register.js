@@ -1,6 +1,6 @@
 const { Pool } = require('pg');
 
-export default async function handler(req, res) {
+module.exports = async function handler(req, res) {
   if (req.method !== 'POST') {
     return res.status(405).json({ message: 'Method Not Allowed' });
   }
@@ -18,7 +18,6 @@ export default async function handler(req, res) {
   });
 
   try {
-    // Ensure registrations table exists with all modern columns
     await pool.query(`
       CREATE TABLE IF NOT EXISTS registrations (
         id SERIAL PRIMARY KEY,
@@ -32,7 +31,6 @@ export default async function handler(req, res) {
       )
     `);
 
-    // Ensure missing columns exist if table was previously created with fewer columns
     await pool.query(`
       ALTER TABLE registrations 
       ADD COLUMN IF NOT EXISTS phone VARCHAR(50),
@@ -61,4 +59,4 @@ export default async function handler(req, res) {
   } finally {
     await pool.end();
   }
-}
+};

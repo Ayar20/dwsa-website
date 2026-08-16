@@ -30,7 +30,7 @@ const DEFAULT_ADVERT = {
   is_active: true
 };
 
-export default async function handler(req, res) {
+module.exports = async function handler(req, res) {
   if (req.method !== 'GET') {
     return res.status(405).json({ message: 'Method Not Allowed' });
   }
@@ -47,7 +47,6 @@ export default async function handler(req, res) {
   });
 
   try {
-    // Ensure table exists
     await pool.query(`
       CREATE TABLE IF NOT EXISTS adverts (
         id VARCHAR(50) PRIMARY KEY,
@@ -69,4 +68,4 @@ export default async function handler(req, res) {
   } finally {
     await pool.end();
   }
-}
+};

@@ -1,6 +1,6 @@
 const { Pool } = require('pg');
 
-export default async function handler(req, res) {
+module.exports = async function handler(req, res) {
   if (req.method !== 'GET') {
     return res.status(405).json({ message: 'Method Not Allowed' });
   }
@@ -12,7 +12,6 @@ export default async function handler(req, res) {
   });
 
   try {
-    // Auto-create the books table if it doesn't exist
     await pool.query(`
       CREATE TABLE IF NOT EXISTS books (
         id SERIAL PRIMARY KEY,
@@ -36,4 +35,4 @@ export default async function handler(req, res) {
   } finally {
     await pool.end();
   }
-}
+};
