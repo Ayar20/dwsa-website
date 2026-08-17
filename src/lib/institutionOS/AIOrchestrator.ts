@@ -1,3 +1,5 @@
+// InstitutionOS Multi-Provider AI Orchestrator Core (Gemini 2.0 Flash / 1.5 Pro)
+// Build Target: Production Deployment
 import "server-only";
 
 import { KnowledgeRetrievalService } from "./KnowledgeRetrievalService";
