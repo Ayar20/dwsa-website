@@ -1,5 +1,5 @@
-// InstitutionOS Multi-Provider AI Orchestrator Core — Gemini 2.5 Flash
-// Deployed: 2026-08-17 | Model: gemini-2.5-flash
+// InstitutionOS Multi-Provider AI Orchestrator Core — Gemini 1.5 Flash (Free Tier)
+// Deployed: 2026-08-17 | Model: gemini-1.5-flash
 
 import { KnowledgeRetrievalService } from "./KnowledgeRetrievalService";
 import { AIUsageService } from "./AIUsageService";
@@ -51,7 +51,7 @@ export class AIOrchestrator {
 
     if (!apiKey) throw new Error("AI service is not configured. Add GEMINI_API_KEY (or GOOGLE_API_KEY) to the server environment.");
 
-    const model = process.env.GEMINI_MODEL || "gemini-2.5-flash";
+    const model = process.env.GEMINI_MODEL || "gemini-1.5-flash";
     const startTime = Date.now();
     const knowledge = KnowledgeRetrievalService.retrieveRelevantContext(prompt);
     const sources = knowledge.map((item) => item.title);
