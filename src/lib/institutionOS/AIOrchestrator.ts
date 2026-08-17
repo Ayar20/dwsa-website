@@ -1,5 +1,5 @@
-// InstitutionOS Multi-Provider AI Orchestrator Core (Gemini 2.0 Flash / 1.5 Pro)
-// Build Target: Production Deployment
+// InstitutionOS Multi-Provider AI Orchestrator Core — Gemini 2.5 Flash
+// Deployed: 2026-08-17 | Model: gemini-2.5-flash
 
 import { KnowledgeRetrievalService } from "./KnowledgeRetrievalService";
 import { AIUsageService } from "./AIUsageService";
