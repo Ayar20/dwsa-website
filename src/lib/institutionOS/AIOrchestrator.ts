@@ -51,7 +51,7 @@ export class AIOrchestrator {
 
     if (!apiKey) throw new Error("AI service is not configured. Add GEMINI_API_KEY (or GOOGLE_API_KEY) to the server environment.");
 
-    const model = process.env.GEMINI_MODEL || "gemini-2.0-flash-lite";
+    const model = process.env.GEMINI_MODEL || "gemini-3.6-flash";
     const startTime = Date.now();
     const knowledge = KnowledgeRetrievalService.retrieveRelevantContext(prompt);
     const sources = knowledge.map((item) => item.title);
