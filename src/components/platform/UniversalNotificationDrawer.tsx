@@ -19,70 +19,50 @@ interface NotificationItem {
   ctaHref?: string;
 }
 
-const mockNotifications: NotificationItem[] = [
+const initialNotifications: NotificationItem[] = [
   {
     id: "n1",
-    title: "12 Digital Certificates Awaiting Sign-off",
-    message: "Cohort Alpha graduation batch requires cryptographic signature.",
+    title: "Flagship Cohort Registration Active",
+    message: "Enrolments for Generative AI for Work & Productivity (GENAI-WP-001) are open.",
     category: "Academic",
     priority: "High",
-    time: "10 mins ago",
+    time: "Live",
     read: false,
-    ctaText: "Review & Sign",
-    ctaHref: "/dashboard/admin/certificates",
+    ctaText: "View Enrolment",
+    ctaHref: "/dashboard/student",
   },
   {
     id: "n2",
-    title: "Paystack Revenue Settlement Received",
-    message: "₦4.8M tuition payment batch processed successfully.",
+    title: "Paystack & Corporate Bank Gateway Active",
+    message: "Tuition collection enabled for Zenith Bank, Fidelity Bank, and UBA corporate accounts.",
     category: "Finance",
     priority: "High",
-    time: "25 mins ago",
+    time: "Active",
     read: false,
-    ctaText: "View ERP",
-    ctaHref: "/dashboard/admin/finance",
+    ctaText: "Payment Details",
+    ctaHref: "/dashboard/student",
   },
   {
     id: "n3",
-    title: "Sage AI Agent Flagged Learner Support",
-    message: "3 learners in Cohort Alpha require academic intervention.",
+    title: "Google Gemini 2.0 AI Companion Online",
+    message: "Aida (Student) and Sage (Faculty) agents connected to Google Generative AI gateway.",
     category: "AI",
     priority: "Medium",
-    time: "1 hour ago",
+    time: "Online",
     read: false,
-    ctaText: "Open Sage Agent",
-    ctaHref: "/dashboard/instructor/ai-agent",
+    ctaText: "Launch AI Agent",
+    ctaHref: "/dashboard/student/ai-agent",
   },
   {
     id: "n4",
-    title: "New Marketplace Extension Installed",
-    message: "Data Exchange & ETL Connector v5.2 activated.",
-    category: "Marketplace",
-    priority: "Low",
-    time: "3 hours ago",
-    read: true,
-    ctaText: "Manage Modules",
-    ctaHref: "/dashboard/platform/marketplace",
-  },
-  {
-    id: "n5",
-    title: "Digital Transformation Audit Complete",
-    message: "First Bank PLC transformation readiness score updated to 94%.",
-    category: "Transformation",
-    priority: "Medium",
-    time: "Yesterday",
-    read: true,
-    ctaText: "View Proposal",
-    ctaHref: "/dashboard/platform/proposals",
-  },
-  {
-    id: "n6",
-    title: "ISO 27001 Security Audit Passed",
-    message: "Zero vulnerabilities flagged across all 4 dashboard shells.",
+    title: "Digital Certificate Verification Active",
+    message: "Cryptographic QR certificate verification engine running for DWSA graduates.",
     category: "Security",
     priority: "Low",
-    time: "2 days ago",
-    read: true,
+    time: "Protected",
+    read: false,
+    ctaText: "Verify Certificates",
+    ctaHref: "/certificates",
   },
 ];
 
@@ -97,7 +77,7 @@ export default function UniversalNotificationDrawer({
   onClose,
   role = "ADMIN",
 }: UniversalNotificationDrawerProps) {
-  const [items, setItems] = useState<NotificationItem[]>(mockNotifications);
+  const [items, setItems] = useState<NotificationItem[]>(initialNotifications);
   const [selectedCategory, setSelectedCategory] = useState<string>("ALL");
 
   const categories = ["ALL", "Academic", "Finance", "AI", "Marketplace", "Transformation", "Security"];

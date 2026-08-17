@@ -5,33 +5,52 @@ import { FacultyAIAgentService } from "@/lib/institutionOS/FacultyAIAgentService
 import {
   Sparkles, AlertTriangle, CheckCircle, BookOpen, BarChart2,
   Mail, ChevronRight, Zap, Clock, Users, Star, TrendingDown,
-  MessageSquare, FileCheck
+  MessageSquare, FileCheck, Send, Loader2, RefreshCw, CheckCircle2
 } from "lucide-react";
-
-const priorityConfig = {
-  critical: { color: "text-red-400", bg: "bg-red-500/10", border: "border-red-500/30", dot: "bg-red-400" },
-  high: { color: "text-[#d4a017]", bg: "bg-[#d4a017]/10", border: "border-[#d4a017]/30", dot: "bg-[#d4a017]" },
-  medium: { color: "text-[#818cf8]", bg: "bg-[#818cf8]/10", border: "border-[#818cf8]/30", dot: "bg-[#818cf8]" },
-  low: { color: "text-[#4ade80]", bg: "bg-[#4ade80]/10", border: "border-[#4ade80]/30", dot: "bg-[#4ade80]" },
-};
-
-const typeIcons: Record<string, React.ReactNode> = {
-  "at-risk": <AlertTriangle className="w-4 h-4" />,
-  engagement: <TrendingDown className="w-4 h-4" />,
-  grading: <FileCheck className="w-4 h-4" />,
-  content: <BookOpen className="w-4 h-4" />,
-  schedule: <Clock className="w-4 h-4" />,
-};
+import { requestAI } from "@/lib/ai-client";
 
 export default function FacultyAIAgentPage() {
-  const [draftVisible, setDraftVisible] = useState(false);
-  const insights = FacultyAIAgentService.getProactiveInsights("faculty-001");
+  const [promptInput, setPromptInput] = useState("");
+  const [activeTask, setActiveTask] = useState<"grading" | "rubric" | "lesson" | "feedback">("grading");
+  const [isGenerating, setIsGenerating] = useState(false);
+  const [aiOutput, setAiOutput] = useState<string | null>(null);
+  const [toast, setToast] = useState<string | null>(null);
+
   const capabilities = FacultyAIAgentService.getCapabilities();
-  const stats = FacultyAIAgentService.getAgentStats("faculty-001");
-  const feedbackDraft = FacultyAIAgentService.generateFeedbackDraft("sub-001");
+
+  const handleGenerate = async (customPrompt?: string) => {
+    const query = (customPrompt || promptInput).trim();
+    if (!query || isGenerating) return;
+
+    setIsGenerating(true);
+    setAiOutput(null);
+
+    try {
+      const res = await requestAI(`[Faculty Task: ${activeTask.toUpperCase()}] ${query}`, "Faculty");
+      setAiOutput(res.response);
+      setToast("AI recommendation generated successfully!");
+      setTimeout(() => setToast(null), 3000);
+    } catch (err: any) {
+      setAiOutput(`Failed to generate: ${err.message || "Please try again."}`);
+    } finally {
+      setIsGenerating(false);
+    }
+  };
+
+  const sampleTasks = {
+    grading: "Generate a constructive grading rubric and feedback breakdown for a Capstone Full-Stack Generative AI project submission.",
+    rubric: "Create a 4-tier assessment rubric (Exemplary, Proficient, Developing, Unsatisfactory) for prompt engineering and model fine-tuning.",
+    lesson: "Analyze the 4-week Generative AI syllabus and suggest 3 interactive hands-on lab exercises for Nigerian enterprise professionals.",
+    feedback: "Draft an encouraging mid-cohort check-in message to students with action items for mastering modern LLM application workflows.",
+  };
 
   return (
     <div className="min-h-screen space-y-6 pb-8">
+      {toast && (
+        <div className="fixed bottom-6 right-6 z-50 px-4 py-3 rounded-2xl bg-[#061428] border border-[#4ade80]/50 text-[#4ade80] text-xs font-extrabold shadow-2xl flex items-center gap-2">
+          <CheckCircle2 className="w-4 h-4" /> {toast}
+        </div>
+      )}
 
       {/* Hero Header */}
       <div className="relative overflow-hidden rounded-2xl bg-gradient-to-br from-[#030e1f] via-[#061428] to-[#0a1f40] border border-[#d4a017]/20 p-6">
@@ -43,162 +62,138 @@ export default function FacultyAIAgentPage() {
             </div>
             <div>
               <div className="flex items-center gap-2 mb-0.5">
-                <h1 className="text-xl font-black text-white tracking-tight">Sage — Your AI Teaching Agent</h1>
-                <span className="px-2 py-0.5 rounded-full bg-[#4ade80]/20 text-[#4ade80] text-[10px] font-black tracking-widest border border-[#4ade80]/30">ONLINE</span>
+                <h1 className="text-xl font-black text-white tracking-tight">Sage — Faculty AI Teaching Co-Pilot</h1>
+                <span className="px-2 py-0.5 rounded-full bg-[#4ade80]/20 text-[#4ade80] text-[10px] font-black tracking-widest border border-[#4ade80]/30">
+                  LIVE · GEMINI
+                </span>
               </div>
-              <p className="text-sm text-[#8899b4]">Monitors your cohort 24/7 · Surfaces what matters · Saves you ~{stats.avgTimeSavedPerWeekHrs}hrs/week</p>
+              <p className="text-sm text-[#8899b4]">Automates grading rubrics, lesson synthesis &amp; student feedback generation</p>
             </div>
           </div>
-          {/* Quick Stats */}
+
           <div className="flex items-center gap-4 text-center">
-            {[
-              { v: stats.atRiskFlagsRaised, l: "at-risk flags", c: "text-red-400" },
-              { v: stats.gradingAssistReviews, l: "grading assists", c: "text-[#d4a017]" },
-              { v: stats.lessonsAnalysed, l: "lessons analysed", c: "text-[#818cf8]" },
-            ].map((s, i) => (
-              <React.Fragment key={i}>
-                {i > 0 && <div className="w-px h-8 bg-[#1a2f4a]" />}
-                <div>
-                  <div className={`text-lg font-black ${s.c}`}>{s.v}</div>
-                  <div className="text-[10px] text-[#8899b4] font-bold">{s.l}</div>
-                </div>
-              </React.Fragment>
-            ))}
+            <div>
+              <div className="text-lg font-black text-[#d4a017]">24/7</div>
+              <div className="text-[10px] text-[#8899b4] font-bold">Faculty Co-Pilot</div>
+            </div>
+            <div className="w-px h-8 bg-[#1a2f4a]" />
+            <div>
+              <div className="text-lg font-black text-white">Gemini 2.0</div>
+              <div className="text-[10px] text-[#8899b4] font-bold">Model Engine</div>
+            </div>
           </div>
         </div>
       </div>
 
       <div className="grid grid-cols-1 xl:grid-cols-3 gap-6">
-
-        {/* LEFT: Capabilities + Grading Draft */}
+        {/* LEFT: Capabilities & Presets */}
         <div className="space-y-4">
-          {/* Capabilities */}
-          <div className="rounded-2xl bg-[#040f20] border border-[#1a2f4a] overflow-hidden">
-            <div className="px-4 py-3 border-b border-[#1a2f4a]">
-              <h2 className="text-xs font-black text-[#8899b4] uppercase tracking-widest">Sage's Capabilities</h2>
-            </div>
-            <div className="p-3 space-y-1">
-              {capabilities.map((cap) => (
-                <div key={cap.id} className="flex items-start gap-3 px-3 py-2.5 rounded-xl hover:bg-[#0c1b33] transition-all">
-                  <span className="text-xl mt-0.5">{cap.icon}</span>
-                  <div>
-                    <p className="text-xs font-bold text-white">{cap.name}</p>
-                    <p className="text-[11px] text-[#6b7a94] leading-relaxed mt-0.5">{cap.description}</p>
-                  </div>
-                </div>
+          <div className="rounded-2xl bg-[#040f20] border border-[#1a2f4a] p-4 space-y-3">
+            <h2 className="text-xs font-black text-[#8899b4] uppercase tracking-widest">Teaching Tools</h2>
+            <div className="grid grid-cols-2 gap-2">
+              {[
+                { id: "grading", label: "Grading Assist", icon: <FileCheck className="w-3.5 h-3.5" /> },
+                { id: "rubric", label: "Rubric Builder", icon: <BarChart2 className="w-3.5 h-3.5" /> },
+                { id: "lesson", label: "Lesson Lab Ideas", icon: <BookOpen className="w-3.5 h-3.5" /> },
+                { id: "feedback", label: "Cohort Broadcast", icon: <Mail className="w-3.5 h-3.5" /> },
+              ].map((task) => (
+                <button
+                  key={task.id}
+                  onClick={() => {
+                    setActiveTask(task.id as any);
+                    setPromptInput(sampleTasks[task.id as keyof typeof sampleTasks]);
+                  }}
+                  className={`p-3 rounded-xl text-left text-xs font-bold transition-all flex flex-col gap-1.5 ${
+                    activeTask === task.id
+                      ? "bg-[#d4a017]/20 border border-[#d4a017]/40 text-white"
+                      : "bg-[#061428] border border-[#1a2f4a] text-[#8899b4] hover:text-white hover:border-slate-700"
+                  }`}
+                >
+                  <div className="text-[#d4a017]">{task.icon}</div>
+                  <span>{task.label}</span>
+                </button>
               ))}
             </div>
           </div>
 
-          {/* Grading Assist Demo */}
-          <div className="rounded-2xl bg-[#040f20] border border-[#1a2f4a] overflow-hidden">
-            <div className="px-4 py-3 border-b border-[#1a2f4a] flex items-center justify-between">
-              <h2 className="text-xs font-black text-[#d4a017] uppercase tracking-widest">Grading Assist Preview</h2>
-              <button
-                onClick={() => setDraftVisible(!draftVisible)}
-                className="text-[10px] font-bold text-[#818cf8] hover:text-white transition-all"
-              >
-                {draftVisible ? "Hide Draft" : "See AI Draft"}
-              </button>
-            </div>
-            <div className="p-4">
-              <div className="flex items-center justify-between mb-3">
-                <div>
-                  <p className="text-xs font-bold text-white">Submission: Module 3 — Full-Stack CRUD App</p>
-                  <p className="text-[11px] text-[#6b7a94]">Student: Amara Okonkwo · Submitted 2h ago</p>
-                </div>
-                <span className="px-2 py-1 rounded-lg bg-[#d4a017]/10 text-[#d4a017] text-[10px] font-black border border-[#d4a017]/20">PENDING</span>
-              </div>
-              {draftVisible && (
-                <div className="p-3 rounded-xl bg-[#061428] border border-[#1a2f4a] space-y-2">
-                  <p className="text-[10px] font-black text-[#818cf8] uppercase tracking-widest flex items-center gap-1.5">
-                    <Sparkles className="w-3 h-3" /> AI-Generated Feedback Draft
-                  </p>
-                  <p className="text-xs text-[#c8d8f0] leading-relaxed whitespace-pre-line">{feedbackDraft}</p>
-                  <div className="flex gap-2 pt-1">
-                    <button className="flex-1 py-1.5 rounded-lg bg-[#4ade80]/20 text-[#4ade80] text-[11px] font-bold hover:bg-[#4ade80]/30 transition-all border border-[#4ade80]/30">
-                      Approve & Send
-                    </button>
-                    <button className="flex-1 py-1.5 rounded-lg bg-[#0c1b33] text-[#8899b4] text-[11px] font-bold hover:bg-[#0f2240] transition-all border border-[#1a2f4a]">
-                      Edit Draft
-                    </button>
-                  </div>
-                </div>
-              )}
-            </div>
-          </div>
-
-          {/* Agent Performance */}
           <div className="rounded-2xl bg-[#040f20] border border-[#1a2f4a] p-4 space-y-3">
-            <h3 className="text-xs font-black text-[#8899b4] uppercase tracking-widest">Sage's Impact</h3>
-            <div className="grid grid-cols-2 gap-2">
-              {[
-                { label: "Time saved / week", value: `${stats.avgTimeSavedPerWeekHrs}h` },
-                { label: "Interventions triggered", value: stats.interventionsTriggered },
-                { label: "Content suggestions", value: stats.contentSuggestions },
-                { label: "Satisfaction score", value: "94%" },
-              ].map((s) => (
-                <div key={s.label} className="p-2.5 rounded-xl bg-[#061428] border border-[#1a2f4a] text-center">
-                  <div className="text-base font-black text-white">{s.value}</div>
-                  <div className="text-[10px] text-[#6b7a94] leading-tight mt-0.5">{s.label}</div>
+            <h2 className="text-xs font-black text-[#8899b4] uppercase tracking-widest">Active Capabilities</h2>
+            <div className="space-y-2">
+              {capabilities.map((c) => (
+                <div key={c.id} className="p-2.5 rounded-xl bg-[#061428] border border-[#1a2f4a] text-xs space-y-0.5">
+                  <p className="font-bold text-white flex items-center gap-1.5">
+                    <span>{c.icon}</span> {c.name}
+                  </p>
+                  <p className="text-[11px] text-[#6b7a94]">{c.description}</p>
                 </div>
               ))}
             </div>
           </div>
         </div>
 
-        {/* RIGHT: Proactive Insights */}
-        <div className="xl:col-span-2 space-y-4">
-          <div className="flex items-center justify-between">
-            <h2 className="text-sm font-black text-white">Proactive Insights from Sage</h2>
-            <span className="text-[10px] text-[#8899b4]">{insights.length} active insights · auto-refreshed</span>
+        {/* RIGHT: Interactive AI Co-Pilot Console */}
+        <div className="xl:col-span-2 rounded-2xl bg-[#040f20] border border-[#1a2f4a] p-6 space-y-5">
+          <div className="flex items-center justify-between border-b border-[#1a2f4a] pb-4">
+            <div>
+              <h2 className="text-base font-black text-white">Interactive Faculty Assistant Console</h2>
+              <p className="text-xs text-[#8899b4] mt-0.5">Specify teaching materials, code tasks, or student questions to synthesize instant solutions.</p>
+            </div>
+            <button
+              onClick={() => handleGenerate(sampleTasks[activeTask])}
+              disabled={isGenerating}
+              className="px-3 py-1.5 rounded-xl bg-[#061428] border border-[#1a2f4a] text-xs font-bold text-[#d4a017] hover:bg-[#0c1b33] flex items-center gap-1.5 disabled:opacity-50"
+            >
+              <Zap className="w-3.5 h-3.5" /> Load Preset
+            </button>
           </div>
 
-          {insights.map((insight) => {
-            const cfg = priorityConfig[insight.priority];
-            return (
-              <div key={insight.id} className={`rounded-2xl bg-[#040f20] border ${cfg.border} overflow-hidden`}>
-                <div className={`px-5 py-4 ${cfg.bg}`}>
-                  <div className="flex items-start justify-between gap-3">
-                    <div className="flex items-start gap-3">
-                      <div className={`w-8 h-8 rounded-xl ${cfg.bg} border ${cfg.border} flex items-center justify-center shrink-0 ${cfg.color}`}>
-                        {typeIcons[insight.type]}
-                      </div>
-                      <div>
-                        <div className="flex items-center gap-2 mb-0.5">
-                          <span className={`flex items-center gap-1 text-[9px] font-black uppercase tracking-wider ${cfg.color}`}>
-                            <span className={`w-1.5 h-1.5 rounded-full ${cfg.dot}`} />
-                            {insight.priority}
-                          </span>
-                          <span className="text-[10px] text-[#6b7a94]">{insight.timestamp}</span>
-                        </div>
-                        <h3 className="text-sm font-black text-white">{insight.title}</h3>
-                      </div>
-                    </div>
-                  </div>
-                </div>
-                <div className="px-5 pb-5 pt-3 space-y-3">
-                  <p className="text-xs text-[#8899b4] leading-relaxed">{insight.description}</p>
-                  <div className="p-3 rounded-xl bg-[#061428] border border-[#1a2f4a]">
-                    <div className="flex items-center gap-1.5 mb-1">
-                      <Zap className="w-3 h-3 text-[#818cf8]" />
-                      <p className="text-[10px] font-black text-[#818cf8] uppercase tracking-wider">Sage's Suggested Action</p>
-                    </div>
-                    <p className="text-xs text-[#c8d8f0]">{insight.suggestedAction}</p>
-                  </div>
-                  {insight.actionLabel && insight.actionHref && (
-                    <a
-                      href={insight.actionHref}
-                      className={`inline-flex items-center gap-1.5 text-xs font-bold ${cfg.color} hover:underline`}
-                    >
-                      <ChevronRight className="w-3.5 h-3.5" />
-                      {insight.actionLabel}
-                    </a>
-                  )}
-                </div>
+          <div className="space-y-2">
+            <label className="block text-xs font-black text-[#8899b4] uppercase tracking-wider">
+              Instruction / Prompt
+            </label>
+            <textarea
+              rows={4}
+              value={promptInput}
+              onChange={(e) => setPromptInput(e.target.value)}
+              placeholder="e.g. Draft feedback for a student who completed Module 2 Python Generative AI assignment..."
+              className="w-full p-4 rounded-xl bg-[#061428] border border-[#1a2f4a] text-xs text-white placeholder:text-slate-600 focus:outline-none focus:border-[#d4a017]"
+            />
+          </div>
+
+          <div className="flex justify-end">
+            <button
+              onClick={() => handleGenerate()}
+              disabled={isGenerating || !promptInput.trim()}
+              className="px-6 py-3 rounded-xl bg-[#d4a017] hover:bg-[#b8891a] text-[#030e1f] text-xs font-black flex items-center gap-2 disabled:opacity-50 transition-all shadow-md"
+            >
+              {isGenerating ? (
+                <>
+                  <Loader2 className="w-4 h-4 animate-spin" />
+                  Synthesizing with Sage AI…
+                </>
+              ) : (
+                <>
+                  <Sparkles className="w-4 h-4" />
+                  Generate Teaching Deliverable
+                </>
+              )}
+            </button>
+          </div>
+
+          {/* AI Response Preview */}
+          {aiOutput && (
+            <div className="p-5 rounded-2xl bg-[#061428] border border-[#d4a017]/30 space-y-3 mt-4">
+              <div className="flex items-center justify-between">
+                <span className="text-xs font-black text-[#d4a017] flex items-center gap-1.5">
+                  <Sparkles className="w-4 h-4" /> Sage AI Deliverable Output
+                </span>
+                <span className="text-[10px] text-[#8899b4]">Grounded by DWSA Institutional Schema</span>
               </div>
-            );
-          })}
+              <div className="text-xs text-[#c8d8f0] leading-relaxed whitespace-pre-wrap font-sans bg-[#030e1f] p-4 rounded-xl border border-[#1a2f4a]">
+                {aiOutput}
+              </div>
+            </div>
+          )}
         </div>
       </div>
     </div>

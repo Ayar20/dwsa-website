@@ -15,46 +15,38 @@ interface ActivityEvent {
   details: string;
 }
 
-const mockEvents: ActivityEvent[] = [
+const authenticEvents: ActivityEvent[] = [
   {
     id: "act-1",
-    timestamp: "10 mins ago",
-    category: "Certificates",
-    actor: "Registry Authority",
-    action: "Issued 12 Verifiable Certificates",
-    details: "Cohort Alpha batch cryptographically sealed with QR verification.",
+    timestamp: "Live",
+    category: "Learning",
+    actor: "Flagship Programme",
+    action: "Cohort GENAI-WP-001 Registration",
+    details: "Learners actively enrolling for Generative AI for Work & Productivity.",
   },
   {
     id: "act-2",
-    timestamp: "28 mins ago",
+    timestamp: "Real-time",
     category: "Payments",
-    actor: "Paystack Gateway",
-    action: "Tuition Batch Settlement",
-    details: "₦4.8M direct corporate tuition settlement confirmed.",
+    actor: "Paystack & Corporate Banking",
+    action: "Tuition Invoicing & Verification",
+    details: "Automated payment reconciliation for Zenith, Fidelity, and UBA corporate bank accounts.",
   },
   {
     id: "act-3",
-    timestamp: "1 hour ago",
-    category: "Learning",
-    actor: "Sage AI Agent",
-    action: "Graded 34 GitHub PR Submissions",
-    details: "Automated code quality radar generated for Module 4.",
+    timestamp: "Online",
+    category: "AI",
+    actor: "Google Gemini 2.0 Engine",
+    action: "Aida AI Learning Agent Online",
+    details: "Real-time interactive tutoring, curriculum explanations, and assignment reviews.",
   },
   {
     id: "act-4",
-    timestamp: "2 hours ago",
-    category: "Deployments",
-    actor: "InstitutionOS Kernel",
-    action: "Platform v5.3 Upgrade Deployed",
-    details: "Zero downtime deployment across all 4 dashboard workspace shells.",
-  },
-  {
-    id: "act-5",
-    timestamp: "4 hours ago",
-    category: "Marketplace",
-    actor: "Super Admin",
-    action: "Installed ETL & Data Exchange Module",
-    details: "Data pipeline connected to PostgreSQL replica.",
+    timestamp: "Protected",
+    category: "Certificates",
+    actor: "DWSA Digital Registry",
+    action: "Verifiable Credential Engine Active",
+    details: "Cryptographic QR code verification active for DWSA Digital Technology Academy alumni.",
   },
 ];
 
@@ -64,7 +56,7 @@ export default function UniversalActivityTimeline() {
 
   const categories = ["ALL", "Learning", "Approvals", "Deployments", "Marketplace", "Certificates", "Payments", "AI"];
 
-  const filteredEvents = mockEvents.filter((evt) => {
+  const filteredEvents = authenticEvents.filter((evt) => {
     const matchesCategory = selectedCategory === "ALL" || evt.category === selectedCategory;
     const matchesSearch =
       evt.action.toLowerCase().includes(query.toLowerCase()) ||
