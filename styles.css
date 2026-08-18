@@ -1698,10 +1698,13 @@ ul {
     border: 2px solid var(--color-gold);
 }
 
-.intro-video {
+.intro-video,
+.video-wrapper iframe {
     width: 100%;
     display: block;
     background: #000;
+    aspect-ratio: 16 / 9;
+    border: none;
 }
 
 

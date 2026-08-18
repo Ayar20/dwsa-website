@@ -24,14 +24,16 @@ document.addEventListener('DOMContentLoaded', () => {
             // Update title
             pageTitle.textContent = e.currentTarget.textContent;
 
-            // Load bookshelf inventory or advert settings when tabs are opened
+            // Load bookshelf inventory, advert settings, or video settings when tabs are opened
             if (targetId === 'bookshelf') {
                 fetchBooks();
             } else if (targetId === 'programs') {
                 fetchAdminAdvert();
+            } else if (targetId === 'video') {
+                fetchAdminVideo();
             }
         });
-    } );
+    });
 
     // Auth & Live Database Registrations
     let registrations = [];
@@ -386,6 +388,148 @@ document.addEventListener('DOMContentLoaded', () => {
                 statusEl.style.display = 'block';
             } finally {
                 saveBtn.textContent = '🚀 Publish Advert Live to Website';
+                saveBtn.disabled = false;
+            }
+        });
+    }
+
+    // ── Video Manager ─────────────────────────────────────────────────────────
+    function parseVideoEmbed(url) {
+        if (!url) return null;
+        url = url.trim();
+
+        // YouTube matches (watch, embed, shorts, youtu.be)
+        const ytMatch = url.match(/(?:youtube\.com\/(?:watch\?v=|embed\/|shorts\/)|youtu\.be\/)([a-zA-Z0-9_-]{11})/);
+        if (ytMatch && ytMatch[1]) {
+            return { type: 'youtube', embedUrl: `https://www.youtube-nocookie.com/embed/${ytMatch[1]}?rel=0` };
+        }
+
+        // Vimeo matches
+        const vimeoMatch = url.match(/vimeo\.com\/(?:video\/)?([0-9]+)/);
+        if (vimeoMatch && vimeoMatch[1]) {
+            return { type: 'vimeo', embedUrl: `https://player.vimeo.com/video/${vimeoMatch[1]}` };
+        }
+
+        // Google Drive preview
+        if (url.includes('drive.google.com')) {
+            const driveMatch = url.match(/\/file\/d\/([a-zA-Z0-9_-]+)/) || url.match(/[?&]id=([a-zA-Z0-9_-]+)/);
+            if (driveMatch && driveMatch[1]) {
+                return { type: 'drive', embedUrl: `https://drive.google.com/file/d/${driveMatch[1]}/preview` };
+            }
+        }
+
+        // Direct video link (e.g. mp4, webm, local)
+        return { type: 'direct', url: url };
+    }
+
+    function updateAdminVideoPreview() {
+        const previewContent = document.getElementById('admin-video-preview-content');
+        const urlInput = document.getElementById('video-input-url');
+        const posterInput = document.getElementById('video-input-poster');
+        if (!previewContent || !urlInput) return;
+
+        const videoUrl = urlInput.value.trim();
+        const posterUrl = posterInput ? posterInput.value.trim() : '';
+
+        if (!videoUrl) {
+            previewContent.innerHTML = '<span style="color: #8892b0;">Enter a video URL above to preview</span>';
+            return;
+        }
+
+        const parsed = parseVideoEmbed(videoUrl);
+        if (parsed.type === 'youtube' || parsed.type === 'vimeo' || parsed.type === 'drive') {
+            previewContent.innerHTML = `
+                <iframe src="${parsed.embedUrl}" style="width: 100%; height: 100%; border: none;" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
+            `;
+        } else {
+            previewContent.innerHTML = `
+                <video controls preload="metadata" ${posterUrl ? `poster="${posterUrl}"` : ''} style="width: 100%; height: 100%; display: block; background: #000;">
+                    <source src="${parsed.url}" type="video/mp4">
+                    Your browser does not support the video tag.
+                </video>
+            `;
+        }
+    }
+
+    async function fetchAdminVideo() {
+        try {
+            const res = await fetch('/api/get-video');
+            if (!res.ok) return;
+            const result = await res.json();
+            if (result.success && result.data) {
+                const d = result.data;
+                const titleEl = document.getElementById('video-input-title');
+                const subEl = document.getElementById('video-input-subtitle');
+                const urlEl = document.getElementById('video-input-url');
+                const posterEl = document.getElementById('video-input-poster');
+                const activeEl = document.getElementById('video-input-active');
+
+                if (titleEl && d.title !== undefined) titleEl.value = d.title;
+                if (subEl && d.subtitle !== undefined) subEl.value = d.subtitle;
+                if (urlEl && d.video_url !== undefined) urlEl.value = d.video_url;
+                if (posterEl && d.poster_url !== undefined) posterEl.value = d.poster_url || '';
+                if (activeEl && d.is_active !== undefined) activeEl.checked = Boolean(d.is_active);
+
+                updateAdminVideoPreview();
+            }
+        } catch (err) {
+            console.error('Error fetching admin video:', err);
+        }
+    }
+
+    // Attach real-time input listeners for video preview
+    const videoUrlInput = document.getElementById('video-input-url');
+    const videoPosterInput = document.getElementById('video-input-poster');
+    if (videoUrlInput) videoUrlInput.addEventListener('input', updateAdminVideoPreview);
+    if (videoPosterInput) videoPosterInput.addEventListener('input', updateAdminVideoPreview);
+
+    const videoForm = document.getElementById('admin-video-form');
+    if (videoForm) {
+        videoForm.addEventListener('submit', async (e) => {
+            e.preventDefault();
+            const statusEl = document.getElementById('video-form-status');
+            const saveBtn = document.getElementById('save-video-btn');
+
+            saveBtn.textContent = 'Saving Video Settings...';
+            saveBtn.disabled = true;
+            statusEl.style.display = 'none';
+
+            const payload = {
+                title: document.getElementById('video-input-title').value.trim(),
+                subtitle: document.getElementById('video-input-subtitle').value.trim(),
+                video_url: document.getElementById('video-input-url').value.trim(),
+                poster_url: document.getElementById('video-input-poster').value.trim(),
+                is_active: document.getElementById('video-input-active').checked
+            };
+
+            try {
+                const response = await fetch('/api/save-video', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'Authorization': `Bearer ${authToken}`
+                    },
+                    body: JSON.stringify(payload)
+                });
+
+                const result = await response.json();
+                if (result.success) {
+                    statusEl.textContent = '🎬 Video settings saved & published live to website!';
+                    statusEl.style.color = '#48bb78';
+                    statusEl.style.display = 'block';
+                    updateAdminVideoPreview();
+                } else {
+                    statusEl.textContent = '❌ Error: ' + (result.message || 'Failed to save');
+                    statusEl.style.color = '#ff4d4d';
+                    statusEl.style.display = 'block';
+                }
+            } catch (err) {
+                console.error('Video save error:', err);
+                statusEl.textContent = '❌ Connection error. Please try again.';
+                statusEl.style.color = '#ff4d4d';
+                statusEl.style.display = 'block';
+            } finally {
+                saveBtn.textContent = '🎬 Save & Update Website Video';
                 saveBtn.disabled = false;
             }
         });

@@ -145,6 +145,105 @@ document.addEventListener('DOMContentLoaded', () => {
 
     loadDynamicBookshelf();
 
+    // ── Dynamic Video Loader ─────────────────────────────────────────────
+    async function loadDynamicVideo() {
+        const videoSection = document.getElementById('intro-video');
+        if (!videoSection) return;
+
+        try {
+            const response = await fetch('/api/get-video');
+            if (!response.ok) return;
+
+            const result = await response.json();
+            if (!result.success || !result.data) return;
+
+            const video = result.data;
+
+            // Handle visibility toggle
+            if (video.is_active === false) {
+                videoSection.style.display = 'none';
+                return;
+            } else {
+                videoSection.style.display = '';
+            }
+
+            // Update title
+            const titleEl = videoSection.querySelector('.section-title');
+            if (titleEl && video.title) {
+                if (video.title.includes('DWSA')) {
+                    titleEl.innerHTML = video.title.replace('DWSA', '<span class="highlight-gold">DWSA</span>');
+                } else {
+                    titleEl.textContent = video.title;
+                }
+            }
+
+            // Update subtitle / description
+            const descEl = videoSection.querySelector('.section-header p');
+            if (descEl && video.subtitle) {
+                descEl.textContent = video.subtitle;
+            }
+
+            // Update video player
+            const wrapper = videoSection.querySelector('.video-wrapper');
+            if (wrapper && video.video_url) {
+                const url = video.video_url.trim();
+
+                // YouTube match
+                const ytMatch = url.match(/(?:youtube\.com\/(?:watch\?v=|embed\/|shorts\/)|youtu\.be\/)([a-zA-Z0-9_-]{11})/);
+                if (ytMatch && ytMatch[1]) {
+                    wrapper.innerHTML = `
+                        <iframe src="https://www.youtube-nocookie.com/embed/${ytMatch[1]}?rel=0" 
+                                title="${video.title || 'DWSA Intro Video'}" 
+                                style="width: 100%; aspect-ratio: 16/9; display: block; border: none;" 
+                                allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" 
+                                allowfullscreen></iframe>
+                    `;
+                    return;
+                }
+
+                // Vimeo match
+                const vimeoMatch = url.match(/vimeo\.com\/(?:video\/)?([0-9]+)/);
+                if (vimeoMatch && vimeoMatch[1]) {
+                    wrapper.innerHTML = `
+                        <iframe src="https://player.vimeo.com/video/${vimeoMatch[1]}" 
+                                title="${video.title || 'DWSA Intro Video'}" 
+                                style="width: 100%; aspect-ratio: 16/9; display: block; border: none;" 
+                                allow="autoplay; fullscreen; picture-in-picture" 
+                                allowfullscreen></iframe>
+                    `;
+                    return;
+                }
+
+                // Google Drive preview
+                if (url.includes('drive.google.com')) {
+                    const driveMatch = url.match(/\/file\/d\/([a-zA-Z0-9_-]+)/) || url.match(/[?&]id=([a-zA-Z0-9_-]+)/);
+                    if (driveMatch && driveMatch[1]) {
+                        wrapper.innerHTML = `
+                            <iframe src="https://drive.google.com/file/d/${driveMatch[1]}/preview" 
+                                    title="${video.title || 'DWSA Intro Video'}" 
+                                    style="width: 100%; aspect-ratio: 16/9; display: block; border: none;" 
+                                    allow="autoplay"></iframe>
+                        `;
+                        return;
+                    }
+                }
+
+                // Direct video (mp4 / webm / local file)
+                const posterAttr = video.poster_url ? `poster="${video.poster_url}"` : '';
+                wrapper.innerHTML = `
+                    <video controls preload="metadata" ${posterAttr} class="intro-video">
+                        <source src="${url}" type="video/mp4">
+                        Your browser does not support the video tag.
+                    </video>
+                `;
+            }
+        } catch (err) {
+            console.warn('Dynamic video loader error:', err);
+        }
+    }
+
+    loadDynamicVideo();
+
     // Handle Registration Form Submission
     const campaignForm = document.getElementById('campaign-form');
     if (campaignForm) {

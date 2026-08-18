@@ -34,6 +34,7 @@
                 <li><a href="#" data-target="registrations">Registrations</a></li>
                 <li><a href="#" data-target="bookshelf">Manage Bookshelf</a></li>
                 <li><a href="#" data-target="programs">Manage Advert & Campaigns</a></li>
+                <li><a href="#" data-target="video">Manage Video</a></li>
                 <li class="nav-divider"></li>
                 <li><a href="index.html" class="back-link">← Back to Main Site</a></li>
             </ul>
@@ -205,6 +206,67 @@
                             🚀 Publish Advert Live to Website
                         </button>
                         <p id="advert-form-status" style="margin-top: 1rem; font-size: 0.9rem; display: none;"></p>
+                    </form>
+                </div>
+            </div>
+
+            <!-- Manage Video View -->
+            <div class="content-view" id="view-video">
+                <div class="view-header">
+                    <h2>Website Video Manager</h2>
+                </div>
+                <div class="admin-panel glass-panel-admin">
+                    <h3>Update Introductory Video</h3>
+                    <p style="color: #a0aec0; font-size: 0.85rem; margin-bottom: 1.5rem;">
+                        Control the introductory video displayed on the DWSA homepage. You can provide a <strong>YouTube link</strong> (e.g. <code>https://www.youtube.com/watch?v=...</code> or <code>https://youtu.be/...</code>), a <strong>direct MP4 link</strong>, a <strong>Google Drive link</strong>, or a local file like <code>intro-video.mp4</code>.
+                    </p>
+
+                    <form id="admin-video-form" class="admin-form">
+                        <div class="form-row">
+                            <div class="form-group half">
+                                <label>Section Heading</label>
+                                <input type="text" id="video-input-title" required value="Welcome to DWSA" placeholder="e.g. Welcome to DWSA">
+                            </div>
+                            <div class="form-group half">
+                                <label>Visibility</label>
+                                <div style="margin-top: 0.6rem; display: flex; align-items: center; gap: 0.6rem;">
+                                    <input type="checkbox" id="video-input-active" checked style="width: auto; height: 18px; cursor: pointer;">
+                                    <label for="video-input-active" style="margin-bottom: 0; cursor: pointer; color: #fff; font-size: 0.9rem;">Show video section on homepage</label>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="form-group">
+                            <label>Section Subtitle / Description</label>
+                            <input type="text" id="video-input-subtitle" required value="Watch our introductory video to learn more about our vision." placeholder="e.g. Watch our introductory video...">
+                        </div>
+
+                        <div class="form-row">
+                            <div class="form-group half">
+                                <label>Video URL or File Path</label>
+                                <input type="text" id="video-input-url" required value="intro-video.mp4" placeholder="https://www.youtube.com/watch?v=... or .mp4 link">
+                                <small style="color: #8892b0; font-size: 0.75rem; margin-top: 4px; display: block;">Supports YouTube, Vimeo, Google Drive, or direct MP4 URLs.</small>
+                            </div>
+                            <div class="form-group half">
+                                <label>Poster / Thumbnail Image URL</label>
+                                <input type="text" id="video-input-poster" value="video-thumbnail.png" placeholder="e.g. video-thumbnail.png or image URL">
+                                <small style="color: #8892b0; font-size: 0.75rem; margin-top: 4px; display: block;">Image shown before the video plays (for MP4s).</small>
+                            </div>
+                        </div>
+
+                        <div style="margin-top: 1.5rem; margin-bottom: 1.5rem;">
+                            <label style="display: block; color: var(--color-gold); font-weight: 600; margin-bottom: 0.5rem;">Live Preview</label>
+                            <div id="admin-video-preview-wrapper" style="max-width: 600px; border-radius: 12px; overflow: hidden; border: 2px solid var(--color-gold); background: #000; box-shadow: 0 10px 30px rgba(0,0,0,0.4);">
+                                <div id="admin-video-preview-content" style="width: 100%; aspect-ratio: 16/9; display: flex; align-items: center; justify-content: center; color: #8892b0;">
+                                    <span>Video Preview</span>
+                                </div>
+                            </div>
+                        </div>
+
+                        <button type="submit" class="btn-primary" id="save-video-btn" style="margin-top: 1rem;">
+                            🎬 Save & Update Website Video
+                        </button>
+                        <p id="video-form-status" style="margin-top: 1rem; font-size: 0.9rem; display: none;"></p>
                     </form>
                 </div>
             </div>
