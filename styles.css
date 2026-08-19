@@ -2797,7 +2797,7 @@ ul {
 
 /* Architecture SVG Container */
 .arch-diagram-container {
-    margin: 3rem auto;
+    margin: 3rem auto 0;
     max-width: 1000px;
     background: rgba(3, 14, 31, 0.9);
     border: 1px solid var(--color-gold);
@@ -2811,23 +2811,30 @@ ul {
     height: auto;
 }
 
-/* Responsive adjustments */
-@media (max-width: 768px) {
-    .hero-positioning-statement {
-        font-size: 1rem;
-        padding: 1rem;
-    }
-    .domains-grid {
-        grid-template-columns: repeat(2, 1fr);
-    }
-    .hero-actions-trio {
-        flex-direction: column;
-        width: 100%;
-    }
-    .hero-actions-trio .btn-primary,
-    .hero-actions-trio .btn-secondary {
-        width: 100%;
-    }
+.arch-diagram-title {
+    text-align: center;
+    color: var(--color-gold);
+    font-family: var(--font-accent);
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    margin-bottom: 1.5rem;
+    font-size: 1rem;
+}
+
+.arch-scroll-hint {
+    display: none;
+    text-align: center;
+    color: var(--color-text-muted);
+    font-size: 0.75rem;
+    font-family: var(--font-accent);
+    margin-bottom: 0.75rem;
+    letter-spacing: 1px;
+}
+
+.arch-svg-scroll-wrapper {
+    width: 100%;
+    overflow-x: auto;
+    -webkit-overflow-scrolling: touch;
 }
 
 /* ── Governance & R&D Specific Components ── */
@@ -2879,6 +2886,8 @@ ul {
     padding: 2.5rem 1.5rem;
     margin-top: 3rem;
     box-shadow: 0 15px 45px rgba(0,0,0,0.5);
+    overflow-x: auto;
+    -webkit-overflow-scrolling: touch;
 }
 
 .collaboration-grid {
@@ -2913,6 +2922,357 @@ ul {
     font-size: 1.05rem;
     color: var(--color-white);
     font-weight: 700;
+}
+
+/* ═══════════════════════════════════════════════════════════════════════════
+   COMPREHENSIVE RESPONSIVE OVERRIDES (Tablets & Mobile)
+   ═══════════════════════════════════════════════════════════════════════════ */
+
+/* Global safety */
+html, body {
+    max-width: 100vw;
+    overflow-x: hidden;
+    -webkit-text-size-adjust: 100%;
+}
+
+img, video, iframe, svg {
+    max-width: 100%;
+    height: auto;
+}
+
+.section-title {
+    font-size: clamp(1.75rem, 4vw + 0.5rem, 2.5rem);
+}
+
+.section-description {
+    font-size: clamp(0.95rem, 2vw + 0.2rem, 1.15rem);
+    color: #cbd5e1;
+    line-height: 1.8;
+    margin-top: 1rem;
+}
+
+.who-we-are-section {
+    padding: 6rem 5%;
+    background: var(--color-navy-dark);
+}
+
+.who-we-are-section .section-header {
+    text-align: center;
+    max-width: 900px;
+    margin: 0 auto 3rem;
+}
+
+/* ── Tablets (≤960px) ───────────────────────────────────────────────────── */
+@media (max-width: 960px) {
+    .hero,
+    .who-we-are-section,
+    .pillars-section,
+    .domains-section,
+    .campaign-advert-section,
+    .products-section,
+    .identity-section,
+    .services-section,
+    .values-section,
+    .case-study-section,
+    .video-section,
+    .bookshelf-section,
+    .registration-section,
+    .community-section {
+        padding-top: 4.5rem;
+        padding-bottom: 4.5rem;
+        padding-left: 4.5%;
+        padding-right: 4.5%;
+    }
+
+    .section-header {
+        margin-bottom: 2.5rem;
+    }
+
+    .hero {
+        flex-direction: column;
+        justify-content: center;
+        text-align: center;
+        padding-top: 7.5rem;
+        min-height: auto;
+        padding-bottom: 3.5rem;
+    }
+
+    .hero-content {
+        max-width: 100%;
+    }
+
+    .hero-content h1 {
+        font-size: clamp(2rem, 5.5vw, 3.2rem);
+        line-height: 1.15;
+    }
+
+    .hero-positioning-statement {
+        font-size: 1.02rem;
+        padding: 1rem 1.25rem;
+        margin: 1.25rem auto 0;
+        text-align: left;
+    }
+
+    .hero-actions-trio {
+        display: flex;
+        flex-direction: column;
+        gap: 0.75rem;
+        width: 100%;
+        max-width: 480px;
+        margin: 1.75rem auto 0;
+    }
+
+    .hero-actions-trio .btn-primary,
+    .hero-actions-trio .btn-secondary {
+        width: 100%;
+        text-align: center;
+        padding: 0.9rem 1.5rem;
+    }
+
+    .hero-graphics {
+        width: 100%;
+        height: auto;
+        position: static;
+        margin-top: 3rem;
+        display: flex;
+        flex-wrap: wrap;
+        gap: 1rem;
+        justify-content: center;
+    }
+
+    .hero-graphics .glass-card {
+        position: static;
+        flex: 1 1 220px;
+        max-width: 280px;
+        transform: none;
+        box-shadow: 0 8px 24px rgba(0,0,0,0.3);
+    }
+
+    .arch-scroll-hint {
+        display: block;
+    }
+
+    .arch-svg-graphic {
+        min-width: 680px;
+    }
+
+    .product-suite-grid {
+        grid-template-columns: repeat(auto-fit, minmax(min(100%, 280px), 1fr));
+        gap: 1.5rem;
+    }
+
+    .services-grid {
+        grid-template-columns: repeat(2, 1fr);
+        gap: 1.5rem;
+    }
+
+    .registration-container {
+        flex-direction: column;
+        text-align: center;
+        gap: 2.5rem;
+    }
+
+    .form-wrapper {
+        padding: 2rem 1.5rem;
+    }
+
+    .case-study-card {
+        padding: 2.5rem 2rem;
+    }
+
+    .modal-content {
+        padding: 2rem 1.5rem;
+        max-width: 92vw;
+    }
+}
+
+/* ── Mobile Phones (≤640px) ─────────────────────────────────────────────── */
+@media (max-width: 640px) {
+    .who-we-are-section,
+    .pillars-section,
+    .domains-section,
+    .campaign-advert-section,
+    .products-section,
+    .identity-section,
+    .services-section,
+    .values-section,
+    .case-study-section,
+    .video-section,
+    .bookshelf-section,
+    .registration-section,
+    .community-section {
+        padding-top: 3.5rem;
+        padding-bottom: 3.5rem;
+        padding-left: 4%;
+        padding-right: 4%;
+    }
+
+    .navbar {
+        padding: 0.75rem 4%;
+    }
+
+    .brand-logo-link {
+        gap: 0.5rem;
+        max-width: calc(100vw - 80px);
+    }
+
+    .nav-logo-icon {
+        height: 34px;
+        padding: 2px 4px;
+    }
+
+    .logo-title {
+        font-size: 0.8rem;
+    }
+
+    .logo-subtitle {
+        font-size: 0.6rem;
+        letter-spacing: 1px;
+    }
+
+    .hero-content h1 {
+        font-size: 2.1rem;
+        line-height: 1.2;
+    }
+
+    .institutional-badge {
+        font-size: 0.72rem;
+        padding: 0.35rem 0.75rem;
+    }
+
+    .hero-positioning-statement {
+        font-size: 0.92rem;
+        padding: 0.85rem 1rem;
+        line-height: 1.6;
+    }
+
+    .domains-grid {
+        grid-template-columns: repeat(2, 1fr);
+        gap: 0.85rem;
+    }
+
+    .domain-chip {
+        padding: 1rem 0.6rem;
+    }
+
+    .domain-title {
+        font-size: 0.82rem;
+    }
+
+    .domains-core-hub {
+        font-size: 0.95rem;
+        padding: 0.75rem 1.5rem;
+    }
+
+    .domains-diagram-wrapper {
+        padding: 1.75rem 1rem;
+        border-radius: 14px;
+    }
+
+    .services-grid {
+        grid-template-columns: 1fr;
+        gap: 1.25rem;
+    }
+
+    .service-card {
+        padding: 2rem 1.5rem;
+    }
+
+    .pride-header {
+        padding: 1.2rem 1.25rem;
+    }
+
+    .pride-letter {
+        font-size: 1.8rem;
+        margin-right: 1rem;
+    }
+
+    .pride-value-name {
+        font-size: 1.1rem;
+    }
+
+    .pride-body {
+        padding: 0 1.25rem;
+    }
+
+    .pride-item.active .pride-body {
+        padding-bottom: 1.5rem;
+    }
+
+    .pride-body p {
+        font-size: 0.95rem;
+    }
+
+    .case-study-card {
+        padding: 1.75rem 1.25rem;
+    }
+
+    .case-study-title {
+        font-size: 1.4rem;
+        margin-bottom: 1.5rem;
+    }
+
+    .case-metrics {
+        grid-template-columns: 1fr;
+        gap: 1.25rem;
+    }
+
+    .bookshelf-grid {
+        grid-template-columns: 1fr;
+        gap: 1.75rem;
+    }
+
+    .book-cover {
+        height: 260px;
+    }
+
+    .book-info {
+        padding: 1.5rem;
+    }
+
+    .form-wrapper {
+        padding: 1.5rem 1rem;
+        border-radius: 12px;
+    }
+
+    .custom-form input,
+    .custom-form select {
+        padding: 0.85rem;
+        font-size: 0.95rem;
+    }
+
+    .footer {
+        padding: 3rem 4% 1.5rem;
+    }
+
+    .footer-content {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 1.5rem;
+    }
+
+    .social-links {
+        gap: 1rem;
+    }
+}
+
+/* ── Small Phones (≤380px) ──────────────────────────────────────────────── */
+@media (max-width: 380px) {
+    .domains-grid {
+        grid-template-columns: 1fr;
+    }
+
+    .hero-content h1 {
+        font-size: 1.85rem;
+    }
+
+    .price-value {
+        font-size: 2.2rem;
+    }
+
+    .brand-logo-link {
+        max-width: calc(100vw - 70px);
+    }
 }
 
 
