@@ -1,3 +1,18 @@
+/** ───────────────────────────────────────────────────────────────
+ *  Security: HTML entity encoder — prevents DOM XSS when
+ *  user-supplied data is inserted into innerHTML templates.
+ *  Always use this for any text that comes from an API.
+ * ───────────────────────────────────────────────────────────────*/
+function escapeHtml(str) {
+    if (typeof str !== 'string') return '';
+    return str
+        .replace(/&/g, '&amp;')
+        .replace(/</g, '&lt;')
+        .replace(/>/g, '&gt;')
+        .replace(/"/g, '&quot;')
+        .replace(/'/g, '&#x27;');
+}
+
 document.addEventListener('DOMContentLoaded', () => {
     // Intersection Observer for scroll animations
     const observerOptions = {
@@ -98,29 +113,39 @@ document.addEventListener('DOMContentLoaded', () => {
 
             books.forEach((book, index) => {
                 const delayClass = index === 1 ? ' delay-1' : index === 2 ? ' delay-2' : '';
+
+                const safeTitle = escapeHtml(book.title || '');
+                const safeDesc = escapeHtml(book.description || 'Premium digital material available for download.');
+                const safePrice = escapeHtml(book.price || 'Free');
+
                 const priceDisplay = book.price && book.price.toLowerCase() !== 'free'
-                    ? `<span style="text-decoration:line-through;font-size:0.8em;color:#a0aec0;margin-right:8px;">${book.price}</span>Free`
+                    ? `<span style="text-decoration:line-through;font-size:0.8em;color:#a0aec0;margin-right:8px;">${safePrice}</span>Free`
                     : 'Free';
 
-                // Helper to resolve Google Drive covers to actual thumbnails (works for images and PDF first pages)
-                let coverUrl = book.cover_image_url;
-                if (coverUrl && coverUrl.includes('drive.google.com')) {
-                    const match = coverUrl.match(/\/file\/d\/([a-zA-Z0-9_-]+)/) || coverUrl.match(/[?&]id=([a-zA-Z0-9_-]+)/);
+                // Helper to resolve Google Drive covers to actual thumbnails
+                let coverUrl = '';
+                const rawCover = typeof book.cover_image_url === 'string' ? book.cover_image_url : '';
+                if (rawCover.includes('drive.google.com')) {
+                    const match = rawCover.match(/\/file\/d\/([a-zA-Z0-9_-]+)/) || rawCover.match(/[?&]id=([a-zA-Z0-9_-]+)/);
                     if (match && match[1]) {
-                        coverUrl = `https://drive.google.com/thumbnail?id=${match[1]}&sz=w600`;
+                        coverUrl = `https://drive.google.com/thumbnail?id=${encodeURIComponent(match[1])}&sz=w600`;
                     }
+                } else {
+                    coverUrl = escapeHtml(rawCover);
                 }
 
+                const downloadHref = `/api/download?url=${encodeURIComponent(book.download_url || '')}&filename=${encodeURIComponent((book.title || 'download').replace(/\s+/g, '_') + '.pdf')}`;
+
                 html += `
-                    <div class="book-card observe-me${delayClass}">
+                    <div class="book-card observe-me${escapeHtml(delayClass)}">
                         <div class="book-cover">
-                            <img src="${coverUrl}" alt="${book.title}" onerror="this.style.display='none'; this.parentElement.style.background='rgba(201,168,76,0.1)'">
+                            <img src="${coverUrl}" alt="${safeTitle}" onerror="this.style.display='none'; this.parentElement.style.background='rgba(201,168,76,0.1)'">
                         </div>
                         <div class="book-info">
-                            <h3>${book.title}</h3>
-                            <p>${book.description || 'Premium digital material available for download.'}</p>
+                            <h3>${safeTitle}</h3>
+                            <p>${safeDesc}</p>
                             <div class="book-price">${priceDisplay}</div>
-                            <a href="/api/download?url=${encodeURIComponent(book.download_url)}&filename=${encodeURIComponent(book.title.replace(/\s+/g, '_') + '.pdf')}" download class="btn-primary btn-sm glow-effect" style="display:inline-block;text-align:center;">Download Free</a>
+                            <a href="${escapeHtml(downloadHref)}" download class="btn-primary btn-sm glow-effect" style="display:inline-block;text-align:center;">Download Free</a>
                         </div>
                     </div>
                 `;
@@ -167,11 +192,13 @@ document.addEventListener('DOMContentLoaded', () => {
                 videoSection.style.display = '';
             }
 
-            // Update title
+            // Update title — use safe textContent then only inject the <span> for known safe literal 'DWSA'
             const titleEl = videoSection.querySelector('.section-title');
             if (titleEl && video.title) {
+                const safeTitle = escapeHtml(video.title);
                 if (video.title.includes('DWSA')) {
-                    titleEl.innerHTML = video.title.replace('DWSA', '<span class="highlight-gold">DWSA</span>');
+                    // Only the literal string 'DWSA' gets wrapped — user text is escaped
+                    titleEl.innerHTML = safeTitle.replace('DWSA', '<span class="highlight-gold">DWSA</span>');
                 } else {
                     titleEl.textContent = video.title;
                 }
@@ -186,14 +213,15 @@ document.addEventListener('DOMContentLoaded', () => {
             // Update video player
             const wrapper = videoSection.querySelector('.video-wrapper');
             if (wrapper && video.video_url) {
-                const url = video.video_url.trim();
+                const url = String(video.video_url).trim();
+                const safeVideoTitle = escapeHtml(video.title || 'DWSA Intro Video');
 
                 // YouTube match
                 const ytMatch = url.match(/(?:youtube\.com\/(?:watch\?v=|embed\/|shorts\/)|youtu\.be\/)([a-zA-Z0-9_-]{11})/);
                 if (ytMatch && ytMatch[1]) {
                     wrapper.innerHTML = `
-                        <iframe src="https://www.youtube-nocookie.com/embed/${ytMatch[1]}?rel=0" 
-                                title="${video.title || 'DWSA Intro Video'}" 
+                        <iframe src="https://www.youtube-nocookie.com/embed/${encodeURIComponent(ytMatch[1])}?rel=0" 
+                                title="${safeVideoTitle}" 
                                 style="width: 100%; aspect-ratio: 16/9; display: block; border: none;" 
                                 allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" 
                                 allowfullscreen></iframe>
@@ -205,8 +233,8 @@ document.addEventListener('DOMContentLoaded', () => {
                 const vimeoMatch = url.match(/vimeo\.com\/(?:video\/)?([0-9]+)/);
                 if (vimeoMatch && vimeoMatch[1]) {
                     wrapper.innerHTML = `
-                        <iframe src="https://player.vimeo.com/video/${vimeoMatch[1]}" 
-                                title="${video.title || 'DWSA Intro Video'}" 
+                        <iframe src="https://player.vimeo.com/video/${encodeURIComponent(vimeoMatch[1])}" 
+                                title="${safeVideoTitle}" 
                                 style="width: 100%; aspect-ratio: 16/9; display: block; border: none;" 
                                 allow="autoplay; fullscreen; picture-in-picture" 
                                 allowfullscreen></iframe>
@@ -219,8 +247,8 @@ document.addEventListener('DOMContentLoaded', () => {
                     const driveMatch = url.match(/\/file\/d\/([a-zA-Z0-9_-]+)/) || url.match(/[?&]id=([a-zA-Z0-9_-]+)/);
                     if (driveMatch && driveMatch[1]) {
                         wrapper.innerHTML = `
-                            <iframe src="https://drive.google.com/file/d/${driveMatch[1]}/preview" 
-                                    title="${video.title || 'DWSA Intro Video'}" 
+                            <iframe src="https://drive.google.com/file/d/${encodeURIComponent(driveMatch[1])}/preview" 
+                                    title="${safeVideoTitle}" 
                                     style="width: 100%; aspect-ratio: 16/9; display: block; border: none;" 
                                     allow="autoplay"></iframe>
                         `;
@@ -229,10 +257,10 @@ document.addEventListener('DOMContentLoaded', () => {
                 }
 
                 // Direct video (mp4 / webm / local file)
-                const posterAttr = video.poster_url ? `poster="${video.poster_url}"` : '';
+                const posterAttr = video.poster_url ? `poster="${escapeHtml(video.poster_url)}"` : '';
                 wrapper.innerHTML = `
                     <video controls preload="metadata" ${posterAttr} class="intro-video">
-                        <source src="${url}" type="video/mp4">
+                        <source src="${escapeHtml(url)}" type="video/mp4">
                         Your browser does not support the video tag.
                     </video>
                 `;
@@ -385,7 +413,11 @@ document.addEventListener('DOMContentLoaded', () => {
             const adv = result.data;
             if (adv.title) {
                 const titleEl = document.getElementById('adv-title');
-                if (titleEl) titleEl.innerHTML = adv.title.replace('ACADEMY', '<span class="highlight-gold">ACADEMY</span>');
+                if (titleEl) {
+                    const safeAdvTitle = escapeHtml(adv.title);
+                    // Only the literal word 'ACADEMY' gets wrapped — user text is escaped
+                    titleEl.innerHTML = safeAdvTitle.replace('ACADEMY', '<span class="highlight-gold">ACADEMY</span>');
+                }
             }
             if (adv.sub_badge) {
                 const el = document.getElementById('adv-sub-badge');

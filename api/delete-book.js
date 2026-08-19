@@ -1,4 +1,5 @@
 const { Pool } = require('pg');
+const { verifyToken } = require('./_auth');
 
 module.exports = async function handler(req, res) {
   if (req.method !== 'DELETE') {
@@ -6,10 +7,7 @@ module.exports = async function handler(req, res) {
   }
 
   const authHeader = req.headers.authorization;
-  const adminPassword = process.env.ADMIN_PASSWORD || 'admin123';
-  const expectedToken = `Bearer ${Buffer.from(adminPassword).toString('base64')}`;
-
-  if (authHeader !== expectedToken) {
+  if (!verifyToken(authHeader)) {
     return res.status(401).json({ message: 'Unauthorized access' });
   }
 

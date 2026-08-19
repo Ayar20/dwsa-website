@@ -1,4 +1,5 @@
 const { Pool } = require('pg');
+const { verifyToken } = require('./_auth');
 
 module.exports = async function handler(req, res) {
   if (req.method !== 'POST') {
@@ -6,17 +7,18 @@ module.exports = async function handler(req, res) {
   }
 
   const authHeader = req.headers.authorization;
-  const adminPassword = process.env.ADMIN_PASSWORD || 'admin123';
-  const expectedToken = `Bearer ${Buffer.from(adminPassword).toString('base64')}`;
-
-  if (authHeader !== expectedToken) {
+  if (!verifyToken(authHeader)) {
     return res.status(401).json({ message: 'Unauthorized access' });
   }
 
-  const { title, price, cover_image_url, download_url, description } = req.body;
+  const { title, price, cover_image_url, download_url, description } = req.body || {};
 
   if (!title || !cover_image_url || !download_url) {
     return res.status(400).json({ message: 'Missing required fields: title, cover_image_url, download_url' });
+  }
+
+  if (typeof title !== 'string' || title.length > 255 || typeof cover_image_url !== 'string' || typeof download_url !== 'string') {
+    return res.status(400).json({ message: 'Invalid field types or length exceeds limit' });
   }
 
   const dbUrl = process.env.DATABASE_URL || process.env.NEON_DATABASE_URL || process.env.POSTGRES_URL;

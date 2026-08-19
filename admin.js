@@ -1,3 +1,17 @@
+/** ── Security: HTML entity encoder ────────────────────────────────
+ *  Prevents Stored/DOM XSS when user-supplied registration data
+ *  (name, email, phone, program…) is written into innerHTML tables.
+ * ──────────────────────────────────────────────────────────────── */
+function escHtml(str) {
+    if (str == null) return '';
+    return String(str)
+        .replace(/&/g, '&amp;')
+        .replace(/</g, '&lt;')
+        .replace(/>/g, '&gt;')
+        .replace(/"/g, '&quot;')
+        .replace(/'/g, '&#x27;');
+}
+
 document.addEventListener('DOMContentLoaded', () => {
     // Navigation Logic
     const navLinks = document.querySelectorAll('.sidebar-nav a[data-target]');
@@ -143,13 +157,13 @@ document.addEventListener('DOMContentLoaded', () => {
                 registrations.forEach(reg => {
                     html += `
                         <tr>
-                            <td><strong>${reg.name}</strong></td>
-                            <td><a href="mailto:${reg.email}" style="color: #63b3ed;">${reg.email}</a></td>
-                            <td>${reg.phone || 'N/A'}</td>
-                            <td><span class="badge" style="background: rgba(212, 160, 23, 0.15); color: #d4a017; border: 1px solid #d4a017;">${reg.program || 'AI Coding Academy'}</span></td>
-                            <td>${reg.payment_option || 'Standard'}</td>
-                            <td>${reg.learning_mode || 'Physical'}</td>
-                            <td>${reg.date || ''}</td>
+                            <td><strong>${escHtml(reg.name)}</strong></td>
+                            <td><a href="mailto:${escHtml(reg.email)}" style="color: #63b3ed;">${escHtml(reg.email)}</a></td>
+                            <td>${escHtml(reg.phone || 'N/A')}</td>
+                            <td><span class="badge" style="background: rgba(212, 160, 23, 0.15); color: #d4a017; border: 1px solid #d4a017;">${escHtml(reg.program || 'AI Coding Academy')}</span></td>
+                            <td>${escHtml(reg.payment_option || 'Standard')}</td>
+                            <td>${escHtml(reg.learning_mode || 'Physical')}</td>
+                            <td>${escHtml(reg.date || '')}</td>
                         </tr>
                     `;
                 });
@@ -168,10 +182,10 @@ document.addEventListener('DOMContentLoaded', () => {
                  recent.forEach(reg => {
                      html += `
                          <tr>
-                             <td>${reg.name}</td>
-                             <td>${reg.email}</td>
-                             <td><span class="badge program-badge">${reg.program}</span></td>
-                             <td>${reg.date}</td>
+                             <td>${escHtml(reg.name)}</td>
+                             <td>${escHtml(reg.email)}</td>
+                             <td><span class="badge program-badge">${escHtml(reg.program)}</span></td>
+                             <td>${escHtml(reg.date)}</td>
                              <td><button class="btn-text">View</button></td>
                          </tr>
                      `;

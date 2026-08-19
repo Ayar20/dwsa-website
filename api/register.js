@@ -1,14 +1,33 @@
 const { Pool } = require('pg');
 
+const EMAIL_REGEX = /^[a-zA-Z0-9.!#$%&'*+/=?^_`{|}~-]+@[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?(?:\.[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?)+$/;
+
+function sanitizeInput(str, maxLength = 255) {
+  if (typeof str !== 'string') return '';
+  // Remove control characters / null bytes and trim
+  return str.replace(/[\x00-\x1F\x7F]/g, '').trim().substring(0, maxLength);
+}
+
 module.exports = async function handler(req, res) {
   if (req.method !== 'POST') {
     return res.status(405).json({ message: 'Method Not Allowed' });
   }
 
-  const { name, email, phone, program, payment_option, learning_mode } = req.body;
+  const { name, email, phone, program, payment_option, learning_mode } = req.body || {};
 
-  if (!name || !email) {
-    return res.status(400).json({ message: 'Name and Email are required.' });
+  const cleanName = sanitizeInput(name, 100);
+  const cleanEmail = sanitizeInput(email, 120).toLowerCase();
+  const cleanPhone = sanitizeInput(phone, 30);
+  const cleanProgram = sanitizeInput(program, 100) || 'AI Coding Academy';
+  const cleanPayment = sanitizeInput(payment_option, 100) || 'Early Bird (₦45,000)';
+  const cleanMode = sanitizeInput(learning_mode, 100) || 'Physical (Makurdi)';
+
+  if (!cleanName || cleanName.length < 2) {
+    return res.status(400).json({ message: 'A valid Full Name (at least 2 characters) is required.' });
+  }
+
+  if (!cleanEmail || !EMAIL_REGEX.test(cleanEmail)) {
+    return res.status(400).json({ message: 'A valid Email address is required.' });
   }
 
   const dbUrl = process.env.DATABASE_URL || process.env.NEON_DATABASE_URL || process.env.POSTGRES_URL;
@@ -18,38 +37,11 @@ module.exports = async function handler(req, res) {
   });
 
   try {
-    await pool.query(`
-      CREATE TABLE IF NOT EXISTS registrations (
-        id SERIAL PRIMARY KEY,
-        name VARCHAR(255) NOT NULL,
-        email VARCHAR(255) NOT NULL,
-        phone VARCHAR(50),
-        program VARCHAR(255) DEFAULT 'AI Coding Academy',
-        payment_option VARCHAR(100),
-        learning_mode VARCHAR(100),
-        created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
-      )
-    `);
-
-    await pool.query(`
-      ALTER TABLE registrations 
-      ADD COLUMN IF NOT EXISTS phone VARCHAR(50),
-      ADD COLUMN IF NOT EXISTS payment_option VARCHAR(100),
-      ADD COLUMN IF NOT EXISTS learning_mode VARCHAR(100);
-    `);
-
     const result = await pool.query(
       `INSERT INTO registrations (name, email, phone, program, payment_option, learning_mode) 
        VALUES ($1, $2, $3, $4, $5, $6) 
-       RETURNING *`,
-      [
-        name,
-        email,
-        phone || '',
-        program || 'AI Coding Academy',
-        payment_option || 'Early Bird (₦45,000)',
-        learning_mode || 'Physical (Makurdi)'
-      ]
+       RETURNING id, name, email, program, created_at`,
+      [cleanName, cleanEmail, cleanPhone, cleanProgram, cleanPayment, cleanMode]
     );
 
     res.status(200).json({ success: true, data: result.rows[0] });
@@ -60,3 +52,4 @@ module.exports = async function handler(req, res) {
     await pool.end();
   }
 };
+
