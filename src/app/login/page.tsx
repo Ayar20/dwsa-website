@@ -3,7 +3,7 @@
 import React, { useState } from "react";
 import { signIn } from "next-auth/react";
 import { useRouter } from "next/navigation";
-import { GraduationCap, ShieldAlert, ArrowRight, Mail, Lock, UserCheck, Building2 } from "lucide-react";
+import { GraduationCap, ShieldAlert, ArrowRight, Mail, Lock } from "lucide-react";
 import Link from "next/link";
 
 export default function LoginPage() {
@@ -25,7 +25,7 @@ export default function LoginPage() {
     });
 
     if (res?.error) {
-      setError("Invalid credentials. Use Quick Login buttons below for testing.");
+      setError("Invalid email or password. Please check your credentials.");
       setLoading(false);
     } else {
       if (email.toLowerCase().includes("admin")) {
@@ -37,27 +37,6 @@ export default function LoginPage() {
       }
       router.refresh();
     }
-  };
-
-  const handleQuickLogin = (emailVal: string, passVal: string, targetPath: string = "/dashboard/student") => {
-    setEmail(emailVal);
-    setPassword(passVal);
-    setLoading(true);
-    setError(null);
-
-    signIn("credentials", {
-      email: emailVal,
-      password: passVal,
-      redirect: false,
-    }).then((res) => {
-      if (res?.error) {
-        setError(res.error);
-        setLoading(false);
-      } else {
-        router.push(targetPath);
-        router.refresh();
-      }
-    });
   };
 
   return (
@@ -141,35 +120,7 @@ export default function LoginPage() {
             </Link>
           </div>
 
-          {/* Quick Demo Logins */}
-          <div className="pt-4 border-t border-slate-100 space-y-3">
-            <span className="block text-[11px] font-bold text-center text-slate-400 uppercase tracking-wider">
-              Quick Demo Access
-            </span>
-            <div className="grid grid-cols-2 gap-2.5">
-              <button
-                type="button"
-                onClick={() => handleQuickLogin("student@dwsa.edu", "student123", "/dashboard/student")}
-                className="py-2.5 px-3 bg-[#F0FDF4] hover:bg-emerald-100 border border-[#15803D]/20 rounded-xl text-[11px] font-bold text-[#15803D] flex items-center justify-center gap-1.5 transition-all shadow-xs"
-              >
-                <UserCheck className="w-3.5 h-3.5" />
-                Student Workspace
-              </button>
 
-              <button
-                type="button"
-                onClick={() => handleQuickLogin("admin@dwsa.edu", "admin123", "/dashboard/admin")}
-                className="py-2.5 px-3 bg-[#FEFCE8] hover:bg-amber-100 border border-[#D4A017]/30 rounded-xl text-[11px] font-bold text-[#D4A017] flex items-center justify-center gap-1.5 transition-all shadow-xs"
-              >
-                <Building2 className="w-3.5 h-3.5" />
-                Executive Portal
-              </button>
-            </div>
-            <div className="text-[10px] text-slate-500 text-center space-y-0.5 font-mono pt-1">
-              <p>Student: <span className="text-[#15803D] font-bold">student@dwsa.edu</span> / <span className="text-[#0F172A]">student123</span></p>
-              <p>Admin: <span className="text-[#D4A017] font-bold">admin@dwsa.edu</span> / <span className="text-[#0F172A]">admin123</span></p>
-            </div>
-          </div>
         </div>
 
         {/* Back Link */}

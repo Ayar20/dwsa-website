@@ -24,6 +24,7 @@ import {
   ChevronRight,
   MessageSquare,
   FileCheck2,
+  CreditCard,
 } from "lucide-react";
 
 export default function HomePage() {
@@ -143,19 +144,21 @@ export default function HomePage() {
                 <CheckCircle2 className="w-4 h-4 text-[#4ade80]" />
                 <span>Next Cohort Launching Soon</span>
               </div>
-              <div className="flex items-center gap-3">
-                <button
-                  onClick={() => openLeadModal("Generative AI for Work & Productivity")}
-                  className="px-5 py-2.5 bg-[#D4A017] hover:bg-[#e5a910] text-[#030e1f] font-black text-xs rounded-xl transition-all shadow-md flex items-center gap-2"
+              <div className="flex flex-wrap items-center gap-3">
+                <a
+                  href="https://checkout.paystack.com/brihlvap5ybeaww"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="px-5 py-2.5 bg-[#15803D] hover:bg-[#166534] text-white font-extrabold text-xs rounded-xl transition-all shadow-md flex items-center gap-2"
                 >
-                  <Send className="w-3.5 h-3.5" />
-                  Pre-Register Priority Interest
-                </button>
+                  <CreditCard className="w-3.5 h-3.5" />
+                  Pay ₦45,000 via Paystack →
+                </a>
                 <Link
                   href="/admissions/apply"
                   className="px-5 py-2.5 bg-white/10 hover:bg-white/20 border border-white/20 text-white font-bold text-xs rounded-xl transition-all"
                 >
-                  Start Application
+                  Apply for Admission
                 </Link>
               </div>
             </div>
