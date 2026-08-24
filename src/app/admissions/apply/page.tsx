@@ -39,6 +39,23 @@ export default function AdmissionsApplyPage() {
   const [existingApplications, setExistingApplications] = useState<any[]>([]);
   const [message, setMessage] = useState<{ type: "success" | "error"; text: string } | null>(null);
 
+  const [config, setConfig] = useState({
+    standardPrice: 55000,
+    earlyBirdPrice: 45000,
+    earlyBirdSeats: 5,
+    earlyBirdActive: true,
+    paystackCheckoutUrl: "https://checkout.paystack.com/brihlvap5ybeaww",
+  });
+
+  useEffect(() => {
+    fetch("/api/config")
+      .then((res) => res.json())
+      .then((data) => {
+        if (data && !data.error) setConfig(data);
+      })
+      .catch(() => {});
+  }, []);
+
   // Fetch candidate's existing application status if authenticated
   useEffect(() => {
     if (session?.user) {
@@ -172,7 +189,15 @@ export default function AdmissionsApplyPage() {
               <h2 className="text-xl font-extrabold text-[#0F172A]">Secure Your Seat in Cohort GENAI-WP-001</h2>
               <p className="text-xs text-slate-600 max-w-md mx-auto leading-relaxed">
                 Create your free account, then complete your tuition payment via Paystack to unlock your digital campus workspace instantly.
-                <span className="block mt-1 font-semibold text-[#15803D]">🎉 Early Bird: ₦45,000 (first 5 students) · Standard: ₦55,000</span>
+                {config.earlyBirdActive ? (
+                  <span className="block mt-1 font-semibold text-[#15803D]">
+                    🎉 Early Bird: ₦{config.earlyBirdPrice.toLocaleString()} (first {config.earlyBirdSeats} students) · Standard: ₦{config.standardPrice.toLocaleString()}
+                  </span>
+                ) : (
+                  <span className="block mt-1 font-semibold text-[#15803D]">
+                    Tuition: ₦{config.standardPrice.toLocaleString()}
+                  </span>
+                )}
               </p>
             </div>
             <Link
@@ -255,8 +280,18 @@ export default function AdmissionsApplyPage() {
               <div>
                 <h3 className="text-base font-black text-white">Secure Your Seat — Pay Tuition Now</h3>
                 <div className="flex items-center gap-2 mt-1 flex-wrap">
-                  <span className="text-sm text-slate-400 line-through">₦55,000</span>
-                  <span className="px-2 py-0.5 rounded-full bg-[#15803D]/30 border border-[#4ade80]/40 text-[#4ade80] text-[10px] font-black">🎉 Early Bird: ₦45,000 — First 5 Students</span>
+                  {config.earlyBirdActive ? (
+                    <>
+                      <span className="text-sm text-slate-400 line-through">₦{config.standardPrice.toLocaleString()}</span>
+                      <span className="px-2 py-0.5 rounded-full bg-[#15803D]/30 border border-[#4ade80]/40 text-[#4ade80] text-[10px] font-black">
+                        🎉 Early Bird: ₦{config.earlyBirdPrice.toLocaleString()} — First {config.earlyBirdSeats} Students
+                      </span>
+                    </>
+                  ) : (
+                    <span className="text-sm font-black text-white">
+                      Tuition: ₦{config.standardPrice.toLocaleString()}
+                    </span>
+                  )}
                 </div>
                 <p className="text-xs text-slate-300 mt-1 leading-relaxed">
                   Payment activates your Cohort GENAI-WP-001 enrolment and unlocks your full digital campus workspace immediately.
@@ -264,13 +299,15 @@ export default function AdmissionsApplyPage() {
               </div>
               <div className="flex flex-col sm:flex-row gap-3">
                 <a
-                  href="https://checkout.paystack.com/brihlvap5ybeaww"
+                  href={config.paystackCheckoutUrl}
                   target="_blank"
                   rel="noopener noreferrer"
                   className="flex-1 py-3.5 rounded-xl bg-[#15803D] hover:bg-[#166534] text-white font-black text-xs flex items-center justify-center gap-2 transition-all shadow-md"
                 >
                   <CreditCard className="w-4 h-4" />
-                  Pay Early Bird ₦45,000 via Paystack →
+                  {config.earlyBirdActive
+                    ? `Pay Early Bird ₦${config.earlyBirdPrice.toLocaleString()} via Paystack →`
+                    : `Pay ₦${config.standardPrice.toLocaleString()} via Paystack →`}
                 </a>
                 <a
                   href="https://wa.me/2347082135071"

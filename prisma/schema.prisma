@@ -431,3 +431,10 @@ model AuditLog {
   createdAt DateTime @default(now())
   user      User?    @relation(fields: [userId], references: [id])
 }
+
+model SystemSetting {
+  key       String   @id
+  value     String
+  updatedAt DateTime @updatedAt
+}
+

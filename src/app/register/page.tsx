@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { signIn } from "next-auth/react";
 import Link from "next/link";
 import {
@@ -25,6 +25,23 @@ export default function RegisterPage() {
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const [step, setStep] = useState<1 | 2>(1); // 1 = register, 2 = pay
+
+  const [config, setConfig] = useState({
+    standardPrice: 55000,
+    earlyBirdPrice: 45000,
+    earlyBirdSeats: 5,
+    earlyBirdActive: true,
+    paystackCheckoutUrl: "https://checkout.paystack.com/brihlvap5ybeaww",
+  });
+
+  useEffect(() => {
+    fetch("/api/config")
+      .then((res) => res.json())
+      .then((data) => {
+        if (data && !data.error) setConfig(data);
+      })
+      .catch(() => {});
+  }, []);
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -115,9 +132,17 @@ export default function RegisterPage() {
           </div>
           <h3 className="text-sm font-extrabold text-[#0F172A]">Generative AI for Work &amp; Productivity</h3>
           <div className="flex items-center gap-2 flex-wrap mt-0.5">
-            <span className="text-[11px] text-slate-400 line-through">₦55,000</span>
-            <span className="px-2 py-0.5 rounded-full bg-[#15803D] text-white text-[10px] font-black">Early Bird: ₦45,000</span>
-            <span className="text-[10px] text-slate-500">· First 5 students only</span>
+            {config.earlyBirdActive ? (
+              <>
+                <span className="text-[11px] text-slate-400 line-through">₦{config.standardPrice.toLocaleString()}</span>
+                <span className="px-2 py-0.5 rounded-full bg-[#15803D] text-white text-[10px] font-black">
+                  Early Bird: ₦{config.earlyBirdPrice.toLocaleString()}
+                </span>
+                <span className="text-[10px] text-slate-500">· First {config.earlyBirdSeats} students only</span>
+              </>
+            ) : (
+              <span className="text-[11px] font-bold text-[#15803D]">₦{config.standardPrice.toLocaleString()} Full Tuition</span>
+            )}
           </div>
         </div>
 
@@ -234,33 +259,49 @@ export default function RegisterPage() {
             <div className="p-4 rounded-2xl bg-[#F8FAFC] border border-slate-200 space-y-3">
               <div className="flex items-center justify-between">
                 <span className="text-[10px] font-extrabold text-slate-400 uppercase tracking-wider">Payment Summary</span>
-                <span className="px-2 py-0.5 rounded-full bg-[#15803D] text-white text-[10px] font-black">🎉 Early Bird — First 5 Students</span>
+                {config.earlyBirdActive && (
+                  <span className="px-2 py-0.5 rounded-full bg-[#15803D] text-white text-[10px] font-black">
+                    🎉 Early Bird — First {config.earlyBirdSeats} Students
+                  </span>
+                )}
               </div>
               <div className="flex justify-between items-center">
                 <span className="text-xs text-slate-600">Generative AI for Work &amp; Productivity</span>
                 <div className="text-right">
-                  <span className="text-[10px] text-slate-400 line-through block">₦55,000</span>
-                  <span className="text-xs font-black text-[#15803D]">₦45,000</span>
+                  {config.earlyBirdActive ? (
+                    <>
+                      <span className="text-[10px] text-slate-400 line-through block">₦{config.standardPrice.toLocaleString()}</span>
+                      <span className="text-xs font-black text-[#15803D]">₦{config.earlyBirdPrice.toLocaleString()}</span>
+                    </>
+                  ) : (
+                    <span className="text-xs font-black text-[#0F172A]">₦{config.standardPrice.toLocaleString()}</span>
+                  )}
                 </div>
               </div>
               <div className="flex justify-between items-center border-t border-slate-200 pt-2">
                 <span className="text-xs font-extrabold text-[#0F172A]">Total Due Today</span>
-                <span className="text-base font-black text-[#15803D]">₦45,000</span>
+                <span className="text-base font-black text-[#15803D]">
+                  ₦{(config.earlyBirdActive ? config.earlyBirdPrice : config.standardPrice).toLocaleString()}
+                </span>
               </div>
-              <p className="text-[10px] text-slate-500 pt-1 border-t border-slate-100">
-                Standard price after early bird slots fill: <strong className="text-[#0F172A]">₦55,000</strong>
-              </p>
+              {config.earlyBirdActive && (
+                <p className="text-[10px] text-slate-500 pt-1 border-t border-slate-100">
+                  Standard price after early bird slots fill: <strong className="text-[#0F172A]">₦{config.standardPrice.toLocaleString()}</strong>
+                </p>
+              )}
             </div>
 
             {/* Primary CTA — Paystack */}
             <a
-              href="https://checkout.paystack.com/brihlvap5ybeaww"
+              href={config.paystackCheckoutUrl}
               target="_blank"
               rel="noopener noreferrer"
               className="w-full py-4 rounded-xl text-sm font-black bg-[#15803D] hover:bg-[#166534] text-white shadow-md transition-all flex items-center justify-center gap-2"
             >
               <CreditCard className="w-5 h-5" />
-              Pay Early Bird ₦45,000 via Paystack →
+              {config.earlyBirdActive
+                ? `Pay Early Bird ₦${config.earlyBirdPrice.toLocaleString()} via Paystack →`
+                : `Pay ₦${config.standardPrice.toLocaleString()} via Paystack Now →`}
             </a>
 
             <p className="text-[11px] text-center text-slate-500">
