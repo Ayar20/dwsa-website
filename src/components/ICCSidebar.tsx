@@ -17,6 +17,9 @@ import {
   ChevronRight,
   Sparkles,
   X,
+  Globe,
+  ArrowUpRight,
+  ArrowLeft,
 } from "lucide-react";
 
 interface ICCSidebarProps {
@@ -125,7 +128,7 @@ export default function ICCSidebar({ mobileOpen, setMobileOpen }: ICCSidebarProp
     <div className="flex flex-col h-full bg-[#15803D] text-white select-none">
       {/* Brand Header */}
       <div className="px-4 py-5 border-b border-[#166534] flex items-center justify-between">
-        <div className="flex items-center gap-3">
+        <Link href="/" className="flex items-center gap-3 hover:opacity-90 transition-opacity" title="Return to Main Academy Website">
           <div className="w-9 h-9 rounded-xl bg-white flex items-center justify-center shrink-0 shadow-md">
             <Building2 className="w-4.5 h-4.5 text-[#15803D]" aria-hidden="true" />
           </div>
@@ -138,7 +141,7 @@ export default function ICCSidebar({ mobileOpen, setMobileOpen }: ICCSidebarProp
             </span>
             <span className="text-[9px] text-white/60 tracking-wide">InstitutionOS v5.2</span>
           </div>
-        </div>
+        </Link>
         {mobileOpen && (
           <button
             onClick={() => setMobileOpen(false)}
@@ -220,8 +223,23 @@ export default function ICCSidebar({ mobileOpen, setMobileOpen }: ICCSidebarProp
           );
         })}
 
-        {/* System Status Pill */}
+        {/* Return to Public Website */}
         <div className="pt-2">
+          <Link
+            href="/"
+            className="w-full flex items-center justify-between p-3 rounded-2xl bg-white/10 hover:bg-white/20 border border-white/20 text-white text-xs font-extrabold transition-all group"
+            title="Exit Admin and return to main website"
+          >
+            <div className="flex items-center gap-2">
+              <Globe className="w-4 h-4 text-[#D4A017] group-hover:scale-110 transition-transform" />
+              <span>Main Website</span>
+            </div>
+            <ArrowUpRight className="w-3.5 h-3.5 opacity-70 group-hover:opacity-100 transition-opacity" />
+          </Link>
+        </div>
+
+        {/* System Status Pill */}
+        <div className="pt-1">
           <div className="p-3 rounded-2xl bg-[#166534] border border-white/20">
             <div className="flex items-center gap-2 text-[10px] font-extrabold text-white">
               <span className="w-2 h-2 rounded-full bg-white animate-pulse" aria-hidden="true" />

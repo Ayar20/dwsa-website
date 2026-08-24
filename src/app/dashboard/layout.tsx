@@ -14,7 +14,7 @@ import PrideModal from "@/components/PrideModal";
 import PWAInstallBanner from "@/components/PWAInstallBanner";
 import { useSession } from "next-auth/react";
 import { useRouter, usePathname } from "next/navigation";
-import { Menu, Bell, Search, GraduationCap, ShieldCheck, User, BookMarked, Command } from "lucide-react";
+import { Menu, Bell, Search, GraduationCap, ShieldCheck, User, BookMarked, Command, Globe, ArrowUpRight } from "lucide-react";
 import Link from "next/link";
 
 export default function DashboardLayout({
@@ -391,6 +391,14 @@ export default function DashboardLayout({
                 <Bell className="w-4 h-4" aria-hidden="true" />
                 <span className="absolute top-1.5 right-1.5 w-2 h-2 rounded-full bg-[#15803D]" aria-hidden="true" />
               </button>
+              <Link
+                href="/"
+                className="flex items-center gap-1.5 px-3 py-1.5 rounded-xl bg-[#F0FDF4] border border-[#15803D]/30 text-[#15803D] hover:bg-[#15803D] hover:text-white text-xs font-extrabold transition-all shadow-xs"
+                title="Return to Main Academy Website"
+              >
+                <Globe className="w-3.5 h-3.5" />
+                <span className="hidden sm:inline">Main Website</span>
+              </Link>
               <Link
                 href="/dashboard/admin/settings"
                 className="flex items-center gap-2 p-1.5 sm:px-3 sm:py-1.5 rounded-xl bg-slate-100 border border-slate-200 hover:border-[#15803D] text-[#0F172A] transition-all focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#15803D]"
