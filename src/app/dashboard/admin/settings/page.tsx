@@ -88,6 +88,89 @@ export default function SettingsPage() {
           </div>
         </div>
 
+        {/* Pricing & Early Bird Settings */}
+        <div className="rounded-2xl bg-[#061428] border border-[#1a2f4a] p-6 space-y-4">
+          <div className="flex items-center justify-between">
+            <h3 className="text-sm font-extrabold text-white flex items-center gap-2">
+              <span className="text-base">🎓</span>
+              Cohort Pricing &amp; Early Bird Control
+            </h3>
+            <span className="px-2 py-0.5 rounded-full bg-[#15803D]/20 border border-[#4ade80]/30 text-[#4ade80] text-[9px] font-black uppercase tracking-wider">
+              GENAI-WP-001 Active
+            </span>
+          </div>
+
+          <p className="text-[11px] text-[#8899b4] leading-relaxed">
+            Controls the pricing displayed across the homepage, registration, and admissions pages. The standard price shows as strikethrough when early bird is active.
+          </p>
+
+          <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+            <div>
+              <label className="block text-[10px] font-black text-[#8899b4] uppercase mb-1">
+                Standard / Full Tuition (₦)
+              </label>
+              <input
+                type="number"
+                defaultValue={55000}
+                className="w-full px-3 py-2 rounded-xl bg-[#030e1f] border border-[#1a2f4a] text-xs text-white font-mono"
+              />
+              <p className="text-[10px] text-[#8899b4] mt-1">Displayed with strikethrough when early bird is active</p>
+            </div>
+            <div>
+              <label className="block text-[10px] font-black text-[#8899b4] uppercase mb-1">
+                Early Bird Price (₦)
+              </label>
+              <input
+                type="number"
+                defaultValue={45000}
+                className="w-full px-3 py-2 rounded-xl bg-[#030e1f] border border-[#4ade80]/40 text-xs text-[#4ade80] font-mono"
+              />
+              <p className="text-[10px] text-[#8899b4] mt-1">Active discounted price shown on all CTAs</p>
+            </div>
+            <div>
+              <label className="block text-[10px] font-black text-[#8899b4] uppercase mb-1">
+                Early Bird Seat Limit
+              </label>
+              <input
+                type="number"
+                defaultValue={5}
+                min={1}
+                className="w-full px-3 py-2 rounded-xl bg-[#030e1f] border border-[#1a2f4a] text-xs text-white font-mono"
+              />
+              <p className="text-[10px] text-[#8899b4] mt-1">Shows "First X students only" on pricing badges</p>
+            </div>
+            <div>
+              <label className="block text-[10px] font-black text-[#8899b4] uppercase mb-1">
+                Early Bird Status
+              </label>
+              <select
+                defaultValue="active"
+                className="w-full px-3 py-2 rounded-xl bg-[#030e1f] border border-[#1a2f4a] text-xs text-white"
+              >
+                <option value="active">✅ Active — Show early bird pricing &amp; strikethrough</option>
+                <option value="inactive">❌ Inactive — Show standard price only (no strikethrough)</option>
+              </select>
+              <p className="text-[10px] text-[#8899b4] mt-1">Toggle strikethrough &amp; early bird badge on/off sitewide</p>
+            </div>
+          </div>
+
+          <div>
+            <label className="block text-[10px] font-black text-[#8899b4] uppercase mb-1">
+              Paystack Checkout URL
+            </label>
+            <input
+              type="url"
+              defaultValue="https://checkout.paystack.com/brihlvap5ybeaww"
+              className="w-full px-3 py-2 rounded-xl bg-[#030e1f] border border-[#1a2f4a] text-xs text-white font-mono"
+            />
+            <p className="text-[10px] text-[#8899b4] mt-1">The direct Paystack link used on all "Pay Now" buttons across the site</p>
+          </div>
+
+          <div className="p-3 rounded-xl bg-[#D4A017]/10 border border-[#D4A017]/30 text-[11px] text-[#D4A017] leading-relaxed">
+            ⚠️ <strong>Note:</strong> Pricing is currently hardcoded. Saving here records your intent — a database-driven config update is needed to make changes reflect live without redeployment.
+          </div>
+        </div>
+
         {/* Action button */}
         <div className="flex justify-end">
           <button
