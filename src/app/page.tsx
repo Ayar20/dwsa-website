@@ -140,9 +140,15 @@ export default function HomePage() {
             </div>
 
             <div className="flex flex-wrap items-center justify-between gap-4 pt-2 border-t border-white/10">
-              <div className="flex items-center gap-2 text-xs text-slate-300 font-semibold">
-                <CheckCircle2 className="w-4 h-4 text-[#4ade80]" />
-                <span>Next Cohort Launching Soon</span>
+              <div className="space-y-0.5">
+                <div className="flex items-center gap-2 text-xs text-slate-300 font-semibold">
+                  <CheckCircle2 className="w-4 h-4 text-[#4ade80]" />
+                  <span>Next Cohort Launching Soon</span>
+                </div>
+                <div className="flex items-center gap-2 pl-6">
+                  <span className="text-xs text-slate-500 line-through">₦55,000</span>
+                  <span className="px-2 py-0.5 rounded-full bg-[#4ade80]/20 border border-[#4ade80]/40 text-[#4ade80] text-[10px] font-black">🎉 Early Bird ₦45,000 · First 5 only</span>
+                </div>
               </div>
               <div className="flex flex-wrap items-center gap-3">
                 <a
@@ -152,7 +158,7 @@ export default function HomePage() {
                   className="px-5 py-2.5 bg-[#15803D] hover:bg-[#166534] text-white font-extrabold text-xs rounded-xl transition-all shadow-md flex items-center gap-2"
                 >
                   <CreditCard className="w-3.5 h-3.5" />
-                  Pay ₦45,000 via Paystack →
+                  Pay Early Bird ₦45,000 →
                 </a>
                 <Link
                   href="/register"

@@ -18,7 +18,7 @@ export default function ProgrammesPage() {
           mode: "Physical (Makurdi Lab) + Virtual Live",
           level: "Beginner to Full-Stack",
           outcomes: "Live portfolio, production web application deployed on Vercel, clean GitHub profile, DWSA Certificate (RC 9718724).",
-          tuition: "Early Bird: ₦45,000 (First 8 seats) | Standard: ₦55,000 | Split Pay: ₦30k + ₦25k",
+          tuition: "Early Bird: ₦45,000 (First 5 seats) | Standard: ₦55,000 | Split Pay: ₦30k + ₦25k",
           active: true,
         },
       ],

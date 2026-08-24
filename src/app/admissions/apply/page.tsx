@@ -171,7 +171,8 @@ export default function AdmissionsApplyPage() {
             <div className="space-y-2">
               <h2 className="text-xl font-extrabold text-[#0F172A]">Secure Your Seat in Cohort GENAI-WP-001</h2>
               <p className="text-xs text-slate-600 max-w-md mx-auto leading-relaxed">
-                Create your free account, then complete your ₦45,000 tuition payment via Paystack to unlock your digital campus workspace instantly.
+                Create your free account, then complete your tuition payment via Paystack to unlock your digital campus workspace instantly.
+                <span className="block mt-1 font-semibold text-[#15803D]">🎉 Early Bird: ₦45,000 (first 5 students) · Standard: ₦55,000</span>
               </p>
             </div>
             <Link
@@ -252,7 +253,11 @@ export default function AdmissionsApplyPage() {
                 </span>
               </div>
               <div>
-                <h3 className="text-base font-black text-white">Pay ₦45,000 to Secure Your Seat</h3>
+                <h3 className="text-base font-black text-white">Secure Your Seat — Pay Tuition Now</h3>
+                <div className="flex items-center gap-2 mt-1 flex-wrap">
+                  <span className="text-sm text-slate-400 line-through">₦55,000</span>
+                  <span className="px-2 py-0.5 rounded-full bg-[#15803D]/30 border border-[#4ade80]/40 text-[#4ade80] text-[10px] font-black">🎉 Early Bird: ₦45,000 — First 5 Students</span>
+                </div>
                 <p className="text-xs text-slate-300 mt-1 leading-relaxed">
                   Payment activates your Cohort GENAI-WP-001 enrolment and unlocks your full digital campus workspace immediately.
                 </p>
@@ -265,7 +270,7 @@ export default function AdmissionsApplyPage() {
                   className="flex-1 py-3.5 rounded-xl bg-[#15803D] hover:bg-[#166534] text-white font-black text-xs flex items-center justify-center gap-2 transition-all shadow-md"
                 >
                   <CreditCard className="w-4 h-4" />
-                  Pay ₦45,000 via Paystack →
+                  Pay Early Bird ₦45,000 via Paystack →
                 </a>
                 <a
                   href="https://wa.me/2347082135071"

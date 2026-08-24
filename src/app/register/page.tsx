@@ -114,7 +114,11 @@ export default function RegisterPage() {
             <span className="text-[10px] font-mono font-bold text-slate-500">Cohort GENAI-WP-001</span>
           </div>
           <h3 className="text-sm font-extrabold text-[#0F172A]">Generative AI for Work &amp; Productivity</h3>
-          <p className="text-[11px] text-slate-600">8-Week Executive Live-Online Immersion · ₦45,000 tuition</p>
+          <div className="flex items-center gap-2 flex-wrap mt-0.5">
+            <span className="text-[11px] text-slate-400 line-through">₦55,000</span>
+            <span className="px-2 py-0.5 rounded-full bg-[#15803D] text-white text-[10px] font-black">Early Bird: ₦45,000</span>
+            <span className="text-[10px] text-slate-500">· First 5 students only</span>
+          </div>
         </div>
 
         {/* ── STEP 1: Registration Form ── */}
@@ -228,15 +232,24 @@ export default function RegisterPage() {
 
             {/* Invoice summary */}
             <div className="p-4 rounded-2xl bg-[#F8FAFC] border border-slate-200 space-y-3">
-              <span className="text-[10px] font-extrabold text-slate-400 uppercase tracking-wider block">Payment Summary</span>
+              <div className="flex items-center justify-between">
+                <span className="text-[10px] font-extrabold text-slate-400 uppercase tracking-wider">Payment Summary</span>
+                <span className="px-2 py-0.5 rounded-full bg-[#15803D] text-white text-[10px] font-black">🎉 Early Bird — First 5 Students</span>
+              </div>
               <div className="flex justify-between items-center">
                 <span className="text-xs text-slate-600">Generative AI for Work &amp; Productivity</span>
-                <span className="text-xs font-black text-[#0F172A]">₦45,000</span>
+                <div className="text-right">
+                  <span className="text-[10px] text-slate-400 line-through block">₦55,000</span>
+                  <span className="text-xs font-black text-[#15803D]">₦45,000</span>
+                </div>
               </div>
               <div className="flex justify-between items-center border-t border-slate-200 pt-2">
-                <span className="text-xs font-extrabold text-[#0F172A]">Total Due</span>
+                <span className="text-xs font-extrabold text-[#0F172A]">Total Due Today</span>
                 <span className="text-base font-black text-[#15803D]">₦45,000</span>
               </div>
+              <p className="text-[10px] text-slate-500 pt-1 border-t border-slate-100">
+                Standard price after early bird slots fill: <strong className="text-[#0F172A]">₦55,000</strong>
+              </p>
             </div>
 
             {/* Primary CTA — Paystack */}
@@ -247,7 +260,7 @@ export default function RegisterPage() {
               className="w-full py-4 rounded-xl text-sm font-black bg-[#15803D] hover:bg-[#166534] text-white shadow-md transition-all flex items-center justify-center gap-2"
             >
               <CreditCard className="w-5 h-5" />
-              Pay ₦45,000 via Paystack Now →
+              Pay Early Bird ₦45,000 via Paystack →
             </a>
 
             <p className="text-[11px] text-center text-slate-500">
