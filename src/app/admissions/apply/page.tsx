@@ -19,6 +19,8 @@ import {
   Globe,
   Briefcase,
   HelpCircle,
+  CreditCard,
+  MessageCircle,
 } from "lucide-react";
 
 export default function AdmissionsApplyPage() {
@@ -160,24 +162,31 @@ export default function AdmissionsApplyPage() {
           </div>
         </div>
 
-        {/* Unauthenticated Notice */}
+        {/* Unauthenticated → redirect to /register */}
         {authStatus === "unauthenticated" && (
-          <div className="p-8 bg-white border border-slate-200 rounded-3xl text-center space-y-4 shadow-sm">
-            <div className="w-12 h-12 bg-[#FEFCE8] border border-[#D4A017]/40 rounded-2xl flex items-center justify-center mx-auto text-[#D4A017]">
-              <User className="w-6 h-6" />
+          <div className="p-8 bg-white border border-slate-200 rounded-3xl text-center space-y-5 shadow-sm">
+            <div className="w-12 h-12 bg-[#F0FDF4] border border-[#15803D]/30 rounded-2xl flex items-center justify-center mx-auto text-[#15803D]">
+              <GraduationCap className="w-6 h-6" />
             </div>
-            <h2 className="text-xl font-extrabold text-[#0F172A]">Create an Account to Apply</h2>
-            <p className="text-xs text-slate-600 max-w-md mx-auto leading-relaxed">
-              Admissions applications for DWSA Digital Technology Academy require an authenticated candidate account. Account creation is free and instant.
-            </p>
-            <div className="flex items-center justify-center gap-3 pt-2">
-              <Link
-                href="/login"
-                className="px-6 py-3 rounded-xl bg-[#15803D] hover:bg-[#166534] text-white font-extrabold text-xs transition-all shadow-sm"
-              >
-                Sign In / Create Account
+            <div className="space-y-2">
+              <h2 className="text-xl font-extrabold text-[#0F172A]">Secure Your Seat in Cohort GENAI-WP-001</h2>
+              <p className="text-xs text-slate-600 max-w-md mx-auto leading-relaxed">
+                Create your free account, then complete your ₦45,000 tuition payment via Paystack to unlock your digital campus workspace instantly.
+              </p>
+            </div>
+            <Link
+              href="/register"
+              className="inline-flex items-center gap-2 px-8 py-3.5 rounded-xl bg-[#15803D] hover:bg-[#166534] text-white font-extrabold text-xs transition-all shadow-md"
+            >
+              <CreditCard className="w-4 h-4" />
+              Register &amp; Pay via Paystack →
+            </Link>
+            <p className="text-[11px] text-slate-400">
+              Already registered?{" "}
+              <Link href="/login" className="text-[#15803D] font-bold hover:underline">
+                Sign in to your dashboard
               </Link>
-            </div>
+            </p>
           </div>
         )}
 
@@ -233,12 +242,55 @@ export default function AdmissionsApplyPage() {
 
         {/* Application Form */}
         {authStatus === "authenticated" && !fetchingApp && (
+          <div className="space-y-6">
+
+            {/* ── PAYSTACK PAYMENT CTA ── */}
+            <div className="p-6 rounded-3xl bg-[#030e1f] border border-[#15803D]/40 text-white space-y-4 shadow-xl">
+              <div className="flex items-center gap-2">
+                <span className="px-2.5 py-0.5 rounded-full bg-[#15803D]/20 border border-[#15803D]/40 text-[#4ade80] text-[10px] font-black uppercase tracking-wider">
+                  Step 2 — Payment Required
+                </span>
+              </div>
+              <div>
+                <h3 className="text-base font-black text-white">Pay ₦45,000 to Secure Your Seat</h3>
+                <p className="text-xs text-slate-300 mt-1 leading-relaxed">
+                  Payment activates your Cohort GENAI-WP-001 enrolment and unlocks your full digital campus workspace immediately.
+                </p>
+              </div>
+              <div className="flex flex-col sm:flex-row gap-3">
+                <a
+                  href="https://checkout.paystack.com/brihlvap5ybeaww"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="flex-1 py-3.5 rounded-xl bg-[#15803D] hover:bg-[#166534] text-white font-black text-xs flex items-center justify-center gap-2 transition-all shadow-md"
+                >
+                  <CreditCard className="w-4 h-4" />
+                  Pay ₦45,000 via Paystack →
+                </a>
+                <a
+                  href="https://wa.me/2347082135071"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="flex-1 py-3 rounded-xl bg-white/10 hover:bg-white/20 border border-white/20 text-white font-bold text-xs flex items-center justify-center gap-2 transition-all"
+                >
+                  <MessageCircle className="w-4 h-4" />
+                  Questions? WhatsApp Us
+                </a>
+              </div>
+              <p className="text-[10px] text-slate-400 text-center">
+                Secure payment via Paystack · Card, Bank Transfer &amp; USSD accepted
+              </p>
+            </div>
+
           <form onSubmit={handleSubmit} className="p-6 sm:p-8 bg-white border border-slate-200 rounded-3xl space-y-6 shadow-sm">
             <div className="border-b border-slate-100 pb-4 space-y-1">
               <h2 className="text-lg font-extrabold text-[#0F172A]">
-                Submit Candidate Admissions Form
+                Optional: Candidate Profile Form
               </h2>
               <p className="text-xs text-slate-500">
+                Help us tailor your learning experience. This step is optional — payment above is what activates your enrolment.
+              </p>
+              <p className="text-[11px] text-slate-400">
                 Logged in as: <strong className="text-[#0F172A]">{session.user.name || session.user.email}</strong> ({session.user.email})
               </p>
             </div>
@@ -399,6 +451,7 @@ export default function AdmissionsApplyPage() {
               </button>
             </div>
           </form>
+          </div>
         )}
       </main>
 

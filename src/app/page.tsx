@@ -155,7 +155,7 @@ export default function HomePage() {
                   Pay ₦45,000 via Paystack →
                 </a>
                 <Link
-                  href="/admissions/apply"
+                  href="/register"
                   className="px-5 py-2.5 bg-white/10 hover:bg-white/20 border border-white/20 text-white font-bold text-xs rounded-xl transition-all"
                 >
                   Apply for Admission
