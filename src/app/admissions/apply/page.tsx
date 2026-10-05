@@ -164,18 +164,21 @@ export default function AdmissionsApplyPage() {
         {/* Banner Header */}
         <div className="bg-[#030e1f] text-white border border-[#D4A017]/30 rounded-3xl p-6 sm:p-8 relative overflow-hidden shadow-2xl">
           <div className="absolute -top-24 -right-24 w-60 h-60 bg-[#D4A017]/10 rounded-full blur-3xl pointer-events-none" />
-          <div className="relative z-10 space-y-2">
+          <div className="relative z-10 space-y-3">
             <div className="inline-flex items-center gap-2 px-3 py-1 bg-[#D4A017]/20 border border-[#D4A017]/50 text-[#D4A017] rounded-full text-[10px] font-extrabold uppercase tracking-widest">
               <GraduationCap className="w-3.5 h-3.5" />
-              DWSA Digital Technology Academy Admissions
+              DWSA Digital Technology Academy — Cohort 2
             </div>
-            <h1 className="text-2xl sm:text-3xl font-black tracking-tight text-white">
-              DTA Admissions <span className="text-[#D4A017]">Application Portal</span>
+            <h1 className="text-2xl sm:text-3xl font-black tracking-tight text-white leading-tight">
+              Don&apos;t just use AI. <span className="text-[#D4A017]">Learn to build with it.</span>
             </h1>
             <p className="text-xs sm:text-sm text-slate-300 max-w-2xl leading-relaxed">
-              School of Generative Artificial Intelligence &mdash; Flagship Programme:{" "}
-              <strong className="text-[#00d2ff]">Generative AI for Work &amp; Productivity</strong>.
+              A practical, project-driven Generative AI programme taking you from Beginner to AI Builder.
             </p>
+            <div className="flex flex-wrap gap-4 pt-1 text-[10px] text-slate-300">
+              <span className="flex items-center gap-1.5"><Clock className="w-3 h-3 text-[#D4A017]" /> Start: <strong className="text-white">Monday, 2 November 2026</strong></span>
+              <span className="flex items-center gap-1.5"><Globe className="w-3 h-3 text-[#00d2ff]" /> Venue: <strong className="text-white">No 20 Okpoga Street, High Level, Makurdi, Benue State</strong></span>
+            </div>
           </div>
         </div>
 
@@ -186,9 +189,10 @@ export default function AdmissionsApplyPage() {
               <GraduationCap className="w-6 h-6" />
             </div>
             <div className="space-y-2">
-              <h2 className="text-xl font-extrabold text-[#0F172A]">Secure Your Seat in Cohort GENAI-WP-001</h2>
+              <h2 className="text-xl font-extrabold text-[#0F172A]">Secure Your Seat — Cohort 2 is Coming</h2>
               <p className="text-xs text-slate-600 max-w-md mx-auto leading-relaxed">
                 Create your free account, then complete your tuition payment via Paystack to unlock your digital campus workspace instantly.
+                Ready to move from AI user to AI builder?
                 {config.earlyBirdActive ? (
                   <span className="block mt-1 font-semibold text-[#15803D]">
                     🎉 Early Bird: ₦{config.earlyBirdPrice.toLocaleString()} (first {config.earlyBirdSeats} students) · Standard: ₦{config.standardPrice.toLocaleString()}
@@ -215,6 +219,7 @@ export default function AdmissionsApplyPage() {
             </p>
           </div>
         )}
+
 
         {/* Loading Spinner */}
         {authStatus === "authenticated" && fetchingApp && (
@@ -270,6 +275,55 @@ export default function AdmissionsApplyPage() {
         {authStatus === "authenticated" && !fetchingApp && (
           <div className="space-y-6">
 
+            {/* ── PROGRAMME INFO CARD ── */}
+            <div className="p-5 rounded-3xl bg-[#030e1f] border border-[#D4A017]/30 text-white space-y-4 shadow-xl">
+              <div className="flex flex-col sm:flex-row sm:items-start justify-between gap-4 border-b border-white/10 pb-4">
+                <div>
+                  <span className="px-2.5 py-0.5 rounded-full bg-[#D4A017]/20 border border-[#D4A017]/40 text-[#D4A017] text-[10px] font-black uppercase tracking-wider">
+                    DWSA Digital Technology Academy — Cohort 2
+                  </span>
+                  <h3 className="text-base font-black text-white mt-2">
+                    Don&apos;t just use AI. <span className="text-[#D4A017]">Learn to build with it.</span>
+                  </h3>
+                  <p className="text-xs text-slate-300 mt-1 leading-relaxed">
+                    A practical, project-driven Generative AI programme taking you from Beginner to AI Builder.
+                  </p>
+                </div>
+                <div className="shrink-0 text-right text-[10px] text-slate-400 space-y-1">
+                  <div><Clock className="w-3 h-3 inline mr-1 text-[#D4A017]" /><strong className="text-white">Mon, 2 Nov 2026</strong></div>
+                  <div><Globe className="w-3 h-3 inline mr-1 text-[#00d2ff]" /><strong className="text-white">Makurdi, Benue State</strong></div>
+                </div>
+              </div>
+
+              {/* Curriculum tracks */}
+              <div className="grid grid-cols-2 sm:grid-cols-4 gap-2">
+                {[
+                  { color: "text-[#D4A017]", icon: "💡", title: "Foundations", items: ["GenAI Fundamentals", "Prompt Engineering", "AI for Business"] },
+                  { color: "text-[#00d2ff]", icon: "🎨", title: "Creative AI", items: ["AI Image Generation", "AI Audio & Voice", "AI Video Generation"] },
+                  { color: "text-[#4ade80]", icon: "</>", title: "AI Development", items: ["AI-Powered Apps", "APIs & LLM Integration", "AI Automation"] },
+                  { color: "text-amber-400", icon: "🤖", title: "Advanced AI", items: ["AI Agents & Systems", "Fine-Tuning", "Production AI & Security"] },
+                ].map((track) => (
+                  <div key={track.title} className="p-2.5 bg-white/5 border border-white/10 rounded-xl space-y-1.5">
+                    <span className={`text-[9px] font-black uppercase block ${track.color}`}>{track.icon} {track.title}</span>
+                    <ul className="text-[9px] text-slate-300 space-y-0.5">
+                      {track.items.map(i => <li key={i}>• {i}</li>)}
+                    </ul>
+                  </div>
+                ))}
+              </div>
+
+              {/* Promise */}
+              <div className="flex flex-wrap items-center justify-center gap-2 text-[9px] font-black text-white pt-1">
+                <span className="px-2.5 py-1 bg-[#15803D] rounded-full">LEARN</span>
+                <span className="text-slate-400">→</span>
+                <span className="px-2.5 py-1 bg-[#D4A017] text-[#030e1f] rounded-full">BUILD</span>
+                <span className="text-slate-400">→</span>
+                <span className="px-2.5 py-1 bg-[#00d2ff] text-[#030e1f] rounded-full">AUTOMATE</span>
+                <span className="text-slate-400">→</span>
+                <span className="px-2.5 py-1 bg-amber-500 text-[#030e1f] rounded-full">DEPLOY</span>
+              </div>
+            </div>
+
             {/* ── PAYSTACK PAYMENT CTA ── */}
             <div className="p-6 rounded-3xl bg-[#030e1f] border border-[#15803D]/40 text-white space-y-4 shadow-xl">
               <div className="flex items-center gap-2">
@@ -294,7 +348,7 @@ export default function AdmissionsApplyPage() {
                   )}
                 </div>
                 <p className="text-xs text-slate-300 mt-1 leading-relaxed">
-                  Payment activates your Cohort GENAI-WP-001 enrolment and unlocks your full digital campus workspace immediately.
+                  Payment activates your Cohort 2 enrolment and unlocks your full digital campus workspace immediately. Start: <strong className="text-white">Monday, 2 November 2026</strong>.
                 </p>
               </div>
               <div className="flex flex-col sm:flex-row gap-3">
@@ -323,6 +377,7 @@ export default function AdmissionsApplyPage() {
                 Secure payment via Paystack · Card, Bank Transfer &amp; USSD accepted
               </p>
             </div>
+
 
           <form onSubmit={handleSubmit} className="p-6 sm:p-8 bg-white border border-slate-200 rounded-3xl space-y-6 shadow-sm">
             <div className="border-b border-slate-100 pb-4 space-y-1">
@@ -354,16 +409,20 @@ export default function AdmissionsApplyPage() {
               </div>
             )}
 
-            {/* Target Programme */}
+            {/* Target Programme — Cohort 2 */}
             <div className="p-4 bg-[#FEFCE8] border border-[#D4A017]/30 rounded-2xl space-y-1">
               <span className="text-[10px] font-extrabold text-[#D4A017] uppercase tracking-wider block">
-                Target AI Programme Selection
+                Target Programme — Cohort 2
               </span>
               <h3 className="text-sm font-extrabold text-[#0F172A]">
-                Generative AI for Work &amp; Productivity (Flagship 8-Week Cohort)
+                DWSA Digital Technology Academy — Practical Generative AI Programme
               </h3>
               <p className="text-[11px] text-slate-600">
-                School of Generative Artificial Intelligence &mdash; DWSA Digital Technology Academy
+                From Foundations &amp; Creative AI → AI Development → Advanced AI &amp; Agentic Systems
+              </p>
+              <p className="text-[11px] text-slate-500 flex flex-wrap gap-3 pt-1">
+                <span>📅 <strong>Start:</strong> Monday, 2 November 2026</span>
+                <span>📍 <strong>Venue:</strong> No 20 Okpoga Street, High Level, Makurdi, Benue State</span>
               </p>
             </div>
 
@@ -376,6 +435,7 @@ export default function AdmissionsApplyPage() {
                   </label>
                   <input
                     type="tel"
+
                     required
                     placeholder="+234 800 000 0000"
                     value={phone}
