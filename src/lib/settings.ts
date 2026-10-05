@@ -13,7 +13,7 @@ export const DEFAULT_PRICING_CONFIG: SystemPricingConfig = {
   earlyBirdPrice: 45000,
   earlyBirdSeats: 5,
   earlyBirdActive: true,
-  paystackCheckoutUrl: "https://checkout.paystack.com/brihlvap5ybeaww",
+  paystackCheckoutUrl: "https://paystack.shop/pay/ew9j2hh5uh",
 };
 
 export async function getSystemPricingConfig(): Promise<SystemPricingConfig> {

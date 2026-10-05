@@ -17,7 +17,7 @@ export default function SettingsPage() {
   const [earlyBirdPrice, setEarlyBirdPrice] = useState(45000);
   const [earlyBirdSeats, setEarlyBirdSeats] = useState(5);
   const [earlyBirdActive, setEarlyBirdActive] = useState(true);
-  const [paystackCheckoutUrl, setPaystackCheckoutUrl] = useState("https://checkout.paystack.com/brihlvap5ybeaww");
+  const [paystackCheckoutUrl, setPaystackCheckoutUrl] = useState("https://paystack.shop/pay/ew9j2hh5uh");
 
   // Load active settings from DB
   useEffect(() => {

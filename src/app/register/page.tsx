@@ -31,7 +31,7 @@ export default function RegisterPage() {
     earlyBirdPrice: 45000,
     earlyBirdSeats: 5,
     earlyBirdActive: true,
-    paystackCheckoutUrl: "https://checkout.paystack.com/brihlvap5ybeaww",
+    paystackCheckoutUrl: "https://paystack.shop/pay/ew9j2hh5uh",
   });
 
   useEffect(() => {
